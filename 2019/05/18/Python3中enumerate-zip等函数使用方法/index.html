@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.9.0">
+
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+
+    
+
+    
+        <meta name="description" content="最近正在研读《Python机器学习基础教程》（Introduction to Machine Learning with Python）这本书。书中的Python3代码、对于numpy、pandas、matplotlib以及scikit-learn库的使用都让人叹为观止。作为Python初学者，这本">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="Superlova">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="Python3中enumerate/zip等函数使用方法">
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="最近正在研读《Python机器学习基础教程》（Introduction to Machine Learning with Python）这本书。书中的Python3代码、对于numpy、pandas、matplotlib以及scikit-learn库的使用都让人叹为观止。作为Python初学者，这本">
+    
+
+    <!--Open Graph Site Name-->
+        <meta property="og:site_name" content="Smile :)">
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article">
+    
+
+    <!--Page Cover-->
+    
+    
+        <meta property="og:image" content="https://superlova.github.iohttps://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg">
+    
+
+        <meta name="twitter:card" content="summary_large_image">
+
+    
+
+    
+        <meta name="twitter:image" content="https://superlova.github.iohttps://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg">
+    
+
+    <!-- Title -->
+    
+    <title>Python3中enumerate/zip等函数使用方法 - Smile :)</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet">
+
+    <!-- Google Analytics -->
+    
+
+
+    <!-- favicon -->
+    
+
+<link rel="alternate" href="/atom.xml" title="Smile :)" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+
+<body>
+
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Smile :)</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tags">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            
+                                Categories
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="https://github.com/superlova">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('https://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Python3中enumerate/zip等函数使用方法</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2019-05-18
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
+                    
+                        
+
+
+<a href="/tags/Python/">#Python</a>
+
+
+                    
+                </div>
+                <div class="col-lg-4 col-md-5 post-categories">
+                    
+                        
+
+<a href="/categories/编程语言/">编程语言</a>
+
+                    
+                </div>
+            
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p>最近正在研读《Python机器学习基础教程》（Introduction to Machine Learning with Python）这本书。书中的Python3代码、对于numpy、pandas、matplotlib以及scikit-learn库的使用都让人叹为观止。作为Python初学者，这本书不仅可以让人入门机器学习，更可以让人的Python技巧得到提升。</p>
+<p>下面的代码使用sklearn自带数据集moon以及sklearn的随机森林模型构建由5棵树组成的随机森林，并利用matplotlib库可视化。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> mglearn <span class="comment"># 需要额外下载</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestClassifier</span><br><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> make_moons</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"></span><br><span class="line">X, y = make_moons(n_samples=<span class="number">100</span>, noise=<span class="number">0.25</span>, random_state=<span class="number">3</span>)</span><br><span class="line">X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=y, </span><br><span class="line">                                                    random_state=<span class="number">42</span>)</span><br><span class="line"><span class="comment"># 创建5棵树组成的随机森林</span></span><br><span class="line">forest = RandomForestClassifier(n_estimators=<span class="number">5</span>, random_state=<span class="number">2</span>)</span><br><span class="line"><span class="comment"># 对训练集进行拟合</span></span><br><span class="line">forest.fit(X_train, y_train)</span><br><span class="line"><span class="comment"># 生成两行三列的六张图，宽20高10</span></span><br><span class="line">fig, axes = plt.subplots(<span class="number">2</span>, <span class="number">3</span>, figsize=(<span class="number">20</span>, <span class="number">10</span>))</span><br></pre></td></tr></table></figure>
+<p><code>forest.estimators_</code>是一个列表，保存五棵树的信息<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">print(len(forest.estimators_))</span><br><span class="line">print(type(forest.estimators_[<span class="number">0</span>]))</span><br><span class="line"><span class="number">5</span></span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">sklearn</span>.<span class="title">tree</span>.<span class="title">tree</span>.<span class="title">DecisionTreeClassifier</span>'&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>下面的for遍历用法是我之前很少接触的，尤其是对于enumerate与zip的使用，在此记录下来。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i, (ax, tree) <span class="keyword">in</span> enumerate(zip(axes.ravel(), forest.estimators_)):</span><br><span class="line">    ax.set_title(<span class="string">"Tree &#123;&#125;"</span>.format(i))</span><br><span class="line">    mglearn.plots.plot_tree_partition(X_train, y_train, tree, ax=ax)</span><br><span class="line">    </span><br><span class="line">mglearn.plots.plot_2d_separator(forest, X_train, fill=<span class="literal">True</span>, ax=axes[<span class="number">-1</span>, <span class="number">-1</span>],</span><br><span class="line">                               alpha=<span class="number">.4</span>)</span><br><span class="line">axes[<span class="number">-1</span>, <span class="number">-1</span>].set_title(<span class="string">"Random Forest"</span>)</span><br><span class="line">mglearn.discrete_scatter(X_train[:, <span class="number">0</span>], X_train[:, <span class="number">1</span>], y_train)</span><br></pre></td></tr></table></figure>
+<p>首先zip函数就像大型相亲现场，接受两个可迭代集合：一波男性和一波女性，将前一个集合中的元素与后一个集合中的元素一一配对，返回两两结合的对象，即返回一大群元素组成的集合，集合中元素都是一男一女配对。配对方法就是粗暴的第i个男生-第i个女生，如果有男生or女生多了咋办？zip不管配不上对的元素，只挑选配对成功的组合。</p>
+<p>经过zip函数处理，axes里面的六张图配上了五棵树，最后一张图我们留到最后处理。</p>
+<p>接下来是enumerate，enumerate接受可迭代对象，不仅仅输出对象元素，还附带输出该元素所在的位置。enumerate本身就是“枚举”的意思嘛。</p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
+    </div>
+</article>
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/superlova" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2020 Superlova<br></p>
+                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+</body>
+
+</html>

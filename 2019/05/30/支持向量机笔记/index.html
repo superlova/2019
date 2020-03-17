@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.9.0">
+
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+
+    
+
+    
+        <meta name="description" content="支持向量机1. 思想SVM的思想，即对于平面上的二分类问题，找到一条直线，不但能够将两类数据恰好分开，而且要分的越开越好。即最大化不同类别的（关键）样本点之间的距离。
+我们的目的是找到一条河，让这条河的河岸恰恰经过正负样本的同时，尽可能宽。
+
+上图蓝线是最终确定的超平面，红线则是正例和反例的“楚河汉">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="Superlova">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="支持向量机笔记">
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="支持向量机1. 思想SVM的思想，即对于平面上的二分类问题，找到一条直线，不但能够将两类数据恰好分开，而且要分的越开越好。即最大化不同类别的（关键）样本点之间的距离。
+我们的目的是找到一条河，让这条河的河岸恰恰经过正负样本的同时，尽可能宽。
+
+上图蓝线是最终确定的超平面，红线则是正例和反例的“楚河汉">
+    
+
+    <!--Open Graph Site Name-->
+        <meta property="og:site_name" content="Smile :)">
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article">
+    
+
+    <!--Page Cover-->
+    
+    
+        <meta property="og:image" content="https://superlova.github.iohttps://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg">
+    
+
+        <meta name="twitter:card" content="summary_large_image">
+
+    
+
+    
+        <meta name="twitter:image" content="https://superlova.github.iohttps://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg">
+    
+
+    <!-- Title -->
+    
+    <title>支持向量机笔记 - Smile :)</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet">
+
+    <!-- Google Analytics -->
+    
+
+
+    <!-- favicon -->
+    
+
+<link rel="alternate" href="/atom.xml" title="Smile :)" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+
+<body>
+
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Smile :)</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tags">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            
+                                Categories
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="https://github.com/superlova">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('https://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>支持向量机笔记</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2019-05-30
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
+                    
+                        
+
+
+<a href="/tags/机器学习/">#机器学习</a> <a href="/tags/支持向量机/">#支持向量机</a>
+
+
+                    
+                </div>
+                <div class="col-lg-4 col-md-5 post-categories">
+                    
+                        
+
+<a href="/categories/机器学习/">机器学习</a>/ <a href="/categories/机器学习/学习笔记/">学习笔记</a>
+
+                    
+                </div>
+            
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <h1 id="支持向量机"><a href="#支持向量机" class="headerlink" title="支持向量机"></a>支持向量机</h1><h2 id="1-思想"><a href="#1-思想" class="headerlink" title="1. 思想"></a>1. 思想</h2><p>SVM的思想，即对于平面上的二分类问题，找到一条直线，不但能够将两类数据恰好分开，而且要分的越开越好。即最大化不同类别的（关键）样本点之间的距离。</p>
+<p><strong>我们的目的是找到一条河，让这条河的河岸恰恰经过正负样本的同时，尽可能宽。</strong></p>
+<p><img src="/2019/05/30/支持向量机笔记/2019-05-30-20-27-32.png" alt></p>
+<p>上图蓝线是最终确定的超平面，红线则是正例和反例的“楚河汉界”。这“楚河汉界”与超平面平行，并且距超平面相同距离。</p>
+<p><strong>我们不妨定义这段距离为1。</strong></p>
+<h2 id="2-最大化距离的方法"><a href="#2-最大化距离的方法" class="headerlink" title="2. 最大化距离的方法"></a>2. 最大化距离的方法</h2><p>假设已经找到了这样一条超平面，它的法向量为$\vec{w}$.</p>
+<p>对于任意样本$\vec{u}$，如果$f(u)=w\cdot u+b &gt; 0$则把样本u归为正例，反之为负例。</p>
+<p>现在想要找到一条河，让这条河的河岸恰恰经过正负样本的同时，尽可能宽。这样我们对正例和负例的划分做出了更高的要求：不仅仅大于0，更要大于河的宽度（的一半），即大于1。</p>
+<script type="math/tex; mode=display">
+f\left(\mathbf{x}_{+}\right)=\mathbf{w} \cdot \mathbf{x}_{+}+b \geq 1</script><script type="math/tex; mode=display">
+f\left(\mathbf{x}_{-}\right)=\mathbf{w} \cdot \mathbf{x}_{-}+b \leq-1</script><p>设想一下，我们有两个样本，一个小红，一个小蓝，他们站在河的对岸相望。</p>
+<script type="math/tex; mode=display">
+\begin{aligned} \mathbf{w} \cdot \mathbf{x}_{1}+b &=+1 \\ \mathbf{w} \cdot \mathbf{x}_{2}+b &=-1 \end{aligned}</script><p><img src="/2019/05/30/支持向量机笔记/2019-05-30-20-45-50.png" alt></p>
+<p>那我现在问你，求河的长度。WTF？这样就能求出河的长度了吗？是的，想一下，从小红指向小蓝的那一条向量$x_1-x_2$，向超平面的法向量$w$方向投影，然后得到的向量长度不就是河的长度了吗？</p>
+<p>河的长度：$ \mathbf{w} \cdot\left(\mathbf{x}<em>{1}-\mathbf{x}</em>{2}\right)=2 $<br>。还记得两个向量投影就是求点积吗？蛤蛤。</p>
+<p>忘了，法向量也是有长度的，为了把法向量标准化，我们需要除以法向量的长度：</p>
+<script type="math/tex; mode=display">
+\frac{\mathbf{w}}{\|\mathbf{w}\|} \cdot\left(\mathbf{x}_{1}-\mathbf{x}_{2}\right)=\frac{2}{\|\mathbf{w}\|}</script><p>问题就转化为将$\frac{2}{||\mathbf{w}||}$求最大。这就是一个最优化问题，按理说利用拉格朗日乘子法，对分量挨个求导即可求出极值点。但是现在这副模样连求导都做不到。我们想办法变形一下：</p>
+<p>常数项肯定就不要了，问题就变成了最小化$\frac{1}{2}|\mathbf{w}|^{2}$。这一切都是为了方便数学处理呀。</p>
+<p>不要忘了，还有一个（其实是i个）限制条件：</p>
+<script type="math/tex; mode=display">
+y_{i}\left(\mathbf{w} \cdot \mathbf{x}_{i}+b\right) \geq 1</script><p>y取1或-1，用来标记样本类别。</p>
+<h2 id="3-二次优化问题"><a href="#3-二次优化问题" class="headerlink" title="3. 二次优化问题"></a>3. 二次优化问题</h2><p>所谓拉格朗日，就是在限制条件前面加个参数，然后附加在要求的优化方程式中，从而将问题转化成无约束优化问题。被拉格朗日之后，我们加了i个参数，组成参数向量a</p>
+<script type="math/tex; mode=display">
+L=\frac{1}{2}\|\mathbf{w}\|^{2}-\sum_{i=1}^{l} a_{i}\left(y_{i}\left(\mathbf{x}_{i} \cdot \mathbf{w}+b\right)-1\right)</script><p>接下来要对向量求导了。害怕吗？有如下公式：$\frac{\partial|\mathbf{w}|^{2}}{\partial \mathbf{w}}=2 \mathbf{w}$和$\frac{\partial \mathbf{x} \cdot \mathbf{w}}{\partial \mathbf{w}}=\mathbf{x}$</p>
+<p>我们分别对w和b求导，看看拉格朗日函数对w和b的变化分别有什么反应：</p>
+<script type="math/tex; mode=display">\begin{aligned} \frac{\partial L}{\partial \mathbf{w}} &=\mathbf{w}-\sum_{i=1}^{l} a_{i} y_{i} \mathbf{x}_{i}=0 \\ \frac{\partial L}{\partial b} &=\sum_{i=1}^{l} a_{i} y_{i}=0 \end{aligned}</script><p>现在合适的 $ w^*=\sum<em>{i=1}^{l} a</em>{i} y<em>{i} \mathbf{x}</em>{i} $ 也都找到了，将他们回代到拉格朗日函数中去，看看他的最小点长什么样子。</p>
+<script type="math/tex; mode=display">
+L=\sum_{i=1}^{l} a_{i}-\frac{1}{2} \sum_{i, j=1}^{l} a_{i} a_{j} y_{i} y_{j} \mathbf{x}_{i} \cdot \mathbf{x}_{j}</script><p>我们可以看到啊，这个L的大小，取决于样本之间的点积，也就是我们选的两个小红和小蓝，他们站的位置。他们的位置要是不好，那距离就会不够大，那我们的拉格朗日同学就要重新选人。因此呢，最终被选择的样本，那一定是具有代表性的，我们称它们为<strong>支持向量</strong>。这就是支持向量机一词的由来。</p>
+<h2 id="4-核方法的运用"><a href="#4-核方法的运用" class="headerlink" title="4. 核方法的运用"></a>4. 核方法的运用</h2><p>有时候我们会碰到一些样本，他们本来就不是线性可分的，比如</p>
+<p><img src="/2019/05/30/支持向量机笔记/2019-05-30-21-14-02.png" alt></p>
+<p>但我们还是将他们利用支持向量机分开了。怎么做到的？怎么“以直为曲”？那是因为有一个道理，<strong>高维空间比低维空间更广阔的</strong>，更难出现线性不可分的状况。所以很自然的，我们人为添加一些分量，比如将二维点添加z轴分量到三维啊，甚至无限维。之后我们可以找到一个超平面，将他们分开就是轻而易举的事情啦。</p>
+<p>我们需要一种神秘变换$\Phi$，接受一个样本向量，输出提升维度之后的样本向量。</p>
+<p><img src="/2019/05/30/支持向量机笔记/2019-05-30-21-17-55.png" alt></p>
+<p>$\Phi$很难找，但是我们不必找。因为根据前面的结论，拉格朗日函数根我们选取的关键向量的<strong>内积</strong>有关，直接表示出$ \Phi\left(\mathbf{x}<em>{1}\right) \cdot \Phi\left(\mathbf{x}</em>{2}\right) $，一步到位哦。</p>
+<p>正好有这种专门表示两个向量运算的函数，叫做核函数。</p>
+<script type="math/tex; mode=display">
+\Phi\left(\mathbf{x}_{1}\right) \cdot \Phi\left(\mathbf{x}_{2}\right)=K\left(\mathbf{x}_{1}, \mathbf{x}_{2}\right)</script><p>举个例子，线性核函数：</p>
+<script type="math/tex; mode=display">
+K(x, y) = x\cdot y</script><p>多项式核函数：</p>
+<script type="math/tex; mode=display">
+K\left(\mathbf{x}_{1}, \mathbf{x}_{2}\right)=\left(\mathbf{x}_{1} \cdot \mathbf{x}_{2}+1\right)^{n}</script><p>高斯核函数：</p>
+<script type="math/tex; mode=display">
+K\left(\mathbf{x}_{1}, \mathbf{x}_{2}\right)=e^{\frac{-|| x_{1}+x_{2} ||^{2}}{2 \sigma^{2}}}</script><p>有的时候我们会碰到一些样本，他们很难缠，甚至根本线性不可分。类似于红军打入了蓝军内部，根本无法找到一条直线将他们分开。这时候我们就需要放低要求。</p>
+<p>引入松弛变量，出现的错误样本在一定程度范围内越小越好。</p>
+<script type="math/tex; mode=display">
+\xi_i =  1-y_{i}\left(w^{T} x_{i}+b\right)</script><p>则有下式</p>
+<script type="math/tex; mode=display">
+y_{i}\left(w^{T} x_{i}+b\right) \geq 1-\xi_{i}, \quad i=1, \dots, n</script><p>最终的优化问题就变成了</p>
+<script type="math/tex; mode=display">
+\begin{array}{l}{\min \frac{1}{2}\|w\|^{2}+C \sum_{i=1}^{n} \xi_{i}} \\ {\text {s.t.}, y_{i}\left(w^{T} x_{i}+b\right) \geq 1-\xi_{i}, i=1, \ldots, n} \\ {\xi_{i} \geq 0, i=1, \ldots, n}\end{array}</script><p>C为经验参数，调参侠必备。您想让误差少点，C就大点。</p>
+<p>接下来的套路就和之前一样了，拉格朗日啊之类的，略去不表。</p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
+    </div>
+</article>
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/superlova" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2020 Superlova<br></p>
+                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+</body>
+
+</html>

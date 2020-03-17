@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.9.0">
+
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+
+    
+
+    
+        <meta name="description" content="1. 分类问题区别于CS229 note 1: Introduction提到的回归问题，我们这里要研究的问题是分类，即输出变量是离散的，非黑即白、非一即二，取值范围不再是实数。
+对于2-分类问题，我们倾向于找到一个函数h(x)，输入特征x后，给出0或者1的结果。看起来就是一个简化版的回归问题，毕竟结">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="Superlova">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="CS229-note-2-分类问题与逻辑回归">
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="1. 分类问题区别于CS229 note 1: Introduction提到的回归问题，我们这里要研究的问题是分类，即输出变量是离散的，非黑即白、非一即二，取值范围不再是实数。
+对于2-分类问题，我们倾向于找到一个函数h(x)，输入特征x后，给出0或者1的结果。看起来就是一个简化版的回归问题，毕竟结">
+    
+
+    <!--Open Graph Site Name-->
+        <meta property="og:site_name" content="Smile :)">
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article">
+    
+
+    <!--Page Cover-->
+    
+    
+        <meta property="og:image" content="https://superlova.github.iohttps://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg">
+    
+
+        <meta name="twitter:card" content="summary_large_image">
+
+    
+
+    
+        <meta name="twitter:image" content="https://superlova.github.iohttps://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg">
+    
+
+    <!-- Title -->
+    
+    <title>CS229-note-2-分类问题与逻辑回归 - Smile :)</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet">
+
+    <!-- Google Analytics -->
+    
+
+
+    <!-- favicon -->
+    
+
+<link rel="alternate" href="/atom.xml" title="Smile :)" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+
+<body>
+
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Smile :)</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tags">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            
+                                Categories
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="https://github.com/superlova">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('https://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>CS229-note-2-分类问题与逻辑回归</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2019-04-26
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
+                    
+                        
+
+
+<a href="/tags/机器学习/">#机器学习</a> <a href="/tags/回归和分类/">#回归和分类</a> <a href="/tags/逻辑回归/">#逻辑回归</a>
+
+
+                    
+                </div>
+                <div class="col-lg-4 col-md-5 post-categories">
+                    
+                        
+
+<a href="/categories/机器学习/">机器学习</a>/ <a href="/categories/机器学习/学习笔记/">学习笔记</a>
+
+                    
+                </div>
+            
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <h2 id="1-分类问题"><a href="#1-分类问题" class="headerlink" title="1. 分类问题"></a>1. 分类问题</h2><p>区别于<a href="./CS229-note-1-Introduction.md">CS229 note 1: Introduction</a>提到的回归问题，我们这里要研究的问题是分类，即输出变量是离散的，非黑即白、非一即二，取值范围不再是实数。</p>
+<p>对于2-分类问题，我们倾向于找到一个函数h(x)，输入特征x后，给出0或者1的结果。看起来就是一个简化版的回归问题，毕竟结果不需要精确到数字，只需要给出一个类别就可以了。可不可以利用回归问题的解决思路来解决分类问题？答案是也可以，但会出现一系列的问题，相当于用一个复杂的模型去拟合一个简单的数据。</p>
+<p>直观来讲，我们只需要设置某个阈值，高于此阈值的为1，低于此阈值的为0即可。没错，这是一种分类方法。</p>
+<script type="math/tex; mode=display">
+g(z)=\left\{\begin{array}{ll}{1} & {\text { if } z \geq 0} \\ {0} & {\text { if } z<0}\end{array}\right.</script><p>还有其他的分类方法，比如Sigmoid函数，该函数具有良好的性质，比如光滑可求导，值域在(0,1)内等等。<br><img src="/2019/04/26/CS229-note-2-分类问题与逻辑回归/2019-04-26-20-12-09.png" alt></p>
+<script type="math/tex; mode=display">
+g(z)=\frac{1}{1+e^{-z}}</script><p>我们利用Sigmoid函数作为$h_{\theta}(x)$，调整θ，使得分类器效果最好，这就是逻辑斯蒂回归模型。</p>
+<script type="math/tex; mode=display">
+h_{\theta}(x)=g\left(\theta^{T} x\right)=\frac{1}{1+e^{-\theta^{T} x}}</script><p>请注意，虽然是回归模型，但逻辑斯蒂回归做的事情其实是分类。问题又切换到如何构建一个合理的、以θ为变量的函数，对其优化、找到最低点？</p>
+<p>让我们以抛硬币为例，阐述二元分类问题。抛硬币事件符合0-1分布，即事情发生是1，不发生是0。如果连续抛很多次硬币，问有多少次正面，多少次反面的概率，那这就是伯努利分布，即二项分布。</p>
+<p>二分类问题也是如此，已知样本x，在参数为θ的情况下，y=1即正面的概率，即为h(x)，y=0即反面的概率为1-h(x)。</p>
+<script type="math/tex; mode=display">
+\begin{array}{l}{P(y=1 | x ; \theta)=h_{\theta}(x)} \\ {P(y=0 | x ; \theta)=1-h_{\theta}(x)}\end{array}</script><p>将两个式子通过一些数学技巧结合起来，方便数学讨论：</p>
+<script type="math/tex; mode=display">
+p(y | x ; \theta)=\left(h_{\theta}(x)\right)^{y}\left(1-h_{\theta}(x)\right)^{1-y}</script><p>推广到全部数据：在参数为θ时，已知输入数据集为X，则输出为$\vec y$的概率可以用下面的函数来表示：</p>
+<script type="math/tex; mode=display">
+\begin{aligned} L(\theta) &=p(\vec{y} | X ; \theta) \\ &=\prod_{i=1}^{m} p\left(y^{(i)} | x^{(i)} ; \theta\right) \\ &=\prod_{i=1}^{m}\left(h_{\theta}\left(x^{(i)}\right)\right)^{y^{(i)}}\left(1-h_{\theta}\left(x^{(i)}\right)\right)^{1-y^{(i)}} \end{aligned}\\
+\begin{aligned} \ell(\theta) &=\log L(\theta) \\ &=\sum_{i=1}^{m} y^{(i)} \log h\left(x^{(i)}\right)+\left(1-y^{(i)}\right) \log \left(1-h\left(x^{(i)}\right)\right) \end{aligned}</script><p>又变成了我们熟悉的最大似然估计问题，即求θ，使得$\ell(\theta)$最大。我们既可以求导数，也可以采用随机梯度下降法。</p>
+<script type="math/tex; mode=display">
+\begin{aligned} \frac{\partial}{\partial \theta_{j}} \ell(\theta) &=\left(y \frac{1}{g\left(\theta^{T} x\right)}-(1-y) \frac{1}{1-g\left(\theta^{T} x\right)}\right) \frac{\partial}{\partial \theta_{j}} g\left(\theta^{T} x\right) \\ &=\left(y \frac{1}{g\left(\theta^{T} x\right)}-(1-y) \frac{1}{1-g\left(\theta^{T} x\right)}\right) g\left(\theta^{T} x\right)\left(1-g\left(\theta^{T} x\right)\frac{\partial}{\partial \theta_{j}} \theta^{T} x\right.\\ &=\left(y\left(1-g\left(\theta^{T} x\right)\right)-(1-y) g\left(\theta^{T} x\right)\right) x_{j} \\ &=\left(y-h_{\theta}(x)\right) x_{j} \end{aligned}
+\\
+\begin{aligned}\theta_{j} :=\theta_{j}+\alpha\left(y^{(i)}-h_{\theta}\left(x^{(i)}\right)\right) x_{j}^{(i)}\end{aligned}</script><p>有没有感觉求偏导数后的形式与回归问题很相似？这背后又有着怎样的共同点？</p>
+<p>还有更巧的呢。记得我们之前说的$<br>g(z)=\left{\begin{array}{ll}{1} &amp; {\text { if } z \geq 0} \ {0} &amp; {\text { if } z&lt;0}\end{array}\right.<br>$吗？采用该分类函数作为分类器进行训练的模型，叫做感知器(perceptron learning algorithm)模型。它的梯度下降算法也是这种形式：$\theta<em>{j} :=\theta</em>{j}+\alpha\left(y^{(i)}-h<em>{\theta}\left(x^{(i)}\right)\right) x</em>{j}^{(i)}$</p>
+<p>这背后的原因将留在我之后的更新中解答。</p>
+<h2 id="2-其他优化似然函数的方法：牛顿法"><a href="#2-其他优化似然函数的方法：牛顿法" class="headerlink" title="2.其他优化似然函数的方法：牛顿法"></a>2.其他优化似然函数的方法：牛顿法</h2><p>除了前面说的梯度下降法，牛顿法也是机器学习中用的比较多的一种优化算法。牛顿法遵循这样的优化规则：</p>
+<script type="math/tex; mode=display">
+\theta :=\theta-\frac{f(\theta)}{f^{\prime}(\theta)}</script><p><img src="/2019/04/26/CS229-note-2-分类问题与逻辑回归/2019-04-26-20-52-14.png" alt><br>首先选择一点，从该点作函数的切线，交x轴于新的点x2，x2再作切线，交x轴于新的点x3，如上图所示。</p>
+<p>最终牛顿法会找到f(x)最小时的x值，整个过程会很快，比梯度下降要快。<br>如果我们想要优化的函数是$\ell^{\prime}(\theta)$，则牛顿法优化规则为：</p>
+<script type="math/tex; mode=display">
+\theta :=\theta-\frac{\ell^{\prime}(\theta)}{\ell^{\prime \prime}(\theta)}</script><p>上面我们假设θ是一个实变量。如果θ是一个向量，则牛顿法变成：</p>
+<script type="math/tex; mode=display">
+\theta :=\theta-H^{-1} \nabla_{\theta} \ell(\theta)</script><p>其中：</p>
+<script type="math/tex; mode=display">
+H_{i j}=\frac{\partial^{2} \ell(\theta)}{\partial \theta_{i} \partial \theta_{j}}</script><p>像这样将牛顿法应用于逻辑斯蒂回归的似然函数优化问题上，叫做fisher’s scoring。</p>
+<h2 id="3-总结"><a href="#3-总结" class="headerlink" title="3. 总结"></a>3. 总结</h2><p>我们主要讨论了分类问题的概念，二分类问题的处理方法：感知器、逻辑斯蒂回归，以及将牛顿法应用于逻辑回归。</p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
+    </div>
+</article>
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/superlova" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2020 Superlova<br></p>
+                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+</body>
+
+</html>

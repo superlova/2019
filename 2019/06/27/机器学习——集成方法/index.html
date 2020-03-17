@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.9.0">
+
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+
+    
+
+    
+        <meta name="description" content="1. 投票分类器三个臭皮匠顶一个诸葛亮。即便是很多预测准确率仅强于随机的个体学习器的组合，经过一定的安排，也可以发挥令人惊讶的效果。在机器学习中，这种看起来没什么含金量的学习策略称之为集成学习。
+集成学习首先需要一系列的个体学习器。之后采用某些策略结合它们的判断。
+集成学习的要求：
+
+构成集成学习器">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="Superlova">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="机器学习——集成方法">
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="1. 投票分类器三个臭皮匠顶一个诸葛亮。即便是很多预测准确率仅强于随机的个体学习器的组合，经过一定的安排，也可以发挥令人惊讶的效果。在机器学习中，这种看起来没什么含金量的学习策略称之为集成学习。
+集成学习首先需要一系列的个体学习器。之后采用某些策略结合它们的判断。
+集成学习的要求：
+
+构成集成学习器">
+    
+
+    <!--Open Graph Site Name-->
+        <meta property="og:site_name" content="Smile :)">
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article">
+    
+
+    <!--Page Cover-->
+    
+    
+        <meta property="og:image" content="https://superlova.github.iohttps://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg">
+    
+
+        <meta name="twitter:card" content="summary_large_image">
+
+    
+
+    
+        <meta name="twitter:image" content="https://superlova.github.iohttps://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg">
+    
+
+    <!-- Title -->
+    
+    <title>机器学习——集成方法 - Smile :)</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet">
+
+    <!-- Google Analytics -->
+    
+
+
+    <!-- favicon -->
+    
+
+<link rel="alternate" href="/atom.xml" title="Smile :)" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+
+<body>
+
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Smile :)</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tags">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            
+                                Categories
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="https://github.com/superlova">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('https://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>机器学习——集成方法</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2019-06-27
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
+                    
+                        
+
+
+<a href="/tags/机器学习/">#机器学习</a> <a href="/tags/西瓜书/">#西瓜书</a> <a href="/tags/集成学习/">#集成学习</a>
+
+
+                    
+                </div>
+                <div class="col-lg-4 col-md-5 post-categories">
+                    
+                        
+
+<a href="/categories/机器学习/">机器学习</a>/ <a href="/categories/机器学习/学习笔记/">学习笔记</a>
+
+                    
+                </div>
+            
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <h2 id="1-投票分类器"><a href="#1-投票分类器" class="headerlink" title="1. 投票分类器"></a>1. 投票分类器</h2><p>三个臭皮匠顶一个诸葛亮。即便是很多预测准确率仅强于随机的个体学习器的组合，经过一定的安排，也可以发挥令人惊讶的效果。在机器学习中，这种看起来没什么含金量的学习策略称之为<strong>集成学习</strong>。</p>
+<p>集成学习首先需要一系列的个体学习器。之后采用某些策略结合它们的判断。</p>
+<p>集成学习的要求：</p>
+<ul>
+<li>构成集成学习器的个体学习器，其性能不能太差，至少要为强于随机的<strong>弱学习器</strong>。</li>
+</ul>
+<p>当然强学习器更好。在最后的结果汇总阶段，也会更多听取强学习器的意见。</p>
+<ul>
+<li>个体学习器要具有一定的多样性。</li>
+</ul>
+<p>广泛吸收各种不同学习器的意见，做出的决策才有代表性。在机器学习中，体现出的要求就是模型之间的差别要尽可能的大。一方面可以通过划分不同的数据集，独立训练来得到差异性；另一方面我们也可以选取不同的训练模型，比如SVM、决策树、逻辑回归。</p>
+<p>集成学习法的准确率比集成学习中表现最好的分类器准确率还高，这究竟是为什么？难道那一些不入流的臭鱼烂虾机器学习法，它们存在的意义就是提升集成学习中的准确率的吗？</p>
+<p>我们来打个比方。假设我有一枚硬币，这枚硬币经过加工处理，正面朝上的可能性比背面要高那么一点点，51%的可能性是正面。问，如果我投掷1000次硬币，正面朝上次数大于背面朝上次数的可能性占比多少？一万次呢？</p>
+<p>事实上，1000次投掷，最后正面次数比背面多的概率就达到了0.72，如果投掷10000次，那么就是0.94，几乎是必然事件。</p>
+<p>将其类比到集成学习中来，如果相互独立的个体学习器足够多，那么我们得到正确结论的概率将大大提升。不过这里有一个最关键的点：<strong>模型之间相互独立</strong>。这个要求其实是蛮难达到的，因为即便是不同的机器学习模型，如果采用相同或者相似的数据集进行训练，那么他们之间必然存在某种相关性。更不用说连模型都是一模一样的情况了。</p>
+<h2 id="2-Boosting算法"><a href="#2-Boosting算法" class="headerlink" title="2. Boosting算法"></a>2. Boosting算法</h2><p>Boosting算法的核心思想是分割训练集，用同一种机器学习算法得到差异化的一系列模型。</p>
+<p>先从初始训练集训练出一个基学习器，再根据基学习器的表现对训练样本的分布进行调整，是的先前基学习器做错的训练样本在后续收到更多地关注。然后基于调整后的样本分布来训练下一个基学习器。如此反复进行，训练T个基学习器，最终加权投票。</p>
+<p><img src="/2019/06/27/机器学习——集成方法/2019-06-27-21-57-03.png" alt></p>
+<p><img src="/2019/06/27/机器学习——集成方法/2019-06-27-21-57-17.png" alt></p>
+<h2 id="3-Bagging算法"><a href="#3-Bagging算法" class="headerlink" title="3. Bagging算法"></a>3. Bagging算法</h2><p>有放回采样被称为Bagging。采用Bagging的方法我们可以得到很多的可能有重复样本的数据子集。我们在之前的文章中已经提到，对于每个选取的子集，平均下来只有63%的训练实例被采样，剩下的37%正好当做测试集。</p>
+<p>随机森林就采用了Bagging采样方法来训练很多的决策树。如果你观察单一的决策树，重要的特征会出现在更靠近根部的位置，不重要的特征会经常出现在靠近叶子的位置。因此我们可以通过计算一个特征在森林的全部树中出现的平均深度来预测特征的重要性。</p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
+    </div>
+</article>
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/superlova" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2020 Superlova<br></p>
+                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+</body>
+
+</html>

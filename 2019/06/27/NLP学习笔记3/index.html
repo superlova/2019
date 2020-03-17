@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.9.0">
+
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+
+    
+
+    
+        <meta name="description" content="1. TF-IDF原理。tf-idf（英语：term frequency–inverse document frequency）是一种用于信息检索与文本挖掘的常用加权技术。tf-idf是一种统计方法，用以评估一字词对于一个文件集或一个语料库中的其中一份文件的重要程度。字词的重要性随着它在文件中出现的">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="Superlova">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="NLP学习笔记3">
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="1. TF-IDF原理。tf-idf（英语：term frequency–inverse document frequency）是一种用于信息检索与文本挖掘的常用加权技术。tf-idf是一种统计方法，用以评估一字词对于一个文件集或一个语料库中的其中一份文件的重要程度。字词的重要性随着它在文件中出现的">
+    
+
+    <!--Open Graph Site Name-->
+        <meta property="og:site_name" content="Smile :)">
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article">
+    
+
+    <!--Page Cover-->
+    
+    
+        <meta property="og:image" content="https://superlova.github.iohttps://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg">
+    
+
+        <meta name="twitter:card" content="summary_large_image">
+
+    
+
+    
+        <meta name="twitter:image" content="https://superlova.github.iohttps://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg">
+    
+
+    <!-- Title -->
+    
+    <title>NLP学习笔记3 - Smile :)</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet">
+
+    <!-- Google Analytics -->
+    
+
+
+    <!-- favicon -->
+    
+
+<link rel="alternate" href="/atom.xml" title="Smile :)" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+
+<body>
+
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Smile :)</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tags">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            
+                                Categories
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="https://github.com/superlova">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('https://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>NLP学习笔记3</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2019-06-27
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
+                    
+                        
+
+
+<a href="/tags/NLP/">#NLP</a> <a href="/tags/深度学习/">#深度学习</a> <a href="/tags/自然语言处理/">#自然语言处理</a>
+
+
+                    
+                </div>
+                <div class="col-lg-4 col-md-5 post-categories">
+                    
+                        
+
+<a href="/categories/学习笔记/">学习笔记</a>
+
+                    
+                </div>
+            
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <h2 id="1-TF-IDF原理。"><a href="#1-TF-IDF原理。" class="headerlink" title="1. TF-IDF原理。"></a>1. TF-IDF原理。</h2><p>tf-idf（英语：term frequency–inverse document frequency）是一种用于信息检索与文本挖掘的常用加权技术。tf-idf是一种统计方法，用以评估一字词对于一个文件集或一个语料库中的其中一份文件的重要程度。字词的重要性随着它在文件中出现的次数成正比增加，但同时会随着它在语料库中出现的频率成反比下降。tf-idf加权的各种形式常被搜索引擎应用，作为文件与用户查询之间相关程度的度量或评级。除了tf-idf以外，互联网上的搜索引擎还会使用基于链接分析的评级方法，以确定文件在搜索结果中出现的顺序。</p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>在一份给定的文件里，词频（term frequency，tf）指的是某一个给定的词语在该文件中出现的频率。这个数字是对词数（term count）的归一化，以防止它偏向长的文件。（同一个词语在长文件里可能会比短文件有更高的词数，而不管该词语重要与否。）对于在某一特定文件里的词语 ${\displaystyle t_{i}!}$来说，它的重要性可表示为：</p>
+<script type="math/tex; mode=display">{\displaystyle \mathrm {tf_{i,j}\!} ={\frac {n_{i,j}\!}{\sum _{k}n_{k,j}\!}\!}\!}</script><p>以上式子中 ${\displaystyle n<em>{i,j}!} n</em>{i,j}$是该词在文件 ${\displaystyle d<em>{j}!} d</em>{j}$中的出现次数，而分母则是在文件 ${\displaystyle d<em>{j}!} d</em>{j}$中所有字词的出现次数之和。</p>
+<p>逆向文件频率（inverse document frequency，idf）是一个词语普遍重要性的度量。某一特定词语的idf，可以由总文件数目除以包含该词语之文件的数目，再将得到的商取以10为底的对数得到：</p>
+<script type="math/tex; mode=display">{\displaystyle \mathrm {idf_{i}\!} =\lg {\frac {|D|}{|\{j:t_{i}\in d_{j}\}|}\!}\!}</script><p>其中</p>
+<p>$|D|$：语料库中的文件总数</p>
+<script type="math/tex; mode=display">{\displaystyle |\{j:t_{i}\in d_{j}\}|} $$：包含词语 ${\displaystyle t_{i}\!} t_{i}$的文件数目（即 ${\displaystyle n_{i,j}\neq 0} n_{i,j}\neq 0$的文件数目）如果词语不在数据中，就导致分母为零，因此一般情况下使用 $${\displaystyle 1+|\{j:t_{i}\in d_{j}\}|}</script><p>然后</p>
+<script type="math/tex; mode=display">{\displaystyle \mathrm {tf{}idf_{i,j}\!} =\mathrm {tf_{i,j}\!} \times \mathrm {idf_{i}\!} }</script><p>某一特定文件内的高词语频率，以及该词语在整个文件集合中的低文件频率，可以产生出高权重的tf-idf。因此，tf-idf倾向于过滤掉常见的词语，保留重要的词语。</p>
+<h3 id="1-2-例子"><a href="#1-2-例子" class="headerlink" title="1.2 例子"></a>1.2 例子</h3><p>有很多不同的数学公式可以用来计算tf-idf。这边的例子以上述的数学公式来计算。词频（tf）是一词语出现的次数除以该文件的总词语数。假如一篇文件的总词语数是100个，而词语“母牛”出现了3次，那么“母牛”一词在该文件中的词频就是3/100=0.03。而计算文件频率（IDF）的方法是以文件集的文件总数，除以出现“母牛”一词的文件数。所以，如果“母牛”一词在1,000份文件出现过，而文件总数是10,000,000份的话，其逆向文件频率就是lg（10,000,000 / 1,000）=4。最后的tf-idf的分数为0.03 * 4=0.12。</p>
+<h3 id="1-3-tf-idf的理论依据及不足"><a href="#1-3-tf-idf的理论依据及不足" class="headerlink" title="1.3 tf-idf的理论依据及不足"></a>1.3 tf-idf的理论依据及不足</h3><p>tf-idf算法是创建在这样一个假设之上的：对区别文档最有意义的词语应该是那些在文档中出现频率高，而在整个文档集合的其他文档中出现频率少的词语，所以如果特征空间坐标系取tf词频作为测度，就可以体现同类文本的特点。另外考虑到单词区别不同类别的能力，tf-idf法认为一个单词出现的文本频数越小，它区别不同类别文本的能力就越大。因此引入了逆文本频度idf的概念，以tf和idf的乘积作为特征空间坐标系的取值测度，并用它完成对权值tf的调整，调整权值的目的在于突出重要单词，抑制次要单词。但是在本质上idf是一种试图抑制噪声的加权，并且单纯地认为文本频率小的单词就越重要，文本频率大的单词就越无用，显然这并不是完全正确的。idf的简单结构并不能有效地反映单词的重要程度和特征词的分布情况，使其无法很好地完成对权值调整的功能，所以tf-idf法的精度并不是很高。</p>
+<p>此外，在tf-idf算法中并没有体现出单词的位置信息，对于Web文档而言，权重的计算方法应该体现出HTML的结构特征。特征词在不同的标记符中对文章内容的反映程度不同，其权重的计算方法也应不同。因此应该对于处于网页不同位置的特征词分别赋予不同的系数，然后乘以特征词的词频，以提高文本表示的效果。</p>
+<h2 id="2-文本矩阵化，使用词袋模型，以TF-IDF特征值为权重。"><a href="#2-文本矩阵化，使用词袋模型，以TF-IDF特征值为权重。" class="headerlink" title="2. 文本矩阵化，使用词袋模型，以TF-IDF特征值为权重。"></a>2. 文本矩阵化，使用词袋模型，以TF-IDF特征值为权重。</h2><p>TfidfVectorizer可以把原始文本转化为tf-idf的特征矩阵，从而为后续的文本相似度计算，主题模型(如LSI)，文本搜索排序等一系列应用奠定基础。基本应用如：</p>
+<h3 id="第一步：分词"><a href="#第一步：分词" class="headerlink" title="第一步：分词"></a>第一步：分词</h3><p>采用著名的中文分词库jieba进行分词：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> jieba</span><br><span class="line">text = <span class="string">"""我是一条天狗呀！</span></span><br><span class="line"><span class="string">我把月来吞了，</span></span><br><span class="line"><span class="string">我把日来吞了，</span></span><br><span class="line"><span class="string">我把一切的星球来吞了，</span></span><br><span class="line"><span class="string">我把全宇宙来吞了。</span></span><br><span class="line"><span class="string">我便是我了！"""</span></span><br><span class="line">sentences = text.split()</span><br><span class="line">sent_words = [list(jieba.cut(sent0)) <span class="keyword">for</span> sent0 <span class="keyword">in</span> sentences]</span><br><span class="line">document = [<span class="string">" "</span>.join(sent0) <span class="keyword">for</span> sent0 <span class="keyword">in</span> sent_words]</span><br><span class="line">print(document)</span><br></pre></td></tr></table></figure></p>
+<h3 id="第二步：建模"><a href="#第二步：建模" class="headerlink" title="第二步：建模"></a>第二步：建模</h3><pre><code>理论上，现在得到的document的格式已经可以直接拿来训练了。让我们跑一下模型试试。
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">tfidf_model = TfidfVectorizer().fit(document)</span><br><span class="line">print(tfidf_model.vocabulary_)</span><br><span class="line"><span class="comment"># &#123;'一条': 1, '天狗': 4, '日来': 5, '一切': 0, '星球': 6, '全宇宙': 3, '便是': 2&#125;</span></span><br><span class="line">sparse_result = tfidf_model.transform(document)</span><br><span class="line">print(sparse_result)</span><br><span class="line"><span class="comment"># (0, 4)	0.707106781187</span></span><br><span class="line"><span class="comment"># (0, 1)	0.707106781187</span></span><br><span class="line"><span class="comment"># (2, 5)	1.0</span></span><br><span class="line"><span class="comment"># (3, 6)	0.707106781187</span></span><br><span class="line"><span class="comment"># (3, 0)	0.707106781187</span></span><br><span class="line"><span class="comment"># (4, 3)	1.0</span></span><br><span class="line"><span class="comment"># (5, 2)	1.0</span></span><br></pre></td></tr></table></figure>
+<h3 id="第三步：参数"><a href="#第三步：参数" class="headerlink" title="第三步：参数"></a>第三步：参数</h3><pre><code>查了一些资料以后，发现单字的问题是token_pattern这个参数搞的鬼。它的默认值只匹配长度≥2的单词，就像其实开头的例子中的&#39;I&#39;也被忽略了一样，一般来说，长度为1的单词在英文中一般是无足轻重的，但在中文里，就可能有一些很重要的单字词，所以修改如下：
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tfidf_model2 = TfidfVectorizer(token_pattern=<span class="string">r"(?u)\b\w+\b"</span>).fit(document)</span><br><span class="line">print(tfidf_model2.vocabulary_)</span><br><span class="line"><span class="comment"># &#123;'我': 8, '是': 12, '一条': 1, '天狗': 7, '呀': 6, '把': 9, '月': 13, '来': 14, '吞': 5, '了': 2, '日来': 10, '一切': 0, '的': 15, '星球': 11, '全宇宙': 4, '便是': 3&#125;</span></span><br></pre></td></tr></table></figure>
+<p>token_pattern这个参数使用正则表达式来分词，其默认参数为r”(?u)\b\w\w+\b”，其中的两个\w决定了其匹配长度至少为2的单词，所以这边减到1个。对这个参数进行更多修改，可以满足其他要求，比如这里依然没有得到标点符号，在此不详解了。</p>
+<h2 id="3-互信息"><a href="#3-互信息" class="headerlink" title="3. 互信息"></a>3. 互信息</h2><p>在概率论和信息论中，两个随机变量的互信息（Mutual Information，简称MI）或转移信息（transinformation）是变量间相互依赖性的量度。不同于相关系数，互信息并不局限于实值随机变量，它更加一般且决定着联合分布$ p(X,Y) $和分解的边缘分布的乘积$ p(X)p(Y) $的相似程度。互信息是点间互信息（PMI）的期望值。互信息最常用的单位是bit。</p>
+<p>一般地，两个离散随机变量$ X $和$ Y $的互信息可以定义为：</p>
+<script type="math/tex; mode=display">{\displaystyle I(X;Y)=\sum _{y\in Y}\sum _{x\in X}p(x,y)\log {\left({\frac {p(x,y)}{p(x)\,p(y)}\!}\right)},\,\!}</script><p>其中$ p(x,y) $是 $X $和 $Y $的联合概率分布函数，而 ${\displaystyle p(x)} $和$ {\displaystyle p(y)}  $分别是 X 和 Y 的边缘概率分布函数。</p>
+<p>在连续随机变量的情形下，求和被替换成了二重定积分：</p>
+<script type="math/tex; mode=display">{\displaystyle I(X;Y)=\int _{Y}\int _{X}p(x,y)\log {\left({\frac {p(x,y)}{p(x)\,p(y)}\!}\right)}\;dx\,dy,} $$,
+
+其中 $p(x,y)$ 当前是 X 和 Y 的联合概率密度函数，而 ${\displaystyle p(x)} $和$ {\displaystyle p(y)}$分别是$ X $和$ Y $的边缘概率密度函数。
+
+如果对数以 2 为基底，互信息的单位是bit。
+
+直观上，互信息度量 X 和 Y 共享的信息：它度量知道这两个变量其中一个，对另一个不确定度减少的程度。例如，如果 X 和 Y 相互独立，则知道 X 不对 Y 提供任何信息，反之亦然，所以它们的互信息为零。在另一个极端，如果 X 是 Y 的一个确定性函数，且 Y 也是 X 的一个确定性函数，那么传递的所有信息被 X 和 Y 共享：知道 X 决定 Y 的值，反之亦然。因此，在此情形互信息与 Y（或 X）单独包含的不确定度相同，称作 Y（或 X）的熵。而且，这个互信息与 X 的熵和 Y 的熵相同。（这种情形的一个非常特殊的情况是当 X 和 Y 为相同随机变量时。）
+
+互信息是 X 和 Y 的联合分布相对于假定 X 和 Y 独立情况下的联合分布之间的内在依赖性。 于是互信息以下面方式度量依赖性：$I(X; Y) = 0$ 当且仅当 X 和 Y 为独立随机变量。从一个方向很容易看出：当 X 和 Y 独立时，$p(x,y) = p(x) p(y)$，因此：
+
+$${\displaystyle \log {\left({\frac {p(x,y)}{p(x)\,p(y)} \!}\right)}=\log 1=0.\,\!}</script><p>此外，互信息是非负的（即 $I(X;Y) ≥ 0$; 见下文），而且是对称的（即 $I(X;Y) = I(Y;X)$）。</p>
+<p>互信息又可以等价地表示成</p>
+<script type="math/tex; mode=display">{\displaystyle {\begin{aligned}I(X;Y)&{}=H(X)-H(X|Y)\\&{}=H(Y)-H(Y|X)\\&{}=H(X)+H(Y)-H(X,Y)\\&{}=H(X,Y)-H(X|Y)-H(Y|X)\end{aligned}\!}\!}</script><p>其中$ {\displaystyle \ H(X)} $ 和$ {\displaystyle \ H(Y)}  $是边缘熵，$H(X|Y) $和$ H(Y|X) $是条件熵，而 $H(X,Y) $是 X 和 Y 的联合熵。</p>
+<p><strong>互信息越小，两个来自不同事件空间的随机变量彼此之间的关系性越低; 互信息越高，关系性则越高。</strong></p>
+<h2 id="4-对特征矩阵使用互信息进行特征筛选"><a href="#4-对特征矩阵使用互信息进行特征筛选" class="headerlink" title="4. 对特征矩阵使用互信息进行特征筛选"></a>4. 对特征矩阵使用互信息进行特征筛选</h2><p><code>sklearn.metrics.mutual_info_score</code><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> datasets</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> metrics <span class="keyword">as</span> mr</span><br><span class="line"> </span><br><span class="line">iris = datasets.load_iris()</span><br><span class="line">x = iris.data</span><br><span class="line">label = iris.target</span><br><span class="line">x0 = x[:, <span class="number">0</span>]</span><br><span class="line">x1 = x[:, <span class="number">1</span>]</span><br><span class="line">x2 = x[:, <span class="number">2</span>]</span><br><span class="line">x3 = x[:, <span class="number">3</span>]</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 计算各特征与label的互信息</span></span><br><span class="line">print(mr.mutual_info_score(x0, label))</span><br><span class="line">print(mr.mutual_info_score(x1, label))</span><br><span class="line">print(mr.mutual_info_score(x2, label))</span><br><span class="line">print(mr.mutual_info_score(x3, label))</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/06/27/NLP学习笔记3/2019-06-27-20-45-13.png" alt><br><code>sklearn.feature_selection.mutual_info_classif</code><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> datasets</span><br><span class="line"><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> mutual_info_classif</span><br><span class="line"> </span><br><span class="line">iris = datasets.load_iris()</span><br><span class="line">x = iris.data</span><br><span class="line">label = iris.target</span><br><span class="line"> </span><br><span class="line">mutual_info = mutual_info_classif(x, label, discrete_features= <span class="literal">False</span>)</span><br><span class="line">print(mutual_info)</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/06/27/NLP学习笔记3/2019-06-27-20-45-28.png" alt></p>
+<blockquote>
+<p>参考文献<br><a href="https://zh.wikipedia.org/wiki/Tf-idf" target="_blank" rel="noopener">https://zh.wikipedia.org/wiki/Tf-idf</a><br><a href="https://zh.wikipedia.org/wiki/%E4%BA%92%E4%BF%A1%E6%81%AF" target="_blank" rel="noopener">https://zh.wikipedia.org/wiki/%E4%BA%92%E4%BF%A1%E6%81%AF</a><br><a href="https://blog.csdn.net/yyy430/article/details/88249709" target="_blank" rel="noopener">https://blog.csdn.net/yyy430/article/details/88249709</a></p>
+</blockquote>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
+    </div>
+</article>
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/superlova" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2020 Superlova<br></p>
+                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+</body>
+
+</html>

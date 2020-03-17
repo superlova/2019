@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.9.0">
+
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+
+    
+
+    
+        <meta name="description" content="1. 树的划分流程：原理与思想1.1 决策树的工作原理决策树是广泛用于分类和回归任务的模型。本质上，它从一层层的if/else 问题中进行学习，并得出结论。
+
+在这张图中，树的每个结点代表一个问题或一个包含答案的终结点（也叫叶结点）。树的边将问题的答案与将问的下一个问题连接起来。
+用机器学习的语言来">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="Superlova">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="机器学习——决策树——note1">
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="1. 树的划分流程：原理与思想1.1 决策树的工作原理决策树是广泛用于分类和回归任务的模型。本质上，它从一层层的if/else 问题中进行学习，并得出结论。
+
+在这张图中，树的每个结点代表一个问题或一个包含答案的终结点（也叫叶结点）。树的边将问题的答案与将问的下一个问题连接起来。
+用机器学习的语言来">
+    
+
+    <!--Open Graph Site Name-->
+        <meta property="og:site_name" content="Smile :)">
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article">
+    
+
+    <!--Page Cover-->
+    
+    
+        <meta property="og:image" content="https://superlova.github.iohttps://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg">
+    
+
+        <meta name="twitter:card" content="summary_large_image">
+
+    
+
+    
+        <meta name="twitter:image" content="https://superlova.github.iohttps://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg">
+    
+
+    <!-- Title -->
+    
+    <title>机器学习——决策树——note1 - Smile :)</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet">
+
+    <!-- Google Analytics -->
+    
+
+
+    <!-- favicon -->
+    
+
+<link rel="alternate" href="/atom.xml" title="Smile :)" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+
+<body>
+
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Smile :)</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tags">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            
+                                Categories
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="https://github.com/superlova">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('https://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>机器学习——决策树——note1</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2019-05-22
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
+                    
+                        
+
+
+<a href="/tags/机器学习/">#机器学习</a> <a href="/tags/决策树/">#决策树</a> <a href="/tags/西瓜书/">#西瓜书</a>
+
+
+                    
+                </div>
+                <div class="col-lg-4 col-md-5 post-categories">
+                    
+                        
+
+<a href="/categories/机器学习/">机器学习</a>/ <a href="/categories/机器学习/学习笔记/">学习笔记</a>
+
+                    
+                </div>
+            
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <h2 id="1-树的划分流程：原理与思想"><a href="#1-树的划分流程：原理与思想" class="headerlink" title="1. 树的划分流程：原理与思想"></a>1. 树的划分流程：原理与思想</h2><h3 id="1-1-决策树的工作原理"><a href="#1-1-决策树的工作原理" class="headerlink" title="1.1 决策树的工作原理"></a>1.1 决策树的工作原理</h3><p>决策树是广泛用于分类和回归任务的模型。本质上，它从一层层的if/else 问题中进行学习，并得出结论。</p>
+<p><img src="/2019/05/22/机器学习——决策树——note1/2019-05-22-21-00-49.png" alt="区分几种动物的决策树"></p>
+<p>在这张图中，树的每个结点代表一个问题或一个包含答案的终结点（也叫叶结点）。树的边将问题的答案与将问的下一个问题连接起来。</p>
+<p>用机器学习的语言来说就是，为了区分四类动物（鹰、企鹅、海豚和熊），我们利用三个特征（“有没有羽毛”“会不会飞”和“有没有鳍”）来构建一个模型。我们可以利用监督学习从数据中学习模型，而无需人为构建模型。</p>
+<h3 id="1-2-决策树的思想"><a href="#1-2-决策树的思想" class="headerlink" title="1.2 决策树的思想"></a>1.2 决策树的思想</h3><p>原则上讲，对于给定的属性集，可以构造的决策树的数目达指数级。尽管某些决策树比其他决策树更准确，但是由于搜索空间是指数规模的，找出最佳决策树在计算上是不可行的。尽管如此，人们还是开发出了一写有效的算法，这些算法通常基于贪心策略，在选择划分数据的属性时，采取一系列局部最优决策来构造决策树。下面介绍Hunt算法，Hunt算法是许多决策树算法的基础</p>
+<p>1) Hunt算法</p>
+<p>在Hunt算法中，通过将训练记录相继划分成较纯的子集，以递归方式建立决策树。设D_t是与节点t相关联的训练记录集，而y={y_1, y_2,\cdots,y_c}是类标号，则Hunt算法的递归定义如下：</p>
+<p>（1）如果D_t中所有记录同属于一个类y_t，则t是叶节点，用y_t标记；<br>（2）如果D_t中包含属于多个类的纪录，则选择一个<strong>属性测试条件</strong>，将记录划分成较小的子集。对于测试条件的每个输出，创建一个子女节点，并根据测试结果将D_t中的记录分布到子女节点中。然后，对于每个子女节点，递归地调用该算法.</p>
+<p>如果属性值的每种组合都在训练数据中出现，并且每种组合都具有唯一的类标号，则Hunt算法是有效的。但是对于大多数情况，这些假设太苛刻了。因此，需要附加的条件来处理以下的情况：</p>
+<ul>
+<li>算法的第二部所创建的子女节点可能为空，即不存在与这些节点相关联的记录。这时，该节点成为叶节点，类标号为其父节点上训练记录中的多数类。</li>
+<li>在第二步中，如果与D_t相关联的所有记录都具有相同的属性值（目标属性除外），则不可能进一步划分这些记录。在这种情况下，该节点为叶节点，其标号为与该节点相关联的训练记录中的多数类。</li>
+</ul>
+<p>2) 决策树归纳的设计问题<br>决策树归纳的学习算法必须解决下面两个问题。<br>（1）如何分裂训练记录？树增长过程的每个递归步都必须选择1个属性测试条件，将记录划分成较小的子集。为了实现这个步骤，算法必须提供为不同类型的属性指定测试条件的方法并提供评估毎种测试条件的客观度量。<br>（2）如何停止分裂过程？需要有结束条件，以终止决策树的生长过程。一个可能的策略是分裂结点，直到所有的记录都属于同一个类。或者所有的记录都具有相同的属性值。</p>
+<p>3) 属性的表示</p>
+<p>决策树归纳算法必须为不间类的属性提供表示属性测试条件和其对应输出的方法。不同属性按类别可分为<strong>二元属性</strong>、<strong>标称属性</strong>、<strong>序列属性</strong>、<strong>连续属性</strong>。如果是二元属性，我们可以简单的将树分成两个分支；但是对于其他属性，特别是非离散属性，我们要考虑的问题就更多了。后面会谈到离散属性连续化，以及应用于回归分析的算法。</p>
+<h2 id="2-树如何进行划分：信息增益、增益率、基尼指数"><a href="#2-树如何进行划分：信息增益、增益率、基尼指数" class="headerlink" title="2. 树如何进行划分：信息增益、增益率、基尼指数"></a>2. 树如何进行划分：信息增益、增益率、基尼指数</h2><p>决策树最关键的是选择合适的划分方法，来使得问题的规模最大程度的简化。一般是根据划分后子女结点不纯性的程度。</p>
+<p>不纯性的度量：</p>
+<script type="math/tex; mode=display">Entropy(t)=-\Sigma_{i=0}^{c-1}p(i|t)\log_2{p(i|t)}</script><script type="math/tex; mode=display">Gini(t)=1-\Sigma_{i=0}^{c-1}[p(i|t)]^2</script><script type="math/tex; mode=display">Classification\_Error(t)=1-\max_i{p(i|t)}</script><p>增益率：</p>
+<p>为解决熵和Gini指标等不纯性度量趋于有利于具有大量不同值的属性，CART使用二元划分属性，C4.5使用增益率。</p>
+<script type="math/tex; mode=display">Gain\_ratio=\frac{\Delta_{info}}{Split\_info}</script><h2 id="3-对抗过拟合的手段：预剪枝、后剪枝"><a href="#3-对抗过拟合的手段：预剪枝、后剪枝" class="headerlink" title="3. 对抗过拟合的手段：预剪枝、后剪枝"></a>3. 对抗过拟合的手段：预剪枝、后剪枝</h2><p>先剪枝（提前终于规则）：</p>
+<p>在这种方法中，树增长算法在产生完全拟合整个训练数据集的完全增长的决策树之前就停止决策树的生长。具体实现方式可以当观察到的不纯性度量的增益低于某个确定的阈值时就停止扩展叶结点。这种方法的优点在于避免产生过分拟合训练数据的过于复杂的子树。但是阈值的选取是一个比较复杂的问题。</p>
+<p>后剪枝：</p>
+<p>初始决策树按照最大规模生长，然后进行剪枝的步骤，按照自底向上的方式修剪完全增长然后修剪。</p>
+<p>修剪有两种做法：</p>
+<p>（1）用新的叶子节点替换子树，该叶结点的类标号由子树下记录中的多数类决定。子树替换</p>
+<p>（2）用子树中最常使用的分支代替子树。当模型不能再改进时终止剪枝步骤。子树提升</p>
+<h2 id="4-如何处理连续、缺失值"><a href="#4-如何处理连续、缺失值" class="headerlink" title="4. 如何处理连续、缺失值"></a>4. 如何处理连续、缺失值</h2><p>1) 连续值如何划分？</p>
+<p>C4.5：Information Gain （Ratio） based Threshold<br>CART：遍历所有输入变量j 和切分点s，根据最小化平方误差准则选取；</p>
+<p>2) 是否能够处理Missing值？ 如果能， 是如何处理的？</p>
+<ul>
+<li>插值法（Imputation）： QUEST, CRUISE</li>
+<li>替代法（Alternate/Surrogate Splits）：CART， CRUISE</li>
+<li>缺失值单独分支（Missing value branch）：CHAID， GUIDE</li>
+<li>概率权重（Probability weights）： C4.5</li>
+</ul>
+<p>3) 决策树是如何处理不完整数据的？</p>
+<ul>
+<li>采用抛弃缺失值<br>抛弃极少量的缺失值的样本对决策树的创建影响不是太大。但是如果属性缺失值较多或是关键属性值缺失,创建的决策树将是不完全的,同时可能给用户造成知识上的大量错误信息,所以抛弃缺失值一般不采用。只有在数据库具有极少量的缺失值同时缺失值不是关键的属性值时,且为了加快创建决策树的速度,才采用抛弃属性缺失值的方式创建决策树。</li>
+<li>补充缺失值<br>缺失值较少时按照我们上面的补充规则是可行的。但如果数据库的数据较大,缺失值较多(当然,这样获取的数据库在现实中使用的意义已不大,同时在信息获取方面基本不会出现这样的数据库),这样根据填充后的数据库创建的决策树可能和根据正确值创建的决策树有很大变化。</li>
+<li>概率化缺失值<br>对缺失值的样本赋予该属性所有属性值的概率分布,即将缺失值按照其所在属性已知值的相对概率分布来创建决策树。用系数F进行合理的修正计算的信息量,F=数据库中缺失值所在的属性值样本数量去掉缺失值样本数量/数据库中样本数量的总和,即F表示所给属性具有已知值样本的概率。</li>
+</ul>
+<h2 id="5-各种决策树之间的比较：ID3-C4-5-CART"><a href="#5-各种决策树之间的比较：ID3-C4-5-CART" class="headerlink" title="5. 各种决策树之间的比较：ID3/C4.5/CART"></a>5. 各种决策树之间的比较：ID3/C4.5/CART</h2><h3 id="5-1-ID3决策树"><a href="#5-1-ID3决策树" class="headerlink" title="5.1 ID3决策树"></a>5.1 ID3决策树</h3><p>信息熵是度量样本集合纯度最常用的一种指标。假设样本集合D中第k类样本所占的比重为pk，那么信息熵的计算则为下面的计算方式</p>
+<script type="math/tex; mode=display">Entropy(t)=-\Sigma_{i=0}^{c-1}p(i|t)\log_2{p(i|t)}</script><p>当这个Entropy(D)的值越小，说明样本集合D的纯度就越高</p>
+<p>有了信息熵，当我选择用样本的某一个属性a来划分样本集合D时，就可以得出用属性a对样本D进行划分所带来的“信息增益”</p>
+<script type="math/tex; mode=display">
+\operatorname{Gain}(D, a)=\operatorname{Entropy}(D)-\sum_{v=1}^{V} \frac{\left|D^{v}\right|}{|D|} \operatorname{Entropy}\left(D^{v}\right)</script><p>一般来讲，信息增益越大，说明如果用属性a来划分样本集合D，那么纯度会提升，因为我们分别对样本的所有属性计算增益情况，选择最大的来作为决策树的一个结点，或者可以说那些信息增益大的属性往往离根结点越近，因为我们会优先用能区分度大的也就是信息增益大的属性来进行划分。当一个属性已经作为划分的依据，在下面就不在参与竞选了，我们刚才说过根结点代表全部样本，而经过根结点下面属性各个取值后样本又可以按照相应属性值进行划分，并且在当前的样本下利用剩下的属性再次计算信息增益来进一步选择划分的结点，ID3决策树就是这样建立起来的。</p>
+<h3 id="5-2-C4-5决策树"><a href="#5-2-C4-5决策树" class="headerlink" title="5.2 C4.5决策树"></a>5.2 C4.5决策树</h3><p>C4.5决策树的提出完全是为了解决ID3决策树的一个缺点，当一个属性的可取值数目较多时，那么可能在这个属性对应的可取值下的样本只有一个或者是很少个，那么这个时候它的信息增益是非常高的，这个时候纯度很高，ID3决策树会认为这个属性很适合划分，但是较多取值的属性来进行划分带来的问题是它的泛化能力比较弱，不能够对新样本进行有效的预测。</p>
+<p>而C4.5决策树则不直接使用信息增益来作为划分样本的主要依据，而提出了另外一个概念，增益率</p>
+<script type="math/tex; mode=display">Gain\_ratio=\frac{\Delta_{info}}{Split\_info}</script><script type="math/tex; mode=display">
+Split\_info(a)=-\sum_{v=1}^{V} \frac{\left|D^{v}\right|}{|D|} \log _{2} \frac{\left|D^{v}\right|}{|D|}</script><p>但是同样的这个增益率对可取值数目较少的属性有所偏好，因此C4.5决策树先从候选划分属性中找出信息增益高于平均水平的属性，在从中选择增益率最高的。</p>
+<h3 id="5-3-CART决策树"><a href="#5-3-CART决策树" class="headerlink" title="5.3 CART决策树"></a>5.3 CART决策树</h3><p>CART决策树的全称为Classification and Regression Tree,可以应用于分类和回归。</p>
+<p>采用基尼系数来划分属性</p>
+<p>基尼值</p>
+<script type="math/tex; mode=display">Gini(t)=1-\Sigma_{i=0}^{c-1}[p(i|t)]^2</script><p>基尼系数</p>
+<script type="math/tex; mode=display">
+\operatorname{Gini\_index}(D, a)=\sum_{v=1}^{V} \frac{\left|D^{v}\right|}{|D|} \operatorname{Gini}\left(D^{v}\right)</script><p>因此在候选属性中选择基尼系数最小的属性作为最优划分属性。</p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
+    </div>
+</article>
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/superlova" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2020 Superlova<br></p>
+                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+</body>
+
+</html>

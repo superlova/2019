@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.9.0">
+
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+
+    
+
+    
+        <meta name="description" content="实验二一、实验目的尝试实现一个无连接的数据报Socket进程间通信（UDP）
+二、实验内容
+创建两个进程，使用无链接的数据报Socket实现交换一个字符串。一个叫做Sender.java ，用于向一个名为Receiver.java的进程发送一个字符串。
+Sender.java需要一个命令行参数，用于">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="Superlova">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="高级操作系统——分布式系统——课程设计与实现">
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="实验二一、实验目的尝试实现一个无连接的数据报Socket进程间通信（UDP）
+二、实验内容
+创建两个进程，使用无链接的数据报Socket实现交换一个字符串。一个叫做Sender.java ，用于向一个名为Receiver.java的进程发送一个字符串。
+Sender.java需要一个命令行参数，用于">
+    
+
+    <!--Open Graph Site Name-->
+        <meta property="og:site_name" content="Smile :)">
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article">
+    
+
+    <!--Page Cover-->
+    
+    
+        <meta property="og:image" content="https://superlova.github.iohttps://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg">
+    
+
+        <meta name="twitter:card" content="summary_large_image">
+
+    
+
+    
+        <meta name="twitter:image" content="https://superlova.github.iohttps://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg">
+    
+
+    <!-- Title -->
+    
+    <title>高级操作系统——分布式系统——课程设计与实现 - Smile :)</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet">
+
+    <!-- Google Analytics -->
+    
+
+
+    <!-- favicon -->
+    
+
+<link rel="alternate" href="/atom.xml" title="Smile :)" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+
+<body>
+
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Smile :)</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tags">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            
+                                Categories
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="https://github.com/superlova">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('https://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>高级操作系统——分布式系统——课程设计与实现</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2019-06-15
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
+                    
+                        
+
+
+<a href="/tags/分布式系统/">#分布式系统</a> <a href="/tags/操作系统/">#操作系统</a> <a href="/tags/课程设计/">#课程设计</a> <a href="/tags/Java/">#Java</a>
+
+
+                    
+                </div>
+                <div class="col-lg-4 col-md-5 post-categories">
+                    
+                        
+
+<a href="/categories/学校课程/">学校课程</a>/ <a href="/categories/学校课程/分布式系统/">分布式系统</a>
+
+                    
+                </div>
+            
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <h1 id="实验二"><a href="#实验二" class="headerlink" title="实验二"></a>实验二</h1><h2 id="一、实验目的"><a href="#一、实验目的" class="headerlink" title="一、实验目的"></a>一、实验目的</h2><p>尝试实现一个无连接的数据报Socket进程间通信（UDP）</p>
+<h2 id="二、实验内容"><a href="#二、实验内容" class="headerlink" title="二、实验内容"></a>二、实验内容</h2><ol>
+<li>创建两个进程，使用无链接的数据报Socket实现交换一个字符串。一个叫做Sender.java ，用于向一个名为Receiver.java的进程发送一个字符串。</li>
+<li>Sender.java需要一个命令行参数，用于表示传递消息的端口号.</li>
+<li>Receiver.java 需要一个命令行参数用于表示接受消息的端口号。</li>
+<li>接受方需要阻塞直到从发送方收到一个消息。如果发送放在接受运行之前发送出消息，消息会丢失。这种情况在此实验中是允许的。</li>
+<li>消息缓冲可以是定长的。如果发送的消息比消息缓冲长，接受方就看不到完整的消息。这种情况在此实验中是允许的。例如，消息缓冲的长度是5，而发送方发送一个消息 “123456789”，则接受方只能看到“12345”。</li>
+</ol>
+<h2 id="三、实验设计"><a href="#三、实验设计" class="headerlink" title="三、实验设计"></a>三、实验设计</h2><h3 id="实验背景："><a href="#实验背景：" class="headerlink" title="实验背景："></a>实验背景：</h3><p><strong>UDP简介</strong></p>
+<p><a href="https://blog.csdn.net/qq_23473123/article/details/51464272" target="_blank" rel="noopener">JAVA Socket 实现 UDP 编程</a></p>
+<p>UDP协议全称是用户数据报协议，在网络中它与TCP协议一样用于处理数据包，是一种无连接的协议。在OSI模型中，在第四层——传输层，处于IP协议的上一层。UDP有不提供数据包分组、组装和不能对数据包进行排序的缺点，也就是说，当报文发送之后，是无法得知其是否安全完整到达的。UDP用来支持那些需要在计算机之间传输数据的网络应用。包括网络视频会议系统在内的众多的客户/服务器模式的网络应用都需要使用UDP协议。</p>
+<p>UDP协议的主要作用是将网络数据流量压缩成数据包的形式。一个典型的数据包就是一个二进制数据的传输单位。每一个数据包的前8个字节用来包含报头信息，剩余字节则用来包含具体的传输数据。</p>
+<p><strong>什么时候应该使用UDP：</strong><br>当对网络通讯质量要求不高的时候，要求网络通讯速度能尽量的快，这时就可以使用UDP。 </p>
+<p>比如，日常生活中，常见使用UDP协议的应用如下：</p>
+<p>QQ语音、QQ视频……</p>
+<p><strong>Java中的UDP</strong></p>
+<p>在Java中，实现UDP连接和数据传输的类主要是DatagramPacket和DatagramSocket。</p>
+<p>DatagramSocket类表示用来发送和接收数据报包的套接字。</p>
+<p>数据报套接字是包投递服务的发送或接收点。每个在数据报套接字上发送或接收的包都是单独编址和路由的。从一台机器发送到另一台机器的多个包可能选择不同的路由，也可能按不同的顺序到达。</p>
+<p>在 DatagramSocket 上总是启用 UDP 广播发送。在接收端（Receiver），DatagramSocket只需输入空闲端口即可初始化对象。在消息发送端（Sender），DatagramSocket不需要任何参数初始化，直接新建对象。</p>
+<p>DatagramSocket对象拥有send()和receive()方法，参数是DatagramPacket对象，即发送和接收数据包。</p>
+<p>DatagramPacket类表示数据报包。</p>
+<p>数据报包用来实现无连接包投递服务。每条报文仅根据该包中包含的信息从一台机器路由到另一台机器。从一台机器发送到另一台机器的多个包可能选择不同的路由，也可能按不同的顺序到达。不对包投递做出保证。</p>
+<p>发送方（sender）要负责在数据报包上面贴好标签，注明收信人（地址和端口），这样才能够准确地被收信人（receiver）收到。</p>
+<p>在DatagramPacket包中的函数 int getLength()返回实际接受的字节数，<br>byte[] getData()返回接受到的数据。</p>
+<p>要想接受端给发送端回信息，就需要知道发送端的IP地址InetAddress getAddress()和发送端进程所绑定的端口号int getPort()。</p>
+<p>数据报套接字发送成功之后，就相当于建立了一个虚连接，双方可以发送数据。</p>
+<h3 id="实验环境："><a href="#实验环境：" class="headerlink" title="实验环境："></a>实验环境：</h3><p>Intellij IDEA, JDK 1.8, Windows 10</p>
+<h3 id="实验思路："><a href="#实验思路：" class="headerlink" title="实验思路："></a>实验思路：</h3><ol>
+<li>新建两个类，Sender和Receiver。由于逻辑简单，具体代码可直接在main中实现；</li>
+<li>Sender和Receiver类需要接收命令行参数，可利用Intellij IDEA的类运行设置来输入参数，利用main函数的args参数来传递命令行参数，避免了操作命令行界面的不便；<br><img src="/2019/06/15/高级操作系统——分布式系统——课程设计与实现/2019-06-15-16-36-58.png" alt><br><img src="/2019/06/15/高级操作系统——分布式系统——课程设计与实现/2019-06-15-16-37-07.png" alt></li>
+<li>Sender：定义地址、端口号、数据；创建数据报包，包含发送的数据信息；创建DatagramSocket对象；向服务器发送数据报包。</li>
+<li>Receiver：创建服务器端DatagramSocket，指定端口；创建数据报，用于接收客户端发送的数据；接收客户端发送的数据；读取数据。</li>
+</ol>
+<h3 id="相关代码："><a href="#相关代码：" class="headerlink" title="相关代码："></a>相关代码：</h3><p><code>Sender.java</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Sender</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">         * 向Receiver发送数据</span></span><br><span class="line"><span class="comment">         * java Sender 192.168.1.101 12 hello</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="comment">// 1.定义服务器的地址、端口号、数据</span></span><br><span class="line">        <span class="keyword">if</span> (args.length != <span class="number">3</span>) &#123;</span><br><span class="line">            System.out.println(<span class="string">"参数个数不正确！"</span> + args.length);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(args[<span class="number">0</span>]);</span><br><span class="line">        System.out.println(args[<span class="number">1</span>]);</span><br><span class="line">        System.out.println(args[<span class="number">2</span>]);</span><br><span class="line">        InetAddress address = InetAddress.getByName(args[<span class="number">0</span>]);</span><br><span class="line">        <span class="comment">//InetAddress address = InetAddress.getByName("localhost");</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> port = Integer.parseInt(args[<span class="number">1</span>]);</span><br><span class="line">        <span class="keyword">byte</span>[] data = args[<span class="number">2</span>].getBytes();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2.创建数据报，包含发送的数据信息</span></span><br><span class="line">        DatagramPacket packet = <span class="keyword">new</span> DatagramPacket(data, data.length, address, port);</span><br><span class="line">        <span class="comment">// 3.创建DatagramSocket对象</span></span><br><span class="line">        DatagramSocket socket = <span class="keyword">new</span> DatagramSocket();</span><br><span class="line">        <span class="comment">// 4.向服务器端发送数据报</span></span><br><span class="line">        socket.send(packet);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>Receiver.java</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Receiver</span> </span>&#123;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * 接收Sender发送的数据</span></span><br><span class="line"><span class="comment">     * java Receiver 12</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="comment">// 设置缓冲区大小</span></span><br><span class="line">        <span class="keyword">int</span> bufferLength = <span class="number">5</span>;</span><br><span class="line">        <span class="comment">// 设置参数格式</span></span><br><span class="line">        <span class="keyword">if</span> (args.length != <span class="number">1</span>) &#123;</span><br><span class="line">            System.out.println(<span class="string">"参数个数不正确！"</span> + args.length);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 1.创建服务器端DatagramSocket，指定端口</span></span><br><span class="line">        DatagramSocket socket = <span class="keyword">new</span> DatagramSocket(Integer.parseInt(args[<span class="number">0</span>]));</span><br><span class="line">        <span class="comment">// 2.创建数据报，用于接收客户端发送的数据</span></span><br><span class="line">        <span class="keyword">byte</span>[] data = <span class="keyword">new</span> <span class="keyword">byte</span>[bufferLength];</span><br><span class="line">        DatagramPacket packet = <span class="keyword">new</span> DatagramPacket(data, data.length);</span><br><span class="line">        <span class="comment">// 3.接收客户端发送的数据</span></span><br><span class="line">        System.out.println(<span class="string">"****服务器端已经启动，等待客户端发送数据"</span>);</span><br><span class="line">        socket.receive(packet);<span class="comment">// 此方法在接收到数据报之前会一直阻塞</span></span><br><span class="line">        <span class="comment">// 4.读取数据</span></span><br><span class="line">        String info = <span class="keyword">new</span> String(data, <span class="number">0</span>, packet.getLength());</span><br><span class="line">        System.out.println(<span class="string">"我是服务器，客户端说："</span> + info);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="四、实验结果与分析"><a href="#四、实验结果与分析" class="headerlink" title="四、实验结果与分析"></a>四、实验结果与分析</h2><p>编译过程略去。</p>
+<ol>
+<li>运行Reciever<br><img src="/2019/06/15/高级操作系统——分布式系统——课程设计与实现/2019-06-15-16-53-22.png" alt></li>
+<li>运行Sender<br><img src="/2019/06/15/高级操作系统——分布式系统——课程设计与实现/2019-06-15-16-54-43.png" alt></li>
+<li>此时的Receiver<br><img src="/2019/06/15/高级操作系统——分布式系统——课程设计与实现/2019-06-15-16-55-10.png" alt></li>
+</ol>
+<h3 id="实验分析："><a href="#实验分析：" class="headerlink" title="实验分析："></a>实验分析：</h3><p>缓冲区大小可以修改。修改后的缓冲区大小为5，可以看到，Sender中的消息<code>Hello!</code>发送给Receiver后，尾部的感叹号被削去。</p>
+<p>通过本次实验，我了解了UDP连接的原理与优缺点，掌握了在Java中建立UDP连接的方法。</p>
+<hr>
+<h1 id="实验三"><a href="#实验三" class="headerlink" title="实验三"></a>实验三</h1><h2 id="一、实验目的-1"><a href="#一、实验目的-1" class="headerlink" title="一、实验目的"></a>一、实验目的</h2><p>尝试通过面向流模式的socket实现通信。</p>
+<h2 id="二、实验内容-1"><a href="#二、实验内容-1" class="headerlink" title="二、实验内容"></a>二、实验内容</h2><ol>
+<li>创建一个名为Acceptor.java的程序。此程序可以接受一个连接并用流模式socket接受一个消息。创建一个名为 Requestor.java 的程序。此程序可以请求一个连接，并使用流模式socket。</li>
+<li>Acceptor.java 有2个命令行参数，分别用于表示本进程使用的服务器socket的端口号，以及要发送的消息。</li>
+<li>Requestor.java 有2个命令行参数，分别表示连接acceptor的主机名和连接acceptor的端口号。</li>
+</ol>
+<h2 id="三、实验设计-1"><a href="#三、实验设计-1" class="headerlink" title="三、实验设计"></a>三、实验设计</h2><h3 id="实验背景：-1"><a href="#实验背景：-1" class="headerlink" title="实验背景："></a>实验背景：</h3><p><a href="https://blog.csdn.net/qq_23473123/article/details/51461894" target="_blank" rel="noopener">Java 通过 Socket 实现 TCP 编程</a></p>
+<p><strong>TCP简介</strong></p>
+<p>TCP（Transmission Control Protocol 传输控制协议）是一种面向连接的、可靠的、基于字节流的传输层通信协议。</p>
+<p><strong>Java Socket简介</strong></p>
+<p>所谓socket 通常也称作”套接字“，用于描述IP地址和端口，是一个通信链的句柄。应用程序通常通过”套接字”向网络发出请求或者应答网络请求。</p>
+<p>ServerSocket用于服务器端，Socket是建立网络连接时使用的。在连接成功时，应用程序两端都会产生一个Socket实例，操作这个实例，完成所需的会话。对于一个网络连接来说，套接字是平等的，并没有差别，不因为在服务器端或在客户端而产生不同级别。不管是Socket还是ServerSocket它们的工作都是通过SocketImpl类及其子类完成的。</p>
+<p><strong>Java Socket常用方法</strong></p>
+<p>. Accept方法用于产生”阻塞”，直到接受到一个连接，并且返回一个客户端的Socket对象实例。”阻塞”是一个术语，它使程序运行暂时”停留”在这个地方，直到一个会话产生，然后程序继续；通常”阻塞”是由循环产生的。</p>
+<p>. getInputStream方法获得网络连接输入，同时返回一个InputStream对象实例。<br>. getOutputStream方法连接的另一端将得到输入，同时返回一个OutputStream对象实例。</p>
+<p>注意：其中getInputStream和getOutputStream方法均会产生一个IOException，它必须被捕获，因为它们返回的流对象，通常都会被另一个流对象使用。</p>
+<p><strong>Java 操作流对象</strong></p>
+<p>建立Socket连接后，两台机器之间便以流模式进行通信。在Java API中，可以从其中读入一个字节序列的对象称做输入流，而可以向其中写入一个字节序列的对象称做输出流。这些字节序列的来源地和目的地可以是文件，而且通常都是文件，但是也可以是网络连接，甚至是内存块。抽象类InputStream和OutputStream构成了输入/输出（I/O)类层次结构的基础。</p>
+<p>本次实验我选择利用Scanner作为读取流的手段，用PrintWriter作为写入流的手段。</p>
+<h3 id="实验环境：-1"><a href="#实验环境：-1" class="headerlink" title="实验环境："></a>实验环境：</h3><p>Intellij IDEA, JDK 1.8, Windows 10</p>
+<h3 id="实验思路：-1"><a href="#实验思路：-1" class="headerlink" title="实验思路："></a>实验思路：</h3><ol>
+<li>新建两个类，ConnectionAcceptor和ConnectionRequestor。由于逻辑简单，具体代码可直接在main中实现；</li>
+<li>ConnectionAcceptor和ConnectionRequestor类需要接收命令行参数，可利用Intellij IDEA的类运行设置来输入参数，利用main函数的args参数来传递命令行参数，避免了操作命令行界面的不便；</li>
+<li>ConnectionRequestor：建立连接；接收数据；发送数据；关闭连接。</li>
+<li>ConnectionAcceptor：接收请求；发送数据；接收数据；断开连接。</li>
+</ol>
+<h3 id="相关代码：-1"><a href="#相关代码：-1" class="headerlink" title="相关代码："></a>相关代码：</h3><p><code>ConnectionRequestor.java</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConnectionRequestor</span> </span>&#123;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * java ConnectionRequestor 192.168.1.101 12</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="comment">// 检查参数个数</span></span><br><span class="line">        <span class="keyword">if</span> (args.length != <span class="number">2</span>) &#123;</span><br><span class="line">            System.out.println(<span class="string">"Wrong parameters!"</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 1. 建立连接</span></span><br><span class="line">        String host = args[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">int</span> port = Integer.parseInt(args[<span class="number">1</span>]);</span><br><span class="line">        Socket socket = <span class="keyword">new</span> Socket(host, port);</span><br><span class="line">        <span class="comment">// 2. 接收数据</span></span><br><span class="line">        InputStream inputStream = socket.getInputStream();</span><br><span class="line">        Scanner scanner = <span class="keyword">new</span> Scanner(inputStream);</span><br><span class="line">        String line = scanner.nextLine();</span><br><span class="line">        System.out.println(<span class="string">"收到来自发送方的消息："</span> + line);</span><br><span class="line">        <span class="comment">// 3. 发送数据</span></span><br><span class="line">        OutputStream outputStream = socket.getOutputStream();</span><br><span class="line">        PrintWriter printWriter = <span class="keyword">new</span> PrintWriter(outputStream, <span class="keyword">true</span>);</span><br><span class="line">        printWriter.println(<span class="string">"我已收到消息，内容是"</span> + line);</span><br><span class="line">        <span class="comment">// 4. 关闭连接</span></span><br><span class="line">        socket.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>ConnectionAcceptor.java</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConnectionAcceptor</span> </span>&#123;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * java ConnectionAcceptor 12 Hello</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="comment">// 检查参数个数</span></span><br><span class="line">        <span class="keyword">if</span> (args.length != <span class="number">2</span>) &#123;</span><br><span class="line">            System.out.println(<span class="string">"Wrong parameters!"</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 1. 接受请求</span></span><br><span class="line">        <span class="keyword">int</span> port = Integer.parseInt(args[<span class="number">0</span>]);</span><br><span class="line">        ServerSocket serverSocket = <span class="keyword">new</span> ServerSocket(port);</span><br><span class="line">        Socket socket = serverSocket.accept();</span><br><span class="line">        <span class="comment">// 2. 发送数据</span></span><br><span class="line">        OutputStream outputStream = socket.getOutputStream();</span><br><span class="line">        PrintWriter printWriter = <span class="keyword">new</span> PrintWriter(outputStream, <span class="keyword">true</span>);</span><br><span class="line">        printWriter.println(args[<span class="number">1</span>]);</span><br><span class="line">        <span class="comment">// 3. 接收数据</span></span><br><span class="line">        InputStream inputStream = socket.getInputStream();</span><br><span class="line">        Scanner scanner = <span class="keyword">new</span> Scanner(inputStream);</span><br><span class="line">        String line = scanner.nextLine();</span><br><span class="line">        System.out.println(<span class="string">"服务器应答："</span> + line);</span><br><span class="line">        <span class="comment">// 4. 断开连接</span></span><br><span class="line">        socket.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="四、实验结果与分析-1"><a href="#四、实验结果与分析-1" class="headerlink" title="四、实验结果与分析"></a>四、实验结果与分析</h2><p>编译过程略去。</p>
+<ol>
+<li>运行ConnectionAcceptor<br><img src="/2019/06/15/高级操作系统——分布式系统——课程设计与实现/2019-06-15-17-27-34.png" alt></li>
+<li>运行ConnectionRequestor<br><img src="/2019/06/15/高级操作系统——分布式系统——课程设计与实现/2019-06-15-17-28-48.png" alt></li>
+<li>此时的ConnectionAcceptor<br><img src="/2019/06/15/高级操作系统——分布式系统——课程设计与实现/2019-06-15-17-29-13.png" alt></li>
+</ol>
+<h3 id="实验分析：-1"><a href="#实验分析：-1" class="headerlink" title="实验分析："></a>实验分析：</h3><p>通过本次实验，我了解了TCP连接的原理与优缺点，掌握了TCP和UDP的主要不同之处，掌握了在Java中建立TCP Socket连接的方法，掌握了流处理的基本方法。</p>
+<hr>
+<h1 id="实验四"><a href="#实验四" class="headerlink" title="实验四"></a>实验四</h1><h2 id="一、实验目的-2"><a href="#一、实验目的-2" class="headerlink" title="一、实验目的"></a>一、实验目的</h2><p>创建进程之间的多播。</p>
+<h2 id="二、实验内容-2"><a href="#二、实验内容-2" class="headerlink" title="二、实验内容"></a>二、实验内容</h2><ol>
+<li>MulticastSender.java用于发送多播消息给多播接收程序。多播IP地址是239.1.2.3 端口号为1234。</li>
+<li>MulticastReceiver.java 用于接收多播消息并显示消息。</li>
+<li>实验最终效果要求：至少开启两个以上的MulticastReceiver进程，MulticastSender发送的消息，均可被MulticastReceiver收到。</li>
+</ol>
+<h2 id="三、实验设计-2"><a href="#三、实验设计-2" class="headerlink" title="三、实验设计"></a>三、实验设计</h2><h3 id="实验背景：-2"><a href="#实验背景：-2" class="headerlink" title="实验背景："></a>实验背景：</h3><p><a href="https://blog.csdn.net/zhouzixin053/article/details/22823521" target="_blank" rel="noopener">java————多播编程——-MulticastSocket</a></p>
+<p><strong>单播：</strong></p>
+<p>一个单个的发送者和一个接受者之间通过网络进行的通信。</p>
+<p>1、服务器及时响应客户机的请求</p>
+<p>2、服务器针对每个客户不同的请求发送不同的数据，容易实现个性化服务。</p>
+<p><strong>多播：</strong></p>
+<p>一个发送者和多个接受者之间的通信。</p>
+<p>广播特点：主机之间“一对所有”的通讯模式，网络对其中每一台主机发出的信号都进行无条件复制并转发，所有主机都可以接收到所有信息（不管你是否需要）。</p>
+<p>1、网络设备简单，维护简单，布网成本低廉。</p>
+<p>2、由于服务器不用向每个客户机单独发送数据，所以服务器流量负载极低。</p>
+<p>多播的地址是特定的，D类地址用于多播。D类IP地址就是多播IP地址，即224.0.0.0至239.255.255.255之间的IP地址。</p>
+<p><strong>多播程序设计的框架</strong></p>
+<p>要进行多播的编程，需要遵从一定的编程框架。多播程序框架主要包含套接字初始化、设置多播超时时间、加入多播组、发送数据、接收数据以及从多播组中离开几个方面。其步骤如下：</p>
+<p>（1）建立一个socket。</p>
+<p>（2）然后设置多播的参数，例如超时时间TTL、本地回环许可LOOP等。</p>
+<p>（3）加入多播组。</p>
+<p>（4）发送和接收数据。</p>
+<p>（5）从多播组离开。</p>
+<p><strong>Java MulticastSocket</strong></p>
+<p>多播通过多播数据报套接MulticastSocket类来实现</p>
+<p>重要的构造方法：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MulticastSocket()<span class="comment">//创建多播套接字</span></span><br><span class="line">MulticastSocket(<span class="keyword">int</span> port)<span class="comment">//创建多播套接字并将其绑定到特定端口</span></span><br><span class="line">MulticastSocket(SocketAddress bindaddr)<span class="comment">//创建绑定到指定套接字地址的MulticastSocket</span></span><br></pre></td></tr></table></figure></p>
+<p>常用的方法：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">joinGroup</span><span class="params">(InetAddress meastaddr)</span><span class="comment">//加入多播组</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">leaveGroup</span><span class="params">(InetAddress meastaddr)</span><span class="comment">//离开多播组</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">send</span><span class="params">(DatagramPacket p)</span><span class="comment">//从此套接字发送数据包</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">receive</span><span class="params">(DatagramPacket p)</span><span class="comment">//从此套接字接收数据包</span></span></span><br></pre></td></tr></table></figure></p>
+<h3 id="实验环境：-2"><a href="#实验环境：-2" class="headerlink" title="实验环境："></a>实验环境：</h3><p>Intellij IDEA, JDK 1.8, Windows 10</p>
+<h3 id="实验思路：-2"><a href="#实验思路：-2" class="headerlink" title="实验思路："></a>实验思路：</h3><ol>
+<li>新建两个类，MulticastSender和MulticastReciever。由于逻辑简单，具体代码可直接在main中实现；</li>
+<li>为了体现多播的广播特性，MulticastReciever的进程要多几个，随着MulticastSender的启动，全部收到信息才行。</li>
+<li>MulticastSender：新建多播连接；构造数据包；广播数据；关闭连接。</li>
+<li>MulticastReciever：新建多播连接；构造数据包；接收数据；关闭连接。</li>
+</ol>
+<h3 id="相关代码：-2"><a href="#相关代码：-2" class="headerlink" title="相关代码："></a>相关代码：</h3><p><code>MulticastSender.java</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MulticastSender</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="comment">// 新建多播连接</span></span><br><span class="line">        <span class="keyword">int</span> port = <span class="number">1234</span>;</span><br><span class="line">        String address = <span class="string">"239.1.2.3"</span>;</span><br><span class="line">        MulticastSocket multicastSocket = <span class="keyword">new</span> MulticastSocket(port);</span><br><span class="line">        InetAddress groupAddress = InetAddress.getByName(address);</span><br><span class="line">        multicastSocket.joinGroup(groupAddress);</span><br><span class="line">        <span class="comment">// 构造数据包</span></span><br><span class="line">        <span class="keyword">byte</span>[] message = <span class="string">"Hello!"</span>.getBytes();</span><br><span class="line">        DatagramPacket datagramPacket = <span class="keyword">new</span> DatagramPacket(message, message.length, InetAddress.getByName(address), port);</span><br><span class="line">        <span class="comment">// 广播数据</span></span><br><span class="line">        multicastSocket.send(datagramPacket);</span><br><span class="line">        <span class="comment">// 关闭连接</span></span><br><span class="line">        multicastSocket.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>MulticastReciever.java</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MulticastReciever</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="comment">// 新建多播连接</span></span><br><span class="line">        <span class="keyword">int</span> port = <span class="number">1234</span>;</span><br><span class="line">        String address = <span class="string">"239.1.2.3"</span>;</span><br><span class="line">        MulticastSocket multicastSocket = <span class="keyword">new</span> MulticastSocket(port);</span><br><span class="line">        InetAddress groupAddress = InetAddress.getByName(address);</span><br><span class="line">        multicastSocket.joinGroup(groupAddress);</span><br><span class="line">        <span class="comment">// 构造数据包</span></span><br><span class="line">        <span class="keyword">byte</span>[] message = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line">        DatagramPacket datagramPacket = <span class="keyword">new</span> DatagramPacket(message, message.length, InetAddress.getByName(address), port);</span><br><span class="line">        <span class="comment">// 接收数据</span></span><br><span class="line">        multicastSocket.receive(datagramPacket);</span><br><span class="line">        System.out.println(<span class="string">"接收到了广播消息："</span> + <span class="keyword">new</span> String(message));</span><br><span class="line">        <span class="comment">// 关闭连接</span></span><br><span class="line">        multicastSocket.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="四、实验结果与分析-2"><a href="#四、实验结果与分析-2" class="headerlink" title="四、实验结果与分析"></a>四、实验结果与分析</h2><p>编译过程略去。</p>
+<ol>
+<li>运行MulticastReciever（6个）<br><img src="/2019/06/15/高级操作系统——分布式系统——课程设计与实现/2019-06-15-17-45-12.png" alt></li>
+<li>运行MulticastSender<br><img src="/2019/06/15/高级操作系统——分布式系统——课程设计与实现/2019-06-15-17-46-17.png" alt></li>
+<li>此时的MulticastReciever<br><img src="/2019/06/15/高级操作系统——分布式系统——课程设计与实现/2019-06-15-17-46-34.png" alt><br><img src="/2019/06/15/高级操作系统——分布式系统——课程设计与实现/2019-06-15-17-46-48.png" alt><br><img src="/2019/06/15/高级操作系统——分布式系统——课程设计与实现/2019-06-15-17-47-02.png" alt><br>剩下三个略去不表，结果相同。</li>
+</ol>
+<h3 id="实验分析：-2"><a href="#实验分析：-2" class="headerlink" title="实验分析："></a>实验分析：</h3><p>通过本次实验，我了解了多播的原理和相对于单播的优点，掌握了在Java中建立多播MulticastSocket连接的方法。</p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
+    </div>
+</article>
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/superlova" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2020 Superlova<br></p>
+                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+</body>
+
+</html>

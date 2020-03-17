@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.9.0">
+
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+
+    
+
+    
+        <meta name="description" content="我实在是不会把hexo中的latex开关打开了，大家如果想看公式，可以使用markdown编辑器，复制本文后在本地查看。本文是由本人汇编自网上的资料整理而成，为的是记忆和分享。
+然后来建立运算法则。回想遇到较复杂的一元函数如$f = \log(2+\sin x)e^{\sqrt{x}}$，我们是如何">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="Superlova">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="矩阵求导总结">
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="我实在是不会把hexo中的latex开关打开了，大家如果想看公式，可以使用markdown编辑器，复制本文后在本地查看。本文是由本人汇编自网上的资料整理而成，为的是记忆和分享。
+然后来建立运算法则。回想遇到较复杂的一元函数如$f = \log(2+\sin x)e^{\sqrt{x}}$，我们是如何">
+    
+
+    <!--Open Graph Site Name-->
+        <meta property="og:site_name" content="Smile :)">
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article">
+    
+
+    <!--Page Cover-->
+    
+    
+        <meta property="og:image" content="https://superlova.github.iohttps://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg">
+    
+
+        <meta name="twitter:card" content="summary_large_image">
+
+    
+
+    
+        <meta name="twitter:image" content="https://superlova.github.iohttps://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg">
+    
+
+    <!-- Title -->
+    
+    <title>矩阵求导总结 - Smile :)</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet">
+
+    <!-- Google Analytics -->
+    
+
+
+    <!-- favicon -->
+    
+
+<link rel="alternate" href="/atom.xml" title="Smile :)" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+
+<body>
+
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Smile :)</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tags">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            
+                                Categories
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="https://github.com/superlova">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('https://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>矩阵求导总结</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2019-05-15
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
+                    
+                        
+
+
+<a href="/tags/机器学习/">#机器学习</a> <a href="/tags/深度学习/">#深度学习</a> <a href="/tags/矩阵分析/">#矩阵分析</a> <a href="/tags/矩阵求导/">#矩阵求导</a>
+
+
+                    
+                </div>
+                <div class="col-lg-4 col-md-5 post-categories">
+                    
+                        
+
+<a href="/categories/机器学习/">机器学习</a>/ <a href="/categories/机器学习/学习笔记/">学习笔记</a>/ <a href="/categories/机器学习/学习笔记/数学基础/">数学基础</a>/ <a href="/categories/机器学习/学习笔记/数学基础/转载/">转载</a>
+
+                    
+                </div>
+            
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p>我实在是不会把hexo中的latex开关打开了，大家如果想看公式，可以使用markdown编辑器，复制本文后在本地查看。本文是由本人汇编自网上的资料整理而成，为的是记忆和分享。</p>
+<p>然后来建立运算法则。回想遇到较复杂的一元函数如$f = \log(2+\sin x)e^{\sqrt{x}}$，我们是如何求导的呢？通常不是从定义开始求极限，而是先建立了初等函数求导和四则运算、复合等法则，再来运用这些法则。故而，我们来创立常用的矩阵微分的运算法则：</p>
+<p>加减法：$d(X\pm Y) = dX \pm dY$；矩阵乘法：$d(XY) = (dX)Y + X dY $；转置：$d(X^T) = (dX)^T$；迹：$d\text{tr}(X) = \text{tr}(dX)$。<br>逆：$dX^{-1} = -X^{-1}dX X^{-1}$。此式可在$XX^{-1}=I$两侧求微分来证明。<br>行列式：$d|X| = \text{tr}(X^$表示X的伴随矩阵，在X可逆时又可以写作$d|X|= |X|\text{tr}(X^{-1}dX)$。此式可用Laplace展开来证明，详见张贤达《矩阵分析与应用》第279页。<br>逐元素乘法：$d(X\odot Y) = dX\odot Y + X\odot dY$，$\odot$表示尺寸相同的矩阵X,Y逐元素相乘。<br>逐元素函数：$d\sigma(X) = \sigma’(X)\odot dX$ ，$\sigma(X) = \left[\sigma(X<em>{ij})\right]$是逐元素标量函数运算，$ \sigma’(X)=[\sigma’(X</em>{ij})]$是逐元素求导数。举个例子，<script type="math/tex">X=\left[\begin{matrix}x_{11} & x_{12} \\ x_{21} & x_{22}\end{matrix}\right], d \sin(X) = \left[\begin{matrix}\cos x_{11} dx_{11} & \cos x_{12} d x_{12}\\ \cos x_{21} d x_{21}& \cos x_{22} dx_{22}\end{matrix}\right] = \cos(X)\odot dX</script>。</p>
+<p>我们试图利用矩阵导数与微分的联系$df = \text{tr}\left(\frac{\partial f}{\partial X}^T dX\right)$ ，在求出左侧的微分df后，该如何写成右侧的形式并得到导数呢？这需要一些迹技巧(trace trick)：</p>
+<p>标量套上迹：$a = \text{tr}(a)$<br>转置：$\mathrm{tr}(A^T) = \mathrm{tr}(A)$。<br>线性：$\text{tr}(A\pm B) = \text{tr}(A)\pm \text{tr}(B)$。<br>矩阵乘法交换：$\text{tr}(AB) = \text{tr}(BA)$，其中$A$与$B^T$尺寸相同。两侧都等于$\sum<em>{i,j}A</em>{ij}B<em>{ji}$。<br>矩阵乘法/逐元素乘法交换：$\text{tr}(A^T(B\odot C)) = \text{tr}((A\odot B)^TC)$，其中$A, B, C$尺寸相同。两侧都等于$\sum</em>{i,j}A<em>{ij}B</em>{ij}C_{ij}$。</p>
+<p>观察一下可以断言，若标量函数f是矩阵X经加减乘法、逆、行列式、逐元素函数等运算构成，则使用相应的运算法则对f求微分，再使用迹技巧给df套上迹并将其它项交换至dX左侧，对照导数与微分的联系$df = \text{tr}\left(\frac{\partial f}{\partial X}^T dX\right)$，即能得到导数。</p>
+<p>特别地，若矩阵退化为向量，对照导数与微分的联系$df = \frac{\partial f}{\partial \boldsymbol{x}}^T d\boldsymbol{x}$ ，即能得到导数。</p>
+<p>在建立法则的最后，来谈一谈复合：假设已求得$\frac{\partial f}{\partial Y}$，而Y是X的函数，如何求$\frac{\partial f}{\partial X}$呢？在微积分中有标量求导的链式法则$\frac{\partial f}{\partial x} = \frac{\partial f}{\partial y} \frac{\partial y}{\partial x}$，但这里我们不能随意沿用标量的链式法则，因为矩阵对矩阵的导数$\frac{\partial Y}{\partial X}$截至目前仍是未定义的。于是我们继续追本溯源，链式法则是从何而来？源头仍然是微分。我们直接从微分入手建立复合法则：先写出$df = \text{tr}\left(\frac{\partial f}{\partial Y}^T dY\right)$，再将dY用dX表示出来代入，并使用迹技巧将其他项交换至dX左侧，即可得到$\frac{\partial f}{\partial X}$。</p>
+<p>最常见的情形是$Y = AXB$，此时 <script type="math/tex">df = \text{tr}\left(\frac{\partial f}{\partial Y}^T dY\right) = \text{tr}\left(\frac{\partial f}{\partial Y}^T AdXB\right) =  \text{tr}\left(B\frac{\partial f}{\partial Y}^T AdX\right) = \text{tr}\left((A^T\frac{\partial f}{\partial Y}B^T)^T dX\right)</script> ，可得到<script type="math/tex">\frac{\partial f}{\partial X}=A^T\frac{\partial f}{\partial Y}B^T</script>。注意这里$dY = (dA)XB + AdXB + AXdB = AdXB$，由于A,B是常量，$dA=0,dB=0$，以及我们使用矩阵乘法交换的迹技巧交换了$\frac{\partial f}{\partial Y}^T AdX$与$B$。</p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
+    </div>
+</article>
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/superlova" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2020 Superlova<br></p>
+                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+</body>
+
+</html>

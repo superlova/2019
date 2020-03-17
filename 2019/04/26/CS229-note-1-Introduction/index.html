@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.9.0">
+
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+
+    
+
+    
+        <meta name="description" content="1. Supervised learning机器学习，机器从数据中学习固定的问题-答案模式，形成固定的问答模型的过程。
+机器学习的过程可用下图表示：
+
+机器通过特定的学习方法Learning Algorithm学习已知的问题-答案数据集Training Set，Learning Algorithm最">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="Superlova">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="CS229 note 1: Introduction">
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="1. Supervised learning机器学习，机器从数据中学习固定的问题-答案模式，形成固定的问答模型的过程。
+机器学习的过程可用下图表示：
+
+机器通过特定的学习方法Learning Algorithm学习已知的问题-答案数据集Training Set，Learning Algorithm最">
+    
+
+    <!--Open Graph Site Name-->
+        <meta property="og:site_name" content="Smile :)">
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article">
+    
+
+    <!--Page Cover-->
+    
+    
+        <meta property="og:image" content="https://superlova.github.iohttps://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg">
+    
+
+        <meta name="twitter:card" content="summary_large_image">
+
+    
+
+    
+        <meta name="twitter:image" content="https://superlova.github.iohttps://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg">
+    
+
+    <!-- Title -->
+    
+    <title>CS229 note 1: Introduction - Smile :)</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet">
+
+    <!-- Google Analytics -->
+    
+
+
+    <!-- favicon -->
+    
+
+<link rel="alternate" href="/atom.xml" title="Smile :)" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+
+<body>
+
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Smile :)</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tags">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            
+                                Categories
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="https://github.com/superlova">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('https://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>CS229 note 1: Introduction</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2019-04-26
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
+                    
+                        
+
+
+<a href="/tags/机器学习/">#机器学习</a>
+
+
+                    
+                </div>
+                <div class="col-lg-4 col-md-5 post-categories">
+                    
+                        
+
+<a href="/categories/机器学习/">机器学习</a>/ <a href="/categories/机器学习/学习笔记/">学习笔记</a>
+
+                    
+                </div>
+            
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <h2 id="1-Supervised-learning"><a href="#1-Supervised-learning" class="headerlink" title="1. Supervised learning"></a>1. Supervised learning</h2><p>机器学习，机器从数据中学习固定的问题-答案模式，形成固定的问答模型的过程。</p>
+<p>机器学习的过程可用下图表示：</p>
+<p><img src="/2019/04/26/CS229-note-1-Introduction/2019-04-26-12-57-21.png" alt></p>
+<p>机器通过特定的学习方法Learning Algorithm学习已知的问题-答案数据集Training Set，Learning Algorithm最终会得到一个与真实模型相差无几的假说模型hypothesis。得到该模型之后，我们就可以利用它，对全新的问题的答案作出预测。</p>
+<p>机器通过问题-答案训练模型的过程，称之为监督学习过程。问题是由一组已知数据构成的输入，比如房屋的面积、照射率、卧室数目等等；答案则是一个确切的结论，比如房屋的价格。刚才举的例子就是依照房屋的面积和其他信息来预测房屋的价格，输出值是一个实数（连续变量）。这在统计学上称之为回归问题。假设房屋的价格和面积成正比，则称上个问题为线性回归问题。</p>
+<p>好了，那么机器怎么实现学习的呢？我们可以以预测房屋价格为例，构建一个学习模型。</p>
+<p>首先，回归问题的本质就是通过给定一系列的参数，拟合出一个函数h(x)，这个函数应该与真实函数y(x)越接近越好。h(x)大概长成这样：</p>
+<script type="math/tex; mode=display">h_{\vec\theta}(\vec x)=\theta_0+\theta_1x_1+\theta_2x_2+\cdots\\=\vec\theta^T\vec x</script><p>今后为了方便起见，$\vec x$和$\vec \theta$等等就不加上箭头了，他们都表示由许多分量的向量。</p>
+<p>可以看到，学习效果的好坏，取决于$\theta$选择的好坏，选择的好了$h_{\theta}(x)$就更逼近真实的y。学习的过程，就是不断修改$\theta$的过程。</p>
+<p>那我们怎么改$\theta$呢？回想我们的数学建模过程，我们可以构造一个函数，自变量为$\theta$，检验y(x)与h(x)的距离（即差值），距离越小则说明$\theta$越完美。这不就转化成了一个最优化问题了吗？如果构造出来的函数还能够求导的话，求一次导，找到最低点，岂不是美滋滋？因此我们构造出来了以下函数：</p>
+<script type="math/tex; mode=display">J(\theta)=\frac{1}{2}\Sigma_{i=1}^{m}(h_{\theta}(x^{(i)})-y^{(i)})</script><p>其中m是样本个数，以上就是<strong>线性回归</strong>问题的<strong>损失函数</strong>，损失函数越小，训练得越好。</p>
+<h2 id="2-求解损失函数最小值的迭代思路"><a href="#2-求解损失函数最小值的迭代思路" class="headerlink" title="2. 求解损失函数最小值的迭代思路"></a>2. 求解损失函数最小值的迭代思路</h2><p>按理说，我们直接对损失函数求导，马上就知道二次函数的最低点了。求这个函数的导数可不太容易，首先我们以非解析方法来迭代求解该函数。我们采用梯度下降法，逐步逼近全局最优点：</p>
+<script type="math/tex; mode=display">\theta_j:=\theta_j-\alpha\frac{\partial}{\partial\theta_j}J(\theta)</script><p>$\theta$维度太多，求导是个困难的事情。如果对$\theta$求梯度，得到某一点处下降速度最快的方向，即可逐步实现优化。下面是对$J(\theta)$求偏导数的过程：</p>
+<script type="math/tex; mode=display">
+\frac{\partial J(\theta)}{\partial \theta_j}=\frac{1}{2}\Sigma_{i=i}^{m}\frac{\partial(\theta^Tx^{(i)}-y^{(i)})^2}{\partial\theta_j}\\=\Sigma_{i=i}^{m}(\theta^Tx^{(i)}-y^{(i)})\cdot x_j^{(i)}</script><p>因此我们得到了以下学习算法：</p>
+<p><img src="/2019/04/26/CS229-note-1-Introduction/2019-04-26-14-57-21.png" alt></p>
+<p>该算法具有“离终点越近，收敛速度越慢”的特点。该算法还有一个特点，即每计算一个$\theta$的分量$\theta_j$，算法都需要遍历一遍整个数据集。效率是O(n*n*m*k),n是维度，m是数据集大小，k是直到收敛为止循环的次数。</p>
+<p>因为每判断一次，都需要整批数据的支持，因此这种梯度下降方式又称之为<strong>批梯度下降</strong>(batch gradient descent)。</p>
+<p>做一个不恰当的比喻：批梯度下降好比每做一次选择，总是要询问周边所有的人的意见，之后给出一个让所有人都比较满意的方向。</p>
+<p>与之相对应，如果我只问一个人的意见，就给出结论，这不就节约了遍历整个数据集的时间了吗？这种方法叫做<strong>随机梯度下降</strong>(stochastic gradient descent)。</p>
+<p>算法表示如下：</p>
+<p><img src="/2019/04/26/CS229-note-1-Introduction/2019-04-26-15-17-07.png" alt></p>
+<p>该算法的效率是O(n<em>\n\</em>k)。虽然性能得到了提升，但是牺牲了一部分准确性。事实证明随机梯度下降能在一定程度上代替批梯度下降，我们更多地使用小批量梯度下降法，即结合二者的优势，做决定之前问问一部分人的意见即可。</p>
+<h2 id="3-求解损失函数最小值的代数证明"><a href="#3-求解损失函数最小值的代数证明" class="headerlink" title="3. 求解损失函数最小值的代数证明"></a>3. 求解损失函数最小值的代数证明</h2><p>前文说过，对$J(\theta)$求导不是不行，而是因为如果$\theta$维度变高，求导相对困难。下面我们就来硬肛这个方法。</p>
+<p>先要做一些数学知识铺垫，即矩阵的求导运算：</p>
+<ol>
+<li>函数对矩阵求导<br>对于一个函数$f:\mathbb{R}^{m\times n}\mapsto\mathbb{R}$，即输入一个矩阵，输出一个值的此类函数，定义f对矩阵A求导(the derivative of f with respect to A)为：<script type="math/tex; mode=display">
+\nabla_{A} f(A)=\left[ \begin{array}{ccc}{\frac{\partial f}{\partial A_{11}}} & {\cdots} & {\frac{\partial f}{\partial A_{1 n}}} \\ {\vdots} & {\ddots} & {\vdots} \\ {\frac{\partial f}{\partial A_{m 1}}} & {\cdots} & {\frac{\partial f}{\partial A_{m n}}}\end{array}\right]</script></li>
+</ol>
+<p>举个例子，若定义$A=\left[ \begin{array}{ll}{A<em>{11}} &amp; {A</em>{12}} \ {A<em>{21}} &amp; {A</em>{22}}\end{array}\right]$，$f(A)=\frac{3}{2} A<em>{11}+5 A</em>{12}^{2}+A<em>{21} A</em>{22}$，那么有$\nabla<em>{A} f(A)=\left[ \begin{array}{cc}{\frac{3}{2}} &amp; {10 A</em>{12}} \ {A<em>{22}} &amp; {A</em>{21}}\end{array}\right]$。</p>
+<ol>
+<li>矩阵的迹(trace, tr)<br>矩阵的迹特指方阵的迹。矩阵的迹就是上文所定义的函数f的一个代表。定义如下：</li>
+</ol>
+<script type="math/tex; mode=display">\operatorname{tr} A=\sum_{i=1}^{n} A_{i i}</script><p>矩阵的迹有以下性质：</p>
+<p>$tr(AB)=tr(BA)\<br>tr(ABC)=tr(CAB)=tr(BCA)\<br>tr(ABCD)=tr(DABC)=tr(CDAB)=tr(BCDA)\<br>trA=trA^T\<br>tr(A+B)=trA+trB\<br>traA=atrA$</p>
+<p>矩阵的转置的性质：</p>
+<p>$(AB)^T= B^TA^T \<br>(A+B)^T=A^T+B^T$</p>
+<p>对迹求导的几个结论：<br>$\begin{aligned} \nabla<em>{A} \operatorname{tr} A B &amp;=B^{T} \ \nabla</em>{A^{T}} f(A) &amp;=\left(\nabla<em>{A} f(A)\right)^{T} \ \nabla</em>{A} \operatorname{tr} A B A^{T} C &amp;=C A B+C^{T} A B^{T} \ \nabla_{A}|A| &amp;=|A|\left(A^{-1}\right)^{T} \end{aligned}$</p>
+<ol>
+<li>一些符号的定义<br>如果X是由样本构成的矩阵，<script type="math/tex; mode=display">
+X=\left[ \begin{array}{c}{-\left(x^{(1)}\right)^{T}-} \\ {-\left(x^{(2)}\right)^{T}-} \\ {\vdots} \\ {-\left(x^{(m)}\right)^{T}-}\end{array}\right]</script>y是由真实结果组成的向量，<script type="math/tex; mode=display">
+\vec{y}=\left[ \begin{array}{c}{y^{(1)}} \\ {y^{(2)}} \\ {\vdots} \\ {y^{(m)}}\end{array}\right]</script></li>
+</ol>
+<p>由于$h_{\theta}\left(x^{(i)}\right)=\left(x^{(i)}\right)^{T} \theta$，所以我们可以得到下式：</p>
+<script type="math/tex; mode=display">
+X \theta-\vec{y}=\left[ \begin{array}{c}{\left(x^{(1)}\right)^{T} \theta} \\ {\vdots} \\ {\left(x^{(m)}\right)^{T} \theta}\end{array}\right]-\left[ \begin{array}{c}{y^{(1)}} \\ {\vdots} \\ {y^{(m)}}\end{array}\right]
+$$</script><p>=\left[ \begin{array}{c}{h<em>{\theta}\left(x^{(1)}\right)-y^{(1)}} \ {\vdots} \ {h</em>{\theta}\left(x^{(m)}\right)-y^{(m)}}\end{array}\right]</p>
+<script type="math/tex; mode=display">
+则我们的损失函数可以化成：</script><p>\begin{aligned} \frac{1}{2}(X \theta-\vec{y})^{T}(X \theta-\vec{y}) &amp;=\frac{1}{2} \sum<em>{i=1}^{m}\left(h</em>{\theta}\left(x^{(i)}\right)-y^{(i)}\right)^{2} \ &amp;=J(\theta) \end{aligned}</p>
+<script type="math/tex; mode=display">
+
+4. 开始推导
+根据上面的结论，让损失函数对$\theta$求导，得到：</script><p>\begin{aligned} \nabla<em>{\theta} J(\theta) &amp;=\nabla</em>{\theta} \frac{1}{2}(X \theta-\vec{y})^{T}(X \theta-\vec{y}) \ &amp;=\frac{1}{2} \nabla<em>{\theta}\left(\theta^{T} X^{T} X \theta-\theta^{T} X^{T} \vec{y}-\vec{y}^{T} X \theta+\vec{y}^{T} \vec{y}\right) \ &amp;=\frac{1}{2} \nabla</em>{\theta} \operatorname{tr}\left(\theta^{T} X^{T} X \theta-\theta^{T} X^{T} \vec{y}-\vec{y}^{T} X \theta+\vec{y}^{T} \vec{y}\right) \ &amp;=\frac{1}{2} \nabla_{\theta}\left(\operatorname{tr} \theta^{T} X^{T} X \theta-2 \operatorname{tr} \vec{y}^{T} X \theta\right) \ &amp;=\frac{1}{2}\left(X^{T} X \theta+X^{T} X \theta-2 X^{T} \vec{y}\right) \ &amp;=X^{T} X \theta-X^{T} \vec{y} \end{aligned}</p>
+<script type="math/tex; mode=display">
+
+令导数为零，求得零点的$\theta$值为：</script><p>\theta=\left(X^{T} X\right)^{-1} X^{T} \vec{y}</p>
+<script type="math/tex; mode=display">
+
+# 4. 为什么使用最小二乘作为损失函数？
+
+除了易于数学处理之外，还有更深刻的道理。我们将从概率的角度解释为什么使用最小二乘法作为损失函数。
+
+我们说，现实生活中的大多数模型，甚至是全部模型，其输入都含有一定的误差$\epsilon$。这些误差各自符合不同的分布。</script><p>y^{(i)}=\theta^{T} x^{(i)}+\epsilon^{(i)}</p>
+<script type="math/tex; mode=display">
+
+根据大数定律，多个随机变量的结果趋近于高斯分布（正态分布），即$\epsilon^{(i)}\sim\mathcal{N}\left(0, \sigma^{2}\right)$。则$\epsilon^{(i)}$的概率是：</script><p>p\left(\epsilon^{(i)}\right)=\frac{1}{\sqrt{2 \pi} \sigma} \exp \left(-\frac{\left(\epsilon^{(i)}\right)^{2}}{2 \sigma^{2}}\right)</p>
+<script type="math/tex; mode=display">
+
+将$y^{(i)}=\theta^{T} x^{(i)}+\epsilon^{(i)}$带入得：</script><p>p\left(y^{(i)} | x^{(i)} ; \theta\right)=\frac{1}{\sqrt{2 \pi} \sigma} \exp \left(-\frac{\left(y^{(i)}-\theta^{T} x^{(i)}\right)^{2}}{2 \sigma^{2}}\right)</p>
+<script type="math/tex; mode=display">
+
+上式左边是在第i个样本为x、参数为θ的条件下，得到y的概率。上式完全是一个与θ有关的函数，因为样本x和y都是固定的。别忘了，我们需要求的是θ。问题转化成了**我们已知事件发生的概率，想要反推具有最大可能性时，θ的值**。
+
+这边就要稍微插一句了，机器学习学术界有两种学派，一派是*频率学派*，另一派是*贝叶斯学派*。二者各自有用武之地，都能解决上面提出的问题。下面我们利用频率学派的方法：**最大似然估计**解决这个问题。首先构造下面的函数：</script><p>L(\theta)=L(\theta ; X, \vec{y})=p(\vec{y} | X ; \theta)</p>
+<script type="math/tex; mode=display">
+
+我们的样本扩大到整个样本集，则整体的概率分布就如上面的公式。因为我们假设每个样本集中的样本独立同分布（IID），所以根据概率的乘法定理，我们可以把每个事件概率相乘，得到整体的概率。</script><p>\begin{aligned} L(\theta) &amp;=\prod<em>{i=1}^{m} p\left(y^{(i)} | x^{(i)} ; \theta\right) \ &amp;=\prod</em>{i=1}^{m} \frac{1}{\sqrt{2 \pi} \sigma} \exp \left(-\frac{\left(y^{(i)}-\theta^{T} x^{(i)}\right)^{2}}{2 \sigma^{2}}\right) \end{aligned}</p>
+<script type="math/tex; mode=display">
+
+又回到了最优化问题的思路来了，这是一个关于θ的函数，那我们对它求导，就有希望得到极值。连乘$\prod$不好求导的话，我们不妨对整个似然函数L(θ)取对数，因为对数在其定义域上是单调增的，所以不改变函数的单调性，我们可以利用对数函数的性质。</script><p>\begin{aligned} \ell(\theta) &amp;=\log L(\theta) \ &amp;=\log \prod<em>{i=1}^{m} \frac{1}{\sqrt{2 \pi} \sigma} \exp \left(-\frac{\left(y^{(i)}-\theta^{T} x^{(i)}\right)^{2}}{2 \sigma^{2}}\right) \ &amp;=\sum</em>{i=1}^{m} \log \frac{1}{\sqrt{2 \pi} \sigma} \exp \left(-\frac{\left(y^{(i)}-\theta^{T} x^{(i)}\right)^{2}}{2 \sigma^{2}}\right) \ &amp;=m \log \frac{1}{\sqrt{2 \pi} \sigma}-\frac{1}{\sigma^{2}} \cdot \frac{1}{2} \sum_{i=1}^{m}\left(y^{(i)}-\theta^{T} x^{(i)}\right)^{2} \end{aligned}</p>
+<script type="math/tex; mode=display">
+
+看到了吗？式子最右端，出现了，我们的最小二乘优化项：</script><p>\frac{1}{2} \sum_{i=1}^{m}\left(y^{(i)}-\theta^{T} x^{(i)}\right)^{2}</p>
+<script type="math/tex; mode=display">
+
+## 5. 局部加权回归
+
+局部加权回归的思想很简单，它可以解决欠拟合(underfitting)与过拟合(overfitting)问题。
+
+![](CS229-note-1-Introduction/2019-04-26-18-52-01.png)
+
+左图对数据的预测效果不是很好，数据明显的趋势被忽略了；右图好的过分了，模型考虑了过多的噪音和误差，导致拟合产生的函数不能良好的预测未知数据。对于现实世界的复杂模型，很难说一定能找到一个完美的函数，恰好拟合所有的数据，同时对未知数据又具有良好的预测能力。
+
+局部加权回归的思想就是，在咨询别人意见时，对于我周围的意见着重考虑，对于离我很远的意见我略微考虑，即根据离自己的距离，来决定权值大小。则优化目标就从$\sum_{i}\left(y^{(i)}-\theta^{T} x^{(i)}\right)^{2}$变成了$\sum_{i} w^{(i)}\left(y^{(i)}-\theta^{T} x^{(i)}\right)^{2}$。其中$\omega$定义为
+$$w^{(i)}=\exp \left(-\frac{\left(x^{(i)}-x\right)^{2}}{2 \tau^{2}}\right)</script><p>其中$\tau$定义为带宽，我将会于近期更新文章解释局部加权回归。</p>
+<h2 id="6-总结"><a href="#6-总结" class="headerlink" title="6. 总结"></a>6. 总结</h2><p>我们介绍了机器学习中监督学习的概念，并引入了回归问题的解决方案，使用了最小二乘法对回归问题进行机器学习。对于最小二乘项，有两种方法可以对其优化，一种是逐步求精的梯度下降法，另一种则是一步到位的数学推导法。梯度下降适用于工程实现，而数学推导则是归纳总结背后的原理。</p>
+<p>我们还从概率角度讨论了为什么回归问题要采用最小二乘法，并引入了欠拟合与过拟合的概念，最后采用局部加权回归方法尽可能避免拟合不良的问题。</p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
+    </div>
+</article>
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/superlova" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2020 Superlova<br></p>
+                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+</body>
+
+</html>

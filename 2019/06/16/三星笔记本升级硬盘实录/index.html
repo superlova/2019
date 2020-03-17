@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.9.0">
+
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+
+    
+
+    
+        <meta name="description" content="这是一篇装机实录，主要内容有：
+
+给老式（2014年左右）无光驱笔记本电脑安装固态硬盘、拆卸机械硬盘；
+重装系统的坑
+固态硬盘体验
+
+旧本盼望新生很早之前就想为自己的古董笔记本提升一下性能了。我的笔记本型号是NP370R5V-S02CN，属于2014年那会儿产的机型。i5的CPU、8G的内存（其中我">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="Superlova">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="三星笔记本升级硬盘实录">
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="这是一篇装机实录，主要内容有：
+
+给老式（2014年左右）无光驱笔记本电脑安装固态硬盘、拆卸机械硬盘；
+重装系统的坑
+固态硬盘体验
+
+旧本盼望新生很早之前就想为自己的古董笔记本提升一下性能了。我的笔记本型号是NP370R5V-S02CN，属于2014年那会儿产的机型。i5的CPU、8G的内存（其中我">
+    
+
+    <!--Open Graph Site Name-->
+        <meta property="og:site_name" content="Smile :)">
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article">
+    
+
+    <!--Page Cover-->
+    
+    
+        <meta property="og:image" content="https://superlova.github.iohttps://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg">
+    
+
+        <meta name="twitter:card" content="summary_large_image">
+
+    
+
+    
+        <meta name="twitter:image" content="https://superlova.github.iohttps://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg">
+    
+
+    <!-- Title -->
+    
+    <title>三星笔记本升级硬盘实录 - Smile :)</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet">
+
+    <!-- Google Analytics -->
+    
+
+
+    <!-- favicon -->
+    
+
+<link rel="alternate" href="/atom.xml" title="Smile :)" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+
+<body>
+
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Smile :)</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tags">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            
+                                Categories
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="https://github.com/superlova">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('https://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>三星笔记本升级硬盘实录</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2019-06-16
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
+                    
+                        
+
+
+<a href="/tags/装机实录/">#装机实录</a> <a href="/tags/笔记本电脑/">#笔记本电脑</a> <a href="/tags/固态硬盘/">#固态硬盘</a>
+
+
+                    
+                </div>
+                <div class="col-lg-4 col-md-5 post-categories">
+                    
+                        
+
+<a href="/categories/经验教训/">经验教训</a>
+
+                    
+                </div>
+            
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p>这是一篇装机实录，主要内容有：</p>
+<ul>
+<li>给老式（2014年左右）无光驱笔记本电脑安装固态硬盘、拆卸机械硬盘；</li>
+<li>重装系统的坑</li>
+<li>固态硬盘体验</li>
+</ul>
+<h1 id="旧本盼望新生"><a href="#旧本盼望新生" class="headerlink" title="旧本盼望新生"></a>旧本盼望新生</h1><p>很早之前就想为自己的古董笔记本提升一下性能了。我的笔记本型号是NP370R5V-S02CN，属于2014年那会儿产的机型。i5的CPU、8G的内存（其中我额外购置了4G内存条），再加上5年的使用习惯，让我对这台机器还比较满意。限制笔记本电脑性能的主要瓶颈就是硬盘了。</p>
+<p>我是一个等等党，平时也不会在自己的电脑上运行特别复杂的程序，大部分都在服务器或者公有云上跑了。所以对笔记本电脑的需求不是那么急切。固态2块钱1G的时候我没有心动，1块钱1G的时候我还是没有心动，但是我看到西数蓝盘500G的固态只卖379元，而且5年质保时，我真的憋不住了。</p>
+<p>之前我一直用的是windows 7的操作系统，一直没敢上windows 10，因为听说windows 10挺吃性能的。现在我打算把原来笔记本电脑上的数据备份一下之后，直接上windows 10。因此我不需要进行系统迁移，直接重装系统。</p>
+<h1 id="部件难堪重负"><a href="#部件难堪重负" class="headerlink" title="部件难堪重负"></a>部件难堪重负</h1><h2 id="1-制作启动U盘"><a href="#1-制作启动U盘" class="headerlink" title="1) 制作启动U盘"></a>1) 制作启动U盘</h2><p>的过程，我完全按照网上说的，先到校园网下载win10专业版镜像，利用我手头上的16G空U盘和Rufus 3.5软件，将ISO镜像拷入U盘，格式化为启动盘。</p>
+<p>此处U盘的大小一般8G以上为宜。现在是2019年，市面上8G的U盘算容量不大的了。不知道以后会不会淘汰掉。Rufus是免费软件，相同功能的软件还有UltraISO等。</p>
+<p>需要注意的是，不要使用老毛桃等PE，虽然傻瓜式安装，但是系统不纯净。而且装系统的过程并不复杂，多踩踩坑就熟悉了。</p>
+<h2 id="2-拆卸更换硬盘"><a href="#2-拆卸更换硬盘" class="headerlink" title="2) 拆卸更换硬盘"></a>2) 拆卸更换硬盘</h2><p>我的笔记本似乎在设计的时候就料到了用户会添加内存条和更换硬盘，因此包裹硬盘和内存区域的外壳与主板是分开的，只需拆卸一颗螺丝，即可将硬盘位和内存位暴露出来。这给我的拆卸过程减少了很多麻烦。</p>
+<p>关机，拆后盖，连电池都不用拆卸，直接把硬盘固定位的四颗螺丝拧下来，换上固态，美滋滋。</p>
+<p>将拆卸下来的机械硬盘放在我买的硬盘盒里面（25元），大小刚刚合适（2.5寸）。沉甸甸的，里面存了不少数据【doge】。</p>
+<p>开始重装系统。现在的固态硬盘是空的，里面没有系统。插入U盘，按下电源键后按F2进入BIOS模式。这里开始就有坑了。</p>
+<h2 id="3-更新操作系统"><a href="#3-更新操作系统" class="headerlink" title="3) 更新操作系统"></a>3) 更新操作系统</h2><p>首先我准备安装的是win10，原来安装的是win7。win7的磁盘引导是MBR方式，而最新的引导方式是UEFI，这两种磁盘格式化方式是不一样的，也只有当磁盘里没有任何数据的一开始，我敢将磁盘的引导方式修改一下，换作原来我真的害怕稍微操作数据就没了。所以我进行了如下设置：</p>
+<ul>
+<li>将Security Boot关闭</li>
+<li>将AHCI引导换成UEFI启动</li>
+<li>Boot Mode换成UEFI only<br>一顿操作，win10安装完成了，哈哈哈。令我没想到的事情来了！</li>
+</ul>
+<h2 id="4-电脑受不了Windows-10"><a href="#4-电脑受不了Windows-10" class="headerlink" title="4) 电脑受不了Windows 10"></a>4) 电脑受不了Windows 10</h2><p>安装win10后，固态硬盘的好处显现出来了，任何东西都是秒开，延迟大大的降低了。就在我享受各种操作的时候，突然电脑卡住了。</p>
+<p>就是卡死在一瞬间，鼠标都不能动了。等了好久也没用，我长按电源键强制关机后再启动，没用，过一会儿还是死机。</p>
+<p>我怀疑是不是我的电脑其他部件太过古老了？当时的风扇吹出来的风都烫手。但是当我放凉之后再次开机，还是会毫无征兆地死机。</p>
+<p>我怀疑是不是我安装的软件里面有不兼容的驱动？有可能是显卡驱动之类的。因为三星官网关于我这个机型的驱动，最多支持到win7。</p>
+<p>各种原因都查了个遍，一下午过去了，一晚上过去了，我还是没能解决这个问题。总不能是固态的问题吧？</p>
+<p>我认真的思考了一下，西部数据蓝盘，打折出售，也有可能是卖给我了劣质盘。但是我现在没办法安装磁盘检测软件，一开电脑就死机。</p>
+<h2 id="5-悲伤地换回windows-7"><a href="#5-悲伤地换回windows-7" class="headerlink" title="5) 悲伤地换回windows 7"></a>5) 悲伤地换回windows 7</h2><p>于是我决定，重新安装回win7，如果能用就不折腾了。</p>
+<p>下载win7镜像，使用rufus制作启动盘，此时的分区格式就选择mbr好了。我妥协了！不折腾了。</p>
+<p>一如既往地修改BIOS，BootMode改成Legacy。win7一会儿就安装好了。没有其他的问题。</p>
+<p>真是邪了门了，而且用win7发热的现象也缓解了很多！</p>
+<p>看来真的是，给老电脑更换一个新固态，好比是给老年人更换年轻人的心脏，心有余而力不足啊！</p>
+<h1 id="体验固态硬盘"><a href="#体验固态硬盘" class="headerlink" title="体验固态硬盘"></a>体验固态硬盘</h1><p>上次有这种性能大幅度稳定提升一个档次的感觉的时候，是这台电脑安装新的内存条之后。读写速度真的是限制目前性能的一大瓶颈。</p>
+<p>由于我的内部接口是SATA 2，所以无法发挥SATA 3接口的西数蓝盘的全部威力。不过这也在我的计算之中了，因为相对于HDD，SSD带来的提升实在是天壤之别。</p>
+<p><img src="/2019/06/16/三星笔记本升级硬盘实录/2019-06-19-19-01-03.png" alt></p>
+<p>等到老娘今后有钱了，这个硬盘还能拆下来重复利用，岂不是美滋滋。</p>
+<p>本来寻思给这篇文章加点图，算啦，反正也不是什么成功经验。</p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
+    </div>
+</article>
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/superlova" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2020 Superlova<br></p>
+                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+</body>
+
+</html>

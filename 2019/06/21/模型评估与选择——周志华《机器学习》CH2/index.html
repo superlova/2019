@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.9.0">
+
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+
+    
+
+    
+        <meta name="description" content="模型如何评估，选择标准是什么？先让我们了解一下常见的衡量标准
+错误率+精度=1
+误差：训练误差/经验误差 training/empirical error泛化误差 generalization error
+训练误差低，泛化误差不一定低。这其中牵扯到过拟合和欠拟合的问题。
+过拟合：过分学习，将训练样本">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="Superlova">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="模型评估与选择——周志华《机器学习》CH2">
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="模型如何评估，选择标准是什么？先让我们了解一下常见的衡量标准
+错误率+精度=1
+误差：训练误差/经验误差 training/empirical error泛化误差 generalization error
+训练误差低，泛化误差不一定低。这其中牵扯到过拟合和欠拟合的问题。
+过拟合：过分学习，将训练样本">
+    
+
+    <!--Open Graph Site Name-->
+        <meta property="og:site_name" content="Smile :)">
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article">
+    
+
+    <!--Page Cover-->
+    
+    
+        <meta property="og:image" content="https://superlova.github.iohttps://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg">
+    
+
+        <meta name="twitter:card" content="summary_large_image">
+
+    
+
+    
+        <meta name="twitter:image" content="https://superlova.github.iohttps://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg">
+    
+
+    <!-- Title -->
+    
+    <title>模型评估与选择——周志华《机器学习》CH2 - Smile :)</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet">
+
+    <!-- Google Analytics -->
+    
+
+
+    <!-- favicon -->
+    
+
+<link rel="alternate" href="/atom.xml" title="Smile :)" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+
+<body>
+
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Smile :)</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tags">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            
+                                Categories
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="https://github.com/superlova">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('https://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>模型评估与选择——周志华《机器学习》CH2</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2019-06-21
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
+                    
+                        
+
+
+<a href="/tags/机器学习/">#机器学习</a> <a href="/tags/西瓜书/">#西瓜书</a> <a href="/tags/模型评估与选择/">#模型评估与选择</a>
+
+
+                    
+                </div>
+                <div class="col-lg-4 col-md-5 post-categories">
+                    
+                        
+
+<a href="/categories/机器学习/">机器学习</a>/ <a href="/categories/机器学习/学习笔记/">学习笔记</a>
+
+                    
+                </div>
+            
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p>模型如何评估，选择标准是什么？<br>先让我们了解一下常见的衡量标准</p>
+<p>错误率+精度=1</p>
+<h3 id="误差："><a href="#误差：" class="headerlink" title="误差："></a>误差：</h3><p><strong>训练误差/经验误差</strong> training/empirical error<br><strong>泛化误差</strong> generalization error</p>
+<p>训练误差低，泛化误差不一定低。这其中牵扯到过拟合和欠拟合的问题。</p>
+<p><strong>过拟合</strong>：过分学习，将训练样本中不属于规律的的噪声也一并学习的现象。<br>防止过拟合，一般采用将数据集分成训练集和测试集，利用训练集训练模型，利用测试集拟合泛化误差的办法。</p>
+<p><strong>测试误差</strong> testing error</p>
+<h3 id="划分数据集的方法"><a href="#划分数据集的方法" class="headerlink" title="划分数据集的方法"></a>划分数据集的方法</h3><h4 id="样本划分之留出法-hold-out"><a href="#样本划分之留出法-hold-out" class="headerlink" title="样本划分之留出法 hold-out"></a>样本划分之留出法 hold-out</h4><p>将样本分成互斥的两部分S,T<br>用S训练，用T测试。分割比例自己确定。<br>需要注意的是，必须保证S、T同分布，建议采用<strong>分层采样</strong>stratified sampling，即数据集中的每个类别雨露均沾。<br>另外可以随机划分若干次，防止单次划分出现极端采样结果。随机次数越高，结果的<strong>保真性</strong>fidelity越高。</p>
+<h4 id="样本划分之交叉验证-cross-validation"><a href="#样本划分之交叉验证-cross-validation" class="headerlink" title="样本划分之交叉验证 cross validation"></a>样本划分之交叉验证 cross validation</h4><p>将数据集采用分层划分，分成若干个互斥的小数据集。每个小数据集都当一次测试集，其他数据集组成新训练集。如果分割成k个小数据集，则这种验证方法会做k个不同的划分。因此又称为k-fold 交叉验证。</p>
+<p>极端情况是留一法 leave one out，即k=|D|。</p>
+<h4 id="样本划分之自助法-bootstrapping"><a href="#样本划分之自助法-bootstrapping" class="headerlink" title="样本划分之自助法 bootstrapping"></a>样本划分之自助法 bootstrapping</h4><p>从D中进行m次<strong>放回抽样</strong>，形成新的小数据集D’,理所应当地，新数据集内可能有重复元素，即<script type="math/tex">|unique(D')|\leq m</script></p>
+<p>大数据集中的一个元素x不被选中的概率是<script type="math/tex">\mathbb{P}\{x\in \mathit{D}\cap x\notin \mathit{D}'\}=(1-\frac{1}{m})^m</script>，此时如果m取得越多，概率就越趋近于<script type="math/tex">\lim_{m\rightarrow\infty}(1-\frac{1}{m})^m=\frac{1}{e}</script>。</p>
+<p>最后可以利用D’训练，用D/D’测试。此种抽样方法又称为<strong>包外估计</strong> out of bag estimate，适用于|D|很小的情况。</p>
+<h3 id="如何判断模型的好坏？"><a href="#如何判断模型的好坏？" class="headerlink" title="如何判断模型的好坏？"></a>如何判断模型的好坏？</h3><p>为防止专有名词混淆，此处主要采用英文术语。<br>对于二分类模型，有以下评价模型的标准：</p>
+<p>accuracy：模型结果与真实值相同的比率。中文称之为<strong>精度</strong>。</p>
+<p>precision：模型所得结果中正例比率。中文称之为<strong>准确率</strong>。若想准确率提升，直观的方法是只挑选自己十分确定的样本。所谓不打无准备之仗。不过这样肯定会放过很多原本是正例的样本。</p>
+<p>recall：正例中模型结果占比。中文称为<strong>查全率</strong>、<strong>召回率</strong>。想提高查全率，就要把所有疑似样本全都收集进来，所谓宁杀一千不放一个。这样显然也会提高误杀率。</p>
+<p><strong>PR曲线</strong>：即准确率-查全率曲线。对于预测模型来说，对未知样本的预测，准确率和查全率往往不可兼得。呈现一个这种曲线：</p>
+<p><img src="/2019/06/21/模型评估与选择——周志华《机器学习》CH2/2019-06-21-11-58-57.png" alt></p>
+<p>模型对每个样本会给出自己的判断，并且还会有自己的置信度。我们可以按照置信度排序，就可以做出PR曲线。</p>
+<p>只有PR曲线，我们可以说模型C最差，因为这条曲线完全被A或B模型的曲线所包围。但是不好判断A红线与B黑线的性能，因为二者有交叉。这种情况有三种度量：</p>
+<p>求<strong>曲线下面积</strong>是一种思路，不过有比较高的计算成本，更喜欢采用的是<strong>平衡点</strong>Break-Even point，可以看到我们挑了三个小红点。靠外的模型好。另外可以采用F1度量。计算公式是<script type="math/tex">F_1=\frac{2PR}{P+R}</script>这个公式就是准确率和查全率的调和平均<script type="math/tex">\frac{1}{F_1}=\frac{1}{2}(\frac{1}{P}+\frac{1}{R})</script>。之所以取调和平均，是因为调和平均在四种平均中最小，因此更重视较小值。</p>
+<p><img src="/2019/06/21/模型评估与选择——周志华《机器学习》CH2/2019-06-21-12-46-48.png" alt="四大基本不等式"></p>
+<p>对于实际问题，准确率和查全率的意义不一样。超市小偷识别系统更害怕冤枉好人，因此可能更注重准确率；而地铁检查系统可能抱着“宁查一千不放一个”的态度，更追求查全率。因此对F1评价稍作修改，我们就得到了F<em>beta度量指标：$$F</em>{\beta}=\frac{(1+\beta^2)PR}{\beta^2P+R}<script type="math/tex">，其实这个公式就是加了权重后的调和平均</script>\frac{1}{F_{\beta}}=\frac{1}{1+\beta^2}(\frac{1}{P}+\frac{\beta^2}{R})$$。$\beta&gt;1$则更注重查全率R，$\beta&lt;1$则更注重查准率P。</p>
+<p><strong>ROC曲线</strong>是另外一个思路的评价标准，横坐标是假正例，纵坐标是真正例。其绘制方法也是将样本按照置信度排序，如果样本是真正例，则垂直向y轴正方向绘制一个单位；如果样本是假正例，则水平向x轴正方向绘制一个单位。</p>
+<p>理想状态下，模型将所有正例排在反例前面，因此曲线应该一直往上升，升到m个正例穷尽之后，再水平到|D|-m个反例。但是往往模型会判断失误，于是就出现了这种图像：</p>
+<p><img src="/2019/06/21/模型评估与选择——周志华《机器学习》CH2/2019-06-21-12-59-40.png" alt></p>
+<p>左图是无限样例下，才可能达到的光滑ROC曲线。右图是实际可能的ROC曲线。ROC曲线围成的面积称之为<strong>AUC</strong>。ROC越丰满，AUC越大，模型的判别效果越好。</p>
+<p><strong>AUC</strong>同样也可判断模型的好坏。而且AUC实际上可以通过数值方法来近似求解，有如下公式：<script type="math/tex">AUC=\frac{1}{2}\sum_{i=1}^{m-1}(x_{i+1}-x_i)(y_i+y_{i+1})</script></p>
+<p>若预测正误代价不同，可参考西瓜书“<strong>代价曲线</strong>”，此处不再赘述。</p>
+<p><strong>假设检验</strong>模块，数学味道太浓，写成博客实用度不高。而且西瓜书上讲的也不甚明了，真正想了解假设检验的朋友，可参考《统计推断》一书或其他的数理统计教材。</p>
+<h3 id="偏差方差分解-bias-variance-decomposition"><a href="#偏差方差分解-bias-variance-decomposition" class="headerlink" title="偏差方差分解 bias variance decomposition"></a>偏差方差分解 bias variance decomposition</h3><p>这种分解可以解释泛化性能为什么会下降到一定程度后上升，越训练越差。</p>
+<p>偏差 bias<br>方差 var</p>
+<p><script type="math/tex">E(f) = bias^2(x)+var(x)+\epsilon^2</script>，我们想令Ef最小。事实上训练越充分，偏差bias越小，但是方差var会提高。所以并不是训练越多越好。</p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
+    </div>
+</article>
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/superlova" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2020 Superlova<br></p>
+                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+</body>
+
+</html>

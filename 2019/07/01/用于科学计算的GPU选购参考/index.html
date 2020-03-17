@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.9.0">
+
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+
+    
+
+    
+        <meta name="description" content="实验室最近要采购一批显卡，需要调研显卡的型号和价格。
+需求分析首先说一下需求：
+
+首先显卡的用途是科学计算，更具体一点是深度学习，有人做图像，有人做NLP；
+其次预算有限，得买性价比最好的；
+然后可能会有很多人要用服务器训练模型。
+
+然后这是戴尔服务器的售后人员发来的建议采购清单：
+其中M10：19">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="Superlova">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="用于科学计算的GPU选购参考">
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="实验室最近要采购一批显卡，需要调研显卡的型号和价格。
+需求分析首先说一下需求：
+
+首先显卡的用途是科学计算，更具体一点是深度学习，有人做图像，有人做NLP；
+其次预算有限，得买性价比最好的；
+然后可能会有很多人要用服务器训练模型。
+
+然后这是戴尔服务器的售后人员发来的建议采购清单：
+其中M10：19">
+    
+
+    <!--Open Graph Site Name-->
+        <meta property="og:site_name" content="Smile :)">
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article">
+    
+
+    <!--Page Cover-->
+    
+    
+        <meta property="og:image" content="https://superlova.github.iohttps://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg">
+    
+
+        <meta name="twitter:card" content="summary_large_image">
+
+    
+
+    
+        <meta name="twitter:image" content="https://superlova.github.iohttps://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg">
+    
+
+    <!-- Title -->
+    
+    <title>用于科学计算的GPU选购参考 - Smile :)</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet">
+
+    <!-- Google Analytics -->
+    
+
+
+    <!-- favicon -->
+    
+
+<link rel="alternate" href="/atom.xml" title="Smile :)" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+
+<body>
+
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Smile :)</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tags">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            
+                                Categories
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="https://github.com/superlova">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('https://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>用于科学计算的GPU选购参考</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2019-07-01
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
+                    
+                        
+
+
+<a href="/tags/深度学习/">#深度学习</a> <a href="/tags/GPU/">#GPU</a> <a href="/tags/采购/">#采购</a> <a href="/tags/Tesla/">#Tesla</a> <a href="/tags/1080Ti/">#1080Ti</a> <a href="/tags/Titan/">#Titan</a>
+
+
+                    
+                </div>
+                <div class="col-lg-4 col-md-5 post-categories">
+                    
+                        
+
+<a href="/categories/经验教训/">经验教训</a>
+
+                    
+                </div>
+            
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p>实验室最近要采购一批显卡，需要调研显卡的型号和价格。</p>
+<h2 id="需求分析"><a href="#需求分析" class="headerlink" title="需求分析"></a>需求分析</h2><p>首先说一下需求：</p>
+<ul>
+<li>首先显卡的用途是科学计算，更具体一点是深度学习，有人做图像，有人做NLP；</li>
+<li>其次预算有限，得买性价比最好的；</li>
+<li>然后可能会有很多人要用服务器训练模型。</li>
+</ul>
+<p>然后这是戴尔服务器的售后人员发来的建议采购清单：<br><img src="/2019/07/01/用于科学计算的GPU选购参考/2019-07-01-18-19-43.png" alt></p>
+<p>其中M10：19999￥ P100： 49999￥ V100：59999￥ P40：49999￥</p>
+<p>值得一提的是，谷歌的Colab上面用的是这款：<br><img src="/2019/07/01/用于科学计算的GPU选购参考/2019-07-01-18-21-48.png" alt><br><img src="/2019/07/01/用于科学计算的GPU选购参考/2019-07-01-18-21-58.png" alt></p>
+<p>但是一个从事深度学习研究的学长建议我买1080Ti。他好像提都没提过Tesla啊？难道显卡水这么深？</p>
+<h2 id="GPU参数"><a href="#GPU参数" class="headerlink" title="GPU参数"></a>GPU参数</h2><p>GPU的性能主要由下面三个主要参数构成：</p>
+<p><strong>计算能力</strong>。通常我们关心的是32位浮点计算能力。当然，对于高玩来说也可以考虑16位浮点用来训练，8位整数来预测。</p>
+<p><strong>内存大小</strong>。神经网络越深，或者训练时批量大小越大，所需要的GPU内存就越多。</p>
+<p><strong>内存带宽</strong>。内存带宽要足够才能发挥出所有计算能力。</p>
+<p>此外，针对不同深度学习架构，GPU参数的选择优先级是不一样的，总体来说分两条路线：</p>
+<p><strong>卷积网络和Transformer</strong>：张量核心&gt;FLOPs（每秒浮点运算次数）&gt;显存带宽&gt;16位浮点计算能力</p>
+<p><strong>循环神经网络</strong>：显存带宽&gt;16位浮点计算能力&gt;张量核心&gt;FLOPs</p>
+<p>这个排序背后有一套逻辑，下面将详细解释一下。</p>
+<p>在说清楚哪个GPU参数对速度尤为重要之前，先看看两个最重要的张量运算：矩阵乘法和卷积。</p>
+<p>举个栗子，以运算矩阵乘法A×B=C为例，将A、B复制到显存上比直接计算A×B更耗费资源。也就是说，如果你想用LSTM等处理大量小型矩阵乘法的循环神经网络，显存带宽是GPU最重要的属性。</p>
+<p>矩阵乘法越小，内存带宽就越重要。</p>
+<p>相反，卷积运算受计算速度的约束比较大。因此，要衡量GPU运行ResNets等卷积架构的性能，最佳指标就是FLOPs。张量核心可以明显增加FLOPs。</p>
+<p>Transformer中用到的大型矩阵乘法介于卷积运算和RNN的小型矩阵乘法之间，16位存储、张量核心和TFLOPs都对大型矩阵乘法有好处，但它仍需要较大的显存带宽。</p>
+<h2 id="性价比分析"><a href="#性价比分析" class="headerlink" title="性价比分析"></a>性价比分析</h2><p>下面总结了一张GPU和TPU的标准性能数据，值越高代表性能越好。RTX系列假定用了16位计算，Word RNN数值是指长度&lt;100的段序列的biLSTM性能。</p>
+<p>这项基准测试是用PyTorch 1.0.1和CUDA 10完成的。</p>
+<p><img src="/2019/07/01/用于科学计算的GPU选购参考/2019-07-01-19-09-53.png" alt="GPU和TPU的性能数据"></p>
+<p>性价比可能是选择一张GPU最重要的考虑指标。</p>
+<p>性价比可能是选择一张GPU最重要的考虑指标。在攻略中，小哥进行了如下运算测试各显卡的性能：</p>
+<ul>
+<li>用语言模型Transformer-XL和BERT进行Transformer性能的基准测试。</li>
+<li>用最先进的biLSTM进行了单词和字符级RNN的基准测试。</li>
+<li>上述两种测试是针对Titan Xp、Titan RTX和RTX 2080 Ti进行的，对于其他GPU则线性缩放了性能差异。</li>
+<li>借用了现有的CNN基准测试。</li>
+<li>用了亚马逊和eBay上显卡的平均售价作为GPU的参考成本。<br>最后，可以得出CNN、RNN和Transformer的归一化性能/成本比值，如下所示：</li>
+</ul>
+<p><img src="/2019/07/01/用于科学计算的GPU选购参考/2019-07-01-19-11-20.png" alt="CNN、RNN和Transformer的每美元性能"></p>
+<p>在上面这张图中，数字越大代表每一美元能买到的性能越强。可以看出， RTX 2060比RTX 2070，RTX 2080或RTX 2080 Ti更具成本效益，<strong>甚至是Tesla V100性价比的5倍以上</strong>。</p>
+<p>所以此轮的性价比之王已经确定，是RTX 2060无疑了。</p>
+<p>下图是李沐老师画了900和1000系列里各个卡的32位浮点计算能力和价格的对比（价格是wikipedia的推荐价格，真实价格通常会有浮动）。</p>
+<p><img src="/2019/07/01/用于科学计算的GPU选购参考/2019-07-01-19-06-00.png" alt></p>
+<p>由于GPU的功耗，散热和体积，需要一些额外考虑。</p>
+<ul>
+<li>机箱体积<br>GPU尺寸较大，通常不考虑太小的机箱。而且机箱自带的风扇要好。</li>
+<li>电源<br>购买GPU时需要查下GPU的功耗，50w到300w不等。因此买电源时需要功率足够的。</li>
+<li>主板的PCIe卡槽<br>推荐使用PCIe 3.0 16x来保证足够的GPU到主内存带宽。如果是多卡的话，要仔细看主板说明，保证多卡一起使用时仍然是16x带宽。（有些主板插4卡时会降到8x甚至4x）</li>
+</ul>
+<h2 id="Tesla为什么那么贵？"><a href="#Tesla为什么那么贵？" class="headerlink" title="Tesla为什么那么贵？"></a>Tesla为什么那么贵？</h2><p>英伟达现在有一项非常坑爹的政策，如果在数据中心使用CUDA，那么只允许使用Tesla GPU而不能用GTX或RTX GPU。</p>
+<p>由于担心法律问题，研究机构和大学经常被迫购买低性价比的Tesla GPU。<strong>然而，Tesla与GTX和RTX相比并没有真正的优势，价格却高出10倍。</strong></p>
+<p>Nvidia卡有面向个人用户（例如GTX系列）和企业用户（例如Tesla系列）两种。企业用户卡通常使用被动散热和增加了内存校验从而更加适合数据中心。但计算能力上两者相当。<strong>企业卡通常要贵上10倍</strong>。</p>
+<p>Tesla显卡那么贵，其实是贵在双精度浮点数运算能力上了，外加一个鸡肋的ECC校验功能，实在不值。</p>
+<h2 id="总结建议："><a href="#总结建议：" class="headerlink" title="总结建议："></a>总结建议：</h2><p><strong>最佳GPU</strong>：RTX 2070</p>
+<p><strong>避免的坑</strong>：所有Tesla、Quadro、创始人版（Founders Edition）的显卡，还有Titan RTX、Titan V、Titan XP</p>
+<p><strong>高性价比</strong>：RTX 2070（高端），RTX 2060或GTX 1060 (6GB)（中低端）</p>
+<p><strong>计算机视觉或机器翻译研究人员</strong>：采用鼓风设计的GTX 2080 Ti，如果训练非常大的网络，请选择RTX Titans</p>
+<p><strong>NLP研究人员</strong>：RTX 2080 Ti</p>
+<p><strong>已经开始研究深度学习</strong>：RTX 2070起步，以后按需添置更多RTX 2070</p>
+<h2 id="其他配件要求："><a href="#其他配件要求：" class="headerlink" title="其他配件要求："></a>其他配件要求：</h2><p><img src="/2019/07/01/用于科学计算的GPU选购参考/2019-07-01-19-19-14.png" alt="各硬件性能要求"></p>
+<ul>
+<li><p>CPU:<br>因为主要使用显卡进行cuda计算，因此对CPU的要求并不是很高，频率越高、线程数越多越好，一般最低要求cpu核心数大于显卡个数。其中一个制约因素：cpu的最大PCI-E 通道数。每张显卡占用16条pcie通道才能达到最大性能，而单cpu最大支持40条pcie，也就是即使有4个pcie x16接口，只能最多达到2路x16加一路x8，插上的显卡不能发挥全部性能。不过，主板芯片组其实也可以扩充一部分pcie通道。（x99主板可以扩宽2.0的8lanes，z170可以扩充3.0的20lanes）</p>
+</li>
+<li><p>主板:<br>前面提到了cpu提供的pcie通道数的限制，如果要使用多块显卡，就需要主板提供额外的pcie通道，一般只有服务器级别的主板才会提供扩展pcie通道如x99、x299等主板，但是使用此类主板必须搭配具有该接口的服务器级cpu（xeon系列、i7 7900x以上、i9系列等），如果不需要三块以上的显卡，使用cpu提供的40lane pcie即可。</p>
+</li>
+<li><p>内存：<br>深度学习需要大量数据，中间计算过程也会临时储存大量数据，一般要求具有显存2~3倍的内存，32G或64G乃至更高。内存频率越高越好。<br>最低建议32G DDR4 3200MHz内存(16G*2)约2000元，预算宽裕可升级到64G（约4000元）</p>
+</li>
+<li><p>硬盘：<br>深度学习需要大量数据，和较快的访问速度，一般使用一个较大的固态硬盘作为系统盘和训练数据仓储盘，另外使用hdd机械硬盘作为仓储盘。<br>建议使用512G以上nVME固态硬盘（800元）搭配几TB(2TB约300元）Hdd作为储存空间</p>
+</li>
+<li><p>电源、机箱：电源其实还是要买个比较稳定的，因为要保证长期稳定运行会有“无休止”的training。一般使用大品牌的经过80PLUS金牌或铂金认证的电源。只搭配一张显卡700w即可，每多一张增加400w。4*titan V大概使用1600w电源。</p>
+</li>
+</ul>
+<p>深度学习实验室共享服务器，7x24小时运行  2080ti或者4titan V ，预算充裕可以专门购置一台高性能多显卡深度学习服务器，24*7小时运行，其他用户可以在自己的笔记本电脑和台式机上编写和初步调试卷积神经网络，本地验证无误后，上传至服务器进行训练任务。这样做可以极大的节省设备开支，最大限度的利用计算资源，也避免了每个用户单独配置复杂的软件环境。</p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
+    </div>
+</article>
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/superlova" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2020 Superlova<br></p>
+                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+</body>
+
+</html>
