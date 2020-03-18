@@ -16,7 +16,7 @@
   <meta name="description" content>
   <meta name="author" content="Superlova">
   <meta name="keywords" content>
-  <title>CS229 note 1: Introduction - 每天进步一点点...</title>
+  <title>CS229 note 1: Introduction - Superlova</title>
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
@@ -36,7 +36,7 @@
 <!-- 自定义样式保持在最底部 -->
 
 
-<link rel="alternate" href="/atom.xml" title="每天进步一点点..." type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="alternate" href="/atom.xml" title="Superlova" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
 
 
@@ -45,7 +45,7 @@
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
-       href="/">&nbsp;<strong>每天进步一点点...</strong>&nbsp;</a>
+       href="/">&nbsp;<strong>Superlova</strong>&nbsp;</a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent"
@@ -196,15 +196,15 @@
 <li>函数对矩阵求导<br>对于一个函数$f:\mathbb{R}^{m\times n}\mapsto\mathbb{R}$，即输入一个矩阵，输出一个值的此类函数，定义f对矩阵A求导(the derivative of f with respect to A)为：<script type="math/tex; mode=display">
 \nabla_{A} f(A)=\left[ \begin{array}{ccc}{\frac{\partial f}{\partial A_{11}}} & {\cdots} & {\frac{\partial f}{\partial A_{1 n}}} \\ {\vdots} & {\ddots} & {\vdots} \\ {\frac{\partial f}{\partial A_{m 1}}} & {\cdots} & {\frac{\partial f}{\partial A_{m n}}}\end{array}\right]</script></li>
 </ol>
-<p>举个例子，若定义$A=\left[ \begin{array}{ll}{A<em>{11}} &amp; {A</em>{12}} \ {A<em>{21}} &amp; {A</em>{22}}\end{array}\right]$，$f(A)=\frac{3}{2} A<em>{11}+5 A</em>{12}^{2}+A<em>{21} A</em>{22}$，那么有$\nabla<em>{A} f(A)=\left[ \begin{array}{cc}{\frac{3}{2}} &amp; {10 A</em>{12}} \ {A<em>{22}} &amp; {A</em>{21}}\end{array}\right]$。</p>
+<p>举个例子，若定义$A=\left[ \begin{array}{ll}{A_{11}} &amp; {A_{12}} \\ {A_{21}} &amp; {A_{22}}\end{array}\right]$，$f(A)=\frac{3}{2} A_{11}+5 A_{12}^{2}+A_{21} A_{22}$，那么有$\nabla_{A} f(A)=\left[ \begin{array}{cc}{\frac{3}{2}} &amp; {10 A_{12}} \\ {A_{22}} &amp; {A_{21}}\end{array}\right]$。</p>
 <ol>
 <li>矩阵的迹(trace, tr)<br>矩阵的迹特指方阵的迹。矩阵的迹就是上文所定义的函数f的一个代表。定义如下：</li>
 </ol>
 <script type="math/tex; mode=display">\operatorname{tr} A=\sum_{i=1}^{n} A_{i i}</script><p>矩阵的迹有以下性质：</p>
-<p>$tr(AB)=tr(BA)\<br>tr(ABC)=tr(CAB)=tr(BCA)\<br>tr(ABCD)=tr(DABC)=tr(CDAB)=tr(BCDA)\<br>trA=trA^T\<br>tr(A+B)=trA+trB\<br>traA=atrA$</p>
+<p>$tr(AB)=tr(BA)\\<br>tr(ABC)=tr(CAB)=tr(BCA)\\<br>tr(ABCD)=tr(DABC)=tr(CDAB)=tr(BCDA)\\<br>trA=trA^T\\<br>tr(A+B)=trA+trB\\<br>traA=atrA$</p>
 <p>矩阵的转置的性质：</p>
-<p>$(AB)^T= B^TA^T \<br>(A+B)^T=A^T+B^T$</p>
-<p>对迹求导的几个结论：<br>$\begin{aligned} \nabla<em>{A} \operatorname{tr} A B &amp;=B^{T} \ \nabla</em>{A^{T}} f(A) &amp;=\left(\nabla<em>{A} f(A)\right)^{T} \ \nabla</em>{A} \operatorname{tr} A B A^{T} C &amp;=C A B+C^{T} A B^{T} \ \nabla_{A}|A| &amp;=|A|\left(A^{-1}\right)^{T} \end{aligned}$</p>
+<p>$(AB)^T= B^TA^T \\<br>(A+B)^T=A^T+B^T$</p>
+<p>对迹求导的几个结论：<br>$\begin{aligned} \nabla_{A} \operatorname{tr} A B &amp;=B^{T} \\ \nabla_{A^{T}} f(A) &amp;=\left(\nabla_{A} f(A)\right)^{T} \\ \nabla_{A} \operatorname{tr} A B A^{T} C &amp;=C A B+C^{T} A B^{T} \\ \nabla_{A}|A| &amp;=|A|\left(A^{-1}\right)^{T} \end{aligned}$</p>
 <ol>
 <li>一些符号的定义<br>如果X是由样本构成的矩阵，<script type="math/tex; mode=display">
 X=\left[ \begin{array}{c}{-\left(x^{(1)}\right)^{T}-} \\ {-\left(x^{(2)}\right)^{T}-} \\ {\vdots} \\ {-\left(x^{(m)}\right)^{T}-}\end{array}\right]</script>y是由真实结果组成的向量，<script type="math/tex; mode=display">
@@ -213,13 +213,13 @@ X=\left[ \begin{array}{c}{-\left(x^{(1)}\right)^{T}-} \\ {-\left(x^{(2)}\right)^
 <p>由于$h_{\theta}\left(x^{(i)}\right)=\left(x^{(i)}\right)^{T} \theta$，所以我们可以得到下式：</p>
 <script type="math/tex; mode=display">
 X \theta-\vec{y}=\left[ \begin{array}{c}{\left(x^{(1)}\right)^{T} \theta} \\ {\vdots} \\ {\left(x^{(m)}\right)^{T} \theta}\end{array}\right]-\left[ \begin{array}{c}{y^{(1)}} \\ {\vdots} \\ {y^{(m)}}\end{array}\right]
-$$</script><p>=\left[ \begin{array}{c}{h<em>{\theta}\left(x^{(1)}\right)-y^{(1)}} \ {\vdots} \ {h</em>{\theta}\left(x^{(m)}\right)-y^{(m)}}\end{array}\right]</p>
+$$</script><p>=\left[ \begin{array}{c}{h_{\theta}\left(x^{(1)}\right)-y^{(1)}} \\ {\vdots} \\ {h_{\theta}\left(x^{(m)}\right)-y^{(m)}}\end{array}\right]</p>
 <script type="math/tex; mode=display">
-则我们的损失函数可以化成：</script><p>\begin{aligned} \frac{1}{2}(X \theta-\vec{y})^{T}(X \theta-\vec{y}) &amp;=\frac{1}{2} \sum<em>{i=1}^{m}\left(h</em>{\theta}\left(x^{(i)}\right)-y^{(i)}\right)^{2} \ &amp;=J(\theta) \end{aligned}</p>
+则我们的损失函数可以化成：</script><p>\begin{aligned} \frac{1}{2}(X \theta-\vec{y})^{T}(X \theta-\vec{y}) &amp;=\frac{1}{2} \sum_{i=1}^{m}\left(h_{\theta}\left(x^{(i)}\right)-y^{(i)}\right)^{2} \\ &amp;=J(\theta) \end{aligned}</p>
 <script type="math/tex; mode=display">
 
 4. 开始推导
-根据上面的结论，让损失函数对$\theta$求导，得到：</script><p>\begin{aligned} \nabla<em>{\theta} J(\theta) &amp;=\nabla</em>{\theta} \frac{1}{2}(X \theta-\vec{y})^{T}(X \theta-\vec{y}) \ &amp;=\frac{1}{2} \nabla<em>{\theta}\left(\theta^{T} X^{T} X \theta-\theta^{T} X^{T} \vec{y}-\vec{y}^{T} X \theta+\vec{y}^{T} \vec{y}\right) \ &amp;=\frac{1}{2} \nabla</em>{\theta} \operatorname{tr}\left(\theta^{T} X^{T} X \theta-\theta^{T} X^{T} \vec{y}-\vec{y}^{T} X \theta+\vec{y}^{T} \vec{y}\right) \ &amp;=\frac{1}{2} \nabla_{\theta}\left(\operatorname{tr} \theta^{T} X^{T} X \theta-2 \operatorname{tr} \vec{y}^{T} X \theta\right) \ &amp;=\frac{1}{2}\left(X^{T} X \theta+X^{T} X \theta-2 X^{T} \vec{y}\right) \ &amp;=X^{T} X \theta-X^{T} \vec{y} \end{aligned}</p>
+根据上面的结论，让损失函数对$\theta$求导，得到：</script><p>\begin{aligned} \nabla_{\theta} J(\theta) &amp;=\nabla_{\theta} \frac{1}{2}(X \theta-\vec{y})^{T}(X \theta-\vec{y}) \\ &amp;=\frac{1}{2} \nabla_{\theta}\left(\theta^{T} X^{T} X \theta-\theta^{T} X^{T} \vec{y}-\vec{y}^{T} X \theta+\vec{y}^{T} \vec{y}\right) \\ &amp;=\frac{1}{2} \nabla_{\theta} \operatorname{tr}\left(\theta^{T} X^{T} X \theta-\theta^{T} X^{T} \vec{y}-\vec{y}^{T} X \theta+\vec{y}^{T} \vec{y}\right) \\ &amp;=\frac{1}{2} \nabla_{\theta}\left(\operatorname{tr} \theta^{T} X^{T} X \theta-2 \operatorname{tr} \vec{y}^{T} X \theta\right) \\ &amp;=\frac{1}{2}\left(X^{T} X \theta+X^{T} X \theta-2 X^{T} \vec{y}\right) \\ &amp;=X^{T} X \theta-X^{T} \vec{y} \end{aligned}</p>
 <script type="math/tex; mode=display">
 
 令导数为零，求得零点的$\theta$值为：</script><p>\theta=\left(X^{T} X\right)^{-1} X^{T} \vec{y}</p>
@@ -243,10 +243,10 @@ $$</script><p>=\left[ \begin{array}{c}{h<em>{\theta}\left(x^{(1)}\right)-y^{(1)}
 这边就要稍微插一句了，机器学习学术界有两种学派，一派是*频率学派*，另一派是*贝叶斯学派*。二者各自有用武之地，都能解决上面提出的问题。下面我们利用频率学派的方法：**最大似然估计**解决这个问题。首先构造下面的函数：</script><p>L(\theta)=L(\theta ; X, \vec{y})=p(\vec{y} | X ; \theta)</p>
 <script type="math/tex; mode=display">
 
-我们的样本扩大到整个样本集，则整体的概率分布就如上面的公式。因为我们假设每个样本集中的样本独立同分布（IID），所以根据概率的乘法定理，我们可以把每个事件概率相乘，得到整体的概率。</script><p>\begin{aligned} L(\theta) &amp;=\prod<em>{i=1}^{m} p\left(y^{(i)} | x^{(i)} ; \theta\right) \ &amp;=\prod</em>{i=1}^{m} \frac{1}{\sqrt{2 \pi} \sigma} \exp \left(-\frac{\left(y^{(i)}-\theta^{T} x^{(i)}\right)^{2}}{2 \sigma^{2}}\right) \end{aligned}</p>
+我们的样本扩大到整个样本集，则整体的概率分布就如上面的公式。因为我们假设每个样本集中的样本独立同分布（IID），所以根据概率的乘法定理，我们可以把每个事件概率相乘，得到整体的概率。</script><p>\begin{aligned} L(\theta) &amp;=\prod_{i=1}^{m} p\left(y^{(i)} | x^{(i)} ; \theta\right) \\ &amp;=\prod_{i=1}^{m} \frac{1}{\sqrt{2 \pi} \sigma} \exp \left(-\frac{\left(y^{(i)}-\theta^{T} x^{(i)}\right)^{2}}{2 \sigma^{2}}\right) \end{aligned}</p>
 <script type="math/tex; mode=display">
 
-又回到了最优化问题的思路来了，这是一个关于θ的函数，那我们对它求导，就有希望得到极值。连乘$\prod$不好求导的话，我们不妨对整个似然函数L(θ)取对数，因为对数在其定义域上是单调增的，所以不改变函数的单调性，我们可以利用对数函数的性质。</script><p>\begin{aligned} \ell(\theta) &amp;=\log L(\theta) \ &amp;=\log \prod<em>{i=1}^{m} \frac{1}{\sqrt{2 \pi} \sigma} \exp \left(-\frac{\left(y^{(i)}-\theta^{T} x^{(i)}\right)^{2}}{2 \sigma^{2}}\right) \ &amp;=\sum</em>{i=1}^{m} \log \frac{1}{\sqrt{2 \pi} \sigma} \exp \left(-\frac{\left(y^{(i)}-\theta^{T} x^{(i)}\right)^{2}}{2 \sigma^{2}}\right) \ &amp;=m \log \frac{1}{\sqrt{2 \pi} \sigma}-\frac{1}{\sigma^{2}} \cdot \frac{1}{2} \sum_{i=1}^{m}\left(y^{(i)}-\theta^{T} x^{(i)}\right)^{2} \end{aligned}</p>
+又回到了最优化问题的思路来了，这是一个关于θ的函数，那我们对它求导，就有希望得到极值。连乘$\prod$不好求导的话，我们不妨对整个似然函数L(θ)取对数，因为对数在其定义域上是单调增的，所以不改变函数的单调性，我们可以利用对数函数的性质。</script><p>\begin{aligned} \ell(\theta) &amp;=\log L(\theta) \\ &amp;=\log \prod_{i=1}^{m} \frac{1}{\sqrt{2 \pi} \sigma} \exp \left(-\frac{\left(y^{(i)}-\theta^{T} x^{(i)}\right)^{2}}{2 \sigma^{2}}\right) \\ &amp;=\sum_{i=1}^{m} \log \frac{1}{\sqrt{2 \pi} \sigma} \exp \left(-\frac{\left(y^{(i)}-\theta^{T} x^{(i)}\right)^{2}}{2 \sigma^{2}}\right) \\ &amp;=m \log \frac{1}{\sqrt{2 \pi} \sigma}-\frac{1}{\sigma^{2}} \cdot \frac{1}{2} \sum_{i=1}^{m}\left(y^{(i)}-\theta^{T} x^{(i)}\right)^{2} \end{aligned}</p>
 <script type="math/tex; mode=display">
 
 看到了吗？式子最右端，出现了，我们的最小二乘优化项：</script><p>\frac{1}{2} \sum_{i=1}^{m}\left(y^{(i)}-\theta^{T} x^{(i)}\right)^{2}</p>

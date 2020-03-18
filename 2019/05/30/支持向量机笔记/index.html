@@ -16,7 +16,7 @@
   <meta name="description" content>
   <meta name="author" content="Superlova">
   <meta name="keywords" content>
-  <title>支持向量机笔记 - 每天进步一点点...</title>
+  <title>支持向量机笔记 - Superlova</title>
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
@@ -36,7 +36,7 @@
 <!-- 自定义样式保持在最底部 -->
 
 
-<link rel="alternate" href="/atom.xml" title="每天进步一点点..." type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="alternate" href="/atom.xml" title="Superlova" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
 
 
@@ -45,7 +45,7 @@
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
-       href="/">&nbsp;<strong>每天进步一点点...</strong>&nbsp;</a>
+       href="/">&nbsp;<strong>Superlova</strong>&nbsp;</a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent"
@@ -181,7 +181,7 @@ f\left(\mathbf{x}_{-}\right)=\mathbf{w} \cdot \mathbf{x}_{-}+b \leq-1</script><p
 <script type="math/tex; mode=display">
 \begin{aligned} \mathbf{w} \cdot \mathbf{x}_{1}+b &=+1 \\ \mathbf{w} \cdot \mathbf{x}_{2}+b &=-1 \end{aligned}</script><p><img src="/2019/05/30/支持向量机笔记/2019-05-30-20-45-50.png" srcset="/img/loading.gif" alt></p>
 <p>那我现在问你，求河的长度。WTF？这样就能求出河的长度了吗？是的，想一下，从小红指向小蓝的那一条向量$x_1-x_2$，向超平面的法向量$w$方向投影，然后得到的向量长度不就是河的长度了吗？</p>
-<p>河的长度：$ \mathbf{w} \cdot\left(\mathbf{x}<em>{1}-\mathbf{x}</em>{2}\right)=2 $<br>。还记得两个向量投影就是求点积吗？蛤蛤。</p>
+<p>河的长度：$ \mathbf{w} \cdot\left(\mathbf{x}_{1}-\mathbf{x}_{2}\right)=2 $<br>。还记得两个向量投影就是求点积吗？蛤蛤。</p>
 <p>忘了，法向量也是有长度的，为了把法向量标准化，我们需要除以法向量的长度：</p>
 <script type="math/tex; mode=display">
 \frac{\mathbf{w}}{\|\mathbf{w}\|} \cdot\left(\mathbf{x}_{1}-\mathbf{x}_{2}\right)=\frac{2}{\|\mathbf{w}\|}</script><p>问题就转化为将$\frac{2}{||\mathbf{w}||}$求最大。这就是一个最优化问题，按理说利用拉格朗日乘子法，对分量挨个求导即可求出极值点。但是现在这副模样连求导都做不到。我们想办法变形一下：</p>
@@ -193,7 +193,7 @@ y_{i}\left(\mathbf{w} \cdot \mathbf{x}_{i}+b\right) \geq 1</script><p>y取1或-1
 <script type="math/tex; mode=display">
 L=\frac{1}{2}\|\mathbf{w}\|^{2}-\sum_{i=1}^{l} a_{i}\left(y_{i}\left(\mathbf{x}_{i} \cdot \mathbf{w}+b\right)-1\right)</script><p>接下来要对向量求导了。害怕吗？有如下公式：$\frac{\partial|\mathbf{w}|^{2}}{\partial \mathbf{w}}=2 \mathbf{w}$和$\frac{\partial \mathbf{x} \cdot \mathbf{w}}{\partial \mathbf{w}}=\mathbf{x}$</p>
 <p>我们分别对w和b求导，看看拉格朗日函数对w和b的变化分别有什么反应：</p>
-<script type="math/tex; mode=display">\begin{aligned} \frac{\partial L}{\partial \mathbf{w}} &=\mathbf{w}-\sum_{i=1}^{l} a_{i} y_{i} \mathbf{x}_{i}=0 \\ \frac{\partial L}{\partial b} &=\sum_{i=1}^{l} a_{i} y_{i}=0 \end{aligned}</script><p>现在合适的 $ w^*=\sum<em>{i=1}^{l} a</em>{i} y<em>{i} \mathbf{x}</em>{i} $ 也都找到了，将他们回代到拉格朗日函数中去，看看他的最小点长什么样子。</p>
+<script type="math/tex; mode=display">\begin{aligned} \frac{\partial L}{\partial \mathbf{w}} &=\mathbf{w}-\sum_{i=1}^{l} a_{i} y_{i} \mathbf{x}_{i}=0 \\ \frac{\partial L}{\partial b} &=\sum_{i=1}^{l} a_{i} y_{i}=0 \end{aligned}</script><p>现在合适的 $ w^*=\sum_{i=1}^{l} a_{i} y_{i} \mathbf{x}_{i} $ 也都找到了，将他们回代到拉格朗日函数中去，看看他的最小点长什么样子。</p>
 <script type="math/tex; mode=display">
 L=\sum_{i=1}^{l} a_{i}-\frac{1}{2} \sum_{i, j=1}^{l} a_{i} a_{j} y_{i} y_{j} \mathbf{x}_{i} \cdot \mathbf{x}_{j}</script><p>我们可以看到啊，这个L的大小，取决于样本之间的点积，也就是我们选的两个小红和小蓝，他们站的位置。他们的位置要是不好，那距离就会不够大，那我们的拉格朗日同学就要重新选人。因此呢，最终被选择的样本，那一定是具有代表性的，我们称它们为<strong>支持向量</strong>。这就是支持向量机一词的由来。</p>
 <h2 id="4-核方法的运用"><a href="#4-核方法的运用" class="headerlink" title="4. 核方法的运用"></a>4. 核方法的运用</h2><p>有时候我们会碰到一些样本，他们本来就不是线性可分的，比如</p>
@@ -201,7 +201,7 @@ L=\sum_{i=1}^{l} a_{i}-\frac{1}{2} \sum_{i, j=1}^{l} a_{i} a_{j} y_{i} y_{j} \ma
 <p>但我们还是将他们利用支持向量机分开了。怎么做到的？怎么“以直为曲”？那是因为有一个道理，<strong>高维空间比低维空间更广阔的</strong>，更难出现线性不可分的状况。所以很自然的，我们人为添加一些分量，比如将二维点添加z轴分量到三维啊，甚至无限维。之后我们可以找到一个超平面，将他们分开就是轻而易举的事情啦。</p>
 <p>我们需要一种神秘变换$\Phi$，接受一个样本向量，输出提升维度之后的样本向量。</p>
 <p><img src="/2019/05/30/支持向量机笔记/2019-05-30-21-17-55.png" srcset="/img/loading.gif" alt></p>
-<p>$\Phi$很难找，但是我们不必找。因为根据前面的结论，拉格朗日函数根我们选取的关键向量的<strong>内积</strong>有关，直接表示出$ \Phi\left(\mathbf{x}<em>{1}\right) \cdot \Phi\left(\mathbf{x}</em>{2}\right) $，一步到位哦。</p>
+<p>$\Phi$很难找，但是我们不必找。因为根据前面的结论，拉格朗日函数根我们选取的关键向量的<strong>内积</strong>有关，直接表示出$ \Phi\left(\mathbf{x}_{1}\right) \cdot \Phi\left(\mathbf{x}_{2}\right) $，一步到位哦。</p>
 <p>正好有这种专门表示两个向量运算的函数，叫做核函数。</p>
 <script type="math/tex; mode=display">
 \Phi\left(\mathbf{x}_{1}\right) \cdot \Phi\left(\mathbf{x}_{2}\right)=K\left(\mathbf{x}_{1}, \mathbf{x}_{2}\right)</script><p>举个例子，线性核函数：</p>

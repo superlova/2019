@@ -16,7 +16,7 @@
   <meta name="description" content>
   <meta name="author" content="Superlova">
   <meta name="keywords" content>
-  <title>CS229-note-2-分类问题与逻辑回归 - 每天进步一点点...</title>
+  <title>CS229-note-2-分类问题与逻辑回归 - Superlova</title>
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
@@ -36,7 +36,7 @@
 <!-- 自定义样式保持在最底部 -->
 
 
-<link rel="alternate" href="/atom.xml" title="每天进步一点点..." type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="alternate" href="/atom.xml" title="Superlova" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
 
 
@@ -45,7 +45,7 @@
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
-       href="/">&nbsp;<strong>每天进步一点点...</strong>&nbsp;</a>
+       href="/">&nbsp;<strong>Superlova</strong>&nbsp;</a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent"
@@ -189,7 +189,7 @@ p(y | x ; \theta)=\left(h_{\theta}(x)\right)^{y}\left(1-h_{\theta}(x)\right)^{1-
 \begin{aligned} \frac{\partial}{\partial \theta_{j}} \ell(\theta) &=\left(y \frac{1}{g\left(\theta^{T} x\right)}-(1-y) \frac{1}{1-g\left(\theta^{T} x\right)}\right) \frac{\partial}{\partial \theta_{j}} g\left(\theta^{T} x\right) \\ &=\left(y \frac{1}{g\left(\theta^{T} x\right)}-(1-y) \frac{1}{1-g\left(\theta^{T} x\right)}\right) g\left(\theta^{T} x\right)\left(1-g\left(\theta^{T} x\right)\frac{\partial}{\partial \theta_{j}} \theta^{T} x\right.\\ &=\left(y\left(1-g\left(\theta^{T} x\right)\right)-(1-y) g\left(\theta^{T} x\right)\right) x_{j} \\ &=\left(y-h_{\theta}(x)\right) x_{j} \end{aligned}
 \\
 \begin{aligned}\theta_{j} :=\theta_{j}+\alpha\left(y^{(i)}-h_{\theta}\left(x^{(i)}\right)\right) x_{j}^{(i)}\end{aligned}</script><p>有没有感觉求偏导数后的形式与回归问题很相似？这背后又有着怎样的共同点？</p>
-<p>还有更巧的呢。记得我们之前说的$<br>g(z)=\left{\begin{array}{ll}{1} &amp; {\text { if } z \geq 0} \ {0} &amp; {\text { if } z&lt;0}\end{array}\right.<br>$吗？采用该分类函数作为分类器进行训练的模型，叫做感知器(perceptron learning algorithm)模型。它的梯度下降算法也是这种形式：$\theta<em>{j} :=\theta</em>{j}+\alpha\left(y^{(i)}-h<em>{\theta}\left(x^{(i)}\right)\right) x</em>{j}^{(i)}$</p>
+<p>还有更巧的呢。记得我们之前说的$<br>g(z)=\left\{\begin{array}{ll}{1} &amp; {\text { if } z \geq 0} \\ {0} &amp; {\text { if } z&lt;0}\end{array}\right.<br>$吗？采用该分类函数作为分类器进行训练的模型，叫做感知器(perceptron learning algorithm)模型。它的梯度下降算法也是这种形式：$\theta_{j} :=\theta_{j}+\alpha\left(y^{(i)}-h_{\theta}\left(x^{(i)}\right)\right) x_{j}^{(i)}$</p>
 <p>这背后的原因将留在我之后的更新中解答。</p>
 <h2 id="2-其他优化似然函数的方法：牛顿法"><a href="#2-其他优化似然函数的方法：牛顿法" class="headerlink" title="2.其他优化似然函数的方法：牛顿法"></a>2.其他优化似然函数的方法：牛顿法</h2><p>除了前面说的梯度下降法，牛顿法也是机器学习中用的比较多的一种优化算法。牛顿法遵循这样的优化规则：</p>
 <script type="math/tex; mode=display">

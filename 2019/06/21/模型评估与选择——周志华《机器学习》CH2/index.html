@@ -16,7 +16,7 @@
   <meta name="description" content>
   <meta name="author" content="Superlova">
   <meta name="keywords" content>
-  <title>模型评估与选择——周志华《机器学习》CH2 - 每天进步一点点...</title>
+  <title>模型评估与选择——周志华《机器学习》CH2 - Superlova</title>
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
@@ -36,7 +36,7 @@
 <!-- 自定义样式保持在最底部 -->
 
 
-<link rel="alternate" href="/atom.xml" title="每天进步一点点..." type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="alternate" href="/atom.xml" title="Superlova" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
 
 
@@ -45,7 +45,7 @@
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
-       href="/">&nbsp;<strong>每天进步一点点...</strong>&nbsp;</a>
+       href="/">&nbsp;<strong>Superlova</strong>&nbsp;</a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent"
@@ -189,7 +189,7 @@
 <p>只有PR曲线，我们可以说模型C最差，因为这条曲线完全被A或B模型的曲线所包围。但是不好判断A红线与B黑线的性能，因为二者有交叉。这种情况有三种度量：</p>
 <p>求<strong>曲线下面积</strong>是一种思路，不过有比较高的计算成本，更喜欢采用的是<strong>平衡点</strong>Break-Even point，可以看到我们挑了三个小红点。靠外的模型好。另外可以采用F1度量。计算公式是<script type="math/tex">F_1=\frac{2PR}{P+R}</script>这个公式就是准确率和查全率的调和平均<script type="math/tex">\frac{1}{F_1}=\frac{1}{2}(\frac{1}{P}+\frac{1}{R})</script>。之所以取调和平均，是因为调和平均在四种平均中最小，因此更重视较小值。</p>
 <p><img src="/2019/06/21/模型评估与选择——周志华《机器学习》CH2/2019-06-21-12-46-48.png" srcset="/img/loading.gif" alt="四大基本不等式"></p>
-<p>对于实际问题，准确率和查全率的意义不一样。超市小偷识别系统更害怕冤枉好人，因此可能更注重准确率；而地铁检查系统可能抱着“宁查一千不放一个”的态度，更追求查全率。因此对F1评价稍作修改，我们就得到了F<em>beta度量指标：$$F</em>{\beta}=\frac{(1+\beta^2)PR}{\beta^2P+R}<script type="math/tex">，其实这个公式就是加了权重后的调和平均</script>\frac{1}{F_{\beta}}=\frac{1}{1+\beta^2}(\frac{1}{P}+\frac{\beta^2}{R})$$。$\beta&gt;1$则更注重查全率R，$\beta&lt;1$则更注重查准率P。</p>
+<p>对于实际问题，准确率和查全率的意义不一样。超市小偷识别系统更害怕冤枉好人，因此可能更注重准确率；而地铁检查系统可能抱着“宁查一千不放一个”的态度，更追求查全率。因此对F1评价稍作修改，我们就得到了F_beta度量指标：<script type="math/tex">F_{\beta}=\frac{(1+\beta^2)PR}{\beta^2P+R}</script>，其实这个公式就是加了权重后的调和平均<script type="math/tex">\frac{1}{F_{\beta}}=\frac{1}{1+\beta^2}(\frac{1}{P}+\frac{\beta^2}{R})</script>。$\beta&gt;1$则更注重查全率R，$\beta&lt;1$则更注重查准率P。</p>
 <p><strong>ROC曲线</strong>是另外一个思路的评价标准，横坐标是假正例，纵坐标是真正例。其绘制方法也是将样本按照置信度排序，如果样本是真正例，则垂直向y轴正方向绘制一个单位；如果样本是假正例，则水平向x轴正方向绘制一个单位。</p>
 <p>理想状态下，模型将所有正例排在反例前面，因此曲线应该一直往上升，升到m个正例穷尽之后，再水平到|D|-m个反例。但是往往模型会判断失误，于是就出现了这种图像：</p>
 <p><img src="/2019/06/21/模型评估与选择——周志华《机器学习》CH2/2019-06-21-12-59-40.png" srcset="/img/loading.gif" alt></p>
