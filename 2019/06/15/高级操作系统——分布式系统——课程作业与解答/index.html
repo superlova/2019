@@ -1,219 +1,173 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 
-<!-- Head tag -->
+
+
+
+
 <head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content>
+  <meta name="author" content="Superlova">
+  <meta name="keywords" content>
+  <title>高级操作系统——分布式系统——课程作业与解答 - 每天进步一点点...</title>
 
-    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!--Description-->
-
-    
-
-    
-        <meta name="description" content="第一章作业1. 什么是分布式系统？请举例说明分布式系统的特点。定义1：分布式系统是多个独立计算机的集合，该系统用户认为它是一个单独的一致的系统定义2：由在通过消息进行通信和协作操作的网络计算机上的软件硬件部件组成的任何系统分布式系统的特点：（1）隐藏性，隐藏了计算机之间的不同，隐藏了计算机之间的通信">
-    
-
-    <!--Author-->
-    
-        <meta name="author" content="Superlova">
-    
-
-    <!--Open Graph Title-->
-    
-        <meta property="og:title" content="高级操作系统——分布式系统——课程作业与解答">
-    
-
-    <!--Open Graph Description-->
-    
-        <meta property="og:description" content="第一章作业1. 什么是分布式系统？请举例说明分布式系统的特点。定义1：分布式系统是多个独立计算机的集合，该系统用户认为它是一个单独的一致的系统定义2：由在通过消息进行通信和协作操作的网络计算机上的软件硬件部件组成的任何系统分布式系统的特点：（1）隐藏性，隐藏了计算机之间的不同，隐藏了计算机之间的通信">
-    
-
-    <!--Open Graph Site Name-->
-        <meta property="og:site_name" content="Smile :)">
-
-    <!--Type page-->
-    
-        <meta property="og:type" content="article">
-    
-
-    <!--Page Cover-->
-    
-    
-        <meta property="og:image" content="https://superlova.github.iohttps://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg">
-    
-
-        <meta name="twitter:card" content="summary_large_image">
-
-    
-
-    
-        <meta name="twitter:image" content="https://superlova.github.iohttps://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg">
-    
-
-    <!-- Title -->
-    
-    <title>高级操作系统——分布式系统——课程作业与解答 - Smile :)</title>
-
-    <!-- Bootstrap Core CSS -->
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/style.css">
-
-    <!-- Custom Fonts -->
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- Gallery -->
-    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet">
-
-    <!-- Google Analytics -->
-    
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
 
 
-    <!-- favicon -->
-    
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
 
-<link rel="alternate" href="/atom.xml" title="Smile :)" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="stylesheet" href="/css/main.css">
+
+
+  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<link rel="alternate" href="/atom.xml" title="每天进步一点点..." type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
 
 
 <body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>每天进步一点点...</strong>&nbsp;</a>
 
-    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Menu -->
-    <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header page-scroll">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">Smile :)</a>
-        </div>
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
-                
-                    <li>
-                        <a href="/">
-                            
-                                Home
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="/archives">
-                            
-                                Archives
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="/tags">
-                            
-                                Tags
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="/categories">
-                            
-                                Categories
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="https://github.com/superlova">
-                            
-                                <i class="fa fa-github fa-stack-2x"></i>
-                            
-                        </a>
-                    </li>
-                
-            </ul>
-        </div>
-        <!-- /.navbar-collapse -->
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
     </div>
-    <!-- /.container -->
+  </div>
 </nav>
 
-    <!-- Main Content -->
-    <!-- Page Header -->
-<!-- Set your background image for this header in your post front-matter: cover -->
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
 
-<header class="intro-header" style="background-image: url('https://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg')">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="post-heading">
-                    <h1>高级操作系统——分布式系统——课程作业与解答</h1>
-                    
-                    <span class="meta">
-                        <!-- Date and Author -->
-                        
-                        
-                            2019-06-15
-                        
-                    </span>
-                </div>
-            </div>
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期六, 六月 15日 2019, 8:14 晚上
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    4.9k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                      17 分钟
+                  </span>
+                
+
+                
+              </p>
+            
+          </div>
+
+          
         </div>
+      </div>
     </div>
-</header>
+  </header>
 
-<!-- Post Content -->
-<article>
-    <div class="container">
-        <div class="row">
+  <main>
+    
+      
 
-            <!-- Tags and categories -->
-           
-                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
-                    
-                        
-
-
-<a href="/tags/分布式系统/">#分布式系统</a> <a href="/tags/操作系统/">#操作系统</a> <a href="/tags/作业/">#作业</a>
-
-
-                    
-                </div>
-                <div class="col-lg-4 col-md-5 post-categories">
-                    
-                        
-
-<a href="/categories/分布式系统/">分布式系统</a>/ <a href="/categories/分布式系统/学校课程/">学校课程</a>
-
-                    
-                </div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5 z-depth-3" id="board">
+          <div class="post-content mx-auto" id="post">
             
-
-            <!-- Gallery -->
-            
-
-            <!-- Post Main Content -->
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <h2 id="第一章作业"><a href="#第一章作业" class="headerlink" title="第一章作业"></a>第一章作业</h2><h3 id="1-什么是分布式系统？请举例说明分布式系统的特点。"><a href="#1-什么是分布式系统？请举例说明分布式系统的特点。" class="headerlink" title="1. 什么是分布式系统？请举例说明分布式系统的特点。"></a>1. 什么是分布式系统？请举例说明分布式系统的特点。</h3><p>定义1：分布式系统是多个独立计算机的集合，该系统用户认为它是一个单独的一致的系统<br>定义2：由在通过消息进行通信和协作操作的网络计算机上的软件硬件部件组成的任何系统<br>分布式系统的特点：<br>（1）隐藏性，隐藏了计算机之间的不同，隐藏了计算机之间的通信过程。<br>（2）统一性和一致性，无论何时何地，用户都采用统一和一致的方法访问分布式系统。<br>（3）可扩展性，隐藏一个独立的计算机如何参与系统的运作；在系统的一部分不能工作的情况下整个系统仍然能持续提供服务；当系统的某些部件被替换或被修改或是系统提供了新的服务时，不应让用户注意到这些改变。<br>（4）并发性，在共享资源的情况下，协调不同的程序并发执行。<br>（5）没有全局时钟，很难在网络中精确地同步所有的时钟，更重要的是发现动作发生的先后顺序。<br>举例部分略。</p>
+            <div class="markdown-body">
+              <h2 id="第一章作业"><a href="#第一章作业" class="headerlink" title="第一章作业"></a>第一章作业</h2><h3 id="1-什么是分布式系统？请举例说明分布式系统的特点。"><a href="#1-什么是分布式系统？请举例说明分布式系统的特点。" class="headerlink" title="1. 什么是分布式系统？请举例说明分布式系统的特点。"></a>1. 什么是分布式系统？请举例说明分布式系统的特点。</h3><p>定义1：分布式系统是多个独立计算机的集合，该系统用户认为它是一个单独的一致的系统<br>定义2：由在通过消息进行通信和协作操作的网络计算机上的软件硬件部件组成的任何系统<br>分布式系统的特点：<br>（1）隐藏性，隐藏了计算机之间的不同，隐藏了计算机之间的通信过程。<br>（2）统一性和一致性，无论何时何地，用户都采用统一和一致的方法访问分布式系统。<br>（3）可扩展性，隐藏一个独立的计算机如何参与系统的运作；在系统的一部分不能工作的情况下整个系统仍然能持续提供服务；当系统的某些部件被替换或被修改或是系统提供了新的服务时，不应让用户注意到这些改变。<br>（4）并发性，在共享资源的情况下，协调不同的程序并发执行。<br>（5）没有全局时钟，很难在网络中精确地同步所有的时钟，更重要的是发现动作发生的先后顺序。<br>举例部分略。</p>
 <h3 id="2-有一个简单的C-S系统，此系统只用一台服务器来响应所有客户的请求。"><a href="#2-有一个简单的C-S系统，此系统只用一台服务器来响应所有客户的请求。" class="headerlink" title="2. 有一个简单的C/S系统，此系统只用一台服务器来响应所有客户的请求。"></a>2. 有一个简单的C/S系统，此系统只用一台服务器来响应所有客户的请求。</h3><p>（1）请解释为什么在这种情况下不能对服务器的响应时间进行限制（例如，这个限制可能是要求服务器一定要在10ms内对客户的请求进行响应）；<br>因为服务器过于简单，处理能力差，对于多线程高并发情况，当服务器发生堵塞时造成的服务等待问题会造成服务器响应不及时的情况。并且一台服务器性能有限，不能保证服务端高效性和高的容错性。因此在这种情况下不能对服务器的响应时间进行限制。</p>
 <p>（2）如果我们想限制服务器的响应时间，应该如何修改设计？<br>可以通过增加服务器的数量或提高服务器的处理能力。</p>
 <p>（3）在现实世界中使用的系统中，这种限制是否是必须的？为什么？<br>是必须的。因为如果不加限制，那么就会导致用户使用系统的体验降低，从而放弃这个系统。</p>
@@ -231,14 +185,14 @@
 <h3 id="6-8分-假设处理器P有一个新任务T，可以有下面的三个算法来实现处理器任务分配"><a href="#6-8分-假设处理器P有一个新任务T，可以有下面的三个算法来实现处理器任务分配" class="headerlink" title="6. (8分)假设处理器P有一个新任务T，可以有下面的三个算法来实现处理器任务分配"></a>6. (8分)假设处理器P有一个新任务T，可以有下面的三个算法来实现处理器任务分配</h3><p>算法A：<br>（i）搜集所有处理器（包括P自己）的负载信息；<br>（ii）选择负载最低的处理器，并将任务分配给负载最低的处理器；<br>（iii）算法结束。<br>算法B:<br>（i）随机选择一个处理器Q，询问其负载情况;<br>（ii）若Q欠载，则将T分配给Q，算法结束；<br>（iii）否则继续执行（i）<br>算法C:<br>（i）随机选择一个处理器Q，询问其负载情况;<br>（ii）若Q欠载，则将T分配给Q，算法结束；<br>（iii）否则，如果已经执行（i）K次，则将T留在本地执行，否则继续执行（i）<br>请问：<br>（1）（2分）上面三个算法哪个是确定性算法？哪个是启发式算法？<br>算法A是确定性算法，B和C是启发式算法。<br>（2）（4分）算法B和算法C很相似，请问哪个算法可行性更强？为什么？<br>算法B有可能不能在有限步骤内结束，因此是个错误的算法。而算法C则可以在有限步骤内结束，可行性强。<br>（3）（2分）算法C是否还可以优化？<br>可以有各种优化方式。比如，只有在本地机器过载的情况下才开始询问其他机器；或者用多播机制发送K个消息询问K台机器的负载情况，然后选择负载最小的机器执行进程。</p>
 <h2 id="第四章作业"><a href="#第四章作业" class="headerlink" title="第四章作业"></a>第四章作业</h2><h3 id="1-在分布式系统中，扁平式命名方式（flat-naming）和名字空间的命名方式（name-space）的主要区别是什么？"><a href="#1-在分布式系统中，扁平式命名方式（flat-naming）和名字空间的命名方式（name-space）的主要区别是什么？" class="headerlink" title="1. 在分布式系统中，扁平式命名方式（flat naming）和名字空间的命名方式（name space）的主要区别是什么？"></a>1. 在分布式系统中，扁平式命名方式（flat naming）和名字空间的命名方式（name space）的主要区别是什么？</h3><p>扁平式命名方式使用ID唯一表示实体，没有结构，不包含任何关于如何定位实体访问点的任何信息。<br>名字空间是一个有标签的有向图，它是结构化的名字。</p>
 <h3 id="2-在扁平式命名方式中使用的层次化方法来定位一个实体的时候，为什么其插入和查找可以体现局部性？"><a href="#2-在扁平式命名方式中使用的层次化方法来定位一个实体的时候，为什么其插入和查找可以体现局部性？" class="headerlink" title="2. 在扁平式命名方式中使用的层次化方法来定位一个实体的时候，为什么其插入和查找可以体现局部性？"></a>2. 在扁平式命名方式中使用的层次化方法来定位一个实体的时候，为什么其插入和查找可以体现局部性？</h3><p>因为在层次化方法中，网络被分为了若干个域，顶层与扩展整个网络，每个域切分为多个更小的域，每个域D中的每个实体E都在dir(D)中有位置记录。因此在修改或者查找的时候，所有的操作都可以在饱含了操作发起点和目标点的最小域里解决，因此体现了局部性。</p>
-<h3 id="3-在图中给出的名字空间中，请为标记为A的实体给出一个绝对路径名和任意一个相对路径名。"><a href="#3-在图中给出的名字空间中，请为标记为A的实体给出一个绝对路径名和任意一个相对路径名。" class="headerlink" title="3. 在图中给出的名字空间中，请为标记为A的实体给出一个绝对路径名和任意一个相对路径名。"></a>3. 在图中给出的名字空间中，请为标记为A的实体给出一个绝对路径名和任意一个相对路径名。</h3><p><img src="/2019/06/15/高级操作系统——分布式系统——课程作业与解答/2019-06-21-13-31-47.png" alt><br>绝对路径名：k: /vu/home/steen/mbox<br>相对路径名：n0: /home/steen/mbox</p>
+<h3 id="3-在图中给出的名字空间中，请为标记为A的实体给出一个绝对路径名和任意一个相对路径名。"><a href="#3-在图中给出的名字空间中，请为标记为A的实体给出一个绝对路径名和任意一个相对路径名。" class="headerlink" title="3. 在图中给出的名字空间中，请为标记为A的实体给出一个绝对路径名和任意一个相对路径名。"></a>3. 在图中给出的名字空间中，请为标记为A的实体给出一个绝对路径名和任意一个相对路径名。</h3><p><img src="/2019/06/15/高级操作系统——分布式系统——课程作业与解答/2019-06-21-13-31-47.png" srcset="/img/loading.gif" alt><br>绝对路径名：k: /vu/home/steen/mbox<br>相对路径名：n0: /home/steen/mbox</p>
 <h3 id="4-为什么缓存可以提升名字服务的可用性？"><a href="#4-为什么缓存可以提升名字服务的可用性？" class="headerlink" title="4. 为什么缓存可以提升名字服务的可用性？"></a>4. 为什么缓存可以提升名字服务的可用性？</h3><p>名字解析过程中，很多步骤的结果都是不变化的，因此使用缓存可以大大提升名字服务的可用性。</p>
 <h3 id="5-为什么要删除不被引用的实体？请解释纯粹采用引用图的方式来解决这个问题时会遇到什么问题？"><a href="#5-为什么要删除不被引用的实体？请解释纯粹采用引用图的方式来解决这个问题时会遇到什么问题？" class="headerlink" title="5. 为什么要删除不被引用的实体？请解释纯粹采用引用图的方式来解决这个问题时会遇到什么问题？"></a>5. 为什么要删除不被引用的实体？请解释纯粹采用引用图的方式来解决这个问题时会遇到什么问题？</h3><p>因为删除无引用实体可以节省资源。<br>当纯粹采用引用图方式解决问题时，很难维护一个全局的引用图，并且需要确定根集，由根集负责发起算法，这些集中式的特点不适用于分布式系统的扩展性。</p>
 <h3 id="6-什么是幂等操作？为什么在删除不被引用的实体的时候采用引用列表方式来可以利用到幂等操作的特性，而采用简单引用计数的方法就不可以？"><a href="#6-什么是幂等操作？为什么在删除不被引用的实体的时候采用引用列表方式来可以利用到幂等操作的特性，而采用简单引用计数的方法就不可以？" class="headerlink" title="6. 什么是幂等操作？为什么在删除不被引用的实体的时候采用引用列表方式来可以利用到幂等操作的特性，而采用简单引用计数的方法就不可以？"></a>6. 什么是幂等操作？为什么在删除不被引用的实体的时候采用引用列表方式来可以利用到幂等操作的特性，而采用简单引用计数的方法就不可以？</h3><p>一个操作多次执行的结果和一次执行的结果是一样的，不会因为多次执行而产生副作用。<br>使用简单计数法时计数增加和减少的操作都不是幂等操作；而采用引用列表时插入和删除操作都是幂等操作。因此在分布式系统中因为通信的不可靠性的存在，幂等操作的存在可以非常适应。</p>
 <h3 id="7-在使用标记不可达对象的跟踪方案删除不被引用的实体时，可以使用两个方案：一个是从根集出发，标记所有可达实体，从而删除所有不可达实体；一个是采用组内跟踪方案，先在一个进程组中标记所有外部可达实体，删除垃圾，然后再扩大组的范围。请解释这两种方案各有何利弊。"><a href="#7-在使用标记不可达对象的跟踪方案删除不被引用的实体时，可以使用两个方案：一个是从根集出发，标记所有可达实体，从而删除所有不可达实体；一个是采用组内跟踪方案，先在一个进程组中标记所有外部可达实体，删除垃圾，然后再扩大组的范围。请解释这两种方案各有何利弊。" class="headerlink" title="7. 在使用标记不可达对象的跟踪方案删除不被引用的实体时，可以使用两个方案：一个是从根集出发，标记所有可达实体，从而删除所有不可达实体；一个是采用组内跟踪方案，先在一个进程组中标记所有外部可达实体，删除垃圾，然后再扩大组的范围。请解释这两种方案各有何利弊。"></a>7. 在使用标记不可达对象的跟踪方案删除不被引用的实体时，可以使用两个方案：一个是从根集出发，标记所有可达实体，从而删除所有不可达实体；一个是采用组内跟踪方案，先在一个进程组中标记所有外部可达实体，删除垃圾，然后再扩大组的范围。请解释这两种方案各有何利弊。</h3><p>第一种方法伸缩性很差，因为需要跟踪分布式系统中的所有对象，是个集中式算法。<br>第二种方法可以适应于分布式系统，可以解决伸缩性问题</p>
 <h2 id="第五章作业"><a href="#第五章作业" class="headerlink" title="第五章作业"></a>第五章作业</h2><h3 id="1-Cristian算法和Berkeley算法哪一个算法可以保证系统中所有的时钟可以与UTC一致？"><a href="#1-Cristian算法和Berkeley算法哪一个算法可以保证系统中所有的时钟可以与UTC一致？" class="headerlink" title="1. Cristian算法和Berkeley算法哪一个算法可以保证系统中所有的时钟可以与UTC一致？"></a>1. Cristian算法和Berkeley算法哪一个算法可以保证系统中所有的时钟可以与UTC一致？</h3><p>答：只有Cristian算法维持了一个拥有WWV接收器的Time server，让所有其他的机器与Time server一致。而Berkeley算法只是维持所有机器时间一致。</p>
-<h3 id="2-在下图中，有三个进程，每个进程上的圆点表示这个进程上发生的事件，事件之间的有箭头的线表示一个消息的发送和接收，请在括号中写出下面四对事件之间的关系【用a-gt-b表示事件a与事件b有happens-before关系，否则用a-x-b表示事件a和b之间没有happens-before关系】"><a href="#2-在下图中，有三个进程，每个进程上的圆点表示这个进程上发生的事件，事件之间的有箭头的线表示一个消息的发送和接收，请在括号中写出下面四对事件之间的关系【用a-gt-b表示事件a与事件b有happens-before关系，否则用a-x-b表示事件a和b之间没有happens-before关系】" class="headerlink" title="2. 在下图中，有三个进程，每个进程上的圆点表示这个进程上发生的事件，事件之间的有箭头的线表示一个消息的发送和接收，请在括号中写出下面四对事件之间的关系【用a -&gt; b表示事件a与事件b有happens before关系，否则用a x b表示事件a和b之间没有happens before关系】"></a>2. 在下图中，有三个进程，每个进程上的圆点表示这个进程上发生的事件，事件之间的有箭头的线表示一个消息的发送和接收，请在括号中写出下面四对事件之间的关系【用a -&gt; b表示事件a与事件b有happens before关系，否则用a x b表示事件a和b之间没有happens before关系】</h3><p><img src="/2019/06/15/高级操作系统——分布式系统——课程作业与解答/2019-06-21-13-33-55.png" alt><br>（1）P1和q1    【    p1 x q1           】<br>（2）p4和q4    【    q4 -&gt; p4           】<br>（3）p1和r4     【    p1 -&gt; r4           】<br>（4）P4和r1    【    p4 x r1           】</p>
-<h3 id="3-（分）下面的两个全局快照的切口是否是一致的切口？"><a href="#3-（分）下面的两个全局快照的切口是否是一致的切口？" class="headerlink" title="3. （分）下面的两个全局快照的切口是否是一致的切口？"></a>3. （分）下面的两个全局快照的切口是否是一致的切口？</h3><p> <img src="/2019/06/15/高级操作系统——分布式系统——课程作业与解答/2019-06-21-13-34-07.png" alt><br>               （a）                                            （b）<br>（a）是一致的切口<br>（m1）p3已发送给p1的消息，p1还未接收到；（m2）p2已发送给p3的消息，p3还未收到；（m3）代表的事件还未发生。<br>（b）是不一致的切口<br>（m1）p3已发送给p1的消息，p1还未接收到，此事件没有问题；（m2）p2已发送给p3的消息，p3还未接收到，此事件也没有问题；（m3）p2已接收到p1给其发送的消息，而p1还未发送该消息，不符合事情发展的顺序，因此图（b）不是一致的切口。</p>
+<h3 id="2-在下图中，有三个进程，每个进程上的圆点表示这个进程上发生的事件，事件之间的有箭头的线表示一个消息的发送和接收，请在括号中写出下面四对事件之间的关系【用a-gt-b表示事件a与事件b有happens-before关系，否则用a-x-b表示事件a和b之间没有happens-before关系】"><a href="#2-在下图中，有三个进程，每个进程上的圆点表示这个进程上发生的事件，事件之间的有箭头的线表示一个消息的发送和接收，请在括号中写出下面四对事件之间的关系【用a-gt-b表示事件a与事件b有happens-before关系，否则用a-x-b表示事件a和b之间没有happens-before关系】" class="headerlink" title="2. 在下图中，有三个进程，每个进程上的圆点表示这个进程上发生的事件，事件之间的有箭头的线表示一个消息的发送和接收，请在括号中写出下面四对事件之间的关系【用a -&gt; b表示事件a与事件b有happens before关系，否则用a x b表示事件a和b之间没有happens before关系】"></a>2. 在下图中，有三个进程，每个进程上的圆点表示这个进程上发生的事件，事件之间的有箭头的线表示一个消息的发送和接收，请在括号中写出下面四对事件之间的关系【用a -&gt; b表示事件a与事件b有happens before关系，否则用a x b表示事件a和b之间没有happens before关系】</h3><p><img src="/2019/06/15/高级操作系统——分布式系统——课程作业与解答/2019-06-21-13-33-55.png" srcset="/img/loading.gif" alt><br>（1）P1和q1    【    p1 x q1           】<br>（2）p4和q4    【    q4 -&gt; p4           】<br>（3）p1和r4     【    p1 -&gt; r4           】<br>（4）P4和r1    【    p4 x r1           】</p>
+<h3 id="3-（分）下面的两个全局快照的切口是否是一致的切口？"><a href="#3-（分）下面的两个全局快照的切口是否是一致的切口？" class="headerlink" title="3. （分）下面的两个全局快照的切口是否是一致的切口？"></a>3. （分）下面的两个全局快照的切口是否是一致的切口？</h3><p> <img src="/2019/06/15/高级操作系统——分布式系统——课程作业与解答/2019-06-21-13-34-07.png" srcset="/img/loading.gif" alt><br>               （a）                                            （b）<br>（a）是一致的切口<br>（m1）p3已发送给p1的消息，p1还未接收到；（m2）p2已发送给p3的消息，p3还未收到；（m3）代表的事件还未发生。<br>（b）是不一致的切口<br>（m1）p3已发送给p1的消息，p1还未接收到，此事件没有问题；（m2）p2已发送给p3的消息，p3还未接收到，此事件也没有问题；（m3）p2已接收到p1给其发送的消息，而p1还未发送该消息，不符合事情发展的顺序，因此图（b）不是一致的切口。</p>
 <h3 id="4-（分）假设有一个事务用于在一个银行的两个账户A和B之间进行转账100元钱。写法如下："><a href="#4-（分）假设有一个事务用于在一个银行的两个账户A和B之间进行转账100元钱。写法如下：" class="headerlink" title="4. （分）假设有一个事务用于在一个银行的两个账户A和B之间进行转账100元钱。写法如下："></a>4. （分）假设有一个事务用于在一个银行的两个账户A和B之间进行转账100元钱。写法如下：</h3><p>Begin-Transaction<br>A=A-100;<br>B=B+100;<br>End-Transaction<br>请使用这个例子来说明一个事务的ACID特性。</p>
 <p>事物的ACID特性为：原子性（A）、一致性（C）、独立性（I）、永久性（D）<br>（1）原子性：Begin-Transaction和End-Transaction之间的操作要么全部正常执行完毕，要么不执行，若中间该事物出现错误需要全部回滚到Begin-Transaction之前的状态<br>（2）一致性：一个事物不能破坏系统的一致性，事务发生之前、之后系统应该维持一个稳定的平衡状态，在此例中，银行的总资产可看作是这个稳定的平衡状态（系统的一致性），即A+B的和维持不变<br>（3）独立性：例如与此例一同并发的还有另一个事务：<br>Begin-Transaction<br>A=A+B<em>0.1;<br>C=C-B</em>0.1;<br>End-Transaction<br>两个事务并发，第一个事务的第二条语句执行之前和执行之后B的值是不一样的，这样就导致了最终第二个事务执行之前和之后A+C的值不一样。这就导致一个事务的执行影响了另一个事务的执行结果，独立性没有了。<br>（4）永久性：事务中的操作成功执行完毕后事务便会提交，提交所带来的变化是永久性的。</p>
 <h3 id="5-为实现事务回滚，请分析Private-Workspace方法和Writeahead-Log方法分别应该在怎样的环境下使用。"><a href="#5-为实现事务回滚，请分析Private-Workspace方法和Writeahead-Log方法分别应该在怎样的环境下使用。" class="headerlink" title="5. 为实现事务回滚，请分析Private Workspace方法和Writeahead Log方法分别应该在怎样的环境下使用。"></a>5. 为实现事务回滚，请分析Private Workspace方法和Writeahead Log方法分别应该在怎样的环境下使用。</h3><p>Private workspace应该在事务冲突很多发生的时候使用，而writeahead log应该在事务冲突发生很少的时候使用。</p>
@@ -252,73 +206,295 @@
 <h3 id="5-为了实现副本的一致性可以采用push的协议，也可以使用pull的协议。请问两种协议都适用于哪种类型的系统"><a href="#5-为了实现副本的一致性可以采用push的协议，也可以使用pull的协议。请问两种协议都适用于哪种类型的系统" class="headerlink" title="5.为了实现副本的一致性可以采用push的协议，也可以使用pull的协议。请问两种协议都适用于哪种类型的系统"></a>5.为了实现副本的一致性可以采用push的协议，也可以使用pull的协议。请问两种协议都适用于哪种类型的系统</h3><p>push的协议会把修改积极推送到各个副本上。在这种情况下，服务器需维护副本的信息，在读写频率高时性能较好，免去了多个副本不断询问的开销；<br>pull的协议副本向服务器轮询是否有修改，当读写频率低时使用较好，不用维护副本信息表，服务器开销小。</p>
 <h3 id="6-（8分）假设在网络中为了提升数据的有效性，为一个数据保存了10个副本。若使用基于法定数量的数据一致性策略，学生A、B、C采用了不同的方案。学生A的方案为读法定数量为1，写法定数量为9；学生B的方案为读法定数量为6，写法定数量为5；学生C的方案为读法定数量为2，写法定数量为9。请回答：（1）这三个方案中哪个方案是正确的？"><a href="#6-（8分）假设在网络中为了提升数据的有效性，为一个数据保存了10个副本。若使用基于法定数量的数据一致性策略，学生A、B、C采用了不同的方案。学生A的方案为读法定数量为1，写法定数量为9；学生B的方案为读法定数量为6，写法定数量为5；学生C的方案为读法定数量为2，写法定数量为9。请回答：（1）这三个方案中哪个方案是正确的？" class="headerlink" title="6.（8分）假设在网络中为了提升数据的有效性，为一个数据保存了10个副本。若使用基于法定数量的数据一致性策略，学生A、B、C采用了不同的方案。学生A的方案为读法定数量为1，写法定数量为9；学生B的方案为读法定数量为6，写法定数量为5；学生C的方案为读法定数量为2，写法定数量为9。请回答：（1）这三个方案中哪个方案是正确的？"></a>6.（8分）假设在网络中为了提升数据的有效性，为一个数据保存了10个副本。若使用基于法定数量的数据一致性策略，学生A、B、C采用了不同的方案。学生A的方案为读法定数量为1，写法定数量为9；学生B的方案为读法定数量为6，写法定数量为5；学生C的方案为读法定数量为2，写法定数量为9。请回答：（1）这三个方案中哪个方案是正确的？</h3><p>（2）对于每种错误的方案给出一个例子说明错误发生的原因。<br>（1）三个方案中C的是正确的<br>（2）如果按照A的方案，读法定数量为1，写法定数量为9，读者会读到一个旧版本的数据；如果按照C的方案，读法定数量为6，写法定数量为5，读者永远读不到6个版本一致的数据。</p>
 
-
+            </div>
+            <hr>
+            <div>
+              <p>
                 
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/分布式系统/">分布式系统</a>
+                      &nbsp;
+                    
+                      <a class="hover-with-bg" href="/categories/分布式系统/学校课程/">学校课程</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/分布式系统/">分布式系统</a>
+                    
+                      <a class="hover-with-bg" href="/tags/操作系统/">操作系统</a>
+                    
+                      <a class="hover-with-bg" href="/tags/作业/">作业</a>
+                    
+                  </span>
+                
+              </p>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
             </div>
 
-            <!-- Comments -->
             
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    
-
-
-                </div>
-            
+          </div>
         </div>
+      </div>
     </div>
-</article>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc-start"></div>
+<div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
 
-    <!-- Footer -->
-    <hr />
+      </div>
+    
+  </div>
+</div>
 
-<!-- Footer -->
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <ul class="list-inline text-center">
-                    
+<!-- Custom -->
 
-                    
 
-                    
-                        <li>
-                            <a href="https://github.com/superlova" target="_blank">
-                                <span class="fa-stack fa-lg">
-                                    <i class="fa fa-circle fa-stack-2x"></i>
-                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                </span>
-                            </a>
-                        </li>
-                    
+    
+  </main>
 
-                    
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
 
-                    
-
-                    
-                </ul>
-                <p class="copyright text-muted">&copy; 2020 Superlova<br></p>
-                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
-                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
-            </div>
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
         </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
     </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    </div>
+    
+
+    
+
+    
+  </div>
 </footer>
 
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script  src="/js/main.js" ></script>
 
-    <!-- After footer scripts -->
-    
-<!-- jQuery -->
-<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
 
-<!-- Bootstrap -->
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script  src="/js/lazyload.js" ></script>
 
-<!-- Gallery -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
 
-<!-- Disqus Comments -->
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var post = $('#post');
+      var toc = $('#toc');
+      var tocLimMax = post.offset().top + post.height() - navHeight;
+
+      $(window).scroll(function () {
+        var tocLimMin = $('#toc-start').offset().top - navHeight;
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': navHeight,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+      var offset = $('#board-ctn').css('margin-right')
+      $('#toc-ctn').css({
+        'right': offset
+      })
+    });
+  </script>
+
+
+
+
+
+
+
+
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-160806707-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+
+  
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "高级操作系统——分布式系统——课程作业与解答&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
 
 
 
@@ -338,5 +514,4 @@
 </script>
 <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
-
 </html>

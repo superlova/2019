@@ -1,244 +1,182 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 
-<!-- Head tag -->
+
+
+
+
 <head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content>
+  <meta name="author" content="Superlova">
+  <meta name="keywords" content>
+  <title>用于科学计算的GPU选购参考 - 每天进步一点点...</title>
 
-    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!--Description-->
-
-    
-
-    
-        <meta name="description" content="实验室最近要采购一批显卡，需要调研显卡的型号和价格。
-需求分析首先说一下需求：
-
-首先显卡的用途是科学计算，更具体一点是深度学习，有人做图像，有人做NLP；
-其次预算有限，得买性价比最好的；
-然后可能会有很多人要用服务器训练模型。
-
-然后这是戴尔服务器的售后人员发来的建议采购清单：
-其中M10：19">
-    
-
-    <!--Author-->
-    
-        <meta name="author" content="Superlova">
-    
-
-    <!--Open Graph Title-->
-    
-        <meta property="og:title" content="用于科学计算的GPU选购参考">
-    
-
-    <!--Open Graph Description-->
-    
-        <meta property="og:description" content="实验室最近要采购一批显卡，需要调研显卡的型号和价格。
-需求分析首先说一下需求：
-
-首先显卡的用途是科学计算，更具体一点是深度学习，有人做图像，有人做NLP；
-其次预算有限，得买性价比最好的；
-然后可能会有很多人要用服务器训练模型。
-
-然后这是戴尔服务器的售后人员发来的建议采购清单：
-其中M10：19">
-    
-
-    <!--Open Graph Site Name-->
-        <meta property="og:site_name" content="Smile :)">
-
-    <!--Type page-->
-    
-        <meta property="og:type" content="article">
-    
-
-    <!--Page Cover-->
-    
-    
-        <meta property="og:image" content="https://superlova.github.iohttps://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg">
-    
-
-        <meta name="twitter:card" content="summary_large_image">
-
-    
-
-    
-        <meta name="twitter:image" content="https://superlova.github.iohttps://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg">
-    
-
-    <!-- Title -->
-    
-    <title>用于科学计算的GPU选购参考 - Smile :)</title>
-
-    <!-- Bootstrap Core CSS -->
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/style.css">
-
-    <!-- Custom Fonts -->
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- Gallery -->
-    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet">
-
-    <!-- Google Analytics -->
-    
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
 
 
-    <!-- favicon -->
-    
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
 
-<link rel="alternate" href="/atom.xml" title="Smile :)" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="stylesheet" href="/css/main.css">
+
+
+  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<link rel="alternate" href="/atom.xml" title="每天进步一点点..." type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
 
 
 <body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>每天进步一点点...</strong>&nbsp;</a>
 
-    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Menu -->
-    <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header page-scroll">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">Smile :)</a>
-        </div>
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
-                
-                    <li>
-                        <a href="/">
-                            
-                                Home
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="/archives">
-                            
-                                Archives
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="/tags">
-                            
-                                Tags
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="/categories">
-                            
-                                Categories
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="https://github.com/superlova">
-                            
-                                <i class="fa fa-github fa-stack-2x"></i>
-                            
-                        </a>
-                    </li>
-                
-            </ul>
-        </div>
-        <!-- /.navbar-collapse -->
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
     </div>
-    <!-- /.container -->
+  </div>
 </nav>
 
-    <!-- Main Content -->
-    <!-- Page Header -->
-<!-- Set your background image for this header in your post front-matter: cover -->
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
 
-<header class="intro-header" style="background-image: url('https://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg')">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="post-heading">
-                    <h1>用于科学计算的GPU选购参考</h1>
-                    
-                    <span class="meta">
-                        <!-- Date and Author -->
-                        
-                        
-                            2019-07-01
-                        
-                    </span>
-                </div>
-            </div>
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期一, 七月 1日 2019, 6:11 晚上
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    2.2k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                      7 分钟
+                  </span>
+                
+
+                
+              </p>
+            
+          </div>
+
+          
         </div>
+      </div>
     </div>
-</header>
+  </header>
 
-<!-- Post Content -->
-<article>
-    <div class="container">
-        <div class="row">
+  <main>
+    
+      
 
-            <!-- Tags and categories -->
-           
-                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
-                    
-                        
-
-
-<a href="/tags/深度学习/">#深度学习</a> <a href="/tags/GPU/">#GPU</a> <a href="/tags/采购/">#采购</a> <a href="/tags/Tesla/">#Tesla</a> <a href="/tags/1080Ti/">#1080Ti</a> <a href="/tags/Titan/">#Titan</a>
-
-
-                    
-                </div>
-                <div class="col-lg-4 col-md-5 post-categories">
-                    
-                        
-
-<a href="/categories/经验教训/">经验教训</a>
-
-                    
-                </div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5 z-depth-3" id="board">
+          <div class="post-content mx-auto" id="post">
             
-
-            <!-- Gallery -->
-            
-
-            <!-- Post Main Content -->
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <p>实验室最近要采购一批显卡，需要调研显卡的型号和价格。</p>
+            <div class="markdown-body">
+              <p>实验室最近要采购一批显卡，需要调研显卡的型号和价格。</p>
 <h2 id="需求分析"><a href="#需求分析" class="headerlink" title="需求分析"></a>需求分析</h2><p>首先说一下需求：</p>
 <ul>
 <li>首先显卡的用途是科学计算，更具体一点是深度学习，有人做图像，有人做NLP；</li>
 <li>其次预算有限，得买性价比最好的；</li>
 <li>然后可能会有很多人要用服务器训练模型。</li>
 </ul>
-<p>然后这是戴尔服务器的售后人员发来的建议采购清单：<br><img src="/2019/07/01/用于科学计算的GPU选购参考/2019-07-01-18-19-43.png" alt></p>
+<p>然后这是戴尔服务器的售后人员发来的建议采购清单：<br><img src="/2019/07/01/用于科学计算的GPU选购参考/2019-07-01-18-19-43.png" srcset="/img/loading.gif" alt></p>
 <p>其中M10：19999￥ P100： 49999￥ V100：59999￥ P40：49999￥</p>
-<p>值得一提的是，谷歌的Colab上面用的是这款：<br><img src="/2019/07/01/用于科学计算的GPU选购参考/2019-07-01-18-21-48.png" alt><br><img src="/2019/07/01/用于科学计算的GPU选购参考/2019-07-01-18-21-58.png" alt></p>
+<p>值得一提的是，谷歌的Colab上面用的是这款：<br><img src="/2019/07/01/用于科学计算的GPU选购参考/2019-07-01-18-21-48.png" srcset="/img/loading.gif" alt><br><img src="/2019/07/01/用于科学计算的GPU选购参考/2019-07-01-18-21-58.png" srcset="/img/loading.gif" alt></p>
 <p>但是一个从事深度学习研究的学长建议我买1080Ti。他好像提都没提过Tesla啊？难道显卡水这么深？</p>
 <h2 id="GPU参数"><a href="#GPU参数" class="headerlink" title="GPU参数"></a>GPU参数</h2><p>GPU的性能主要由下面三个主要参数构成：</p>
 <p><strong>计算能力</strong>。通常我们关心的是32位浮点计算能力。当然，对于高玩来说也可以考虑16位浮点用来训练，8位整数来预测。</p>
@@ -255,7 +193,7 @@
 <p>Transformer中用到的大型矩阵乘法介于卷积运算和RNN的小型矩阵乘法之间，16位存储、张量核心和TFLOPs都对大型矩阵乘法有好处，但它仍需要较大的显存带宽。</p>
 <h2 id="性价比分析"><a href="#性价比分析" class="headerlink" title="性价比分析"></a>性价比分析</h2><p>下面总结了一张GPU和TPU的标准性能数据，值越高代表性能越好。RTX系列假定用了16位计算，Word RNN数值是指长度&lt;100的段序列的biLSTM性能。</p>
 <p>这项基准测试是用PyTorch 1.0.1和CUDA 10完成的。</p>
-<p><img src="/2019/07/01/用于科学计算的GPU选购参考/2019-07-01-19-09-53.png" alt="GPU和TPU的性能数据"></p>
+<p><img src="/2019/07/01/用于科学计算的GPU选购参考/2019-07-01-19-09-53.png" srcset="/img/loading.gif" alt="GPU和TPU的性能数据"></p>
 <p>性价比可能是选择一张GPU最重要的考虑指标。</p>
 <p>性价比可能是选择一张GPU最重要的考虑指标。在攻略中，小哥进行了如下运算测试各显卡的性能：</p>
 <ul>
@@ -265,11 +203,11 @@
 <li>借用了现有的CNN基准测试。</li>
 <li>用了亚马逊和eBay上显卡的平均售价作为GPU的参考成本。<br>最后，可以得出CNN、RNN和Transformer的归一化性能/成本比值，如下所示：</li>
 </ul>
-<p><img src="/2019/07/01/用于科学计算的GPU选购参考/2019-07-01-19-11-20.png" alt="CNN、RNN和Transformer的每美元性能"></p>
+<p><img src="/2019/07/01/用于科学计算的GPU选购参考/2019-07-01-19-11-20.png" srcset="/img/loading.gif" alt="CNN、RNN和Transformer的每美元性能"></p>
 <p>在上面这张图中，数字越大代表每一美元能买到的性能越强。可以看出， RTX 2060比RTX 2070，RTX 2080或RTX 2080 Ti更具成本效益，<strong>甚至是Tesla V100性价比的5倍以上</strong>。</p>
 <p>所以此轮的性价比之王已经确定，是RTX 2060无疑了。</p>
 <p>下图是李沐老师画了900和1000系列里各个卡的32位浮点计算能力和价格的对比（价格是wikipedia的推荐价格，真实价格通常会有浮动）。</p>
-<p><img src="/2019/07/01/用于科学计算的GPU选购参考/2019-07-01-19-06-00.png" alt></p>
+<p><img src="/2019/07/01/用于科学计算的GPU选购参考/2019-07-01-19-06-00.png" srcset="/img/loading.gif" alt></p>
 <p>由于GPU的功耗，散热和体积，需要一些额外考虑。</p>
 <ul>
 <li>机箱体积<br>GPU尺寸较大，通常不考虑太小的机箱。而且机箱自带的风扇要好。</li>
@@ -286,7 +224,7 @@
 <p><strong>计算机视觉或机器翻译研究人员</strong>：采用鼓风设计的GTX 2080 Ti，如果训练非常大的网络，请选择RTX Titans</p>
 <p><strong>NLP研究人员</strong>：RTX 2080 Ti</p>
 <p><strong>已经开始研究深度学习</strong>：RTX 2070起步，以后按需添置更多RTX 2070</p>
-<h2 id="其他配件要求："><a href="#其他配件要求：" class="headerlink" title="其他配件要求："></a>其他配件要求：</h2><p><img src="/2019/07/01/用于科学计算的GPU选购参考/2019-07-01-19-19-14.png" alt="各硬件性能要求"></p>
+<h2 id="其他配件要求："><a href="#其他配件要求：" class="headerlink" title="其他配件要求："></a>其他配件要求：</h2><p><img src="/2019/07/01/用于科学计算的GPU选购参考/2019-07-01-19-19-14.png" srcset="/img/loading.gif" alt="各硬件性能要求"></p>
 <ul>
 <li><p>CPU:<br>因为主要使用显卡进行cuda计算，因此对CPU的要求并不是很高，频率越高、线程数越多越好，一般最低要求cpu核心数大于显卡个数。其中一个制约因素：cpu的最大PCI-E 通道数。每张显卡占用16条pcie通道才能达到最大性能，而单cpu最大支持40条pcie，也就是即使有4个pcie x16接口，只能最多达到2路x16加一路x8，插上的显卡不能发挥全部性能。不过，主板芯片组其实也可以扩充一部分pcie通道。（x99主板可以扩宽2.0的8lanes，z170可以扩充3.0的20lanes）</p>
 </li>
@@ -301,73 +239,298 @@
 </ul>
 <p>深度学习实验室共享服务器，7x24小时运行  2080ti或者4titan V ，预算充裕可以专门购置一台高性能多显卡深度学习服务器，24*7小时运行，其他用户可以在自己的笔记本电脑和台式机上编写和初步调试卷积神经网络，本地验证无误后，上传至服务器进行训练任务。这样做可以极大的节省设备开支，最大限度的利用计算资源，也避免了每个用户单独配置复杂的软件环境。</p>
 
-
+            </div>
+            <hr>
+            <div>
+              <p>
                 
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/经验教训/">经验教训</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/深度学习/">深度学习</a>
+                    
+                      <a class="hover-with-bg" href="/tags/GPU/">GPU</a>
+                    
+                      <a class="hover-with-bg" href="/tags/采购/">采购</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Tesla/">Tesla</a>
+                    
+                      <a class="hover-with-bg" href="/tags/1080Ti/">1080Ti</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Titan/">Titan</a>
+                    
+                  </span>
+                
+              </p>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
             </div>
 
-            <!-- Comments -->
             
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    
-
-
-                </div>
-            
+          </div>
         </div>
+      </div>
     </div>
-</article>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc-start"></div>
+<div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
 
-    <!-- Footer -->
-    <hr />
+      </div>
+    
+  </div>
+</div>
 
-<!-- Footer -->
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <ul class="list-inline text-center">
-                    
+<!-- Custom -->
 
-                    
 
-                    
-                        <li>
-                            <a href="https://github.com/superlova" target="_blank">
-                                <span class="fa-stack fa-lg">
-                                    <i class="fa fa-circle fa-stack-2x"></i>
-                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                </span>
-                            </a>
-                        </li>
-                    
+    
+  </main>
 
-                    
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
 
-                    
-
-                    
-                </ul>
-                <p class="copyright text-muted">&copy; 2020 Superlova<br></p>
-                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
-                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
-            </div>
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
         </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
     </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    </div>
+    
+
+    
+
+    
+  </div>
 </footer>
 
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script  src="/js/main.js" ></script>
 
-    <!-- After footer scripts -->
-    
-<!-- jQuery -->
-<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
 
-<!-- Bootstrap -->
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script  src="/js/lazyload.js" ></script>
 
-<!-- Gallery -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
 
-<!-- Disqus Comments -->
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var post = $('#post');
+      var toc = $('#toc');
+      var tocLimMax = post.offset().top + post.height() - navHeight;
+
+      $(window).scroll(function () {
+        var tocLimMin = $('#toc-start').offset().top - navHeight;
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': navHeight,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+      var offset = $('#board-ctn').css('margin-right')
+      $('#toc-ctn').css({
+        'right': offset
+      })
+    });
+  </script>
+
+
+
+
+
+
+
+
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-160806707-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+
+  
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "用于科学计算的GPU选购参考&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
 
 
 
@@ -387,5 +550,4 @@
 </script>
 <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
-
 </html>

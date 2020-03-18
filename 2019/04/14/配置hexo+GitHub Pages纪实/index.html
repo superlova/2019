@@ -1,223 +1,173 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 
-<!-- Head tag -->
+
+
+
+
 <head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content>
+  <meta name="author" content="Superlova">
+  <meta name="keywords" content>
+  <title>配置hexo+GitHub Pages纪实 - 每天进步一点点...</title>
 
-    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!--Description-->
-
-    
-
-    
-        <meta name="description" content="配置hexo+GitHub Pages纪实想发博客不容易，折腾了大半天总算打通了一条路。
-我一直有将自己匮乏的知识付诸于纸面的冲动。首先我在与FTK同学交流的过程中了解到同性交友网站GitHub可以搭建个人博客，于是今天试着探索了一下子。怎么说呢，没想到坑这么多？？？
-本文旨在记录我从零开始建立个人">
-    
-
-    <!--Author-->
-    
-        <meta name="author" content="Superlova">
-    
-
-    <!--Open Graph Title-->
-    
-        <meta property="og:title" content="配置hexo+GitHub Pages纪实">
-    
-
-    <!--Open Graph Description-->
-    
-        <meta property="og:description" content="配置hexo+GitHub Pages纪实想发博客不容易，折腾了大半天总算打通了一条路。
-我一直有将自己匮乏的知识付诸于纸面的冲动。首先我在与FTK同学交流的过程中了解到同性交友网站GitHub可以搭建个人博客，于是今天试着探索了一下子。怎么说呢，没想到坑这么多？？？
-本文旨在记录我从零开始建立个人">
-    
-
-    <!--Open Graph Site Name-->
-        <meta property="og:site_name" content="Smile :)">
-
-    <!--Type page-->
-    
-        <meta property="og:type" content="article">
-    
-
-    <!--Page Cover-->
-    
-    
-        <meta property="og:image" content="https://superlova.github.iohttps://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg">
-    
-
-        <meta name="twitter:card" content="summary_large_image">
-
-    
-
-    
-        <meta name="twitter:image" content="https://superlova.github.iohttps://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg">
-    
-
-    <!-- Title -->
-    
-    <title>配置hexo+GitHub Pages纪实 - Smile :)</title>
-
-    <!-- Bootstrap Core CSS -->
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/style.css">
-
-    <!-- Custom Fonts -->
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- Gallery -->
-    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet">
-
-    <!-- Google Analytics -->
-    
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
 
 
-    <!-- favicon -->
-    
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
 
-<link rel="alternate" href="/atom.xml" title="Smile :)" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="stylesheet" href="/css/main.css">
+
+
+  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<link rel="alternate" href="/atom.xml" title="每天进步一点点..." type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
 
 
 <body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>每天进步一点点...</strong>&nbsp;</a>
 
-    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Menu -->
-    <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header page-scroll">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">Smile :)</a>
-        </div>
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
-                
-                    <li>
-                        <a href="/">
-                            
-                                Home
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="/archives">
-                            
-                                Archives
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="/tags">
-                            
-                                Tags
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="/categories">
-                            
-                                Categories
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="https://github.com/superlova">
-                            
-                                <i class="fa fa-github fa-stack-2x"></i>
-                            
-                        </a>
-                    </li>
-                
-            </ul>
-        </div>
-        <!-- /.navbar-collapse -->
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
     </div>
-    <!-- /.container -->
+  </div>
 </nav>
 
-    <!-- Main Content -->
-    <!-- Page Header -->
-<!-- Set your background image for this header in your post front-matter: cover -->
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
 
-<header class="intro-header" style="background-image: url('https://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg')">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="post-heading">
-                    <h1>配置hexo+GitHub Pages纪实</h1>
-                    
-                    <span class="meta">
-                        <!-- Date and Author -->
-                        
-                        
-                            2019-04-14
-                        
-                    </span>
-                </div>
-            </div>
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期日, 四月 14日 2019, 9:32 上午
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    1.8k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                      6 分钟
+                  </span>
+                
+
+                
+              </p>
+            
+          </div>
+
+          
         </div>
+      </div>
     </div>
-</header>
+  </header>
 
-<!-- Post Content -->
-<article>
-    <div class="container">
-        <div class="row">
+  <main>
+    
+      
 
-            <!-- Tags and categories -->
-           
-                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
-                    
-                        
-
-
-<a href="/tags/GitHub-Pages/">#GitHub Pages</a> <a href="/tags/hexo/">#hexo</a>
-
-
-                    
-                </div>
-                <div class="col-lg-4 col-md-5 post-categories">
-                    
-                        
-
-<a href="/categories/经验教训/">经验教训</a>
-
-                    
-                </div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5 z-depth-3" id="board">
+          <div class="post-content mx-auto" id="post">
             
-
-            <!-- Gallery -->
-            
-
-            <!-- Post Main Content -->
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <h1 id="配置hexo-GitHub-Pages纪实"><a href="#配置hexo-GitHub-Pages纪实" class="headerlink" title="配置hexo+GitHub Pages纪实"></a>配置hexo+GitHub Pages纪实</h1><p>想发博客不容易，折腾了大半天总算打通了一条路。</p>
+            <div class="markdown-body">
+              <h1 id="配置hexo-GitHub-Pages纪实"><a href="#配置hexo-GitHub-Pages纪实" class="headerlink" title="配置hexo+GitHub Pages纪实"></a>配置hexo+GitHub Pages纪实</h1><p>想发博客不容易，折腾了大半天总算打通了一条路。</p>
 <p>我一直有将自己匮乏的知识付诸于纸面的冲动。首先我在与FTK同学交流的过程中了解到同性交友网站GitHub可以搭建个人博客，于是今天试着探索了一下子。怎么说呢，没想到坑这么多？？？</p>
 <p>本文旨在记录我从零开始建立个人博客的过程，还是有一定门槛的，如果对大家能有一点点帮助那就太好了。</p>
 <h1 id="获得个人网站域名方法"><a href="#获得个人网站域名方法" class="headerlink" title="获得个人网站域名方法"></a>获得个人网站域名方法</h1><p>注册github即可，官网<code>www.github.com</code>，之后新建repository，名字为“你的用户名.github.io”。所以说用户名很重要，你要起个qq号做github名字那我估计没人能记住你的博客名，毕竟个人域名只能和用户名一样。记住项目一定要设置成公有public啊，博客是给大家看的嘛，孤芳自赏就不好玩了。</p>
@@ -229,42 +179,65 @@
 <p>   <a href="https://desktop.github.com/" target="_blank" rel="noopener">Github Desktop</a></p>
 <p>   <a href="https://git-scm.com/download/win" target="_blank" rel="noopener">Git</a>选择64位的安装包，下载后安装</p>
 <p>   新增一个仓库(Repositories)，仓库名称为 <code>yourname.github.io</code> [yourname是你的账号]。<br>   开启刚安装好的 Github Desktop ，并将刚创好的仓库存到本地端。<br>   然后右键刚拉下来的仓库，选取 Open in Git Shell 打开 Git bash(option可选)，执行指令将 Github 上的仓库拉到本地端。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git pull origin master</span><br></pre></td></tr></table></figure>
-<p>Github Desktop 右上的 Sync 按钮具有 pull/push 功能，不想打指令可以多尝试。<br>使用 Github Desktop 的好处是不必像其他教学一样，不需要配置 SSH Key 和 设定 origin 位置路径，省了两个步骤。<br>安装好 Node.js 后，就能使用 npm 安装 hexo。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
-<p>输入以下指令可查看版本。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo version</span><br></pre></td></tr></table></figure></p>
-<p>接下来，依序输入以下指令，初始化我们的 Blog。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># git bash 上面的路径大概长这样</span><br><span class="line">You-PC@You  /e/Documents/GitHub/yourname.github.io (master)</span><br><span class="line">$ hexo init		# 初始化 blog</span><br><span class="line"># 输入上面那个指令后 hexo 会产生新的 .git盖掉旧的 .git</span><br><span class="line">$ git init              # 所以就重新产生一个 .git</span><br><span class="line">$ npm install		# 安装相关套件</span><br><span class="line">$ hexo g		# 产生静态页面</span><br><span class="line">$ hexo s		# 启动本地服务器</span><br></pre></td></tr></table></figure></p>
-<p>网址列输入 <code>http://localhost:4000</code> ，就能观看 Blog 了。<br>预设会有一个 Hello World 文章。<br>到我们本地 yourname.github.io 的文件夹中能找到 _config.yml 文件。<br>这是 Hexo 的全局配置文件。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># Deployment</span><br><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repository: git@github.com:yourname/yourname.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
-<p>这边是 YAML 语法，冒号后面记得空一格，照上面的设定输入，仓库的 SSH 地址如下图可获得。<br>执行以下命令安装 hexo-deployer-git，没安装套件前输入 hexo d 会出现 Error。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure></p>
-<p>产生静态页面后，部署到 Github。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo d -g     # 等同输入 hexo g 和 hexo d 指令</span><br></pre></td></tr></table></figure></p>
-<p>再来就可以上 <code>https://yourname.github.io/</code> 查看 Blog 了。</p>
-<h2 id="常用-Hexo-指令"><a href="#常用-Hexo-指令" class="headerlink" title="常用 Hexo 指令"></a>常用 Hexo 指令</h2><p>写新文章<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new &quot;postName&quot; 		# 产生新的文章</span><br><span class="line">$ hexo new page &quot;pageName&quot;	# 产生新的页面</span><br></pre></td></tr></table></figure></p>
-<p>Hexo提供了常用命令的简写<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ hexo n == hexo new   		# 产生新的 post/page/draft</span><br><span class="line">$ hexo g == hexo generate  	# 产生静态页面</span><br><span class="line">$ hexo s == hexo server		# 启动本地浏览</span><br><span class="line">$ hexo d == hexo deploy		# 部署文件至 Github 上</span><br></pre></td></tr></table></figure></p>
-<p>指令组合<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ hexo d -g	# 产生静态文件后，部署 blog</span><br><span class="line">$ hexo s -g	# 产生静态文件后，预览 blog</span><br></pre></td></tr></table></figure></p>
-<h1 id="各种坑的处理方法"><a href="#各种坑的处理方法" class="headerlink" title="各种坑的处理方法"></a>各种坑的处理方法</h1><h2 id="Hexo-无法生成-index-html"><a href="#Hexo-无法生成-index-html" class="headerlink" title="Hexo 无法生成 index.html"></a>Hexo 无法生成 index.html</h2><p>在刚初始化一个项目后， 你运行 <code>hexo g</code>，有时候 hexo 并不会生成 <code>index.html</code> 和其他一些静态文件。 这一般是没有初始化完全的原因, 有些插件没有安装</p>
+<pre><code>$ git pull origin master
+</code></pre><p>Github Desktop 右上的 Sync 按钮具有 pull/push 功能，不想打指令可以多尝试。<br>使用 Github Desktop 的好处是不必像其他教学一样，不需要配置 SSH Key 和 设定 origin 位置路径，省了两个步骤。<br>安装好 Node.js 后，就能使用 npm 安装 hexo。</p>
+<pre><code>$ npm install -g hexo-cli
+</code></pre><p>输入以下指令可查看版本。</p>
+<pre><code>$ hexo version
+</code></pre><p>接下来，依序输入以下指令，初始化我们的 Blog。</p>
+<pre><code># git bash 上面的路径大概长这样
+You-PC@You  /e/Documents/GitHub/yourname.github.io (master)
+$ hexo init        # 初始化 blog
+# 输入上面那个指令后 hexo 会产生新的 .git盖掉旧的 .git
+$ git init              # 所以就重新产生一个 .git
+$ npm install        # 安装相关套件
+$ hexo g        # 产生静态页面
+$ hexo s        # 启动本地服务器
+</code></pre><p>网址列输入 <code>http://localhost:4000</code> ，就能观看 Blog 了。<br>预设会有一个 Hello World 文章。<br>到我们本地 yourname.github.io 的文件夹中能找到 _config.yml 文件。<br>这是 Hexo 的全局配置文件。</p>
+<pre><code># Deployment
+deploy:
+  type: git
+  repository: git@github.com:yourname/yourname.github.io.git
+  branch: master
+</code></pre><p>这边是 YAML 语法，冒号后面记得空一格，照上面的设定输入，仓库的 SSH 地址如下图可获得。<br>执行以下命令安装 hexo-deployer-git，没安装套件前输入 hexo d 会出现 Error。</p>
+<pre><code>$ npm install hexo-deployer-git --save
+</code></pre><p>产生静态页面后，部署到 Github。</p>
+<pre><code>$ hexo d -g     # 等同输入 hexo g 和 hexo d 指令
+</code></pre><p>再来就可以上 <code>https://yourname.github.io/</code> 查看 Blog 了。</p>
+<h2 id="常用-Hexo-指令"><a href="#常用-Hexo-指令" class="headerlink" title="常用 Hexo 指令"></a>常用 Hexo 指令</h2><p>写新文章</p>
+<pre><code>$ hexo new &quot;postName&quot;         # 产生新的文章
+$ hexo new page &quot;pageName&quot;    # 产生新的页面
+</code></pre><p>Hexo提供了常用命令的简写</p>
+<pre><code>$ hexo n == hexo new           # 产生新的 post/page/draft
+$ hexo g == hexo generate      # 产生静态页面
+$ hexo s == hexo server        # 启动本地浏览
+$ hexo d == hexo deploy        # 部署文件至 Github 上
+</code></pre><p>指令组合</p>
+<pre><code>$ hexo d -g    # 产生静态文件后，部署 blog
+$ hexo s -g    # 产生静态文件后，预览 blog
+</code></pre><h1 id="各种坑的处理方法"><a href="#各种坑的处理方法" class="headerlink" title="各种坑的处理方法"></a>各种坑的处理方法</h1><h2 id="Hexo-无法生成-index-html"><a href="#Hexo-无法生成-index-html" class="headerlink" title="Hexo 无法生成 index.html"></a>Hexo 无法生成 index.html</h2><p>在刚初始化一个项目后， 你运行 <code>hexo g</code>，有时候 hexo 并不会生成 <code>index.html</code> 和其他一些静态文件。 这一般是没有初始化完全的原因, 有些插件没有安装</p>
 <ol>
 <li>查看 npm 插件缺失情况</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm ls --depth 0</span><br></pre></td></tr></table></figure>
-<p>这时一般会提醒你有插件没有装。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm ERROR! missing xxx</span><br></pre></td></tr></table></figure>
-<ol>
+<pre><code>$ npm ls --depth 0
+</code></pre><p>这时一般会提醒你有插件没有装。</p>
+<pre><code>npm ERROR! missing xxx
+</code></pre><ol>
 <li>安装缺失插件</li>
 </ol>
 <p>如果你的插件都在 <code>packages.json</code> 里， 可以简单通过如下命令安装</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install --save</span><br></pre></td></tr></table></figure>
-<p>要是没有， 就依次将所有缺失的插件安装上</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install --save jquery jsdom [xxx ...]</span><br></pre></td></tr></table></figure>
-<ol>
+<pre><code>$ npm install --save
+</code></pre><p>要是没有， 就依次将所有缺失的插件安装上</p>
+<pre><code>$ npm install --save jquery jsdom [xxx ...]
+</code></pre><ol>
 <li>重新生成静态文件</li>
 </ol>
 <p>安装好后，执行 <code>hexo g</code> 命令应该就可以正常生成完整博客了。</p>
-<h2 id="hexo-deploy不上去，明明本地能看但是联网后死活404"><a href="#hexo-deploy不上去，明明本地能看但是联网后死活404" class="headerlink" title="hexo deploy不上去，明明本地能看但是联网后死活404"></a>hexo deploy不上去，明明本地能看但是联网后死活404</h2><p><img src="/2019/04/14/配置hexo+GitHub Pages纪实/github-page-404.png" alt="github-page-404"></p>
+<h2 id="hexo-deploy不上去，明明本地能看但是联网后死活404"><a href="#hexo-deploy不上去，明明本地能看但是联网后死活404" class="headerlink" title="hexo deploy不上去，明明本地能看但是联网后死活404"></a>hexo deploy不上去，明明本地能看但是联网后死活404</h2><p><img src="/2019/04/14/配置hexo+GitHub Pages纪实/github-page-404.png" srcset="/img/loading.gif" alt="github-page-404"></p>
 <ol>
 <li><p>首先有可能是环境没安装完全。</p>
 </li>
-<li><p>其次，可能是config.yml中deploy不完全，应为https链接，此时删除根目录下.deploy_git文件夹后重新hexo deploy即可<br><img src="/2019/04/14/配置hexo+GitHub Pages纪实/config-yml-deploy-not-ready.png" alt="config-yml-deploy-not-ready"><br><img src="/2019/04/14/配置hexo+GitHub Pages纪实/config-yml-deploy-ready.png" alt="config-yml-deploy-ready"></p>
+<li><p>其次，可能是config.yml中deploy不完全，应为https链接，此时删除根目录下.deploy_git文件夹后重新hexo deploy即可<br><img src="/2019/04/14/配置hexo+GitHub Pages纪实/config-yml-deploy-not-ready.png" srcset="/img/loading.gif" alt="config-yml-deploy-not-ready"><br><img src="/2019/04/14/配置hexo+GitHub Pages纪实/config-yml-deploy-ready.png" srcset="/img/loading.gif" alt="config-yml-deploy-ready"></p>
 </li>
 <li><p>再次，未使用git的bash，会提示权限不够</p>
 </li>
@@ -275,7 +248,7 @@
 <h2 id="登录自己的域名，发现优先以文本方式显示README-md"><a href="#登录自己的域名，发现优先以文本方式显示README-md" class="headerlink" title="登录自己的域名，发现优先以文本方式显示README.md"></a>登录自己的域名，发现优先以文本方式显示README.md</h2><p>README.md应该位于source内，并且根目录config.yml中skip_render为README.md</p>
 </li>
 </ol>
-<p><img src="/2019/04/14/配置hexo+GitHub Pages纪实/list-of-hexo-on-github.png" alt="list-of-hexo-on-github"></p>
+<p><img src="/2019/04/14/配置hexo+GitHub Pages纪实/list-of-hexo-on-github.png" srcset="/img/loading.gif" alt="list-of-hexo-on-github"></p>
 <h1 id="需要的环境："><a href="#需要的环境：" class="headerlink" title="需要的环境："></a>需要的环境：</h1><ol>
 <li>GitHub账号</li>
 <li>安装nodejs环境</li>
@@ -289,73 +262,290 @@
 <p>如果提示报错，显示你本地已经有修改，则输入下列命令放弃修改：<br><code>git reset --hard</code><br><code>git pull origin hexo</code></p>
 <p>现在你的本地hexo分支内应该下载了已经上传过的所有博客。</p>
 
-
+            </div>
+            <hr>
+            <div>
+              <p>
                 
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/经验教训/">经验教训</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/GitHub-Pages/">GitHub Pages</a>
+                    
+                      <a class="hover-with-bg" href="/tags/hexo/">hexo</a>
+                    
+                  </span>
+                
+              </p>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
             </div>
 
-            <!-- Comments -->
             
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    
-
-
-                </div>
-            
+          </div>
         </div>
+      </div>
     </div>
-</article>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc-start"></div>
+<div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
 
-    <!-- Footer -->
-    <hr />
+      </div>
+    
+  </div>
+</div>
 
-<!-- Footer -->
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <ul class="list-inline text-center">
-                    
+<!-- Custom -->
 
-                    
 
-                    
-                        <li>
-                            <a href="https://github.com/superlova" target="_blank">
-                                <span class="fa-stack fa-lg">
-                                    <i class="fa fa-circle fa-stack-2x"></i>
-                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                </span>
-                            </a>
-                        </li>
-                    
+    
+  </main>
 
-                    
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
 
-                    
-
-                    
-                </ul>
-                <p class="copyright text-muted">&copy; 2020 Superlova<br></p>
-                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
-                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
-            </div>
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
         </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
     </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    </div>
+    
+
+    
+
+    
+  </div>
 </footer>
 
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script  src="/js/main.js" ></script>
 
-    <!-- After footer scripts -->
-    
-<!-- jQuery -->
-<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
 
-<!-- Bootstrap -->
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script  src="/js/lazyload.js" ></script>
 
-<!-- Gallery -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
 
-<!-- Disqus Comments -->
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var post = $('#post');
+      var toc = $('#toc');
+      var tocLimMax = post.offset().top + post.height() - navHeight;
+
+      $(window).scroll(function () {
+        var tocLimMin = $('#toc-start').offset().top - navHeight;
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': navHeight,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+      var offset = $('#board-ctn').css('margin-right')
+      $('#toc-ctn').css({
+        'right': offset
+      })
+    });
+  </script>
+
+
+
+
+
+
+
+
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-160806707-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+
+  
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "配置hexo+GitHub Pages纪实&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
 
 
 
@@ -375,5 +565,4 @@
 </script>
 <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
-
 </html>

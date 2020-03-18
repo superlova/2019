@@ -1,313 +1,520 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 
-<!-- Head tag -->
+
+
+
+
 <head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content>
+  <meta name="author" content="Superlova">
+  <meta name="keywords" content>
+  <title>NLP学习笔记2 - 每天进步一点点...</title>
 
-    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!--Description-->
-
-    
-
-    
-        <meta name="description" content="1. 分词的概念和实现细节NLP的底层任务可分为词法分析、句法分析和语义分析，分词是词法分析中最基本的任务。中文分词是在一个中文序列的词与此之间加上空格或者其他边界标志进行分割，从而方便接下来步骤的处理。
-分词算法可分为两种，一种是基于词典的分词算法，另一种是基于字的分词算法。
-1.1 基于词典的分">
-    
-
-    <!--Author-->
-    
-        <meta name="author" content="Superlova">
-    
-
-    <!--Open Graph Title-->
-    
-        <meta property="og:title" content="NLP学习笔记2">
-    
-
-    <!--Open Graph Description-->
-    
-        <meta property="og:description" content="1. 分词的概念和实现细节NLP的底层任务可分为词法分析、句法分析和语义分析，分词是词法分析中最基本的任务。中文分词是在一个中文序列的词与此之间加上空格或者其他边界标志进行分割，从而方便接下来步骤的处理。
-分词算法可分为两种，一种是基于词典的分词算法，另一种是基于字的分词算法。
-1.1 基于词典的分">
-    
-
-    <!--Open Graph Site Name-->
-        <meta property="og:site_name" content="Smile :)">
-
-    <!--Type page-->
-    
-        <meta property="og:type" content="article">
-    
-
-    <!--Page Cover-->
-    
-    
-        <meta property="og:image" content="https://superlova.github.iohttps://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg">
-    
-
-        <meta name="twitter:card" content="summary_large_image">
-
-    
-
-    
-        <meta name="twitter:image" content="https://superlova.github.iohttps://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg">
-    
-
-    <!-- Title -->
-    
-    <title>NLP学习笔记2 - Smile :)</title>
-
-    <!-- Bootstrap Core CSS -->
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/style.css">
-
-    <!-- Custom Fonts -->
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- Gallery -->
-    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet">
-
-    <!-- Google Analytics -->
-    
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
 
 
-    <!-- favicon -->
-    
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
 
-<link rel="alternate" href="/atom.xml" title="Smile :)" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="stylesheet" href="/css/main.css">
+
+
+  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<link rel="alternate" href="/atom.xml" title="每天进步一点点..." type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
 
 
 <body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>每天进步一点点...</strong>&nbsp;</a>
 
-    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Menu -->
-    <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header page-scroll">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">Smile :)</a>
-        </div>
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
-                
-                    <li>
-                        <a href="/">
-                            
-                                Home
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="/archives">
-                            
-                                Archives
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="/tags">
-                            
-                                Tags
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="/categories">
-                            
-                                Categories
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="https://github.com/superlova">
-                            
-                                <i class="fa fa-github fa-stack-2x"></i>
-                            
-                        </a>
-                    </li>
-                
-            </ul>
-        </div>
-        <!-- /.navbar-collapse -->
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
     </div>
-    <!-- /.container -->
+  </div>
 </nav>
 
-    <!-- Main Content -->
-    <!-- Page Header -->
-<!-- Set your background image for this header in your post front-matter: cover -->
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
 
-<header class="intro-header" style="background-image: url('https://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg')">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="post-heading">
-                    <h1>NLP学习笔记2</h1>
-                    
-                    <span class="meta">
-                        <!-- Date and Author -->
-                        
-                        
-                            2019-06-24
-                        
-                    </span>
-                </div>
-            </div>
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期一, 六月 24日 2019, 8:19 晚上
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    1.6k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                      5 分钟
+                  </span>
+                
+
+                
+              </p>
+            
+          </div>
+
+          
         </div>
+      </div>
     </div>
-</header>
+  </header>
 
-<!-- Post Content -->
-<article>
-    <div class="container">
-        <div class="row">
+  <main>
+    
+      
 
-            <!-- Tags and categories -->
-           
-                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
-                    
-                        
-
-
-<a href="/tags/NLP/">#NLP</a> <a href="/tags/深度学习/">#深度学习</a> <a href="/tags/IMDB/">#IMDB</a>
-
-
-                    
-                </div>
-                <div class="col-lg-4 col-md-5 post-categories">
-                    
-                        
-
-<a href="/categories/学习笔记/">学习笔记</a>
-
-                    
-                </div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5 z-depth-3" id="board">
+          <div class="post-content mx-auto" id="post">
             
-
-            <!-- Gallery -->
-            
-
-            <!-- Post Main Content -->
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <h2 id="1-分词的概念和实现细节"><a href="#1-分词的概念和实现细节" class="headerlink" title="1. 分词的概念和实现细节"></a>1. 分词的概念和实现细节</h2><p>NLP的底层任务可分为词法分析、句法分析和语义分析，分词是词法分析中最基本的任务。中文分词是在一个中文序列的词与此之间加上空格或者其他边界标志进行分割，从而方便接下来步骤的处理。</p>
+            <div class="markdown-body">
+              <h2 id="1-分词的概念和实现细节"><a href="#1-分词的概念和实现细节" class="headerlink" title="1. 分词的概念和实现细节"></a>1. 分词的概念和实现细节</h2><p>NLP的底层任务可分为词法分析、句法分析和语义分析，分词是词法分析中最基本的任务。中文分词是在一个中文序列的词与此之间加上空格或者其他边界标志进行分割，从而方便接下来步骤的处理。</p>
 <p>分词算法可分为两种，一种是基于词典的分词算法，另一种是基于字的分词算法。</p>
 <h3 id="1-1-基于词典的分词算法："><a href="#1-1-基于词典的分词算法：" class="headerlink" title="1.1 基于词典的分词算法："></a>1.1 基于词典的分词算法：</h3><p><strong>最大匹配分词算法</strong>，有正向和反向两种。主要思路是将词典构造成一颗Trie树，也成为词典树。以“他说的确实在理”这句话为例，构造Trie树如图所示：</p>
-<p><img src="/2019/06/24/NLP学习笔记2/2019-06-24-20-42-46.png" alt></p>
+<p><img src="/2019/06/24/NLP学习笔记2/2019-06-24-20-42-46.png" srcset="/img/loading.gif" alt></p>
 <p>Trie树由词的公共前缀构成节点，降低了存储空间的同时提升查找效率。最大（正向）匹配分词将句子与Trie树进行匹配，在匹配到根结点时由下一个字重新开始进行查找。比如正向（从左至右）匹配“他说的确实在理”，得出的结果为“他／说／的确／实在／理”。如果进行反向最大匹配，则为“他／说／的／确实／在理”。</p>
 <p>单独依仗这种方法达不到很好的分词效果，而且分词时间复杂度为O(N)，即随着字符串长度线性上升。</p>
 <p><strong>最短路径分词算法</strong>，讲一句话中所有的词匹配出来构成<strong>词图</strong>，词图是一个有向无环图。之后分词问题转化为求开始节点和结束节点之间的最短路径的问题。有迪杰斯特拉算法以及其他算法。不一定只保存最短的路径，有可能保存前N短的路径。图的边上也有可能按照不同词汇出现的概率大小不同安排不同的权值。</p>
-<p><img src="/2019/06/24/NLP学习笔记2/2019-06-24-20-47-26.png" alt></p>
+<p><img src="/2019/06/24/NLP学习笔记2/2019-06-24-20-47-26.png" srcset="/img/loading.gif" alt></p>
 <p>如何构建不同权值的词图？有基于n-gram的分词算法。最后我们可以得到词的概率图。</p>
-<p><img src="/2019/06/24/NLP学习笔记2/2019-06-24-20-49-14.png" alt></p>
+<p><img src="/2019/06/24/NLP学习笔记2/2019-06-24-20-49-14.png" srcset="/img/loading.gif" alt></p>
 <h3 id="1-2-基于字的分词算法"><a href="#1-2-基于字的分词算法" class="headerlink" title="1.2 基于字的分词算法"></a>1.2 基于字的分词算法</h3><p>与基于词典的分词不同的是，基于字的分词事先不对句子进行词的匹配，而是将分词看成序列标注问题，把一个字标记成B(Begin), I(Inside), O(Outside), E(End), S(Single)。因此也可以看成是每个字的分类问题，输入为每个字及其前后字所构成的特征，输出为分类标记。对于分类问题，可以用统计机器学习或神经网络的方法求解。</p>
 <p>在NLP中，最常用的神经网络为循环神经网络（RNN，Recurrent Neural Network），它在处理变长输入和序列输入问题中有着巨大的优势。LSTM为RNN变种的一种，在一定程度上解决了RNN在训练过程中梯度消失和梯度爆炸的问题。双向（Bidirectional）循环神经网络分别从句子的开头和结尾开始对输入进行处理，将上下文信息进行编码，提升预测效果。</p>
 <h2 id="2-词、字符频率统计"><a href="#2-词、字符频率统计" class="headerlink" title="2. 词、字符频率统计"></a>2. 词、字符频率统计</h2><p>统计一篇文章中单词出现的次数，首先应该知道该文章中，有多少个单词（去重后），然后再统计单词在文章中的出现频率。这里使用最简单的方式来实现该功能。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">statistics</span><span class="params">()</span>:</span></span><br><span class="line">    path = ...</span><br><span class="line">    <span class="keyword">with</span> open(path, <span class="string">'r'</span>, encoding=<span class="string">'UTF-8'</span>) <span class="keyword">as</span> text:</span><br><span class="line">        print(string.punctuation)</span><br><span class="line">        words = [raw_word.strip(string.punctuation).lower() <span class="keyword">for</span> raw_word <span class="keyword">in</span> text.read().split()]</span><br><span class="line">        words_index = set(words)</span><br><span class="line">        counts_dict = &#123;index: words.count(index) <span class="keyword">for</span> index <span class="keyword">in</span> words_index&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> word <span class="keyword">in</span> sorted(counts_dict, key=<span class="keyword">lambda</span> x: counts_dict[x], reverse=<span class="literal">True</span>):</span><br><span class="line">        print(<span class="string">'&#123;&#125;--&#123;&#125; times'</span>.format(word, counts_dict[word]))</span><br></pre></td></tr></table></figure>
+<pre><code class="lang-python">def statistics():
+    path = ...
+    with open(path, &#39;r&#39;, encoding=&#39;UTF-8&#39;) as text:
+        print(string.punctuation)
+        words = [raw_word.strip(string.punctuation).lower() for raw_word in text.read().split()]
+        words_index = set(words)
+        counts_dict = {index: words.count(index) for index in words_index}
+
+    for word in sorted(counts_dict, key=lambda x: counts_dict[x], reverse=True):
+        print(&#39;{}--{} times&#39;.format(word, counts_dict[word]))
+</code></pre>
 <h2 id="3-语言模型中unigram、bigram、trigram的概念"><a href="#3-语言模型中unigram、bigram、trigram的概念" class="headerlink" title="3. 语言模型中unigram、bigram、trigram的概念"></a>3. 语言模型中unigram、bigram、trigram的概念</h2><p>简单地说，语言模型就是用来计算一个句子的概率的模型。为了解决參数空间过大的问题。引入了马尔科夫假设：随意一个词出现的概率只与它前面出现的有限的一个或者几个词有关。</p>
 <p>如果一个词的出现与它周围的词是独立的，那么我们就称之为unigram也就是一元语言模型：</p>
-<p><img src="/2019/06/24/NLP学习笔记2/2019-06-24-20-55-14.png" alt></p>
+<p><img src="/2019/06/24/NLP学习笔记2/2019-06-24-20-55-14.png" srcset="/img/loading.gif" alt></p>
 <p>如果一个词的出现仅依赖于它前面出现的一个词，那么我们就称之为bigram：</p>
-<p><img src="/2019/06/24/NLP学习笔记2/2019-06-24-20-54-56.png" alt></p>
+<p><img src="/2019/06/24/NLP学习笔记2/2019-06-24-20-54-56.png" srcset="/img/loading.gif" alt></p>
 <p>同理，trigram：</p>
-<p><img src="/2019/06/24/NLP学习笔记2/2019-06-24-20-55-41.png" alt></p>
+<p><img src="/2019/06/24/NLP学习笔记2/2019-06-24-20-55-41.png" srcset="/img/loading.gif" alt></p>
 <p>一般来说，N元模型就是假设当前词的出现概率只与它前面的N-1个词有关。在实践中用的最多的就是bigram和trigram了。</p>
-<h2 id="4-文本矩阵化"><a href="#4-文本矩阵化" class="headerlink" title="4. 文本矩阵化"></a>4. 文本矩阵化</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a =<span class="string">"自然语言处理是计算机科学领域与人工智能领域中的一个重要方向。它研究能实现人与计算机之间用自然语言进行有效通信的各种理论和方法。自然语言处理是一门融语言学、计算机科学、数学于一体的科学"</span></span><br><span class="line">b = <span class="string">"因此，这一领域的研究将涉及自然语言，即人们日常使用的语言，所以它与语言学的研究有着密切的联系，但又有重要的区别。自然语言处理并不是一般地研究自然语言，而在于研制能有效地实现自然语言通信的计算机系统，特别是其中的软件系统。"</span></span><br><span class="line">c =<span class="string">"因而它是计算机科学的一部分。自然语言处理（NLP）是计算机科学，人工智能，语言学关注计算机和人类（自然）语言之间的相互作用的领域。"</span></span><br><span class="line"><span class="keyword">import</span> jieba</span><br><span class="line">all_list= [<span class="string">'  '</span>.join(jieba.cut(s,cut_all = <span class="literal">False</span>)) <span class="keyword">for</span> s <span class="keyword">in</span> [a,b,c]]</span><br><span class="line">print(all_list)</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#从文件导入停用词表</span></span><br><span class="line">stpwrdpath =<span class="string">"C:\\Users\\Administrator\Desktop\lect09_codes\lect09_proj\stop_words\\中文停用词库.txt"</span></span><br><span class="line"><span class="keyword">with</span> open(stpwrdpath, <span class="string">'rb'</span>) <span class="keyword">as</span> fp:</span><br><span class="line">    stopword = fp.read().decode(<span class="string">'utf-8'</span>)  <span class="comment"># 提用词提取</span></span><br><span class="line"><span class="comment">#将停用词表转换为list  </span></span><br><span class="line">stpwrdlst = stopword.splitlines()</span><br><span class="line"><span class="comment"># 从sklearn.feature_extraction.text里导入CountVectorizer</span></span><br><span class="line"><span class="keyword">from</span> sklearn.feature_extraction.text <span class="keyword">import</span> CountVectorizer</span><br><span class="line"><span class="comment"># 对CountVectorizer进行初始化（去除中文停用词）</span></span><br><span class="line">count_vec=CountVectorizer(stop_words=stpwrdlst) <span class="comment">#创建词袋数据结构</span></span><br><span class="line">X_count_train = count_vec.fit_transform(all_list[:<span class="number">2</span>])  <span class="comment">#&lt;class 'scipy.sparse.csr.csr_matrix'&gt;</span></span><br><span class="line"><span class="comment"># 将原始训练和测试文本转化为特征向量</span></span><br><span class="line">X_count_train= X_count_train.toarray()</span><br><span class="line">X_count_test = count_vec.transform(all_list[<span class="number">2</span>]).toarray()</span><br><span class="line">print(X_count_train)</span><br><span class="line"><span class="comment">#词汇表</span></span><br><span class="line">print(<span class="string">'\nvocabulary list:\n\n'</span>,count_vec.get_feature_names())</span><br><span class="line">print( <span class="string">'\nvocabulary dic :\n\n'</span>,count_vec.vocabulary_)</span><br><span class="line"><span class="keyword">print</span> (<span class="string">'vocabulary:\n\n'</span>)</span><br><span class="line"><span class="keyword">for</span> key,value <span class="keyword">in</span> count_vec.vocabulary_.items():</span><br><span class="line">    print(key,value)</span><br></pre></td></tr></table></figure>
+<h2 id="4-文本矩阵化"><a href="#4-文本矩阵化" class="headerlink" title="4. 文本矩阵化"></a>4. 文本矩阵化</h2><pre><code class="lang-python">a =&quot;自然语言处理是计算机科学领域与人工智能领域中的一个重要方向。它研究能实现人与计算机之间用自然语言进行有效通信的各种理论和方法。自然语言处理是一门融语言学、计算机科学、数学于一体的科学&quot;
+b = &quot;因此，这一领域的研究将涉及自然语言，即人们日常使用的语言，所以它与语言学的研究有着密切的联系，但又有重要的区别。自然语言处理并不是一般地研究自然语言，而在于研制能有效地实现自然语言通信的计算机系统，特别是其中的软件系统。&quot;
+c =&quot;因而它是计算机科学的一部分。自然语言处理（NLP）是计算机科学，人工智能，语言学关注计算机和人类（自然）语言之间的相互作用的领域。&quot;
+import jieba
+all_list= [&#39;  &#39;.join(jieba.cut(s,cut_all = False)) for s in [a,b,c]]
+print(all_list)
+</code></pre>
+<pre><code class="lang-python">#从文件导入停用词表
+stpwrdpath =&quot;C:\\Users\\Administrator\Desktop\lect09_codes\lect09_proj\stop_words\\中文停用词库.txt&quot;
+with open(stpwrdpath, &#39;rb&#39;) as fp:
+    stopword = fp.read().decode(&#39;utf-8&#39;)  # 提用词提取
+#将停用词表转换为list  
+stpwrdlst = stopword.splitlines()
+# 从sklearn.feature_extraction.text里导入CountVectorizer
+from sklearn.feature_extraction.text import CountVectorizer
+# 对CountVectorizer进行初始化（去除中文停用词）
+count_vec=CountVectorizer(stop_words=stpwrdlst) #创建词袋数据结构
+X_count_train = count_vec.fit_transform(all_list[:2])  #&lt;class &#39;scipy.sparse.csr.csr_matrix&#39;&gt;
+# 将原始训练和测试文本转化为特征向量
+X_count_train= X_count_train.toarray()
+X_count_test = count_vec.transform(all_list[2]).toarray()
+print(X_count_train)
+#词汇表
+print(&#39;\nvocabulary list:\n\n&#39;,count_vec.get_feature_names())
+print( &#39;\nvocabulary dic :\n\n&#39;,count_vec.vocabulary_)
+print (&#39;vocabulary:\n\n&#39;)
+for key,value in count_vec.vocabulary_.items():
+    print(key,value)
+</code></pre>
 
+            </div>
+            <hr>
+            <div>
+              <p>
                 
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/学习笔记/">学习笔记</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/NLP/">NLP</a>
+                    
+                      <a class="hover-with-bg" href="/tags/深度学习/">深度学习</a>
+                    
+                      <a class="hover-with-bg" href="/tags/IMDB/">IMDB</a>
+                    
+                  </span>
+                
+              </p>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
             </div>
 
-            <!-- Comments -->
             
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    
-
-
-                </div>
-            
+          </div>
         </div>
+      </div>
     </div>
-</article>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc-start"></div>
+<div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
 
-    <!-- Footer -->
-    <hr />
+      </div>
+    
+  </div>
+</div>
 
-<!-- Footer -->
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <ul class="list-inline text-center">
-                    
+<!-- Custom -->
 
-                    
 
-                    
-                        <li>
-                            <a href="https://github.com/superlova" target="_blank">
-                                <span class="fa-stack fa-lg">
-                                    <i class="fa fa-circle fa-stack-2x"></i>
-                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                </span>
-                            </a>
-                        </li>
-                    
+    
+  </main>
 
-                    
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
 
-                    
-
-                    
-                </ul>
-                <p class="copyright text-muted">&copy; 2020 Superlova<br></p>
-                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
-                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
-            </div>
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
         </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
     </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    </div>
+    
+
+    
+
+    
+  </div>
 </footer>
 
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script  src="/js/main.js" ></script>
 
-    <!-- After footer scripts -->
-    
-<!-- jQuery -->
-<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
 
-<!-- Bootstrap -->
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script  src="/js/lazyload.js" ></script>
 
-<!-- Gallery -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
 
-<!-- Disqus Comments -->
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var post = $('#post');
+      var toc = $('#toc');
+      var tocLimMax = post.offset().top + post.height() - navHeight;
+
+      $(window).scroll(function () {
+        var tocLimMin = $('#toc-start').offset().top - navHeight;
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': navHeight,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+      var offset = $('#board-ctn').css('margin-right')
+      $('#toc-ctn').css({
+        'right': offset
+      })
+    });
+  </script>
+
+
+
+
+
+
+
+
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-160806707-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+
+  
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "NLP学习笔记2&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
 
 
 
@@ -327,5 +534,4 @@
 </script>
 <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
-
 </html>

@@ -1,267 +1,173 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 
-<!-- Head tag -->
+
+
+
+
 <head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content>
+  <meta name="author" content="Superlova">
+  <meta name="keywords" content>
+  <title>CS229-note-4-生成学习算法 - 每天进步一点点...</title>
 
-    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!--Description-->
-
-    
-
-    
-        <meta name="description" content="转载自@飞龙
-
-
-
-
-相关链接
-
-
-
-
-Github 地址
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
 
 
-知乎专栏
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+
+<link rel="stylesheet" href="/css/main.css">
 
 
-斯坦福大学 CS229 课程网站
+  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
 
 
-网易公开课中文字幕视频
+<!-- 自定义样式保持在最底部 -->
 
 
-
-
-第四部分 生成学习算法(Generative Learning algorithms)目前为止，我们讲过的学习算法的模型都是$p (y|x;\theta">
-    
-
-    <!--Author-->
-    
-        <meta name="author" content="Superlova">
-    
-
-    <!--Open Graph Title-->
-    
-        <meta property="og:title" content="CS229-note-4-生成学习算法">
-    
-
-    <!--Open Graph Description-->
-    
-        <meta property="og:description" content="转载自@飞龙
-
-
-
-
-相关链接
-
-
-
-
-Github 地址
-
-
-知乎专栏
-
-
-斯坦福大学 CS229 课程网站
-
-
-网易公开课中文字幕视频
-
-
-
-
-第四部分 生成学习算法(Generative Learning algorithms)目前为止，我们讲过的学习算法的模型都是$p (y|x;\theta">
-    
-
-    <!--Open Graph Site Name-->
-        <meta property="og:site_name" content="Smile :)">
-
-    <!--Type page-->
-    
-        <meta property="og:type" content="article">
-    
-
-    <!--Page Cover-->
-    
-    
-        <meta property="og:image" content="https://superlova.github.iohttps://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg">
-    
-
-        <meta name="twitter:card" content="summary_large_image">
-
-    
-
-    
-        <meta name="twitter:image" content="https://superlova.github.iohttps://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg">
-    
-
-    <!-- Title -->
-    
-    <title>CS229-note-4-生成学习算法 - Smile :)</title>
-
-    <!-- Bootstrap Core CSS -->
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/style.css">
-
-    <!-- Custom Fonts -->
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- Gallery -->
-    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet">
-
-    <!-- Google Analytics -->
-    
-
-
-    <!-- favicon -->
-    
-
-<link rel="alternate" href="/atom.xml" title="Smile :)" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<link rel="alternate" href="/atom.xml" title="每天进步一点点..." type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
 
 
 <body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>每天进步一点点...</strong>&nbsp;</a>
 
-    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Menu -->
-    <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header page-scroll">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">Smile :)</a>
-        </div>
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
-                
-                    <li>
-                        <a href="/">
-                            
-                                Home
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="/archives">
-                            
-                                Archives
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="/tags">
-                            
-                                Tags
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="/categories">
-                            
-                                Categories
-                            
-                        </a>
-                    </li>
-                
-                    <li>
-                        <a href="https://github.com/superlova">
-                            
-                                <i class="fa fa-github fa-stack-2x"></i>
-                            
-                        </a>
-                    </li>
-                
-            </ul>
-        </div>
-        <!-- /.navbar-collapse -->
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
     </div>
-    <!-- /.container -->
+  </div>
 </nav>
 
-    <!-- Main Content -->
-    <!-- Page Header -->
-<!-- Set your background image for this header in your post front-matter: cover -->
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
 
-<header class="intro-header" style="background-image: url('https://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg')">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="post-heading">
-                    <h1>CS229-note-4-生成学习算法</h1>
-                    
-                    <span class="meta">
-                        <!-- Date and Author -->
-                        
-                        
-                            2019-05-06
-                        
-                    </span>
-                </div>
-            </div>
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期一, 五月 6日 2019, 4:56 下午
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    8.1k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                      32 分钟
+                  </span>
+                
+
+                
+              </p>
+            
+          </div>
+
+          
         </div>
+      </div>
     </div>
-</header>
+  </header>
 
-<!-- Post Content -->
-<article>
-    <div class="container">
-        <div class="row">
+  <main>
+    
+      
 
-            <!-- Tags and categories -->
-           
-                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
-                    
-                        
-
-
-<a href="/tags/机器学习/">#机器学习</a> <a href="/tags/生成学习算法/">#生成学习算法</a>
-
-
-                    
-                </div>
-                <div class="col-lg-4 col-md-5 post-categories">
-                    
-                        
-
-<a href="/categories/机器学习/">机器学习</a>/ <a href="/categories/机器学习/学习笔记/">学习笔记</a>/ <a href="/categories/机器学习/学习笔记/转载/">转载</a>
-
-                    
-                </div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5 z-depth-3" id="board">
+          <div class="post-content mx-auto" id="post">
             
-
-            <!-- Gallery -->
-            
-
-            <!-- Post Main Content -->
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <p><a href="https://raw.githubusercontent.com/Kivy-CN/Stanford-CS-229-CN/master/Markdown/cs229-notes2.md" target="_blank" rel="noopener">转载自@飞龙</a></p>
+            <div class="markdown-body">
+              <p><a href="https://raw.githubusercontent.com/Kivy-CN/Stanford-CS-229-CN/master/Markdown/cs229-notes2.md" target="_blank" rel="noopener">转载自@飞龙</a></p>
 <div class="table-container">
 <table>
 <thead>
@@ -303,10 +209,10 @@ p(x;\mu,\Sigma)=\frac{1}{(2\pi)^{n/2}|\Sigma|^{1/2}} exp(-\frac{1}{2}(x-\mu)^T\S
 E[X]=\int_x xp(x;\mu,\Sigma)dx=\mu</script><p>随机变量$Z$是一个有值的向量（vector-valued random variable），$Z$ 的 <strong>协方差（covariance）</strong> 的定义是：$Cov(Z) = E[(Z-E[Z])(Z-E[Z])^T ]$。这是对实数随机变量的方差（variance）这一概念的泛化扩展。这个协方差还可以定义成$Cov(Z) = E[ZZ^T]-(E[Z])(E[Z])^T$（你可以自己证明一下这两个定义实际上是等价的。）如果 $X$ 是一个多变量正态分布，即 $X \sim N (\mu, \Sigma)$，则有：</p>
 <script type="math/tex; mode=display">
 Cov(X)=\Sigma</script><p>下面这些样例是一些高斯分布的密度图，如下图所示：</p>
-<p><img src="https://raw.githubusercontent.com/Kivy-CN/Stanford-CS-229-CN/master/img/cs229note2f1.png" alt></p>
+<p><img src="https://raw.githubusercontent.com/Kivy-CN/Stanford-CS-229-CN/master/img/cs229note2f1.png" srcset="/img/loading.gif" alt></p>
 <p>最左边的图，展示的是一个均值为$0$（实际上是一个$2\times 1$ 的零向量）的高斯分布，协方差矩阵就是$\Sigma = I$ （一个 $2\times 2$的单位矩阵，identity matrix）。这种均值为$0$ 并且协方差矩阵为单位矩阵的高斯分布也叫做<strong>标准正态分布。</strong> 中间的图中展示的是均值为$0$而协方差矩阵是$0.6I$ 的高斯分布的概率密度函数；最右边的展示的是协方差矩阵$\Sigma = 2I$的高斯分布的概率密度函数。从这几个图可以看出，随着协方差矩阵$\Sigma$变大，高斯分布的形态就变得更宽平（spread-out），而如果协方差矩阵$\Sigma$变小，分布就会更加集中（compressed）。</p>
 <p>来看一下更多的样例：</p>
-<p><img src="https://raw.githubusercontent.com/Kivy-CN/Stanford-CS-229-CN/master/img/cs229note2f2.png" alt></p>
+<p><img src="https://raw.githubusercontent.com/Kivy-CN/Stanford-CS-229-CN/master/img/cs229note2f2.png" srcset="/img/loading.gif" alt></p>
 <p>上面这几个图展示的是均值为$0$，但协方差矩阵各不相同的高斯分布，其中的协方差矩阵依次如下所示：</p>
 <script type="math/tex; mode=display">
 \Sigma =\begin{bmatrix} 
@@ -317,7 +223,7 @@ Cov(X)=\Sigma</script><p>下面这些样例是一些高斯分布的密度图，�
 \Sigma =\begin{bmatrix} 
 1 & 0.8 \\ 0.8 & 1 \\ 
 \end{bmatrix}</script><p>第一幅图还跟之前的标准正态分布的样子很相似，然后我们发现随着增大协方差矩阵$\Sigma$ 的反对角线（off-diagonal）的值，密度图像开始朝着  45° 方向 (也就是 $x_1 = x_2$ 所在的方向)逐渐压缩（compressed）。  看一下三个同样分布密度图的轮廓图（contours）能看得更明显：</p>
-<p><img src="https://raw.githubusercontent.com/Kivy-CN/Stanford-CS-229-CN/master/img/cs229note2f3.png" alt></p>
+<p><img src="https://raw.githubusercontent.com/Kivy-CN/Stanford-CS-229-CN/master/img/cs229note2f3.png" srcset="/img/loading.gif" alt></p>
 <p>下面的是另外一组样例，调整了协方差矩阵$\Sigma$:</p>
 <script type="math/tex; mode=display">
 \Sigma =\begin{bmatrix} 
@@ -328,10 +234,10 @@ Cov(X)=\Sigma</script><p>下面这些样例是一些高斯分布的密度图，�
 \end{bmatrix}
 \Sigma =\begin{bmatrix} 
 3 & 0.8 \\ 0.8 & 1 \\ \end{bmatrix};</script><p>上面这三个图像对应的协方差矩阵分别如下所示：</p>
-<p><img src="https://raw.githubusercontent.com/Kivy-CN/Stanford-CS-229-CN/master/img/cs229note2f4.png" alt></p>
+<p><img src="https://raw.githubusercontent.com/Kivy-CN/Stanford-CS-229-CN/master/img/cs229note2f4.png" srcset="/img/loading.gif" alt></p>
 <p>从最左边的到中间<code>译者注：注意，左边和中间的这两个协方差矩阵中，右上和左下的元素都是负值！</code>很明显随着协方差矩阵中右上左下这个对角线方向元素的值的降低，图像还是又被压扁了（compressed），只是方向是反方向的。最后，随着我们修改参数，通常生成的轮廓图（contours）都是椭圆（最右边的图就是一个例子）。</p>
 <p>再举一些例子，固定协方差矩阵为单位矩阵，即$\Sigma = I$，然后调整均值$\mu$，我们就可以让密度图像随着均值而移动：</p>
-<p><img src="https://raw.githubusercontent.com/Kivy-CN/Stanford-CS-229-CN/master/img/cs229note2f5.png" alt></p>
+<p><img src="https://raw.githubusercontent.com/Kivy-CN/Stanford-CS-229-CN/master/img/cs229note2f5.png" srcset="/img/loading.gif" alt></p>
 <p>上面的图像中协方差矩阵都是单位矩阵，即 $\Sigma = I$，对应的均值$\mu$如下所示：</p>
 <script type="math/tex; mode=display">
 \mu =\begin{bmatrix} 
@@ -367,7 +273,7 @@ l(\phi,\mu_0,\mu_1,\Sigma) &= \log \prod^m_{i=1}p(x^{(i)},y^{(i)};\phi,\mu_0,\mu
 \mu_1 & = \frac{\sum^m_{i=1}1\{y^{(i)}=1\}x^{(i)}}{\sum^m_{i=1}1\{y^{(i)}=1\}}\\
 \Sigma & = \frac{1}{m}\sum^m_{i=1}(x^{(i)}-\mu_{y^{(i)}})(x^{(i)}-\mu_{y^{(i)}})^T\\
 \end{aligned}</script><p>用图形化的方式来表述，这个算法可以按照下面的图示所表示：</p>
-<p><img src="https://raw.githubusercontent.com/Kivy-CN/Stanford-CS-229-CN/master/img/cs229note2f6.png" alt></p>
+<p><img src="https://raw.githubusercontent.com/Kivy-CN/Stanford-CS-229-CN/master/img/cs229note2f6.png" srcset="/img/loading.gif" alt></p>
 <p>图中展示的点就是训练数据集，图中的两个高斯分布就是针对两类数据各自进行的拟合。要注意这两个高斯分布的轮廓图有同样的形状和拉伸方向，这是因为他们都有同样的协方差矩阵$\Sigma$，但他们有不同的均值$\mu_0$ 和 $\mu_1$ 。此外，图中的直线给出了$p (y = 1|x) = 0.5$ 这条边界线。在这条边界的一侧，我们预测 $y = 1$是最可能的结果，而另一侧，就预测 $y = 0$是最可能的结果。</p>
 <h5 id="1-3-讨论：高斯判别分析（GDA）与逻辑回归（logistic-regression）"><a href="#1-3-讨论：高斯判别分析（GDA）与逻辑回归（logistic-regression）" class="headerlink" title="1.3 讨论：高斯判别分析（GDA）与逻辑回归（logistic regression）"></a>1.3 讨论：高斯判别分析（GDA）与逻辑回归（logistic regression）</h5><p>高斯判别分析模型与逻辑回归有很有趣的相关性。如果我们把变量（quantity）$p (y = 1|x; \phi, \mu_0, \mu_1, \Sigma)$ 作为一个 $x$ 的函数，就会发现可以用如下的形式来表达：</p>
 <script type="math/tex; mode=display">
@@ -484,73 +390,296 @@ p(y=1|x) &= \frac{ \prod^n_{i=1} p(x_i|y=1)p(y=1) }   {\prod^n_{i=1} p(x_i|y=1)p
 \phi_{k|y=0}&=  \frac{\sum^m_{i=1}\sum^{n_i}_{j=1}1\{x_j^{(i)}=k\wedge y^{(i)}=0\}+1}{\sum^m_{i=1}1\{y^{(i)}=0\}n_i+|V|} \\
 \end{aligned}</script><p>当然了，这个并不见得就是一个最好的分类算法，不过朴素贝叶斯分选器通常用起来还都出乎意料地那么好。所以这个方法就是一个很好的”首发选择”，因为它很简单又很好实现。</p>
 
-
+            </div>
+            <hr>
+            <div>
+              <p>
                 
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/机器学习/">机器学习</a>
+                      &nbsp;
+                    
+                      <a class="hover-with-bg" href="/categories/机器学习/学习笔记/">学习笔记</a>
+                      &nbsp;
+                    
+                      <a class="hover-with-bg" href="/categories/机器学习/学习笔记/转载/">转载</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/机器学习/">机器学习</a>
+                    
+                      <a class="hover-with-bg" href="/tags/生成学习算法/">生成学习算法</a>
+                    
+                  </span>
+                
+              </p>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
             </div>
 
-            <!-- Comments -->
             
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    
-
-
-                </div>
-            
+          </div>
         </div>
+      </div>
     </div>
-</article>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc-start"></div>
+<div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
 
-    <!-- Footer -->
-    <hr />
+      </div>
+    
+  </div>
+</div>
 
-<!-- Footer -->
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <ul class="list-inline text-center">
-                    
+<!-- Custom -->
 
-                    
 
-                    
-                        <li>
-                            <a href="https://github.com/superlova" target="_blank">
-                                <span class="fa-stack fa-lg">
-                                    <i class="fa fa-circle fa-stack-2x"></i>
-                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                </span>
-                            </a>
-                        </li>
-                    
+    
+  </main>
 
-                    
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
 
-                    
-
-                    
-                </ul>
-                <p class="copyright text-muted">&copy; 2020 Superlova<br></p>
-                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
-                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
-            </div>
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
         </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
     </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    </div>
+    
+
+    
+
+    
+  </div>
 </footer>
 
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script  src="/js/main.js" ></script>
 
-    <!-- After footer scripts -->
-    
-<!-- jQuery -->
-<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
 
-<!-- Bootstrap -->
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script  src="/js/lazyload.js" ></script>
 
-<!-- Gallery -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
 
-<!-- Disqus Comments -->
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var post = $('#post');
+      var toc = $('#toc');
+      var tocLimMax = post.offset().top + post.height() - navHeight;
+
+      $(window).scroll(function () {
+        var tocLimMin = $('#toc-start').offset().top - navHeight;
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': navHeight,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+      var offset = $('#board-ctn').css('margin-right')
+      $('#toc-ctn').css({
+        'right': offset
+      })
+    });
+  </script>
+
+
+
+
+
+
+
+
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-160806707-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+
+  
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "CS229-note-4-生成学习算法&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
 
 
 
@@ -570,5 +699,4 @@ p(y=1|x) &= \frac{ \prod^n_{i=1} p(x_i|y=1)p(y=1) }   {\prod^n_{i=1} p(x_i|y=1)p
 </script>
 <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
-
 </html>
