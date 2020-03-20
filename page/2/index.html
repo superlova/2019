@@ -147,6 +147,104 @@
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2019/06/21/NLP学习笔记1/">
+        <p class="h4 index-header">NLP学习笔记1</p>
+      </a>
+
+      <a href="/2019/06/21/NLP学习笔记1/">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">IMDB数据集探索实验是在Google Colab上面做的，机器也是用的谷歌云。
+# keras.datasets.imdb is broken in 1.13 and 1.14, by np 1.16.3
+!pip install tf_nightly
+
+安装tensorflow
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+import tensorflow as tf
+from tensorflow import keras
+
+import numpy as np
+
+</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-06-21&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/notes/">notes</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/NLP/">NLP</a>&nbsp;
+          
+            <a href="/tags/deep-learning/">deep learning</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2019/06/21/模型评估与选择——周志华《机器学习》CH2/">
+        <p class="h4 index-header">模型评估与选择——周志华《机器学习》CH2</p>
+      </a>
+
+      <a href="/2019/06/21/模型评估与选择——周志华《机器学习》CH2/">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">模型如何评估，选择标准是什么？先让我们了解一下常见的衡量标准
+错误率+精度=1
+误差：训练误差/经验误差 training/empirical error泛化误差 generalization error
+训练误差低，泛化误差不一定低。这其中牵扯到过拟合和欠拟合的问题。
+过拟合：过分学习，将训练样本中不属于规律的的噪声也一并学习的现象。防止过拟合，一般采用将数据集分成训练集和测试集，利用训练集训练模型，利用测试集拟合泛化误差的办法。
+测试误差 testing error
+划分数据集的方法样本划分之留出法 hold-out将样本分成互斥的两部分S,T用S训练，用T测试。分割比例自己确定。需要注意</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-06-21&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/notes/">notes</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/machine-learning/">machine learning</a>&nbsp;
+          
+            <a href="/tags/model-evaluation/">model evaluation</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
       <a href="/2019/06/16/三星笔记本升级硬盘实录/">
         <p class="h4 index-header">三星笔记本升级硬盘实录</p>
       </a>
@@ -498,94 +596,6 @@ class Network(object):
             <a href="/categories/translation/转载/">转载</a>&nbsp;
           &nbsp;
         
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2019/05/22/机器学习——决策树——note1/">
-        <p class="h4 index-header">机器学习——决策树——note1</p>
-      </a>
-
-      <a href="/2019/05/22/机器学习——决策树——note1/">
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">1. 树的划分流程：原理与思想1.1 决策树的工作原理决策树是广泛用于分类和回归任务的模型。本质上，它从一层层的if/else 问题中进行学习，并得出结论。
-
-在这张图中，树的每个结点代表一个问题或一个包含答案的终结点（也叫叶结点）。树的边将问题的答案与将问的下一个问题连接起来。
-用机器学习的语言来说就是，为了区分四类动物（鹰、企鹅、海豚和熊），我们利用三个特征（“有没有羽毛”“会不会飞”和“有没有鳍”）来构建一个模型。我们可以利用监督学习从数据中学习模型，而无需人为构建模型。
-1.2 决策树的思想原则上讲，对于给定的属性集，可以构造的决策树的数目达指数级。尽管某些决策树比其他决策树更准确，但</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-05-22&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/notes/">notes</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/machine-learning/">machine learning</a>&nbsp;
-          
-            <a href="/tags/decision-tree/">decision tree</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2019/05/18/牛奶可乐经济学读书笔记（不定期更新）/">
-        <p class="h4 index-header">牛奶可乐经济学读书笔记（不定期更新）</p>
-      </a>
-
-      <a href="/2019/05/18/牛奶可乐经济学读书笔记（不定期更新）/">
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">2019年5月16日
-我对经济学比较感兴趣，毕竟我本身就是个穷人，我也希望能够高效利用我身上有限的资源。学习经济学能够对我的思维方式有很大改善。
-我认为阅读一本能够给自己带来很多知识的书时，应当一步一步不要贪多。每次阅读都是美妙的经历，就好像在和读者对话一样。
-这本《牛奶可乐经济学》一开始让我感到有点啰嗦，作者一直在讲他的授课经历，以及学生的反映。似乎欧美的书籍都会有这样的通病。我误以为这又是一本充满废话和鸡汤的科普书籍，便一页一页翻过去，翻到后来却感觉什么也没看进去。于是我从头沉下心来，一点一点阅读。
-终于在睡前阅读完毕了第一章。我强忍着想要阅读第二章的好奇心，闭上眼睛总结学到的东西。我一直</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-05-18&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/notes/">notes</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/study-method/">study method</a>&nbsp;
-          
-            <a href="/tags/economics/">economics</a>&nbsp;
-          
         
       </div>
     </div>

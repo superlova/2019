@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content>
+  <meta name="author" content="Superlova">
+  <meta name="keywords" content>
+  <title>C++关联容器学习笔记 - Superlova</title>
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<link rel="alternate" href="/atom.xml" title="Superlova" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Superlova</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期五, 三月 20日 2020, 12:10 凌晨
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    3.4k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                      13 分钟
+                  </span>
+                
+
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5 z-depth-3" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <div class="markdown-body">
+              <h2 id="1-关联容器特点简介"><a href="#1-关联容器特点简介" class="headerlink" title="1. 关联容器特点简介"></a>1. 关联容器特点简介</h2><p>关联容器和顺序容器是两种适用范围不同的容器。许多C++程序员只用过顺序容器诸如vector和string，但他们从未使用过set和map等关联数据结构。</p>
+<p><img src="/2020/03/20/C-关联容器学习笔记/2020-03-20-09-47-21.png" srcset="/img/loading.gif" alt></p>
+<p><code>set</code>是元素的简单集合，用来保存类型相同的一组元素。当你只是想知道一个值<strong>是否存在</strong>时，<code>set</code>是最有用的。</p>
+<ul>
+<li><code>set</code><strong>不会出现重复元素</strong></li>
+<li>内部元素永远<strong>有序</strong></li>
+<li><code>set</code>中的元素一经添加就<strong>不能修改</strong>。</li>
+</ul>
+<p><code>map</code>可以看做特殊的<code>vector</code>，其特殊之处在于此<code>map</code>中的每个元素都由两部分 <code>(key, value)</code> 构成，C++将每个这样的 <code>(key, value)</code> 封装成一个对象，其类别为<code>pair</code>。<code>map</code>内部元素都为<code>pair</code>类型。</p>
+<ul>
+<li><code>map</code><strong>不会出现重复<code>key</code></strong></li>
+<li>内部元素永远有序，按照<code>pair</code>类型元素的key字段排序（key字段必须能够被排序）。</li>
+<li><code>map</code>中的key一经添加就<strong>不能修改</strong>。</li>
+</ul>
+<h2 id="2-有序容器基本操作"><a href="#2-有序容器基本操作" class="headerlink" title="2. 有序容器基本操作"></a>2. 有序容器基本操作</h2><p>以下所有操作需要添加头文件：</p>
+<pre><code class="lang-cpp">#include &lt;map&gt;
+#include &lt;set&gt;
+</code></pre>
+<h3 id="2-1-初始化"><a href="#2-1-初始化" class="headerlink" title="2.1 初始化"></a>2.1 初始化</h3><h4 id="2-1-1-map"><a href="#2-1-1-map" class="headerlink" title="2.1.1 map"></a>2.1.1 map</h4><pre><code class="lang-cpp">map&lt;int, int&gt; m; // 默认初始化
+map&lt;int, int&gt; m{{1, 2}, {2, 4}}; // 初始化列表
+map&lt;int, int&gt; m2(m); // 拷贝构造函数
+map&lt;int, int&gt; m = {{1, 2}, {2, 4}}; // 初始化列表 + 拷贝构造函数
+
+// pair和make_pair()在#include&lt;utility&gt;中
+map&lt;int, int&gt; m3 = {
+    std::pair&lt;int, int&gt;(1, 2), std::pair&lt;int, int&gt;(2, 4)
+}; // 初始化列表的方法展开来说就是这样
+map&lt;int, int&gt; m4{
+    std::make_pair(1, 2), std::make_pair(2, 4)
+}; // 或者使用make_pair函数，免得输入参数类型，效果等价。
+
+// std::begin()和end()在#include &lt;iterator&gt; 中
+map&lt;int, int&gt; m5 = {std::begin(m), std::end(m)}; // 迭代器，前提是被迭代的对象内部元素类型是pair
+</code></pre>
+<h4 id="2-1-2-set"><a href="#2-1-2-set" class="headerlink" title="2.1.2 set"></a>2.1.2 set</h4><pre><code class="lang-cpp">set&lt;int&gt; s; // 默认初始化
+set&lt;int&gt; s{1, 2, 3, 6, 9, 10}; // 初始化列表
+set&lt;int&gt; s2(s); // 拷贝构造函数
+set&lt;int&gt; s = {1, 2, 3, 6, 9, 10}; // 初始化列表 + 拷贝构造函数
+
+// std::begin()和end()在#include &lt;iterator&gt; 中
+int arr[] = {1, 2, 5, 8, 9};
+set&lt;int&gt; s2{std::begin(arr), std::end(arr)}; // 迭代器
+</code></pre>
+<h4 id="2-1-3-定义排序方法"><a href="#2-1-3-定义排序方法" class="headerlink" title="2.1.3 定义排序方法"></a>2.1.3 定义排序方法</h4><p>可以给map或set初始化时输入一个比较器，用以替代原有的比较key大小的方法（原来一般是小于号）。这个比较器可以是一个函数，也可以是一个当做函数用的函数对象。下面是一个示例。</p>
+<pre><code class="lang-cpp">struct comp {
+    template&lt;typename T&gt;
+    bool operator() (const T&amp; l, const T&amp; r) const {
+        return l &gt; r;
+    }
+};
+
+int main() {
+    map&lt;int, int, comp&gt; m = {
+        {1, 5}, {2, 3}, {7, 6}
+    };
+    for (auto&amp;&amp; [key, val] : m) {
+        cout &lt;&lt; key &lt;&lt; &quot; &quot; &lt;&lt; val &lt;&lt; endl;
+    }
+}
+output
+&gt;&gt; 7 6
+&gt;&gt; 2 3
+&gt;&gt; 1 5
+</code></pre>
+<p>实现自己写的比较器，简单来说就是实现一个自定义的“&lt;”小于号。<br>原有的比较器<code>bool compare(object&amp; left, object&amp; right)</code>作用如下：</p>
+<ol>
+<li>compare输出true，map 认为 left 小于 right ，把left放在right前面。</li>
+<li>compare输出false，map 认为 left 大于等于 right。</li>
+<li>如果compare(left, right)为false，compare(right, left)也为false，就认为left==right。否则left放在right后面。</li>
+</ol>
+<blockquote>
+<p>自己实现的比较器，必须让关键字集合满足以下性质：</p>
+<ul>
+<li>关键字自己不能小于自己</li>
+<li>两个关键字不能互相小于对方</li>
+<li>如果按照比较器，key1小于key2，key2小于key3，则key1小于key3</li>
+</ul>
+<p>学过离散数学的同学应该知道，上面描述的这种二元关系满足反自反性、反对称性和传递性。满足这三个性质的关系称之为“严格偏序关系”。我们日常生活中见到的数字比较的小于号、集合中“真包含于”都是这种关系。</p>
+</blockquote>
+<h3 id="2-2-添加元素"><a href="#2-2-添加元素" class="headerlink" title="2.2 添加元素"></a>2.2 添加元素</h3><h4 id="2-2-1-insert"><a href="#2-2-1-insert" class="headerlink" title="2.2.1 insert"></a>2.2.1 insert</h4><p>对于map</p>
+<pre><code class="lang-cpp">map&lt;string, int&gt; m;
+
+m.insert({&quot;str&quot;, 1});
+m.insert(make_pair(&quot;ser&quot;, 1));
+m.insert(pair&lt;string, int&gt;(&quot;ssr&quot;, 1));
+m.insert(map&lt;string, int&gt;::value_type(&quot;sdr&quot;, 1));
+</code></pre>
+<p>对于set</p>
+<pre><code class="lang-cpp">vector&lt;int&gt; ivec = {2, 4, 6, 8};
+set&lt;int&gt; set2;
+
+set2.insert(1);
+set2.insert({2, 4, 6, 8});
+set2.insert(ivec.cbegin(), ivec.cend());
+</code></pre>
+<p>insert函数和emplace函数返回pair对象，pair.first为迭代器，指向刚插入的元素，pair.second为bool，表示插入是否成功。如果由于存在重复导致插入失败，则除了second为false之外，first指向那个重复元素。</p>
+<pre><code class="lang-cpp">set&lt;int&gt; s;
+const auto [iter, success] = s.insert(x); // 返回值拆成两个
+</code></pre>
+<h4 id="2-2-2-对map使用下标-操作"><a href="#2-2-2-对map使用下标-操作" class="headerlink" title="2.2.2 对map使用下标[]操作"></a>2.2.2 对map使用下标[]操作</h4><p>map使用下标操作首先会查找该key的元素，找不到就新建一个key的pair，将其初始化。最后执行赋值操作。</p>
+<pre><code class="lang-cpp">map&lt;char, int&gt; mp;
+mp[&#39;a&#39;] = 5;
+mp[&#39;b&#39;] = 4;
+mp[&#39;c&#39;] = 3;
+</code></pre>
+<h3 id="2-3-访问和查找元素"><a href="#2-3-访问和查找元素" class="headerlink" title="2.3 访问和查找元素"></a>2.3 访问和查找元素</h3><p>map除了使用下标操作访问元素之外，还可以用<code>at()</code>函数。</p>
+<pre><code class="lang-cpp">map&lt;char, int&gt; mp;
+mp.at(k) // 查找关键字为k的元素，找不到就抛出异常
+</code></pre>
+<p>关联容器内置的<code>find</code>函数和<code>count</code>函数可以执行查找操作</p>
+<pre><code class="lang-cpp">//c为一个map容器
+c.find(k) // 返回一个迭代器，指向关键字为k的元素。若k不在容器中，则返回尾后迭代器
+c.count(k) // 返回关键字等于k的元素数量。对于map和set而言，返回值永远是0或1。
+</code></pre>
+<p>当我们要在map容器中查找一个元素时，我们可以使用find函数查找。</p>
+<pre><code class="lang-cpp">auto it = word_count.find(&quot;foobar&quot;);
+if(it==word_count.end())
+   cout&lt;&lt;&quot;foobar is not in the map&quot;&lt;&lt;endl;
+else
+   cout&lt;&lt;it-&gt;first&lt;&lt;&quot; &quot;&lt;&lt;it-&gt;second&lt;&lt;endl;
+</code></pre>
+<p>在有序容器中，我们还可以找到关键字k附近的元素。</p>
+<pre><code class="lang-cpp">s.lower_bound(k); // 返回迭代器，指向第一个关键字**不小于**k的元素
+s.upper_bound(k); // 返回迭代器，指向第一个关键字**大于**k的元素
+s.equal_range(k); // 返回pair&lt;iter, iter&gt;，表示关键字为k的元素范围。适用于multiset/multimap。若是没有k，则返回两个end()
+</code></pre>
+<p>在对于允许重复关键字的容器来说，查找元素的过程稍微复杂些，因为一个关键字可能对应多个值，我们需要把这么对应的值都找出来。<br>如果multimap中有多个元素具有相同的关键字，则这些关键字在容器中会相邻存储。我们可以通过这一特性，将一个关键字对应的多个值全部找出来。</p>
+<pre><code class="lang-cpp">//《C++ Primer》示例，查找某作者对应的所有书籍
+//authors是一个multimap容器
+string search_item(&quot;Alain&quot;);
+int numbers=authors.count(search_item);
+auto it=authors.find(search_item);
+while(numbers)
+{
+   cout&lt;&lt;iter-&gt;second&lt;&lt;endl;
+   ++it;
+   numbers--;
+}
+
+// 或者采用一种其他方式
+for (auto beg = authors.lower_bound(search_item),
+          end = authors.upper_bound(search_item);
+     beg != end; ++beg) 
+{
+    cout &lt;&lt; beg-&gt;second &lt;&lt; endl; 
+}
+
+// 或者采用一种更加直接的方式
+for (auto pos = authors.equal_range(search_item);
+     pos.first != pos.second; ++pos.first)
+{
+    cout &lt;&lt; pos.first-&gt;second &lt;&lt; endl; // 打印每本书
+}
+</code></pre>
+<h3 id="2-4-删除元素"><a href="#2-4-删除元素" class="headerlink" title="2.4 删除元素"></a>2.4 删除元素</h3><p>使用erase</p>
+<pre><code class="lang-cpp">// s为关联容器，可能为set/map/multiset/multimap
+s.erase(k); // 删除指定关键字的元素，返回删除的个数。
+s.erase(iter); // iter必须指向s中的一个真实元素，返回指向删除元素之后的元素的迭代器。
+s.erase(iter1, iter2); // 删除迭代器[iter1, iter2)，其中必须是真是的元素。iter2指向的元素不删除。返回iter2
+</code></pre>
+<h2 id="3-无序容器特有操作"><a href="#3-无序容器特有操作" class="headerlink" title="3. 无序容器特有操作"></a>3. 无序容器特有操作</h2><h3 id="3-1-无序容器特点"><a href="#3-1-无序容器特点" class="headerlink" title="3.1 无序容器特点"></a>3.1 无序容器特点</h3><p>如果我们不关心容器中元素的次序，那么我们就可以使用无序容器。在无序容器中，元素没有明确的排列次序，当你迭代容器内的所有元素时，会发现他们的次序个有可能。我们唯一关心的是某个元素特定元素是否位于容器内。</p>
+<p>无需容器，常常以Hash table实现出来，内部结构是一个类似于<code>vector&lt;list&gt;</code>的列表，列表的元素是链表<code>linked list</code>。通过某个hash函数的运算，确定元素落于这个列表的位置。</p>
+<p>Hash函数的运算目标是让每个元素的落点（位置）有助于用户快速访问任何一个元素（前提则是哈希函数本身也必须够快）。</p>
+<p>由于这样一个快速而完美的哈希函数不一定存在。抑或由于造成array耗费巨额内存而显得不切实际，因此退而求其次的哈希函数有可能让多个元素落于同一位置上，所以设计上就让vector的元素再被放进一个linked list中。如此一来，vector的每个位置就得以存放一个以上的元素。</p>
+<p><img src="/2020/03/20/C-关联容器学习笔记/2020-03-20-18-01-59.png" srcset="/img/loading.gif" alt></p>
+<p>无序容器的主要优点是，当你打算查找一个特定值的元素，其速度甚至可能快过有序关联式容器（时间复杂度O(1)）。前提是你有一个良好的哈希函数。然而这样的哈希函数可能需要许多内存。</p>
+<p>以下所有操作需要添加头文件：</p>
+<pre><code class="lang-cpp">#include &lt;unordered_map&gt;
+#include &lt;unordered_set&gt;
+</code></pre>
+<p><code>unordered_map</code>/<code>unordered_multimap</code>/<code>unordered_set</code>/<code>unordered_multiset</code>的初始化、插入、查找和删除的方法与普通的<code>map</code>/<code>multimap</code>/<code>set</code>/<code>multiset</code>没有大的区别。注意以下主要区别要点：</p>
+<ol>
+<li>无序容器内部不含比较器，因此你也不能提供自定义比较器。</li>
+<li>每次对无序容器的添加操作可能会引起无序容器次序的改变。即便是相同元素，在不同的电脑上也可能得到不同的次序。</li>
+<li>删除元素虽然不会引起无序容器次序改变，但是删除之后的第一次插入必然会引发次序改变。</li>
+</ol>
+<p>次序究竟会不会变化、怎样变化取决于使用的rehashing策略，该策略可由程序员自定义，就像在有序关联容器里定义排序函数那样。</p>
+<h3 id="3-2-管理桶"><a href="#3-2-管理桶" class="headerlink" title="3.2 管理桶"></a>3.2 管理桶</h3><p>1.桶接口</p>
+<pre><code class="lang-cpp">m.bucket_count()        正在使用的桶的数目
+m.max_bucket_count()    容器能容纳的最多的桶的数量
+m.bucket_size(n)        第n个桶中有多少个元素
+m.bucket(k)             关键字为k的元素在哪个桶
+</code></pre>
+<p>2.桶迭代</p>
+<pre><code class="lang-cpp">local_iterator            可以用来访问桶中元素的迭代器类型
+const_local_iterator      桶迭代器的const版本
+m.begin(n)、m.end(n)      桶n的首元素迭代器和尾后迭代器（n是什么类型？）
+m.cbegin(n)、m.cend(n)    与前两个函数类似，但返回const_local_iterator
+</code></pre>
+<p>3.哈希策略</p>
+<pre><code class="lang-cpp">//每个桶的平均元素数量，返回float值
+m.load_factor() 
+//m试图维护的平均桶大小，返回float值，要求创建的新桶的load_factor&lt;=max_load_factor         
+m.max_load_factor() 
+//重新存储，使得bucket_count&gt;=n，且bucket_count&gt;size/max_load_factor         
+m.rehash(n)  
+//重新存储，使得m可以保存n个元素且不必rehash 
+m.reserve(n)
+</code></pre>
+<h3 id="3-3-自定义哈希函数和比较函数"><a href="#3-3-自定义哈希函数和比较函数" class="headerlink" title="3.3 自定义哈希函数和比较函数"></a>3.3 自定义哈希函数和比较函数</h3><p>默认情况下，无序容器使用<code>==</code>来判断两key是否相等，并使用系统内置的哈希函数生成哈希值。不同类型的key会应用到不同的哈希函数，如下都是STL内置的哈希函数对象：</p>
+<pre><code class="lang-cpp">struct hash&lt;char*&gt;
+struct hash&lt;const char*&gt;
+struct hash&lt;char&gt; 
+struct hash&lt;unsigned char&gt; 
+struct hash&lt;signed char&gt;
+struct hash&lt;short&gt;
+struct hash&lt;unsigned short&gt; 
+struct hash&lt;int&gt; 
+struct hash&lt;unsigned int&gt;
+struct hash&lt;long&gt; 
+struct hash&lt;unsigned long&gt;
+</code></pre>
+<p>如果key使用的是以上类型中的一种，可以使用缺省的hash函数。当然你程序员可以定义自己的hash函数。对于自定义对象，只能自定义hash函数。</p>
+<p>下面是《C++ Primer》的一个自定义哈希函数的一个例子：</p>
+<pre><code class="lang-cpp">/* 定义哈希函数和判等器 */
+size_t hasher(const Sales_data &amp;sd)
+{
+    // 对书籍对象的哈希
+    return hash&lt;string&gt;() (sd.isbn()); // 返回其isbn编号的哈希，调用内置的string哈希函数
+}
+bool eqOp(const Sales_data &amp;lhs, const Sales_data &amp;rhs)
+{
+    // 如何判断两本书是否相等？
+    return lhs.isbn() == rhs.isbn(); // 判断两书的isbn编号是否相等
+}
+/* 使用哈希函数和判等器 */
+using SD_multiset = unordered_multiset&lt;Sales_data, decltype(hasher)*, decltype(eqOp)*&gt;; // 类型名太长了，将类型名保存成别的变量名
+SD_multiset bookstore(42, hasher, eqOp);
+</code></pre>
+<h2 id="4-小结"><a href="#4-小结" class="headerlink" title="4. 小结"></a>4. 小结</h2><p>对C++ 关联容器的总结到此告一段落。本篇文章从开始着手写作到完成，不间断地工作了八个小时，期间不断重温已经遗忘的知识，查阅资料，其中很多还是自己曾经收藏过的资料。</p>
+<p>写作时，我多次问自己：写一篇不会有人看的文章值得吗？我也多次想要像我以前很多文章、像CSDN大多数的文章那样，随便水水，记录一下，反正只有自己看。</p>
+<p>但是这次我觉得，我要为自己负责，要为已经付出的精力和时间负责。我相信大家都会有这种迷茫的时候，怀疑自己手头上的工作有没有意义，甚至想放弃。</p>
+<p>不要轻言放弃，尤其是当你怀疑它的意义的时候。因为这个时候你可能是在为自己的懒惰找借口。将一件事情的意义贬低，这种想法出现的太容易，又太能让自己解脱了。这是一种让人没有负罪感的放弃方式。但是回头看，很多好想法，明明只要坚持一下就可以实现。因为对意义的评价，近乎于预测未来，我们大多数平凡人是没有这种本事的。</p>
+<p>Be a better man, 每天进步一点点。大家共勉！</p>
+
+            </div>
+            <hr>
+            <div>
+              <p>
+                
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/notes/">notes</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/C/">C++</a>
+                    
+                      <a class="hover-with-bg" href="/tags/map/">map</a>
+                    
+                      <a class="hover-with-bg" href="/tags/set/">set</a>
+                    
+                      <a class="hover-with-bg" href="/tags/STL/">STL</a>
+                    
+                  </span>
+                
+              </p>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc-start"></div>
+<div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var post = $('#post');
+      var toc = $('#toc');
+      var tocLimMax = post.offset().top + post.height() - navHeight;
+
+      $(window).scroll(function () {
+        var tocLimMin = $('#toc-start').offset().top - navHeight;
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': navHeight,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+      var offset = $('#board-ctn').css('margin-right')
+      $('#toc-ctn').css({
+        'right': offset
+      })
+    });
+  </script>
+
+
+
+
+
+
+
+
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-160806707-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+
+  
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "C++关联容器学习笔记&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>
