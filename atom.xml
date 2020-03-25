@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://superlova.github.io/"/>
-  <updated>2020-03-20T11:21:43.587Z</updated>
+  <updated>2020-03-25T02:46:22.679Z</updated>
   <id>https://superlova.github.io/</id>
   
   <author>
@@ -15,6 +15,126 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>testRNN--Coverage-guided Testing on Recurrent Neural Networks 论文阅读笔记</title>
+    <link href="https://superlova.github.io/2020/03/25/testRNN%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/"/>
+    <id>https://superlova.github.io/2020/03/25/testRNN%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</id>
+    <published>2020-03-25T02:37:35.000Z</published>
+    <updated>2020-03-25T02:46:22.679Z</updated>
+    
+    <content type="html"><![CDATA[<a id="more"></a>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+
+      
+    
+    </summary>
+    
+    
+      <category term="paper" scheme="https://superlova.github.io/categories/paper/"/>
+    
+    
+      <category term="RNN" scheme="https://superlova.github.io/tags/RNN/"/>
+    
+      <category term="testing" scheme="https://superlova.github.io/tags/testing/"/>
+    
+      <category term="testRNN" scheme="https://superlova.github.io/tags/testRNN/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>RNN-Test--Adversarial Testing Framework for Recurrent Neural Network Systems 论文阅读笔记</title>
+    <link href="https://superlova.github.io/2020/03/25/RNN-Test%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/"/>
+    <id>https://superlova.github.io/2020/03/25/RNN-Test%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</id>
+    <published>2020-03-25T02:37:16.000Z</published>
+    <updated>2020-03-25T02:46:51.436Z</updated>
+    
+    <content type="html"><![CDATA[<a id="more"></a>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+
+      
+    
+    </summary>
+    
+    
+      <category term="paper" scheme="https://superlova.github.io/categories/paper/"/>
+    
+    
+      <category term="RNN" scheme="https://superlova.github.io/tags/RNN/"/>
+    
+      <category term="testing" scheme="https://superlova.github.io/tags/testing/"/>
+    
+      <category term="RNN-Test" scheme="https://superlova.github.io/tags/RNN-Test/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>lintcode-138 子数组求和问题</title>
+    <link href="https://superlova.github.io/2020/03/24/lintcode-138-%E5%AD%90%E6%95%B0%E7%BB%84%E4%B9%8B%E5%92%8C/"/>
+    <id>https://superlova.github.io/2020/03/24/lintcode-138-%E5%AD%90%E6%95%B0%E7%BB%84%E4%B9%8B%E5%92%8C/</id>
+    <published>2020-03-24T09:30:31.000Z</published>
+    <updated>2020-03-24T12:04:57.628Z</updated>
+    
+    <content type="html"><![CDATA[<ul><li>给定一个整数数组，找到和为零的子数组。</li><li>你的代码应该返回满足要求的子数组的起始位置和结束位置<a id="more"></a><h1 id="lintcode-138：子数组之和"><a href="#lintcode-138：子数组之和" class="headerlink" title="lintcode 138：子数组之和"></a>lintcode 138：子数组之和</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2></li></ul><p>给定一个整数数组，找到和为零的子数组。你的代码应该返回满足要求的子数组的起始位置和结束位置<br><strong>样例 1:</strong><br>输入: [-3, 1, 2, -3, 4]<br>输出: [0,2] 或 [1,3]<br>样例解释： 返回任意一段和为0的区间即可。<br><strong>样例 2:</strong><br>输入: [-3, 1, -4, 2, -3, 4]<br>输出: [1,5]<br><strong>注意事项</strong><br>至少有一个子数组的和为 0</p><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>子数组之和问题。看看哪个区间段，段内所有元素加起来刚好等于0（或者某个值）。类似这种求区间段，段内元素满足什么条件的问题。</p><p>关键是下面这个结论：</p><p>准备一个数组array，其中第i个元素保存num[0]~num[i]之和。那么index_value中一旦出现两个元素其值相同，就说明这两个下标之间所有元素加起来等于0。</p><script type="math/tex; mode=display">\begin{aligned}& if & \sum_{i=0}^{\operatorname{index_1}}nums(i) = \sum_{i=0}^{\operatorname{index_2}}nums(i) \\ & then\quad & return \left[ \operatorname{index_1}+1, \operatorname{index_2} \right] \end{aligned}</script><p>举个例子：对于数组<code>num = [-3, 1, 2, -3, 4]</code>，我们可以构建array数组如下：</p><div class="table-container"><table><thead><tr><th>index</th><th>nums[index]</th><th>$\sum_{i=0}^{index}nums(i)$</th></tr></thead><tbody><tr><td>0</td><td>-3</td><td>-3</td></tr><tr><td>1</td><td>1</td><td>-2</td></tr><tr><td>2</td><td>2</td><td>0</td></tr><tr><td>3</td><td>-3</td><td>-3</td></tr><tr><td>4</td><td>4</td><td>1</td></tr></tbody></table></div><p>返回 [0, 2] 或 [1, 3]</p><p>在代码实现中，当我们采用数组实现array时，会受限于查询array内元素的线型时间复杂度，为了找某个值对应的下标，遍历array数组的过程，可能耗费线性复杂度的时间，导致代码TLE超时。</p><p>因此我们采用散列，将散列的key设置为前i个元素的和值，value为该值对应的下标位置。</p><p>在Python中查找元素，用<strong>字典</strong>可以大大加快查找速度。</p><h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code class="lang-python">class Solution:    &quot;&quot;&quot;    @param nums: A list of integers    @return: A list of integers includes the index of the first number and the index of the last number    &quot;&quot;&quot;    def subarraySum(self, nums):        index_value = {}        accumulator = 0        for i in range(len(nums)):            accumulator += nums[i]            if accumulator in index_value:                return [index_value[accumulator] + 1, i]            else:                index_value[accumulator] = i        else:            if accumulator == 0:                return [0, i]        return [0, 0]</code></pre><h2 id="变种：子数组元素之和等于k"><a href="#变种：子数组元素之和等于k" class="headerlink" title="变种：子数组元素之和等于k"></a>变种：子数组元素之和等于k</h2><script type="math/tex; mode=display">\begin{aligned}& if & \sum_{i=0}^{\operatorname{index_1}}nums(i) - \bold{k} = \sum_{i=0}^{\operatorname{index_2}}nums(i) \\ & then\quad & return \left[ \operatorname{index_1}+1, \operatorname{index_2} \right] \end{aligned}</script><pre><code class="lang-python">class Solution:    &quot;&quot;&quot;    @param nums: A list of integers    @return: A list of integers includes the index of the first number and the index of the last number    &quot;&quot;&quot;    def subarraySum(self, nums, obj_num):        index_value = {}        accumulator = 0        for i in range(len(nums)):            accumulator += nums[i]            if accumulator - obj_num in index_value:                return [index_value[accumulator - obj_num] + 1, i]            else:                index_value[accumulator] = i        else:            if accumulator == 0:                return [0, i]        return [0, 0]</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;ul&gt;
+&lt;li&gt;给定一个整数数组，找到和为零的子数组。&lt;/li&gt;
+&lt;li&gt;你的代码应该返回满足要求的子数组的起始位置和结束位置&lt;/li&gt;&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="code_exercises" scheme="https://superlova.github.io/categories/code-exercises/"/>
+    
+    
+      <category term="algorithm" scheme="https://superlova.github.io/tags/algorithm/"/>
+    
+      <category term="lintcode" scheme="https://superlova.github.io/tags/lintcode/"/>
+    
+      <category term="array" scheme="https://superlova.github.io/tags/array/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>C++字符串高级操作总结</title>
+    <link href="https://superlova.github.io/2020/03/23/C-%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%AB%98%E7%BA%A7%E6%93%8D%E4%BD%9C%E6%80%BB%E7%BB%93/"/>
+    <id>https://superlova.github.io/2020/03/23/C-%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%AB%98%E7%BA%A7%E6%93%8D%E4%BD%9C%E6%80%BB%E7%BB%93/</id>
+    <published>2020-03-23T15:50:02.000Z</published>
+    <updated>2020-03-25T02:32:11.470Z</updated>
+    
+    <content type="html"><![CDATA[<p>C++的字符串操作非常多，功能也非常多样化，熟练使用标准库提供的字符串操作函数能够高效提升我们编写代码的效率和可读性。除了常用的<string>库中包含的几项基本操作之外，本文总结了几项特别好用而又不为人所知的高级操作。<br><a id="more"></a></string></p><h2 id="常见的基本操作回顾"><a href="#常见的基本操作回顾" class="headerlink" title="常见的基本操作回顾"></a>常见的基本操作回顾</h2><p>必须指明，<string>中字符串方法可以按照输入参数的类型不同调用不同的重载方法，这些函数名相同，但是参数类型和顺序完全不同，返回值也略有差别。</string></p><p>部分函数，包括insert和erase等函数可分为两类，如果输入的位置参数<code>pos</code>为整数<code>int</code>，此时返回值为<strong>被插入字符串</strong>的引用；而输入的位置参数类型为迭代器<code>iterator</code>，则会调用返回迭代器的函数，该迭代器<strong>指向被插入部分的头部</strong>。</p><p>而且<string>部分函数为了兼容C原生字符串，提供了一批适用于C String构造接口，这又产生了一大批只有参数顺序不同的同名函数。比如对于string构造方法上，输入原生string和输入C String的参数含义完全不同。</string></p><p>这些同名、功能相似但不同参数的函数使得C++新人学习标准库时容易产生极大的困扰。</p><h3 id="1-构造string"><a href="#1-构造string" class="headerlink" title="1. 构造string"></a>1. 构造string</h3><pre><code class="lang-cpp">const char * cp = &quot;Hello World!!!&quot;;char noNull[] = {&#39;H&#39;, &#39;i&#39;};</code></pre><p>输入一个char类型的指针，以及偏移量。转换从指针开始的偏移量个字符。<br>如果未指定偏移量，则默认转化到碰到’\0’为止。<br>没有’\0’结尾则该行为未定义。  </p><pre><code class="lang-cpp">string s1(cp); // 从C风格字符串转化string s2(noNull, 2); // 指定转化的字符个数string s3(noNull); // 未定义，因为noNull不是以空字符结尾string s4(cp + 6, 5);</code></pre><p>拷贝构造函数，从其他string拷贝<br>指定拷贝位置和拷贝字符个数<br>不指定pos则默认从头拷贝<br>不指定len则默认从pos开始全拷贝<br>pos越界则抛出异常<br>len越界没问题，只到’\0’  </p><pre><code class="lang-cpp">string s5(s1, 6, 5);string s6(s1, 6);string s7(s1, 6, 20);string s8(s1, 16);</code></pre><p>substr函数，输入pos和len<br>返回由该字符串的第pos位置拷贝len个字符组成的新子串  </p><pre><code class="lang-cpp">string s9 = s1.substr(0, 5);</code></pre><h3 id="2-改变string"><a href="#2-改变string" class="headerlink" title="2. 改变string"></a>2. 改变string</h3><p>以insert为例，简单介绍不同参数重载的不同insert。</p><p>insert除了接受迭代器的版本之外，还有直接接受下标的版本。返回值为被插入字符串的引用。<br>s.insert(pos, count, char)<br>s.insert(pos, char_ptr, len)<br>s.insert(pos, string, pos, len)</p><p>第一个位置总会是pos，表示被插入位置；</p><p>第二个参数如果是个数，那么你调用的是第一个insert函数，其含义为重复插入第三个参数char所制定的内容；</p><p>第二个参数如果是C风格字符串，那么第三个参数可以指出插入长度，不指名就默认把该C风格字符串全插到pos的位置；</p><p>第二个参数如果是string，那么你还需在string参数后指定从哪个pos开始插，并且指定len表示插入多少个。相对于插入C风格字符串的insert来说，插入string更灵活。</p><p>其他函数及其说明见下表。</p><p><img src="/2020/03/23/C-字符串高级操作总结/2020-03-24-20-38-14.png" srcset="/img/loading.gif" alt><br><img src="/2020/03/23/C-字符串高级操作总结/2020-03-25-08-58-36.png" srcset="/img/loading.gif" alt></p><h2 id="搜索字符串"><a href="#搜索字符串" class="headerlink" title="搜索字符串"></a>搜索字符串</h2><p><string>定义了六种不同的搜索方法，每种方法拥有四个重载版本。</string></p><p><img src="/2020/03/23/C-字符串高级操作总结/2020-03-25-09-00-50.png" srcset="/img/loading.gif" alt><br><img src="/2020/03/23/C-字符串高级操作总结/2020-03-25-09-02-09.png" srcset="/img/loading.gif" alt></p><p>需要注意的有两点：</p><ol><li>搜索函数返回类型为string::size_type，为无符号整数类型。</li><li>搜索失败时，返回string::npos，该值为-1，也就是无符号整数最大的值。</li></ol><h2 id="正则表达式库"><a href="#正则表达式库" class="headerlink" title="正则表达式库"></a>正则表达式库</h2><p>正则表达式是字符串匹配的有力工具。C++11加入了对正则表达式的支持，具体定义位于<regex>头文件中。</regex></p><p>在C++中，正则表达式可以做的工作有：</p><ul><li>Match 将整个输入拿来比对（匹配）某个正则表达式</li><li>Search 查找与正则表达式吻合的子串</li><li>Tokenize 根据正则表达式切分字符串</li><li>Replace 根据正则表达式替换字符串</li></ul><h3 id="第一种应用：Match和Search"><a href="#第一种应用：Match和Search" class="headerlink" title="第一种应用：Match和Search"></a>第一种应用：Match和Search</h3><p>具体流程可概括为：定义、匹配、判断</p><pre><code class="lang-cpp">regex reg(&quot;&lt;.*&gt;.*&lt;/.*&gt;&quot;); // 定义bool isExist = regex_match(string, reg); // 匹配整体//orbool isExist = regex_search(string, reg); // 匹配部分cout &lt;&lt; boolalpha &lt;&lt; isExist &lt;&lt; endl; // 判断</code></pre><p>你可能已经注意到了，regex_match和regex_search返回的仅仅是一个bool值，表明是否匹配。我们还需要匹配的位置。此时我们需要一个<code>match</code>对象来保存结果。<code>match</code>对象的方法如下所示。</p><pre><code class="lang-cpp">smatch m;bool isExist = regex_search(string, m, reg); // 结果保存在m中m.empty()m.size() // 返回匹配个数m.str(i) // 类似于python中group，返回第i个匹配位置的字符串。i=0则返回全部m.length(i) // 同上，返回第i个匹配字符串的长度m.position(i) // 同上，返回第i个匹配字符串的位置m.prefix().str() // 已匹配位置之前的字符串，字符串前缀m.suffix().str() // 已匹配位置之后的字符串，字符串后缀for (auto pos = m.begin(); pos != m.end(); ++pos) {    cout &lt;&lt; *pos &lt;&lt; endl;}代码中的参数i，代表了正则表达式中存在分组，i为提取分组i的被匹配内容。类似python中的group。分组操作是正则表达式的语法，本文不再赘述。</code></pre><p><code>match</code>对象根据保存内容类型不同分成</p><ul><li><code>smatch</code> 匹配string</li><li><code>cmatch</code> 匹配C风格字符串</li><li><code>wsmatch</code> 匹配wstring</li><li><code>wcmatch</code> 匹配const wchar_t*</li></ul><h3 id="第二种应用：Regex-Iterator"><a href="#第二种应用：Regex-Iterator" class="headerlink" title="第二种应用：Regex Iterator"></a>第二种应用：Regex Iterator</h3><p>data可能很长，reg可能会多次匹配。为了迭代所有的匹配成果，我们可以使用regex_iterator。根据类型不同，分别是<br><code>sregex_iterator</code><br><code>cregex_iterator</code><br><code>wsregex_iterator</code><br><code>wcregex_iterator</code></p><pre><code class="lang-cpp">regex reg(&quot;...&quot;);sregex_iterator pos(data.cbegin(), data.cend(), reg);sregex_iterator end;for (; pos != end; ++pos) {    cout &lt;&lt; pos-&gt;str() &lt;&lt; endl;}</code></pre><h3 id="第三种应用：Regex-Token-Iterator"><a href="#第三种应用：Regex-Token-Iterator" class="headerlink" title="第三种应用：Regex Token Iterator"></a>第三种应用：Regex Token Iterator</h3><p>你可能关注的不是被匹配的字符串，而是其余的字符串。此时正则表达式串就像是切割刀一样，将data分割成不含被匹配串的几部分。我们可以利用此功能实现C++中一直没能实现的字符串分割函数split。</p><pre><code class="lang-cpp">string data = &quot;qqq www    eee rrr&quot;;regex r(&quot;\\s+&quot;);sregex_token_iterator pos(data.cbegin(), data.cend(), r, -1); // -1代表你对正则表达式匹配的内容不感兴趣sregex_token_iterator end;for (; pos != end; ++pos) {    cout &lt;&lt; *pos &lt;&lt; endl;}</code></pre><h3 id="第四种应用：替换"><a href="#第四种应用：替换" class="headerlink" title="第四种应用：替换"></a>第四种应用：替换</h3><p>下面的代码将</p><pre><code class="lang-html">&lt;person&gt;&lt;first&gt;Nico&lt;/first&gt;&lt;/person&gt;</code></pre><p>替换成</p><pre><code class="lang-html">&lt;person&gt;&lt;first value=&quot;Nico&quot;/&gt;&lt;/person&gt;</code></pre><pre><code class="lang-cpp">string data = &quot;&lt;person&gt;&lt;first&gt;Nico&lt;/first&gt;&lt;/person&gt;&quot;regex reg(&quot;&lt;(.*)&gt;(.*)&lt;/(\\1)&gt;&quot;);string replace_pattern = &quot;&lt;$1 value=\&quot;$2\&quot;/&gt;&quot;;cout &lt;&lt; regex_replace(data, reg, replace_pattern) &lt;&lt; endl;</code></pre><p>模式替换串用$n指定第几个匹配部分group(n)<br>$1 value=$2 含义即为原来是group(1)的部分替换成group(2)的内容。</p><p><img src="/2020/03/23/C-字符串高级操作总结/2020-03-25-10-21-38.png" srcset="/img/loading.gif" alt></p><h2 id="string-view"><a href="#string-view" class="headerlink" title="string_view"></a>string_view</h2><p>C++17加入了string_view对象，能够避免string类型的复制临时对象操作。</p><ul><li>string_view对象由两部分组成，分别是<strong>数据的起始指针</strong>和<strong>数据的长度</strong>。有点类似于带其他语言表示字符串的方法，不依赖<code>&#39;\0&#39;</code>在结尾，而是通过一个变量记忆长度。</li><li>string_view只读，不能修改。可以很好地作为函数的参数和返回值</li></ul><pre><code class="lang-cpp">//使用string的拷贝操作string s(1000, &#39;0&#39;);string sub_s = s.substr(100, 200); // O(n)//使用view则不需要拷贝string_view sv(s); // no copystring_view sv2 = sv.substr(100, 200); // O(1)</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;C++的字符串操作非常多，功能也非常多样化，熟练使用标准库提供的字符串操作函数能够高效提升我们编写代码的效率和可读性。除了常用的&lt;string&gt;库中包含的几项基本操作之外，本文总结了几项特别好用而又不为人所知的高级操作。&lt;br&gt;&lt;/string&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="notes" scheme="https://superlova.github.io/categories/notes/"/>
+    
+    
+      <category term="C++" scheme="https://superlova.github.io/tags/C/"/>
+    
+      <category term="STL" scheme="https://superlova.github.io/tags/STL/"/>
+    
+      <category term="string" scheme="https://superlova.github.io/tags/string/"/>
+    
+      <category term="regex" scheme="https://superlova.github.io/tags/regex/"/>
+    
+  </entry>
   
   <entry>
     <title>C++关联容器学习笔记</title>
@@ -49,21 +169,17 @@
   </entry>
   
   <entry>
-    <title>DeepStellar论文阅读笔记</title>
+    <title>DeepStellar--Model-Based Quantitative Analysis of Stateful Deep Learning Systems 论文阅读笔记</title>
     <link href="https://superlova.github.io/2020/03/19/DeepStellar%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/"/>
     <id>https://superlova.github.io/2020/03/19/DeepStellar%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</id>
     <published>2020-03-19T07:38:00.000Z</published>
-    <updated>2020-03-20T01:10:47.668Z</updated>
+    <updated>2020-03-25T02:37:49.035Z</updated>
     
-    <content type="html"><![CDATA[<p>try</p>]]></content>
+    <content type="html"><![CDATA[<p>DeepStellar 是少有的针对RNN进行测试的工具，它提出了RNN测试的新思路。<br>封面上的大神就是谢肖飞博士，他是DeepStellar一问的作者。<br><a id="more"></a></p>]]></content>
     
     <summary type="html">
     
-      
-      
-        &lt;p&gt;try&lt;/p&gt;
-
-      
+      &lt;p&gt;DeepStellar 是少有的针对RNN进行测试的工具，它提出了RNN测试的新思路。&lt;br&gt;封面上的大神就是谢肖飞博士，他是DeepStellar一问的作者。&lt;br&gt;&lt;/p&gt;
     
     </summary>
     
@@ -485,124 +601,6 @@
       <category term="machine learning" scheme="https://superlova.github.io/tags/machine-learning/"/>
     
       <category term="bayes" scheme="https://superlova.github.io/tags/bayes/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>牛奶可乐经济学note2</title>
-    <link href="https://superlova.github.io/2019/06/08/%E7%89%9B%E5%A5%B6%E5%8F%AF%E4%B9%90%E7%BB%8F%E6%B5%8E%E5%AD%A6note2/"/>
-    <id>https://superlova.github.io/2019/06/08/%E7%89%9B%E5%A5%B6%E5%8F%AF%E4%B9%90%E7%BB%8F%E6%B5%8E%E5%AD%A6note2/</id>
-    <published>2019-06-08T07:49:56.000Z</published>
-    <updated>2020-03-19T01:43:12.723Z</updated>
-    
-    <content type="html"><![CDATA[<p>回顾一下上一节的概念：</p><ol><li><strong>机会成本</strong>：</li></ol><p>一件事情的机会成本，是指为了从事这件事而放弃的其他事情的价值。</p><p>假设小金抽中了大众点评霸王餐，价值200元的A餐馆的晚饭，必须今晚吃。但是今晚小金最爱的林俊杰今晚开演唱会，演唱会门票400元。小金之前想的是演唱会门票超过500元就不去，但是霸王餐的消息突如其来，小金有点犹豫了。</p><p>那么请问小金去吃霸王餐的机会成本是多少？</p><p>答案是100元。吃霸王餐的价值与本题无关，因为小金放弃的是林俊杰的演唱会。林俊杰演唱会在小金心中值500，但他要花费400元买票，因此只要霸王餐在小金的心目中的价值超过100元，小金就应该去吃霸王餐。</p><p><strong>在经济学理论里，成本如果没有特殊说明就是指机会成本。</strong></p><ol><li><strong>成本效益原则</strong>：</li></ol><p>唯有当行动带来的收益比成本高时，你才应该这么做。</p><p>设想一下，马上618购物节了，你想买空调和衣服。已知你有一张打折优惠券。买空调价格2000元，打折后能省100块钱；买衣服200元，打折后能省90元。空调打折了衣服就不能打折，衣服打折了空调就不能打折。你应该在买什么的时候使用打折优惠券？</p><p>答案显而易见，该在买空调时用，多省10元。</p><ol><li><strong>有例外，才能证明规律存在</strong>：</li></ol><p>个人理解，就是找出命题的逆否命题，并证明逆否命题成立。</p><p>比如动物中很多雄性的体型比雌性大，这是因为体型大的雄性有机会与更多雌性交配。这算是规律吗？还是巧合呢？按照“有例外，才能证明规律存在”这一标准，我们只需找到雄性不会和很多雌性交配的情况，并看看他们是不是雄性体型小于等于雌性即可。</p><p>大多一夫一妻制的鸟类，雄鸟和雌鸟体型相似。很多昆虫中的雄性并不会通过体型来和其他雄性竞争交配权，所以昆虫的雄性甚至比雌性还小。</p><ol><li><strong>以叙述形式表达的信息最易被吸收</strong>：</li></ol><p>这就是为什么<em>码农有道</em>公众号的文章受很多程序员喜爱的原因。他每次科普都会讲一个故事，虽然十分老套但是效果很神奇，很简单就理解了（当然记不记得住、能不能应用就是另一回事了）。</p><ol><li><strong>学习最好的方式之一，就是把它写下来</strong>：</li></ol><p>这就是众多大佬，比如《暗时间》一书的作者刘未鹏提倡写博客的缘故吧。</p><hr><p>开始这一讲的话题：</p><h1 id="CH1-产品设计中的经济学"><a href="#CH1-产品设计中的经济学" class="headerlink" title="CH1 产品设计中的经济学"></a>CH1 产品设计中的经济学</h1><ol><li><strong>除非改动带来的收益大于改动的成本，否则生产商不会给产品研发新功能</strong></li></ol><p>商业环境中，产品设计、科学研发要符合成本效益原则。即产品设计既要包含最符合消费者心意的功能，又要满足卖方保持低价、便于竞争的需求。产品设计必须在两者之间保持平衡。</p><p>举个例子，为什么某些公司从“技工贸”转向“贸工技”（即从技术最重要转向贸易最重要）？这也许是公司领导层认为投入在技术研发上面的成本超过了所能带来的收入。</p><h1 id="CH2-供求关系实践"><a href="#CH2-供求关系实践" class="headerlink" title="CH2 供求关系实践"></a>CH2 供求关系实践</h1><ol><li><strong>商业公司的最大价值，不在于它能提高多少生产率，而在于它能创造多少利润</strong></li></ol><p>从长远角度看，新技术所借省下来的成本并不会给生产者带来更高的利润，而是降低了产品的价格，使消费者受惠。</p><ol><li><strong>没有免费的午餐</strong></li></ol><p>提防那些太过美好的机遇。赚取财富的唯一方式仍然是天赋、勤俭、幸运，再加上艰苦的劳动。</p><p>然而，成千上万的人似乎认为自己能够轻松致富。他们亲眼见别人这么做过：有人把手里的钱全买了一飞冲天的高科技股票，比如阿里巴巴、新浪等，就这样发了大财；还有人拼命借贷，买下大大超过个人负担能力的房地产，一夜暴富。</p><p>“没有免费午餐”定律成功解释了2008年的金融危机。不了解的朋友请看《大空头》这部电影，电影描述了几个经济学家在所有人都陷入房价狂欢的时候，率先意识到股市和房市会崩盘，因此大量做空房市，最后大赚一笔。电影中写了几个细节，说就连夜场舞女、地痞流氓等低信用人士都借贷购买了大量房产，一旦金融危机爆发，他们根本无力还款。所有人都陷入免费午餐中的时候，你就要警惕了。</p><ol><li><strong>一价定律</strong></li></ol><p>两座城市之间商品的价格，不会超过两地之间的运输成本。“一价定律”尤其适合于竞争激烈的市场。</p><p>“一价定律”指出，任何试图利用富人多花钱的想法的供应商，都会给竞争对手创造出直接获利的机会。</p><p>在沙漠里向马云和另外一个穷人卖水，马云可能会给出更高的价格。但是在竞争激烈的市场，水的价格都是统一的。这个价格就是人们心中认为它的价值。</p><ol><li><strong>边际成本</strong></li></ol><p>生产的商品数目越多，<strong>总成本</strong>越高，这是显然的。但是总成本与生产数目的关系并不是线性的。</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;回顾一下上一节的概念：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;机会成本&lt;/strong&gt;：&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;一件事情的机会成本，是指为了从事这件事而放弃的其他事情的价值。&lt;/p&gt;
-&lt;p&gt;假设小金抽中了大众点评霸王餐，价值200元的A餐馆的晚饭，必须今晚吃。但
-      
-    
-    </summary>
-    
-    
-      <category term="notes" scheme="https://superlova.github.io/categories/notes/"/>
-    
-    
-      <category term="study method" scheme="https://superlova.github.io/tags/study-method/"/>
-    
-      <category term="economics" scheme="https://superlova.github.io/tags/economics/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>神经网络学习笔记note1</title>
-    <link href="https://superlova.github.io/2019/06/06/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0note1/"/>
-    <id>https://superlova.github.io/2019/06/06/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0note1/</id>
-    <published>2019-06-06T13:38:03.000Z</published>
-    <updated>2020-03-19T01:45:48.219Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="实现神经网络"><a href="#实现神经网络" class="headerlink" title="实现神经网络"></a>实现神经网络</h1><p>简单的神经网络实现。包含随机梯度下降算法、反向传播算法。</p><pre><code class="lang-python">class Network(object):    def __init__(self, sizes):        self.num_layers = len(sizes)        self.sizes = sizes        self.biases = [np.random.randn(y, 1) for y in sizes[1:]]        self.weights = [np.random.randn(y, x)                        for x, y in zip(sizes[:-1], sizes[1:])]    def feedforward(self, a):        for b, w in zip(self.biases, self.weights):            a = sigmoid(np.dot(w, a)+b)        return a    def SGD(self, training_data, epochs, mini_batch_size, eta,            test_data=None):        training_data = list(training_data)        n = len(training_data)        if test_data:            test_data = list(test_data)            n_test = len(test_data)        for j in range(epochs):            random.shuffle(training_data)            mini_batches = [                training_data[k:k+mini_batch_size]                for k in range(0, n, mini_batch_size)]            for mini_batch in mini_batches:                self.update_mini_batch(mini_batch, eta)            if test_data:                print(&quot;Epoch {} : {} / {}&quot;.format(j,self.evaluate(test_data),n_test));            else:                print(&quot;Epoch {} complete&quot;.format(j))    def update_mini_batch(self, mini_batch, eta):        nabla_b = [np.zeros(b.shape) for b in self.biases]        nabla_w = [np.zeros(w.shape) for w in self.weights]        for x, y in mini_batch:            delta_nabla_b, delta_nabla_w = self.backprop(x, y)            nabla_b = [nb+dnb for nb, dnb in zip(nabla_b, delta_nabla_b)]            nabla_w = [nw+dnw for nw, dnw in zip(nabla_w, delta_nabla_w)]        self.weights = [w-(eta/len(mini_batch))*nw                        for w, nw in zip(self.weights, nabla_w)]        self.biases = [b-(eta/len(mini_batch))*nb                       for b, nb in zip(self.biases, nabla_b)]    def backprop(self, x, y):        nabla_b = [np.zeros(b.shape) for b in self.biases]        nabla_w = [np.zeros(w.shape) for w in self.weights]        # feedforward        activation = x        activations = [x] # list to store all the activations, layer by layer        zs = [] # list to store all the z vectors, layer by layer        for b, w in zip(self.biases, self.weights):            z = np.dot(w, activation)+b            zs.append(z)            activation = sigmoid(z)            activations.append(activation)        # backward pass        delta = self.cost_derivative(activations[-1], y) * \            sigmoid_prime(zs[-1])        nabla_b[-1] = delta        nabla_w[-1] = np.dot(delta, activations[-2].transpose())        for l in range(2, self.num_layers):            z = zs[-l]            sp = sigmoid_prime(z)            delta = np.dot(self.weights[-l+1].transpose(), delta) * sp            nabla_b[-l] = delta            nabla_w[-l] = np.dot(delta, activations[-l-1].transpose())        return (nabla_b, nabla_w)    def evaluate(self, test_data):        test_results = [(np.argmax(self.feedforward(x)), y)                        for (x, y) in test_data]        return sum(int(x == y) for (x, y) in test_results)    def cost_derivative(self, output_activations, y):        return (output_activations-y)#### Miscellaneous functionsdef sigmoid(z):    &quot;&quot;&quot;The sigmoid function.&quot;&quot;&quot;    return 1.0/(1.0+np.exp(-z))def sigmoid_prime(z):    &quot;&quot;&quot;Derivative of the sigmoid function.&quot;&quot;&quot;    return sigmoid(z)*(1-sigmoid(z))</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;实现神经网络&quot;&gt;&lt;a href=&quot;#实现神经网络&quot; class=&quot;headerlink&quot; title=&quot;实现神经网络&quot;&gt;&lt;/a&gt;实现神经网络&lt;/h1&gt;&lt;p&gt;简单的神经网络实现。包含随机梯度下降算法、反向传播算法。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lan
-      
-    
-    </summary>
-    
-    
-      <category term="notes" scheme="https://superlova.github.io/categories/notes/"/>
-    
-      <category term="转载" scheme="https://superlova.github.io/categories/notes/%E8%BD%AC%E8%BD%BD/"/>
-    
-    
-      <category term="deep learning" scheme="https://superlova.github.io/tags/deep-learning/"/>
-    
-      <category term="machcine learning" scheme="https://superlova.github.io/tags/machcine-learning/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>支持向量机笔记</title>
-    <link href="https://superlova.github.io/2019/05/30/%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA%E7%AC%94%E8%AE%B0/"/>
-    <id>https://superlova.github.io/2019/05/30/%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA%E7%AC%94%E8%AE%B0/</id>
-    <published>2019-05-30T09:09:20.000Z</published>
-    <updated>2020-03-19T01:45:00.417Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="支持向量机"><a href="#支持向量机" class="headerlink" title="支持向量机"></a>支持向量机</h1><h2 id="1-思想"><a href="#1-思想" class="headerlink" title="1. 思想"></a>1. 思想</h2><p>SVM的思想，即对于平面上的二分类问题，找到一条直线，不但能够将两类数据恰好分开，而且要分的越开越好。即最大化不同类别的（关键）样本点之间的距离。</p><p><strong>我们的目的是找到一条河，让这条河的河岸恰恰经过正负样本的同时，尽可能宽。</strong></p><p><img src="/2019/05/30/支持向量机笔记/2019-05-30-20-27-32.png" srcset="/img/loading.gif" alt></p><p>上图蓝线是最终确定的超平面，红线则是正例和反例的“楚河汉界”。这“楚河汉界”与超平面平行，并且距超平面相同距离。</p><p><strong>我们不妨定义这段距离为1。</strong></p><h2 id="2-最大化距离的方法"><a href="#2-最大化距离的方法" class="headerlink" title="2. 最大化距离的方法"></a>2. 最大化距离的方法</h2><p>假设已经找到了这样一条超平面，它的法向量为$\vec{w}$.</p><p>对于任意样本$\vec{u}$，如果$f(u)=w\cdot u+b &gt; 0$则把样本u归为正例，反之为负例。</p><p>现在想要找到一条河，让这条河的河岸恰恰经过正负样本的同时，尽可能宽。这样我们对正例和负例的划分做出了更高的要求：不仅仅大于0，更要大于河的宽度（的一半），即大于1。</p><script type="math/tex; mode=display">f\left(\mathbf{x}_{+}\right)=\mathbf{w} \cdot \mathbf{x}_{+}+b \geq 1</script><script type="math/tex; mode=display">f\left(\mathbf{x}_{-}\right)=\mathbf{w} \cdot \mathbf{x}_{-}+b \leq-1</script><p>设想一下，我们有两个样本，一个小红，一个小蓝，他们站在河的对岸相望。</p><script type="math/tex; mode=display">\begin{aligned} \mathbf{w} \cdot \mathbf{x}_{1}+b &=+1 \\ \mathbf{w} \cdot \mathbf{x}_{2}+b &=-1 \end{aligned}</script><p><img src="/2019/05/30/支持向量机笔记/2019-05-30-20-45-50.png" srcset="/img/loading.gif" alt></p><p>那我现在问你，求河的长度。WTF？这样就能求出河的长度了吗？是的，想一下，从小红指向小蓝的那一条向量$x_1-x_2$，向超平面的法向量$w$方向投影，然后得到的向量长度不就是河的长度了吗？</p><p>河的长度：$ \mathbf{w} \cdot\left(\mathbf{x}_{1}-\mathbf{x}_{2}\right)=2 $<br>。还记得两个向量投影就是求点积吗？蛤蛤。</p><p>忘了，法向量也是有长度的，为了把法向量标准化，我们需要除以法向量的长度：</p><script type="math/tex; mode=display">\frac{\mathbf{w}}{\|\mathbf{w}\|} \cdot\left(\mathbf{x}_{1}-\mathbf{x}_{2}\right)=\frac{2}{\|\mathbf{w}\|}</script><p>问题就转化为将$\frac{2}{||\mathbf{w}||}$求最大。这就是一个最优化问题，按理说利用拉格朗日乘子法，对分量挨个求导即可求出极值点。但是现在这副模样连求导都做不到。我们想办法变形一下：</p><p>常数项肯定就不要了，问题就变成了最小化$\frac{1}{2}|\mathbf{w}|^{2}$。这一切都是为了方便数学处理呀。</p><p>不要忘了，还有一个（其实是i个）限制条件：</p><script type="math/tex; mode=display">y_{i}\left(\mathbf{w} \cdot \mathbf{x}_{i}+b\right) \geq 1</script><p>y取1或-1，用来标记样本类别。</p><h2 id="3-二次优化问题"><a href="#3-二次优化问题" class="headerlink" title="3. 二次优化问题"></a>3. 二次优化问题</h2><p>所谓拉格朗日，就是在限制条件前面加个参数，然后附加在要求的优化方程式中，从而将问题转化成无约束优化问题。被拉格朗日之后，我们加了i个参数，组成参数向量a</p><script type="math/tex; mode=display">L=\frac{1}{2}\|\mathbf{w}\|^{2}-\sum_{i=1}^{l} a_{i}\left(y_{i}\left(\mathbf{x}_{i} \cdot \mathbf{w}+b\right)-1\right)</script><p>接下来要对向量求导了。害怕吗？有如下公式：$\frac{\partial|\mathbf{w}|^{2}}{\partial \mathbf{w}}=2 \mathbf{w}$和$\frac{\partial \mathbf{x} \cdot \mathbf{w}}{\partial \mathbf{w}}=\mathbf{x}$</p><p>我们分别对w和b求导，看看拉格朗日函数对w和b的变化分别有什么反应：</p><script type="math/tex; mode=display">\begin{aligned} \frac{\partial L}{\partial \mathbf{w}} &=\mathbf{w}-\sum_{i=1}^{l} a_{i} y_{i} \mathbf{x}_{i}=0 \\ \frac{\partial L}{\partial b} &=\sum_{i=1}^{l} a_{i} y_{i}=0 \end{aligned}</script><p>现在合适的 $ w^*=\sum_{i=1}^{l} a_{i} y_{i} \mathbf{x}_{i} $ 也都找到了，将他们回代到拉格朗日函数中去，看看他的最小点长什么样子。</p><script type="math/tex; mode=display">L=\sum_{i=1}^{l} a_{i}-\frac{1}{2} \sum_{i, j=1}^{l} a_{i} a_{j} y_{i} y_{j} \mathbf{x}_{i} \cdot \mathbf{x}_{j}</script><p>我们可以看到啊，这个L的大小，取决于样本之间的点积，也就是我们选的两个小红和小蓝，他们站的位置。他们的位置要是不好，那距离就会不够大，那我们的拉格朗日同学就要重新选人。因此呢，最终被选择的样本，那一定是具有代表性的，我们称它们为<strong>支持向量</strong>。这就是支持向量机一词的由来。</p><h2 id="4-核方法的运用"><a href="#4-核方法的运用" class="headerlink" title="4. 核方法的运用"></a>4. 核方法的运用</h2><p>有时候我们会碰到一些样本，他们本来就不是线性可分的，比如</p><p><img src="/2019/05/30/支持向量机笔记/2019-05-30-21-14-02.png" srcset="/img/loading.gif" alt></p><p>但我们还是将他们利用支持向量机分开了。怎么做到的？怎么“以直为曲”？那是因为有一个道理，<strong>高维空间比低维空间更广阔的</strong>，更难出现线性不可分的状况。所以很自然的，我们人为添加一些分量，比如将二维点添加z轴分量到三维啊，甚至无限维。之后我们可以找到一个超平面，将他们分开就是轻而易举的事情啦。</p><p>我们需要一种神秘变换$\Phi$，接受一个样本向量，输出提升维度之后的样本向量。</p><p><img src="/2019/05/30/支持向量机笔记/2019-05-30-21-17-55.png" srcset="/img/loading.gif" alt></p><p>$\Phi$很难找，但是我们不必找。因为根据前面的结论，拉格朗日函数根我们选取的关键向量的<strong>内积</strong>有关，直接表示出$ \Phi\left(\mathbf{x}_{1}\right) \cdot \Phi\left(\mathbf{x}_{2}\right) $，一步到位哦。</p><p>正好有这种专门表示两个向量运算的函数，叫做核函数。</p><script type="math/tex; mode=display">\Phi\left(\mathbf{x}_{1}\right) \cdot \Phi\left(\mathbf{x}_{2}\right)=K\left(\mathbf{x}_{1}, \mathbf{x}_{2}\right)</script><p>举个例子，线性核函数：</p><script type="math/tex; mode=display">K(x, y) = x\cdot y</script><p>多项式核函数：</p><script type="math/tex; mode=display">K\left(\mathbf{x}_{1}, \mathbf{x}_{2}\right)=\left(\mathbf{x}_{1} \cdot \mathbf{x}_{2}+1\right)^{n}</script><p>高斯核函数：</p><script type="math/tex; mode=display">K\left(\mathbf{x}_{1}, \mathbf{x}_{2}\right)=e^{\frac{-|| x_{1}+x_{2} ||^{2}}{2 \sigma^{2}}}</script><p>有的时候我们会碰到一些样本，他们很难缠，甚至根本线性不可分。类似于红军打入了蓝军内部，根本无法找到一条直线将他们分开。这时候我们就需要放低要求。</p><p>引入松弛变量，出现的错误样本在一定程度范围内越小越好。</p><script type="math/tex; mode=display">\xi_i =  1-y_{i}\left(w^{T} x_{i}+b\right)</script><p>则有下式</p><script type="math/tex; mode=display">y_{i}\left(w^{T} x_{i}+b\right) \geq 1-\xi_{i}, \quad i=1, \dots, n</script><p>最终的优化问题就变成了</p><script type="math/tex; mode=display">\begin{array}{l}{\min \frac{1}{2}\|w\|^{2}+C \sum_{i=1}^{n} \xi_{i}} \\ {\text {s.t.}, y_{i}\left(w^{T} x_{i}+b\right) \geq 1-\xi_{i}, i=1, \ldots, n} \\ {\xi_{i} \geq 0, i=1, \ldots, n}\end{array}</script><p>C为经验参数，调参侠必备。您想让误差少点，C就大点。</p><p>接下来的套路就和之前一样了，拉格朗日啊之类的，略去不表。</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;支持向量机&quot;&gt;&lt;a href=&quot;#支持向量机&quot; class=&quot;headerlink&quot; title=&quot;支持向量机&quot;&gt;&lt;/a&gt;支持向量机&lt;/h1&gt;&lt;h2 id=&quot;1-思想&quot;&gt;&lt;a href=&quot;#1-思想&quot; class=&quot;headerlink&quot; title=&quot;1. 思想
-      
-    
-    </summary>
-    
-    
-      <category term="notes" scheme="https://superlova.github.io/categories/notes/"/>
-    
-    
-      <category term="machine learning" scheme="https://superlova.github.io/tags/machine-learning/"/>
-    
-      <category term="SVM" scheme="https://superlova.github.io/tags/SVM/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>华为的命运与中国的反应</title>
-    <link href="https://superlova.github.io/2019/05/25/%E5%8D%8E%E4%B8%BA%E7%9A%84%E5%91%BD%E8%BF%90%E4%B8%8E%E4%B8%AD%E5%9B%BD%E7%9A%84%E5%8F%8D%E5%BA%94/"/>
-    <id>https://superlova.github.io/2019/05/25/%E5%8D%8E%E4%B8%BA%E7%9A%84%E5%91%BD%E8%BF%90%E4%B8%8E%E4%B8%AD%E5%9B%BD%E7%9A%84%E5%8F%8D%E5%BA%94/</id>
-    <published>2019-05-25T12:27:35.000Z</published>
-    <updated>2020-03-19T01:37:54.145Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="美国将华为列入了黑名单，实施一系列与针对中兴类似的、外科手术式的精准打击。华为在劫难逃。那么华为或中国可以做什么来应对呢？中国会采取哪些手段？"><a href="#美国将华为列入了黑名单，实施一系列与针对中兴类似的、外科手术式的精准打击。华为在劫难逃。那么华为或中国可以做什么来应对呢？中国会采取哪些手段？" class="headerlink" title="美国将华为列入了黑名单，实施一系列与针对中兴类似的、外科手术式的精准打击。华为在劫难逃。那么华为或中国可以做什么来应对呢？中国会采取哪些手段？"></a>美国将华为列入了黑名单，实施一系列与针对中兴类似的、外科手术式的精准打击。华为在劫难逃。那么华为或中国可以做什么来应对呢？中国会采取哪些手段？</h1><p>华为被列为美国“实体清单”无疑是当下最受关注的话题。显然，美国是想采取一系列精准打击，妄图将华为推入和中兴一样的境地。因此，无论是国内还是国外，线上还是线下，华为和中国的反应无疑是最受人关注的。鉴于国内新闻平台罕有客观分析的文章，我通过Quora论坛（又称作美国版知乎）摘录并翻译了Janus Dongye Qimeng对于该问题的精彩回答。他回答于5月22日，截至目前（25日）收获了5.9k个赞同。让我们来欣赏Janus对于该问题的精彩回答吧。</p><p>链接：<a href="https://www.quora.com/US-blacklisted-Huawei-in-what-is-evidently-ZTE-style-surgical-strike-It-appears-Huawei-is-pretty-much-dead-What-can-Huawei-or-China-do-to-overcome-this-or-to-retaliate-What-will-China-do" target="_blank" rel="noopener">US blacklisted Huawei in what is evidently ZTE style surgical strike. It appears Huawei is pretty much dead. What can Huawei or China do to overcome this or to retaliate? What will China do?</a></p><p>Janus Dongye Qimeng：</p><p>不谈观点，只说事实。</p><p>下面是华为2019年最畅销的P30手机的供应链：</p><p><img src="/2019/05/25/华为的命运与中国的反应/芯片.png" srcset="/img/loading.gif" alt></p><p>华为P30手机的“大脑”是由海思公司设计的麒麟980系统芯片（System-on-Chip，SOC）。而海思是华为旗下的子公司。为什么称它为系统芯片？因为该芯片集成了许多由世界其他地方设计的组件。</p><p>该系统芯片背后是什么？</p><p><strong>指令集架构</strong>（Instruction set architecture）：海思购买了<strong>英国</strong>剑桥ARM的CPU和GPU架构许可证。通过许可，海思可以使用ARM指令集（armv8）并开发自己的64位CPU架构。AMBA等总线标准也是ARM授权的。</p><p><strong>CPU，GPU</strong>：海思在中国深圳拥有数百名员工，负责设计CPU内核、加速器和IP组件。为了设计自己的CPU，他们需要使用Synopsis，Cadence和Xilinx的电子设计自动化（EDA）工具。这些EDA公司都是<strong>美国</strong>加利福尼亚州的公司。海思需要支付许可费才能使用他们的工具来设计和模拟自己的CPU。</p><blockquote><p>译者注：电子设计自动化（英语：Electronic design automation，缩写：EDA）是指利用计算机辅助设计（CAD）软件，来完成超大规模集成电路（VLSI）芯片的功能设计、综合、验证、物理设计（包括布局、布线、版图、设计规则检查等）等流程的设计方式。</p></blockquote><p>同时，海思还可以集成ARM设计的现有软核，如强大的核心Cortex A76和高效的核心Cortex A55。 两者都在同一芯片中。大核心在<strong>美国</strong>德克萨斯州奥斯汀市设计，小核心在<strong>英国</strong>剑桥设计。一些低端CPU核心也从中国台湾联发科购买。同时，海思还可以从ARM购买其他知识产权，包括Mali T830 GPU和互连子系统。Mali GPU设计在<strong>英国</strong>剑桥的ARM总部。</p><p><strong>内存</strong>：海思在存储器控制器和SRAM系统中设计了自己的逻辑电路。SRAM和DRAM单元由<strong>韩国</strong>三星授权。未来的7nm 3D堆叠RAM也将由三星设计，但在中国大连制造。</p><p><strong>DSP和相机</strong>：海思购买了德国徕卡相机的相机镜头设计知识产权和控制系统，其中大部分系统都是在<strong>德国</strong>韦茨拉尔设计的。实际镜头由中国台湾的大立光电（Largan Precision）和中国大陆的舜宇光学科技（Sunny Optical Technology）制造。用于驱动相机改变焦点的电动马达由三美电机（Mitsumi）在日本Tsurumaki制造。为了将光转换为信号，光敏胶片由中国深圳的欧菲光（O-film）设计（也是iPhone X的供应商）。海思从<strong>美国</strong>亚利桑那州凤凰城的安森美（ON Semiconductors）购买了用于自动聚焦和图像稳定的硬件解决方案。高清视频处理芯片由<strong>日本</strong>索尼授权。海思设计了自己的图像处理硬件加速器（ISP），从<strong>美国</strong>加利福尼亚州的CEVA购买了许多DSP专利，并从中国北京购买了来自寒武纪科技（Cambricon Technologies）的AI芯片。</p><p><strong>通信模块</strong>（Baseband）：海思购买了许可证，使用来自<strong>美国</strong>加利福尼亚州圣何塞的博通（Broadcom）的WIFI、GPS和蓝牙。对于3G支持，海思必须向<strong>美国</strong>加利福尼亚州圣地亚哥高通公司持有的专利支付许可使用费。对于后来的4G LTE和5G，海思拥有自己的专利和通信模块处理器，称为Balong，由中国数百人设计。海思还从中国科学院购买了北斗导航系统。请注意，一些芯片验证任务由<strong>印度</strong>海得拉巴的工程师执行。</p><p><strong>射频模块</strong>（Radio frequency，缩写为RF）：要在各种通信信号之间进行多路复用并将模拟信号放大到不同的无线频率，它们需要射频集成电路（RFIC）。RFIC的大多数专利都是由<strong>美国</strong>北卡罗来纳州的RF Micro Devices公司持有，现在在与TriQuint合并后成为Qorvo。RFIC芯片需要一些功率放大器，这由<strong>日本</strong>京都的Murata Manufacturing制造的高端电容器提供。 还需要TST台湾和Microgate在深圳设计和制造的表面声波（SAW）传感器。还需要一些由<strong>美国</strong>Skyworks Solutions设计并由Skyworks在中国制造的绝缘硅绝缘体开关。对于天线组件，它们由深圳的Sunway公司和位于中国上海的Rosenberger（<strong>美国</strong>）工厂设计和制造。在5G时代，华为模拟设备也必须使用来自<strong>美国</strong>，<strong>日本</strong>和中国的这些设备。</p><p><strong>NFC和触控设备</strong>：<strong>荷兰</strong>的恩智浦半导体为华为提供NFC解决方案。该芯片由英飞凌在<strong>德国</strong>西门子开发。深圳Goodix Co提供指纹传感器。USB Type-C解决方案由深圳Everwin Precision提供。</p><p><strong>芯片装配</strong>：在海思将所有知识产权和零件集成到一个系统芯片SOC之后，该设计被送到台湾半导体制造公司（TSMC）进行物理布局和制造。SOC芯片的制造过程是一项非常复杂的任务。对于最重要的步骤，TSMC需要导入由<strong>荷兰</strong>ASML设计的掩模对齐系统（MAS）。他们还需要使用来自<strong>日本</strong>的Shin-Etsu，来自<strong>德国</strong>的Siltronic AG和来自<strong>日本</strong>Minato的SUMCO Corporation的大量晶圆化学品。</p><p><strong>源材料</strong>：但是，大多数化学产品和半成品都是从中国进口的。最具代表性的是中国的稀土金属。对于包括玻璃和钢材在内的其他材料，比亚迪在深圳负责制造手机梯度框架和高密度眼镜。盛意电子为手机生产所有PCB板。</p><p><strong>屏幕</strong>：华为P30采用三星OLED硬屏，但P30 Pro采用京东方科技在中国设计的OLED软屏。有些屏幕也由<strong>韩国</strong>LG在中国广州制造。现在，韩国和中国公司都在屏幕市场占据主导地位。</p><p><strong>组装</strong>：华为随后从每个服务提供商处订购所有组件，并将组件运送到中国郑州的富士康公司。富士康的工人将所有组件组装成一个完整的手机。</p><p><img src="/2019/05/25/华为的命运与中国的反应/p30.jpg" srcset="/img/loading.gif" alt></p><p>这是华为单个手机的供应链。华为的主要产品不只是手机，但他们的手机仍然成功击败苹果，成为未进入美国市场的第二大智能手机公司。华为的主要优势在于其通信基础设施和解决方案。因为这方面我并不熟悉，所以我并不打算写。</p><p>现在请计算这些供应商来自美国，中国，日本和韩国的数量。对于上面列出的每家公司，请访问他们自己的网站，查看他们的产品实际销售到华为或中国市场的份额，以及他们的材料从中国进口的数量。你会惊讶地发现，华为通常是他们最大的客户，他们再也不能离开中国了。</p><p>这意味着如果你杀死了华为，那么大多数供应商也会受到很大的伤害。有些公司会陪葬。他们中的大多数是韩国和日本唯一的高价值公司。他们会遭受40％及以上的市场损失。这将对韩国和日本经济造成巨大打击。</p><p>很显然，特朗普背后的智囊并不了解半导体行业的现状。我想Quora的大多数人都不知道。</p><p><img src="/2019/05/25/华为的命运与中国的反应/trump.jpg" srcset="/img/loading.gif" alt></p><p>华为已死？</p><p>当然没有。十年前，华为已经启动了美国政府的各种情景备胎计划。他们甚至有针对当整个中国被阻止使用x86指令集场景的极端备份计划。</p><h3 id="中国会采取什么手段？"><a href="#中国会采取什么手段？" class="headerlink" title="中国会采取什么手段？"></a>中国会采取什么手段？</h3><p>让我们来看看中国采取的最新的应对措施：</p><p><a href="https://www.scmp.com/tech/enterprises/article/2139699/china-cuts-taxes-chip-makers-promote-industry-development" target="_blank" rel="noopener">由于贸易紧张局势加剧，中国削减了芯片制造商的税收</a></p><p>中国宣布所有国内半导体供应商公司将获得五年免税。他们五年不需要纳税！这意味着他们可以降低运营成本并击败其外国竞争对手。这是美国一直在抱怨中国的地方。现在中国一直在做，不管美国有什么话要说。</p><p>如果华为找不到美国的供应商，那么他们会找到替代品，主要是中国的国内供应商。这些供应商在中国免税。这将为国内公司带来巨大的推动力，因为它们可以同时降低成本和获得客户。</p><p>我一直在与中国半导体行业不同领域的许多中国学者交谈。他们说，华为之所以从这么多来源购买知识产权，并不是说华为没有这项技术，更重要的是，对于他们最重要的领域，他们并不打算<strong>重新发明轮子</strong>（reinvent the wheels），他们希望与世界共享利益。</p><p>确实有一些中国仍然落后的关键技术，如制造工艺和射频芯片。但我们应该明白。中国能达到目前为止的技术水平，正是由于巴黎多边出口管制协调委员会的技术封锁和制裁，中国被禁止使用所有高端技术。多亏了他们，中国有机会自己“重新发明轮子”。</p><p>同时，由于采用了华为技术，北京的地铁已经安装并覆盖了5G信号。</p><p><img src="/2019/05/25/华为的命运与中国的反应/5g.jpg" srcset="/img/loading.gif" alt></p><p>但现在，我坐在伦敦的地铁上。我的手机没有任何信号。因此，我必须离线阅读关于一篇精彩的英国脱欧文章的帖子。我周围的人都在看华为手机上的离线小说。</p><p>有关软件方面“供应链”的分析，请参考我的答案：</p><p><a href="https://www.quora.com/How-badly-will-Huaweis-smartphone-business-be-affected-by-Googles-response-to-US-placing-Huawei-on-Entity-list-Huawei-loses-access-to-Google-proprietary-apps-and-services-but-is-still-be-able-to-run-the-Android-Open/answer/Janus-Dongye-Qimeng" target="_blank" rel="noopener">Janus Dongye Qimeng’s answer to How badly will Huawei’s smartphone business be affected by Google’s response to US placing Huawei on “Entity” list? (Huawei loses access to Google proprietary apps and services but is still be able to run the Android Open Source license (AOSP).</a></p><p>我希望你能通过本文了解更多关于现状的信息。</p><blockquote><p>Talk is cheap. Show me the code.<br>— Linus Torvalds<br>空谈误国，实干兴邦。</p></blockquote><p>本文由<strong>Superlova</strong>翻译自Quora平台Janus Dongye Qimeng对<a href="https://www.quora.com/US-blacklisted-Huawei-in-what-is-evidently-ZTE-style-surgical-strike-It-appears-Huawei-is-pretty-much-dead-What-can-Huawei-or-China-do-to-overcome-this-or-to-retaliate-What-will-China-do" target="_blank" rel="noopener">US blacklisted Huawei in what is evidently ZTE style surgical strike. It appears Huawei is pretty much dead. What can Huawei or China do to overcome this or to retaliate? What will China do?</a>的回答，翻译并传播的初心是用作英语翻译习作和思想交流。郑重声明：本文的观点并不代表译者的观点。转载本译文请注明本译文出处！</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;美国将华为列入了黑名单，实施一系列与针对中兴类似的、外科手术式的精准打击。华为在劫难逃。那么华为或中国可以做什么来应对呢？中国会采取哪些手段？&quot;&gt;&lt;a href=&quot;#美国将华为列入了黑名单，实施一系列与针对中兴类似的、外科手术式的精准打击。华为在劫难逃。那么华为或
-      
-    
-    </summary>
-    
-    
-      <category term="translation" scheme="https://superlova.github.io/categories/translation/"/>
-    
-      <category term="转载" scheme="https://superlova.github.io/categories/translation/%E8%BD%AC%E8%BD%BD/"/>
-    
     
   </entry>
   
