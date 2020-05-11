@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content>
+  <meta name="author" content="Superlova">
+  <meta name="keywords" content>
+  <title>深度学习工作站调研--结合政府采购网信息 - Superlova</title>
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<link rel="alternate" href="/atom.xml" title="Superlova" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Superlova</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期一, 五月 11日 2020, 11:59 中午
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    1.9k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                      7 分钟
+                  </span>
+                
+
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5 z-depth-3" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <div class="markdown-body">
+              <h1 id="服务器调研-2020年5月10日"><a href="#服务器调研-2020年5月10日" class="headerlink" title="服务器调研 2020年5月10日"></a>服务器调研 2020年5月10日</h1><p><strong>调研目标：</strong></p>
+<ul>
+<li>目前典型的计算机，包括商用台式机、工作站、服务器</li>
+<li>搭配目前典型的GPU卡</li>
+<li>GPU适配计算机，需要厂家网站公开的列表，特别是对于服务器。如果厂家没有，需要致电厂商（非销售商）的技术支持。</li>
+</ul>
+<h2 id="1-制约性能的典型项目"><a href="#1-制约性能的典型项目" class="headerlink" title="1. 制约性能的典型项目"></a>1. 制约性能的典型项目</h2><h3 id="1-1-主板"><a href="#1-1-主板" class="headerlink" title="1.1 主板"></a>1.1 主板</h3><p>Intel部分芯片组不支持PCIe 3.0接口，无法发挥显卡的最佳速度。</p>
+<h4 id="名词解释："><a href="#名词解释：" class="headerlink" title="名词解释："></a>名词解释：</h4><p><img src="/2020/05/11/深度学习工作站调研-结合政府采购网信息/2020-05-10-21-33-30.png" srcset="/img/loading.gif" alt><br><strong>PCI Express / PCI-e</strong><br>PCI-E的全名叫PCI Express，简称PCI-E，官方简称PCIe，他是计算机内部的一种高速总线。PCI-E既是通道，也是接口，当他以接口形式存在的时候，就是我们主板上那长长的槽。PCI-E接口目前最大的作用就是插显卡<br><img src="/2020/05/11/深度学习工作站调研-结合政府采购网信息/2020-05-10-21-32-30.png" srcset="/img/loading.gif" alt></p>
+<p><strong>PCI Express 修订版 / PCIe版本</strong><br>PCIe所能承受的带宽一般以版本和长度来区分，目前最流行的PCIe版本是3.0，最新的版本是4.0，目前只有高端主板支持4.0，只有比2080ti还要高端的显卡才需要4.0。</p>
+<p><strong>PCI Express 配置</strong><br>通俗的说就是插槽长度。X1长度是最短的，所能承受的带宽大约是986MB/S。X2长度就是2GB/S，X4长度就是4GB/S，那X16长度就是16GB/S。当前主流显卡，均采用PCIE×16插槽结构。只要具有PCIE×16插槽的主板，都是可以安装独立显卡的。<br>英特尔官网的意义没大看懂，真正有意义的是“支持的处理器 PCI Express 端口配置”这一项。</p>
+<p><strong>支持的处理器 PCI Express 端口配置</strong><br>以Z390主板为例，该主板1x16 or 2x8 or 1x8+2x4，意思就是可以插1个长度为16X的显卡，也可以插两个长度为8X的固态硬盘之类的，但是如果同时插上显卡和固态硬盘，就会出现抢通道的现象：显卡占用16个通道，两个固态占用16个通道，然而<strong>PCI Express 通道数的最大值</strong>就只有24个，通道不够用就会导致限速，甚至无法正常运转。</p>
+<p><img src="/2020/05/11/深度学习工作站调研-结合政府采购网信息/2020-05-10-22-13-34.png" srcset="/img/loading.gif" alt><br><img src="/2020/05/11/深度学习工作站调研-结合政府采购网信息/2020-05-10-22-13-57.png" srcset="/img/loading.gif" alt><br><img src="/2020/05/11/深度学习工作站调研-结合政府采购网信息/2020-05-10-22-14-07.png" srcset="/img/loading.gif" alt><br><img src="/2020/05/11/深度学习工作站调研-结合政府采购网信息/2020-05-10-22-14-15.png" srcset="/img/loading.gif" alt></p>
+<p>以上是当前在售处理器搭配主板（芯片组）的特性支持情况，仅供参考，并不是说某块主板用了上述某个芯片组芯片就会具备这么多的扩展接口及能力，具体还要看主板厂商针对这个版型作出什么样的“阉割”调整。</p>
+<h3 id="1-2-电源"><a href="#1-2-电源" class="headerlink" title="1.2 电源"></a>1.2 电源</h3><p><img src="/2020/05/11/深度学习工作站调研-结合政府采购网信息/2020-05-10-22-11-24.png" srcset="/img/loading.gif" alt="顶级游戏显卡及需要的电源功率大小"></p>
+<h2 id="2-目前典型计算机"><a href="#2-目前典型计算机" class="headerlink" title="2. 目前典型计算机"></a>2. 目前典型计算机</h2><p>服务器对显卡的支持不如工作站，台式机的性能过低，因此本调查汇聚于工作站查询。</p>
+<h3 id="2-1-服务器"><a href="#2-1-服务器" class="headerlink" title="2.1 服务器"></a>2.1 服务器</h3><p>服务器按外形划分可以划分为：塔式服务器、机架式服务器、刀片式服务器。<br>服务器除了一些低端的塔式机能用显卡以外，其他的都不支持显度卡，当然机架式服务器很薄根本就没有显卡的空间。<br>如果购买服务器，官方售后将不会主动为你安装个人家用系列显卡，转而推销商业计算卡。<br><img src="/2020/05/11/深度学习工作站调研-结合政府采购网信息/2020-05-10-15-26-49.png" srcset="/img/loading.gif" alt></p>
+<p>截至2020年5月，服务器热销品牌Top-10（取自<a href="http://top.zol.com.cn/compositor/server.html" target="_blank" rel="noopener">ZOL网</a>）：<br>Dell、华为、浪潮、联想、惠普、H3C、ThinkServer、中科曙光、宝德、IBM。</p>
+<h3 id="2-2-工作站"><a href="#2-2-工作站" class="headerlink" title="2.2 工作站"></a>2.2 工作站</h3><p>工作站的机箱主要以塔式为主，和一般家用主机机箱差距不大。<br>工作站对显卡的支持比服务器强很多，具体来说，工作站的主板对PCI-E的接口支持更好。</p>
+<p>以下价格和资料全部取自于北京市政府采购网。</p>
+<p><strong>神舟</strong><br>HFMPB2O8型号支持双路2080ti或TITAN<br><a href="http://114.255.53.119:81/bgpc_office_manage/produce/parmsInfo.htm?topPk=1r6e15444412038777n5&amp;tiitPk=BG_002X&amp;tioPk=" target="_blank" rel="noopener">HFMPB2O8</a>    78,016.00 自带2080ti<br><a href="http://114.255.53.119:81/bgpc_office_manage/produce/parmsInfo.htm?topPk=2g0v15681729710791z0&amp;tiitPk=BG_002X&amp;tioPk=" target="_blank" rel="noopener">HFMPB99K</a>  55,691.28   自带2080ti<br><a href="http://114.255.53.119:81/bgpc_office_manage/produce/parmsInfo.htm?topPk=6u7m15621197126648s6&amp;tiitPk=BG_002X&amp;tioPk=" target="_blank" rel="noopener">HFMPB3IR</a>  32,870.00   C422可更换更高级显卡<br><a href="http://114.255.53.119:81/bgpc_office_manage/produce/parmsInfo.htm?topPk=8n5x15444417182251i6&amp;tiitPk=BG_002X&amp;tioPk=" target="_blank" rel="noopener">HFMPB3J9</a>  29,980.00   自带2080</p>
+<p><strong>联想</strong><br><a href="http://114.255.53.119:81/bgpc_office_manage/produce/parmsInfo.htm?topPk=6h7y15571256822209c5&amp;tiitPk=BG_002X&amp;tioPk=" target="_blank" rel="noopener">Think Station P520</a>   46,920.00    C422可更换更高级显卡<br><a href="http://114.255.53.119:81/bgpc_office_manage/produce/parmsInfo.htm?topPk=1s8z15571265520623u2&amp;tiitPk=BG_002X&amp;tioPk=" target="_blank" rel="noopener">ThinkStation P720</a> 35,000.00   C622可更换更高级 </p>
+<p><strong>宏碁</strong><br><a href="http://114.255.53.119:81/bgpc_office_manage/produce/parmsInfo.htm?topPk=7w0g15281019011939v9&amp;tiitPk=BG_002X&amp;tioPk=" target="_blank" rel="noopener">AP150 F4</a> 38,500.00    C622可更换更高级 </p>
+<p><strong>浪潮</strong><br>浪潮是自研主板，不过其主板支持PCIe 16x，理论上只要供电足够即可安装包括2080Ti在内的显卡<br><a href="http://114.255.53.119:81/bgpc_office_manage/produce/parmsInfo.htm?topPk=3f4m15287143876139q2&amp;tiitPk=BG_002X&amp;tioPk=" target="_blank" rel="noopener">P8000</a>    37,260.00</p>
+<p><strong>惠普</strong><br><a href="http://114.255.53.119:81/bgpc_office_manage/produce/parmsInfo.htm?topPk=4g2q15281081290990x3&amp;tiitPk=BG_002X&amp;tioPk=" target="_blank" rel="noopener">HP Z4 G4</a>  15,900.00   C622可更换更高级<br><a href="http://114.255.53.119:81/bgpc_office_manage/produce/parmsInfo.htm?topPk=4v9p15281082398434h6&amp;tiitPk=BG_002X&amp;tioPk=" target="_blank" rel="noopener">HP Z6 G4</a>  23,500.00   C622可更换更高级<br><a href="http://114.255.53.119:81/bgpc_office_manage/produce/parmsInfo.htm?topPk=0z0m15314586871347z2&amp;tiitPk=BG_002X&amp;tioPk=" target="_blank" rel="noopener">HP Z8 G4</a>  35,800.00   C622可更换更高级 </p>
+<p><strong>苹果</strong><br>苹果的主板仅支持AMD的显卡，A卡不能用作深度学习。</p>
+<h3 id="2-3-商用台式机"><a href="#2-3-商用台式机" class="headerlink" title="2.3 商用台式机"></a>2.3 商用台式机</h3><p>即普通台式机。普通台式机难以支撑深度学习任务。</p>
+<h2 id="3-显卡介绍"><a href="#3-显卡介绍" class="headerlink" title="3. 显卡介绍"></a>3. 显卡介绍</h2><p>显卡分为Nvidia显卡和AMD显卡，其中Nvidia显卡可以用来深度学习训练和推理。</p>
+<p>比较显卡性能，可以去<a href="https://versus.com/cn" target="_blank" rel="noopener">这个网站</a></p>
+<h3 id="3-1-Nvidia显卡简介"><a href="#3-1-Nvidia显卡简介" class="headerlink" title="3.1 Nvidia显卡简介"></a>3.1 Nvidia显卡简介</h3><p><a href="https://www.bybusa.com/gpu-rank" target="_blank" rel="noopener">2020年显卡天梯图</a></p>
+<p><img src="/2020/05/11/深度学习工作站调研-结合政府采购网信息/2020-05-10-22-23-18.png" srcset="/img/loading.gif" alt="2020年显卡天梯图"></p>
+<p>目前最强的显卡是2080ti。预计在2020年底的3080ti发布之前，2080ti还会持续称霸显卡江湖。</p>
+<h3 id="3-2-游戏显卡"><a href="#3-2-游戏显卡" class="headerlink" title="3.2 游戏显卡"></a>3.2 游戏显卡</h3><p>对游戏显卡的调研，参考<a href="https://post.smzdm.com/p/a6lrwk3e/" target="_blank" rel="noopener">“什么值得买”上的调研</a>以及<a href="https://www.cnblogs.com/xiaozhi_5638/p/10923351.html" target="_blank" rel="noopener">这个网址</a>。</p>
+<p><img src="/2020/05/11/深度学习工作站调研-结合政府采购网信息/2020-05-10-22-09-38.png" srcset="/img/loading.gif" alt="游戏显卡一览"></p>
+<p><strong>Geforce系列</strong></p>
+<p>这个系列是销量最多、大众最为熟悉的显卡，一般用来打游戏。价格便宜，最新出来的旗舰卡RTX 2080Ti京东售价大概1w左右，根据不同的品牌，价格有所波动。低配置的便宜的一千就能买到。官方定位是消费级，但是它在深度学习上的表现也非常不错，很多人用来做推理、训练，单张卡的性能跟深度学习专业卡Tesla系列比起来其实差不太多，但是性价比却高很多。比如已经停产的GTX 1080显卡的参数基本和深度学习入门级显卡Tesla P4一样，用来做训练和推理的效果比Tesla P4还要好，可是GTX 1080一张卡才卖5000~6000左右，而Tesla P4要卖到1.4w。</p>
+<p>究其原因，很大程度上在于英伟达官方禁止使用GTX、RTX系列显卡用于深度学习等用途，一经使用，自动过保。除了商业考虑外，还包括：Tesla多块显卡合起来的性能不会受很大影响，且Tesla系列显卡功耗优化非常明显，基本都是被动散热，不提供风扇，更适合数据中心机房工作环境等。</p>
+<h3 id="3-3-计算显卡"><a href="#3-3-计算显卡" class="headerlink" title="3.3 计算显卡"></a>3.3 计算显卡</h3><p>专业级显卡的介绍参考<a href="https://product.pconline.com.cn/itbk/diy/graphics/1802/10846244.html" target="_blank" rel="noopener">“什么值得买”上的调研</a>以及<a href="https://www.cnblogs.com/xiaozhi_5638/p/10923351.html" target="_blank" rel="noopener">这个网址</a>。</p>
+<p><strong>Quadro系列</strong><br>Quadro系列显卡一般用于特定行业，比如设计、建筑等，图像处理专业显卡，比如CAD、Maya等软件，一般人很少用到，价格相对来讲也稍微贵一些，最新的包括RTX 3000/4000/6000/8000型号。</p>
+<p><strong>Tesla系列</strong><br>Tesla系列显卡定位并行计算，一般用于数据中心，具体点，比如用于深度学习，做训练、推理等。阿里云、Amazon云有非常多的GPU服务器，基本都采用Tesla系列显卡。这个系列显卡有个特别明显的特征，那就是贵。Tesla系列入门级显卡 Tesla P4，前面提到过，用来做深度学习的效果比GTX 1080还差，但是价格是后者的3倍多。像其他更高级别的Tesla V100、Tesla P100 价格高达8w、4w，这种价位的显卡虽然性能强劲，但是一般人是买不起的，只有企业数据中心才会部署这种显卡。</p>
+<h3 id="3-4-显卡性能指标"><a href="#3-4-显卡性能指标" class="headerlink" title="3.4 显卡性能指标"></a>3.4 显卡性能指标</h3><p>本部分请参考<a href="https://www.cnblogs.com/xiaozhi_5638/p/10923351.html" target="_blank" rel="noopener">这里</a>。</p>
+<h3 id="3-4-显卡罗列"><a href="#3-4-显卡罗列" class="headerlink" title="3.4 显卡罗列"></a>3.4 显卡罗列</h3><p>政府采购网上，值得采购的显卡如下</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>型号</th>
+<th>价格</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>p5000</td>
+<td>27000</td>
+</tr>
+<tr>
+<td>p6000</td>
+<td>43500</td>
+</tr>
+<tr>
+<td>2080</td>
+<td>13500</td>
+</tr>
+<tr>
+<td>k4000</td>
+<td>42450</td>
+</tr>
+<tr>
+<td>p4000</td>
+<td>6800</td>
+</tr>
+<tr>
+<td>2070s</td>
+<td>8000</td>
+</tr>
+<tr>
+<td>8000</td>
+<td>93350</td>
+</tr>
+<tr>
+<td>2080ti</td>
+<td>16000</td>
+</tr>
+<tr>
+<td>1080ti</td>
+<td>8620</td>
+</tr>
+<tr>
+<td>p4</td>
+<td>28000</td>
+</tr>
+<tr>
+<td>2080</td>
+<td>10290</td>
+</tr>
+<tr>
+<td>2060</td>
+<td>5000</td>
+</tr>
+<tr>
+<td>titan rtx</td>
+<td>30000</td>
+</tr>
+<tr>
+<td>p1000</td>
+<td>3500</td>
+</tr>
+<tr>
+<td>2070</td>
+<td>7500</td>
+</tr>
+<tr>
+<td>m2000</td>
+<td>2982</td>
+</tr>
+<tr>
+<td>titan v</td>
+<td>37500</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+            </div>
+            <hr>
+            <div>
+              <p>
+                
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/record/">record</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/PCIe/">PCIe</a>
+                    
+                      <a class="hover-with-bg" href="/tags/显卡/">显卡</a>
+                    
+                      <a class="hover-with-bg" href="/tags/工作站/">工作站</a>
+                    
+                  </span>
+                
+              </p>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc-start"></div>
+<div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var post = $('#post');
+      var toc = $('#toc');
+      var tocLimMax = post.offset().top + post.height() - navHeight;
+
+      $(window).scroll(function () {
+        var tocLimMin = $('#toc-start').offset().top - navHeight;
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': navHeight,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+      var offset = $('#board-ctn').css('margin-right')
+      $('#toc-ctn').css({
+        'right': offset
+      })
+    });
+  </script>
+
+
+
+
+
+
+
+
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-160806707-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+
+  
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "深度学习工作站调研--结合政府采购网信息&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>
