@@ -2,6 +2,34 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://superlova.github.io/2020/05/19/numpy%E4%B8%AD%E7%9A%84einsum%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/</loc>
+    
+    <lastmod>2020-05-19T12:46:49.658Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://superlova.github.io/2020/05/19/numpy%E4%B8%ADaxis%E7%9A%84%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3/</loc>
+    
+    <lastmod>2020-05-19T10:36:47.657Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://superlova.github.io/2020/05/18/Python%E8%A3%85%E9%A5%B0%E5%99%A8%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E9%9A%BE%E4%BB%A5%E7%90%86%E8%A7%A3/</loc>
+    
+    <lastmod>2020-05-19T10:06:38.373Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://superlova.github.io/2020/05/19/%E9%97%AD%E5%8C%85%E7%9A%84%E8%BF%B7%E6%80%9D/</loc>
+    
+    <lastmod>2020-05-19T08:05:48.783Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://superlova.github.io/2020/05/11/chrome%E5%8D%87%E7%BA%A7%E7%89%88%E6%9C%AC%E5%A4%B1%E8%B4%A5%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/</loc>
     
     <lastmod>2020-05-11T04:22:34.367Z</lastmod>

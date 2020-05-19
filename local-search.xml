@@ -4,6 +4,122 @@
   
   
   <entry>
+    <title>numpy中的einsum使用方法</title>
+    <link href="/2020/05/19/numpy%E4%B8%AD%E7%9A%84einsum%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/"/>
+    <url>/2020/05/19/numpy%E4%B8%AD%E7%9A%84einsum%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/</url>
+    
+    <content type="html"><![CDATA[<p>本文将介绍爱因斯坦求和约定，以及在numpy中的使用<br><a id="more"></a></p><p>numpy里面有很多奇技淫巧，爱因斯坦求和约定就是其中之一。</p><p>爱因斯坦求和约定能够很方便和简介地表示点积、外积、转置、矩阵-向量乘法、矩阵-矩阵乘法等，这在深度学习公式推导中的用处很大。</p><p>【未完成】</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>notes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Python</tag>
+      
+      <tag>numpy</tag>
+      
+      <tag>einsum</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>numpy中axis的简单理解</title>
+    <link href="/2020/05/19/numpy%E4%B8%ADaxis%E7%9A%84%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3/"/>
+    <url>/2020/05/19/numpy%E4%B8%ADaxis%E7%9A%84%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3/</url>
+    
+    <content type="html"><![CDATA[<p>本文将介绍numpy中的axis<br><a id="more"></a></p><p>我对于numpy中的axis的理解，一直处于似懂非懂、似是而非的状态。看到网上大神的文章，也只能点个赞之后，该不会还是不会。每次看完博客，都会觉得自己懂了；但是每次使用的时候，又要想老半天才行。因此今天我想借此机会，彻底扫清使用numpy时，axis的障碍。</p><p>在numpy中，数据的基本类型是array。array有个基本的数据属性，是它的维度。</p><p>比如下面的这个array，在逻辑上来看这就是个2维的数据，是一个矩阵。</p><pre><code class="lang-python">A = np.random.randint(0, 19, 9).reshape(3, 3)print(A)[[12 15  0] [ 3  3  7] [ 9 18  4]]</code></pre><p>接下来我要对其中的元素进行求和。</p><pre><code class="lang-python">print(np.sum(A))print(np.sum(A, axis=0))print(np.sum(A, axis=1))71[24 36 11][27 13 31]</code></pre><p>显然，第一个sum是对所有元素累加。第二个参数为axis=0的求和，则是这样计算的：</p><p><code>A[0][X] + A[1][X] + A[2][X]</code><br><code>--|---------|---------|----</code></p><p>也就是说，axis=0意味着在求和的过程中，只有A的第0个分量会变化，将第0个分量的所有情况穷举出来，再作为被操作元素，求和之。</p><p>第0个分量的元素计算完毕、得到一个结果时，计算并没有结束，因为我们的X还有很多种可能。</p><p>同理，axis=1时，变化的只有A的第1个（从逻辑上讲是第二个）分量有变化：</p><p><code>A[X][0] + A[X][1] + A[X][2]</code><br><code>-----|---------|---------|-</code></p><p>把该结论推广到更高维度的数据也不会有问题。我们看一个4维的张量是如何指定axis求和的：</p><pre><code class="lang-python">np.random.seed(0)A = np.random.randint(0, 9, 16).reshape(2, 2, 2, 2)print(&quot;orignal A&quot;, A)orignal A [[[[5 0]   [3 3]]  [[7 3]   [5 2]]] [[[4 7]   [6 8]]  [[8 1]   [6 7]]]]</code></pre><pre><code class="lang-python">print(np.sum(A))75</code></pre><pre><code class="lang-python">print(np.sum(A, axis=0))# 相当于print(A[0,:,:,:]+A[1,:,:,:])[[[ 9  7]  [ 9 11]] [[15  4]  [11  9]]]</code></pre><pre><code class="lang-python">print(np.sum(A, axis=1))# 相当于print(A[:,0,:,:] + A[:,1,:,:])[[[12  3]  [ 8  5]] [[12  8]  [12 15]]]</code></pre><pre><code class="lang-python">print(np.sum(A, axis=2))# 相当于print(A[:,:,0,:] + A[:,:,1,:])[[[ 8  3]  [12  5]] [[10 15]  [14  8]]]</code></pre><pre><code class="lang-python">print(np.sum(A, axis=3))# 相当于print(A[:,:,:,0]+A[:,:,:,1])[[[ 5  6]  [10  7]] [[11 14]  [ 9 13]]]</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>notes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Python</tag>
+      
+      <tag>numpy</tag>
+      
+      <tag>axis</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>闭包的迷思</title>
+    <link href="/2020/05/19/%E9%97%AD%E5%8C%85%E7%9A%84%E8%BF%B7%E6%80%9D/"/>
+    <url>/2020/05/19/%E9%97%AD%E5%8C%85%E7%9A%84%E8%BF%B7%E6%80%9D/</url>
+    
+    <content type="html"><![CDATA[<p>闭包是什么？如果你与我有同样的疑问，敬请阅读。<br><a id="more"></a></p><h2 id="什么是闭包？"><a href="#什么是闭包？" class="headerlink" title="什么是闭包？"></a><a href="https://www.ibm.com/developerworks/cn/linux/l-cn-closure/#note_1" target="_blank" rel="noopener">什么是闭包？</a></h2><p>这个问题困扰了我很长时间。</p><p>第一次接触闭包这个概念，是在“形式语言”这门课上。好像“离散数学”这门课上也教过闭包，但是这都不重要，因为我们这里讨论的闭包与数学上的闭包没什么关系。本文讨论的闭包，是程序设计语言中的闭包。</p><h3 id="专业概念："><a href="#专业概念：" class="headerlink" title="专业概念："></a>专业概念：</h3><p><img src="/2020/05/19/闭包的迷思/2020-05-19-15-20-04.png" srcset="/img/loading.gif" alt></p><p>闭包是在其词法上下文中引用了自由变量的<strong>函数</strong>，自由变量是指除局部变量以外的变量。</p><p>又有一种说法是闭包<strong>不是函数</strong>，而是由函数和与其相关的引用环境组合而成的实体。</p><p><a href="https://zh.wikipedia.org/wiki/%E9%97%AD%E5%8C%85_(%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6" target="_blank" rel="noopener">维基百科</a>)的解释：闭包在实现上是一个结构体，它存储了一个函数（通常是其入口地址）和一个关联的环境（相当于一个符号查找表）。</p><p>看到这里我彻底懵逼了。是是是，你们说的都对！<br><img src="/2020/05/19/闭包的迷思/2020-05-18-14-59-42.png" srcset="/img/loading.gif" alt></p><p>身为新手小白，我需要通过判断闭包是做什么的，之后再讨论为什么叫做闭包。</p><h2 id="闭包有什么用？"><a href="#闭包有什么用？" class="headerlink" title="闭包有什么用？"></a>闭包有什么用？</h2><p>如果你是从C++来的，那么阅读下面没有什么障碍。如果不是也没有关系，反正各种语言的设计原理都是类似的，只要你掌握的语言有<strong>匿名函数</strong>的功能即可。</p><p>我们都知道，C++11标准引入了lambda表达式，就是一个匿名函数。这个函数长成这样：</p><pre><code class="lang-cpp">[](const string&amp;a, const string&amp;b) {    return a.size() &lt; b.size();};</code></pre><p>上面的这个匿名函数负责比较两个字符串的大小。匿名函数的好处就是节省代码。</p><p>比如我现在想要实现自定义字符串排序函数，按照字符串长度从小到大排序，而不是按照字典排序。这个排序函数就可以用lambda表达式定义。</p><pre><code class="lang-cpp">stable_sort(words.begin(), words.end(),             [](const string&amp;a, const string&amp;b) {                return a.size() &lt; b.size();};)</code></pre><p>lambda前面的中括号是干啥的？是用来捕获外部变量的。比如我想判断字符串长度有没有大于阈值threshold，这个threshold是在函数外面定义的。按照C++的语法，一般的函数不能访问函数外部的变量。但是lambda可以把外部的变量“捕获”，就像下面这样：</p><pre><code class="lang-cpp">int threshold = 10;[threshold](const string&amp; a) {    return a.size() &gt; threshold;};</code></pre><p>可以看到，这个lambda不但使用了lambda内部的变量和参数，而且还“偷取”了不属于它的全局变量threshold。<strong>我们把lambda表达式定义的这种函数叫做闭包。</strong></p><h2 id="为什么叫做闭包？"><a href="#为什么叫做闭包？" class="headerlink" title="为什么叫做闭包？"></a>为什么叫做闭包？</h2><p>有人说这不是脑子有坑吗，闭包哪里“闭”了？这明明比普通函数更“开放”好吧？是不是名字起错了？</p><p>其实不然。闭包并不是对内部封闭，而是给当前外部环境取了个快照，相当于封闭了外部状态。下面是著名营养快线经销商vczh的回答：</p><p><img src="/2020/05/19/闭包的迷思/2020-05-19-15-40-47.png" srcset="/img/loading.gif" alt></p><h2 id="Python中的闭包"><a href="#Python中的闭包" class="headerlink" title="Python中的闭包"></a>Python中的闭包</h2><p>Python中写闭包就要方便多了，毕竟Python的设计哲学就是“一切皆对象”，函数都是对象。</p><p>我们来看这样一个问题：利用闭包和生成器返回一个计数器函数，每次调用它返回递增整数。</p><pre><code class="lang-python"># 利用闭包和生成器返回一个计数器函数，每次调用它返回递增整数。def createCounter():        [...]# 检验部分counterA = createCounter()print(counterA(), counterA(), counterA(), counterA(), counterA()) # 1 2 3 4 5counterB = createCounter()if [counterB(), counterB(), counterB(), counterB()] == [1, 2, 3, 4]:    print(&#39;测试通过!&#39;)else:    print(&#39;测试失败!&#39;)</code></pre><p>你想怎么写？我能想到的，就是在函数内部定义一个生成器，每次调用生成一个整数；然后利用next函数构造一个迭代器，每次调用让这个整数+1，最后返回这个迭代器。</p><pre><code class="lang-python">def createCounter():        def counter():        &#39;&#39;&#39;定义一个生成器        &#39;&#39;&#39;        n = 0        while 1:            n += 1            yield n    g = counter() # 取生成器    def g_fn():        &#39;&#39;&#39;定义一个迭代器，利用next迭代生成器g        &#39;&#39;&#39;        return next(g)    return g_fn # 返回这个迭代器</code></pre><p>我们看一下上面这个函数，函数内部定义的<code>g_fn</code>函数，它使用了外部变量<code>g</code>，也就是说<code>g_fn</code>是个闭包。</p><h2 id="总结一下："><a href="#总结一下：" class="headerlink" title="总结一下："></a>总结一下：</h2><p><strong>引用了自由变量的函数，就是闭包。</strong></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>notes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>C++</tag>
+      
+      <tag>Python</tag>
+      
+      <tag>closure</tag>
+      
+      <tag>lambda</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Python装饰器为什么这么难以理解</title>
+    <link href="/2020/05/18/Python%E8%A3%85%E9%A5%B0%E5%99%A8%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E9%9A%BE%E4%BB%A5%E7%90%86%E8%A7%A3/"/>
+    <url>/2020/05/18/Python%E8%A3%85%E9%A5%B0%E5%99%A8%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E9%9A%BE%E4%BB%A5%E7%90%86%E8%A7%A3/</url>
+    
+    <content type="html"><![CDATA[<p>本文将介绍Python中的装饰器，以及设计模式中的装饰模式。<br><a id="more"></a></p><p>从C/C++或Java迁移来的新Python程序员一定会对Python的装饰器功能感到陌生，尤其是在函数定义前加<code>@func</code>这一功能感到困惑。装饰器到底是什么？Python背后做了什么？在仔细研究网上的资料之后，我总结了此文，与大家分享。</p><p><a href="https://www.liaoxuefeng.com/wiki/1016959663602400/1017451662295584" target="_blank" rel="noopener">参考文章</a></p><h2 id="1-提出需求"><a href="#1-提出需求" class="headerlink" title="1. 提出需求"></a>1. 提出需求</h2><p>我们想在函数增加一点功能，比如每次函数执行之前打印一段话，但是又不想更改函数的定义。</p><p>这种想要给原来函数增加需求的同时，不修改原来代码的行为，非常有“面向对象编程思想”内味儿，因为它符合“开放封闭原则”。</p><p>现在就有请大名鼎鼎的设计模式之——装饰器模式登场！</p><blockquote><p>装饰器模式（Decorator Pattern）允许向一个现有的对象添加新的功能，同时又不改变其结构。这种类型的设计模式属于结构型模式，它是作为现有的类的一个包装。</p></blockquote><p><img src="/2020/05/18/Python装饰器为什么这么难以理解/2020-05-19-17-27-00.png" srcset="/img/loading.gif" alt></p><h2 id="2-Python中的装饰器模式"><a href="#2-Python中的装饰器模式" class="headerlink" title="2. Python中的装饰器模式"></a>2. Python中的装饰器模式</h2><p>在Python中实现装饰器模式很方便。在Python中，有个功能模块直接就叫装饰器。在Python中的装饰器是指一个返回其他函数的函数。外部的高阶函数在执行内部的原函数的前后，再私藏一点干货，然后把修改后的函数对象赋值给原来的函数变量。这样就能在不修改原函数的基础上，增加一些功能。</p><p>总结下来，实现装饰器三步走：</p><ol><li>定义原函数</li><li>定义高阶函数，在里面除了执行原函数之外，再添加一些功能</li><li>将高阶函数对象赋值为原函数变量，以后调用原函数的时候都会执行高阶函数了</li></ol><pre><code class="lang-python">def log(func):    def wrapper(*args, **kw):        print(&#39;call %s():&#39; % func.__name__)        return func(*args, **kw)    return wrapper</code></pre><p>上面的函数，输入参数为原函数变量，在内部构造了一个高阶函数对象wrapper，wrapper里面负责执行一个print语句。最后返回构造好的wrapper。</p><p>以后我们使用<code>func</code>的时候，只要使用<code>log(func)</code>就可以在执行<code>func</code>的同时，打印一段话了。</p><p>看起来不咋地啊，毕竟我们还是修改了代码，把<code>func</code>全都替换成<code>log(func)</code>才能执行。</p><p>或者我们来这样一句：</p><pre><code class="lang-python">func = log(func)</code></pre><p>这个log函数就是一个装饰器，它现在装饰的是func函数。</p><h2 id="3-Python的语法糖"><a href="#3-Python的语法糖" class="headerlink" title="3. Python的语法糖"></a>3. Python的语法糖</h2><p>借助Python的@语法，把decorator置于函数的定义处，我们可以直接完成<code>func = log(func)</code>的操作。</p><pre><code class="lang-python">@logdef basic_fun():    print(&quot;basic_func&quot;)</code></pre><p>以后使用basic_func就会默认执行log(basic_func)了。</p><h2 id="4-改函数名"><a href="#4-改函数名" class="headerlink" title="4. 改函数名"></a>4. 改函数名</h2><p>Python的设计思想就是“一切皆对象”，就连函数也不例外。既然是对象，那么对象可以赋值给一个变量，也可以直接使用。通过变量也可以调用该函数对象。</p><pre><code class="lang-python">def f():    return 0f_obj = f # 注意，这里f为函数名，不加括号则为将函数对象赋值为变量f_res = f() # f后面跟了括号，则此时执行函数，并把返回值赋值给变量</code></pre><p>Python有个特别方便的功能，那就是函数对象可以在运行时打印自己的名字。接上面的代码：</p><pre><code class="lang-python">print(f.__name__) # fprint(f_obj.__name__) # 本质上还是调用上面的函数对象，结果仍为f</code></pre><p>前面我们做了赋值操作<code>func = log(func)</code>，但是其变量代表的函数名称发生了变化。</p><pre><code class="lang-python">print(func.__name__) # funcfunc = log(func)print(func.__name__) # wrapper</code></pre><p>我们希望装饰器完全包裹原函数，也就是说令外界环境感觉不到内部逻辑的变化。那么就需要我们把函数名字也给保持住。这个功能不难，我们使用<code>functools</code>库中自带的装饰器<code>wraps</code>就可以保持函数名称了。</p><pre><code class="lang-python">import functoolsdef log(func):    @functools.wraps(func) # 将被装饰函数名变成参数中函数名    def wrapper(*args, **kw):        print(&#39;call %s():&#39; % func.__name__)        return func(*args, **kw)    return wrapper</code></pre><h2 id="5-带参数的装饰器"><a href="#5-带参数的装饰器" class="headerlink" title="5. 带参数的装饰器"></a>5. 带参数的装饰器</h2><p>在上面我们可以看到，装饰器也是可以带参数的。这是怎么做到的呢？</p><p>其实我们不难想到，只需装饰一个装饰器即可。比如下面这个问题：</p><p><strong>实现log(str)：在函数每次执行前打印str和函数名</strong></p><pre><code class="lang-python">@log(&#39;end&#39;)def now():    print(np.datetime64(&#39;today&#39;, &#39;D&#39;))&gt;&gt;&gt; now()end now():2019-10-13</code></pre><p>解法如下：</p><pre><code class="lang-python">import functoolsdef log(text):    def decorator(func):        @functools.wraps(func)        def wrapper(*args, **kw):            print(&#39;%s %s():&#39; % (text, func.__name__))            return func(*args, **kw)        return wrapper    return decorator</code></pre><p>相当于<code>fun = log(&#39;text&#39;)(fun)</code>，实际上函数变成了<code>wrapper</code><br>但是由于<code>@functools.wraps(func)</code>，函数的<code>__name__</code>不变</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>notes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>decorator</tag>
+      
+      <tag>Python</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>深度学习工作站调研--结合政府采购网信息</title>
     <link href="/2020/05/11/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%B7%A5%E4%BD%9C%E7%AB%99%E8%B0%83%E7%A0%94-%E7%BB%93%E5%90%88%E6%94%BF%E5%BA%9C%E9%87%87%E8%B4%AD%E7%BD%91%E4%BF%A1%E6%81%AF/"/>
     <url>/2020/05/11/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%B7%A5%E4%BD%9C%E7%AB%99%E8%B0%83%E7%A0%94-%E7%BB%93%E5%90%88%E6%94%BF%E5%BA%9C%E9%87%87%E8%B4%AD%E7%BD%91%E4%BF%A1%E6%81%AF/</url>
@@ -163,11 +279,11 @@
       
       <tag>C++</tag>
       
+      <tag>STL</tag>
+      
       <tag>string</tag>
       
       <tag>regex</tag>
-      
-      <tag>STL</tag>
       
     </tags>
     
@@ -194,11 +310,11 @@
       
       <tag>C++</tag>
       
-      <tag>STL</tag>
-      
       <tag>map</tag>
       
       <tag>set</tag>
+      
+      <tag>STL</tag>
       
     </tags>
     
