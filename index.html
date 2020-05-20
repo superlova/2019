@@ -348,7 +348,7 @@
     
       <div class="col-12 col-md-4 m-auto">
         <a href="/2020/05/11/深度学习工作站调研-结合政府采购网信息/" target="_blank">
-          <img src="/img/2020-05-10-21-32-30.png" srcset="/img/loading.gif" alt="深度学习工作站调研--结合政府采购网信息"
+          <img src="/img/pcie.png" srcset="/img/loading.gif" alt="深度学习工作站调研--结合政府采购网信息"
                class="index-img img-fluid rounded index-thumbnails">
         </a>
       </div>
@@ -452,7 +452,7 @@ GPU适配计算机，需要厂家网站公开的列表，特别是对于服务�
     
       <div class="col-12 col-md-4 m-auto">
         <a href="/2020/03/25/testRNN论文阅读笔记/" target="_blank">
-          <img src="/img/rnn.jpg" srcset="/img/loading.gif" alt="testRNN--Coverage-guided Testing on Recurrent Neural Networks 论文阅读笔记"
+          <img src="/img/rnn.png" srcset="/img/loading.gif" alt="testRNN--Coverage-guided Testing on Recurrent Neural Networks 论文阅读笔记"
                class="index-img img-fluid rounded index-thumbnails">
         </a>
       </div>
@@ -502,7 +502,7 @@ GPU适配计算机，需要厂家网站公开的列表，特别是对于服务�
     
       <div class="col-12 col-md-4 m-auto">
         <a href="/2020/03/25/RNN-Test论文阅读笔记/" target="_blank">
-          <img src="/img/testing.jpg" srcset="/img/loading.gif" alt="RNN-Test--Adversarial Testing Framework for Recurrent Neural Network Systems 论文阅读笔记"
+          <img src="/img/testing.png" srcset="/img/loading.gif" alt="RNN-Test--Adversarial Testing Framework for Recurrent Neural Network Systems 论文阅读笔记"
                class="index-img img-fluid rounded index-thumbnails">
         </a>
       </div>
@@ -845,7 +845,7 @@ GPU适配计算机，需要厂家网站公开的列表，特别是对于服务�
         $(this).wrap(element);
       }
     );
-  </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </script>
 
 
 
@@ -858,5 +858,20 @@ GPU适配计算机，需要厂家网站公开的列表，特别是对于服务�
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>
