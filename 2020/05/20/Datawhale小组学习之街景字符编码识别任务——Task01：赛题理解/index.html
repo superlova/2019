@@ -332,7 +332,8 @@ for idx in range(arr.shape[1]):
 <p>import torch<br>torch.manual_seed(0)<br>torch.backends.cudnn.deterministic = False<br>torch.backends.cudnn.benchmark = True</p>
 <p>import torchvision.models as models<br>import torchvision.transforms as transforms<br>import torchvision.datasets as datasets<br>import torch.nn as nn<br>import torch.nn.functional as F<br>import torch.optim as optim<br>from torch.autograd import Variable<br>from torch.utils.data.dataset import Dataset</p>
 <pre><code>
-- #### 步骤1：定义好读取图像的Dataset     
+#### 步骤1：定义好读取图像的Dataset
+
 ```python
 class SVHNDataset(Dataset):
     def __init__(self, img_path, img_label, transform=None):
@@ -356,26 +357,48 @@ class SVHNDataset(Dataset):
 
     def __len__(self):
         return len(self.img_path)
-</code></pre><ul>
-<li><h4 id="步骤2：定义好训练数据和验证数据的Dataset"><a href="#步骤2：定义好训练数据和验证数据的Dataset" class="headerlink" title="步骤2：定义好训练数据和验证数据的Dataset"></a>步骤2：定义好训练数据和验证数据的Dataset</h4>```python<br>train_path = glob.glob(‘../input/train/*.png’)<br>train_path.sort()<br>train_json = json.load(open(‘../input/train.json’))<br>train_label = [train_json[x][‘label’] for x in train_json]<br>print(len(train_path), len(train_label))</li>
-</ul>
-<p>train_loader = torch.utils.data.DataLoader(<br>    SVHNDataset(train_path, train_label,<br>                transforms.Compose([<br>                    transforms.Resize((64, 128)),<br>                    transforms.RandomCrop((60, 120)),<br>                    transforms.ColorJitter(0.3, 0.3, 0.2),<br>                    transforms.RandomRotation(5),<br>                    transforms.ToTensor(),<br>                    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])<br>    ])),<br>    batch_size=40,<br>    shuffle=True,<br>    num_workers=10,<br>)</p>
-<p>val_path = glob.glob(‘../input/val/*.png’)<br>val_path.sort()<br>val_json = json.load(open(‘../input/val.json’))<br>val_label = [val_json[x][‘label’] for x in val_json]<br>print(len(val_path), len(val_label))</p>
-<p>val_loader = torch.utils.data.DataLoader(<br>    SVHNDataset(val_path, val_label,<br>                transforms.Compose([<br>                    transforms.Resize((60, 120)),</p>
-<pre><code>                # transforms.ColorJitter(0.3, 0.3, 0.2),
-                # transforms.RandomRotation(5),
-                transforms.ToTensor(),
-                transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-])), 
-batch_size=40, 
-shuffle=False, 
-num_workers=10,
-</code></pre><p>)</p>
-<pre><code>
+</code></pre><h4 id="步骤2：定义好训练数据和验证数据的Dataset"><a href="#步骤2：定义好训练数据和验证数据的Dataset" class="headerlink" title="步骤2：定义好训练数据和验证数据的Dataset"></a>步骤2：定义好训练数据和验证数据的Dataset</h4><pre><code class="lang-python">train_path = glob.glob(&#39;../input/train/*.png&#39;)
+train_path.sort()
+train_json = json.load(open(&#39;../input/train.json&#39;))
+train_label = [train_json[x][&#39;label&#39;] for x in train_json]
+print(len(train_path), len(train_label))
 
-- #### 步骤3：定义好字符分类模型，使用renset18的模型作为特征提取模块     
-```python
-class SVHN_Model1(nn.Module):
+train_loader = torch.utils.data.DataLoader(
+    SVHNDataset(train_path, train_label,
+                transforms.Compose([
+                    transforms.Resize((64, 128)),
+                    transforms.RandomCrop((60, 120)),
+                    transforms.ColorJitter(0.3, 0.3, 0.2),
+                    transforms.RandomRotation(5),
+                    transforms.ToTensor(),
+                    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+    ])), 
+    batch_size=40, 
+    shuffle=True, 
+    num_workers=10,
+)
+
+val_path = glob.glob(&#39;../input/val/*.png&#39;)
+val_path.sort()
+val_json = json.load(open(&#39;../input/val.json&#39;))
+val_label = [val_json[x][&#39;label&#39;] for x in val_json]
+print(len(val_path), len(val_label))
+
+val_loader = torch.utils.data.DataLoader(
+    SVHNDataset(val_path, val_label,
+                transforms.Compose([
+                    transforms.Resize((60, 120)),
+                    # transforms.ColorJitter(0.3, 0.3, 0.2),
+                    # transforms.RandomRotation(5),
+                    transforms.ToTensor(),
+                    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+    ])), 
+    batch_size=40, 
+    shuffle=False, 
+    num_workers=10,
+)
+</code></pre>
+<h4 id="步骤3：定义好字符分类模型，使用renset18的模型作为特征提取模块"><a href="#步骤3：定义好字符分类模型，使用renset18的模型作为特征提取模块" class="headerlink" title="步骤3：定义好字符分类模型，使用renset18的模型作为特征提取模块"></a>步骤3：定义好字符分类模型，使用renset18的模型作为特征提取模块</h4><pre><code class="lang-python">class SVHN_Model1(nn.Module):
     def __init__(self):
         super(SVHN_Model1, self).__init__()
 
@@ -400,41 +423,13 @@ class SVHN_Model1(nn.Module):
         c4 = self.fc4(feat)
         c5 = self.fc5(feat)
         return c1, c2, c3, c4, c5
-</code></pre><ul>
-<li><h4 id="步骤4：定义好训练、验证和预测模块"><a href="#步骤4：定义好训练、验证和预测模块" class="headerlink" title="步骤4：定义好训练、验证和预测模块"></a>步骤4：定义好训练、验证和预测模块</h4><p>```python<br>def train(train_loader, model, criterion, optimizer):</p>
-<h1 id="切换模型为训练模式"><a href="#切换模型为训练模式" class="headerlink" title="切换模型为训练模式"></a>切换模型为训练模式</h1><p>  model.train()<br>  train_loss = []</p>
-<p>  for i, (input, target) in enumerate(train_loader):</p>
-<pre><code>  if use_cuda:
-      input = input.cuda()
-      target = target.cuda()
+</code></pre>
+<h4 id="步骤4：定义好训练、验证和预测模块"><a href="#步骤4：定义好训练、验证和预测模块" class="headerlink" title="步骤4：定义好训练、验证和预测模块"></a>步骤4：定义好训练、验证和预测模块</h4><pre><code class="lang-python">def train(train_loader, model, criterion, optimizer):
+    # 切换模型为训练模式
+    model.train()
+    train_loss = []
 
-  c0, c1, c2, c3, c4 = model(input)
-  loss = criterion(c0, target[:, 0]) + \
-          criterion(c1, target[:, 1]) + \
-          criterion(c2, target[:, 2]) + \
-          criterion(c3, target[:, 3]) + \
-          criterion(c4, target[:, 4])
-
-  # loss /= 6
-  optimizer.zero_grad()
-  loss.backward()
-  optimizer.step()
-
-  if i % 100 == 0:
-      print(loss.item())
-
-  train_loss.append(loss.item())
-</code></pre><p>  return np.mean(train_loss)</p>
-</li>
-</ul>
-<p>def validate(val_loader, model, criterion):</p>
-<pre><code># 切换模型为预测模型
-model.eval()
-val_loss = []
-
-# 不记录模型梯度信息
-with torch.no_grad():
-    for i, (input, target) in enumerate(val_loader):
+    for i, (input, target) in enumerate(train_loader):
         if use_cuda:
             input = input.cuda()
             target = target.cuda()
@@ -445,39 +440,71 @@ with torch.no_grad():
                 criterion(c2, target[:, 2]) + \
                 criterion(c3, target[:, 3]) + \
                 criterion(c4, target[:, 4])
-        # loss /= 6
-        val_loss.append(loss.item())
-return np.mean(val_loss)
-</code></pre><p>def predict(test_loader, model, tta=10):<br>    model.eval()<br>    test_pred_tta = None</p>
-<pre><code># TTA 次数
-for _ in range(tta):
-    test_pred = []
 
+        # loss /= 6
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+
+        if i % 100 == 0:
+            print(loss.item())
+
+        train_loss.append(loss.item())
+    return np.mean(train_loss)
+
+def validate(val_loader, model, criterion):
+    # 切换模型为预测模型
+    model.eval()
+    val_loss = []
+
+    # 不记录模型梯度信息
     with torch.no_grad():
-        for i, (input, target) in enumerate(test_loader):
+        for i, (input, target) in enumerate(val_loader):
             if use_cuda:
                 input = input.cuda()
+                target = target.cuda()
 
             c0, c1, c2, c3, c4 = model(input)
-            output = np.concatenate([
-                c0.data.numpy(), 
-                c1.data.numpy(),
-                c2.data.numpy(), 
-                c3.data.numpy(),
-                c4.data.numpy()], axis=1)
-            test_pred.append(output)
+            loss = criterion(c0, target[:, 0]) + \
+                    criterion(c1, target[:, 1]) + \
+                    criterion(c2, target[:, 2]) + \
+                    criterion(c3, target[:, 3]) + \
+                    criterion(c4, target[:, 4])
+            # loss /= 6
+            val_loss.append(loss.item())
+    return np.mean(val_loss)
 
-    test_pred = np.vstack(test_pred)
-    if test_pred_tta is None:
-        test_pred_tta = test_pred
-    else:
-        test_pred_tta += test_pred
+def predict(test_loader, model, tta=10):
+    model.eval()
+    test_pred_tta = None
 
-return test_pred_tta
-</code></pre><pre><code>
-- #### 步骤5：迭代训练和验证模型     
-```python
-model = SVHN_Model1()
+    # TTA 次数
+    for _ in range(tta):
+        test_pred = []
+
+        with torch.no_grad():
+            for i, (input, target) in enumerate(test_loader):
+                if use_cuda:
+                    input = input.cuda()
+
+                c0, c1, c2, c3, c4 = model(input)
+                output = np.concatenate([
+                    c0.data.numpy(), 
+                    c1.data.numpy(),
+                    c2.data.numpy(), 
+                    c3.data.numpy(),
+                    c4.data.numpy()], axis=1)
+                test_pred.append(output)
+
+        test_pred = np.vstack(test_pred)
+        if test_pred_tta is None:
+            test_pred_tta = test_pred
+        else:
+            test_pred_tta += test_pred
+
+    return test_pred_tta
+</code></pre>
+<h4 id="步骤5：迭代训练和验证模型"><a href="#步骤5：迭代训练和验证模型" class="headerlink" title="步骤5：迭代训练和验证模型"></a>步骤5：迭代训练和验证模型</h4><pre><code class="lang-python">model = SVHN_Model1()
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), 0.001)
 best_loss = 1000.0
@@ -511,28 +538,50 @@ for epoch in range(2):
     if val_loss &lt; best_loss:
         best_loss = val_loss
         torch.save(model.state_dict(), &#39;./model.pt&#39;)
-</code></pre><p>训练两个2 Epoch后，输出的训练日志为：</p>
+</code></pre>
+<p>训练两个2 Epoch后，输出的训练日志为：</p>
 <p>Epoch: 0, Train loss: 3.1      Val loss: 3.4 验证集精度：0.3439<br>Epoch: 1, Train loss: 2.1      Val loss: 2.9 验证集精度：0.4346     </p>
-<ul>
-<li><h4 id="步骤6：对测试集样本进行预测，生成提交文件"><a href="#步骤6：对测试集样本进行预测，生成提交文件" class="headerlink" title="步骤6：对测试集样本进行预测，生成提交文件"></a>步骤6：对测试集样本进行预测，生成提交文件</h4>```python<br>test_path = glob.glob(‘../input/test_a/<em>.png’)<br>test_path.sort()<br>test_label = [[1]] </em> len(test_path)<br>print(len(val_path), len(val_label))</li>
-</ul>
-<p>test_loader = torch.utils.data.DataLoader(<br>    SVHNDataset(test_path, test_label,<br>                transforms.Compose([<br>                    transforms.Resize((64, 128)),<br>                    transforms.RandomCrop((60, 120)),</p>
-<pre><code>                # transforms.ColorJitter(0.3, 0.3, 0.2),
-                # transforms.RandomRotation(5),
-                transforms.ToTensor(),
-                transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-])), 
-batch_size=40, 
-shuffle=False, 
-num_workers=10,
-</code></pre><p>)</p>
-<p>test_predict_label = predict(test_loader, model, 1)</p>
-<p>test_label = [‘’.join(map(str, x)) for x in test_loader.dataset.img_label]<br>test_predict_label = np.vstack([<br>    test_predict_label[:, :11].argmax(1),<br>    test_predict_label[:, 11:22].argmax(1),<br>    test_predict_label[:, 22:33].argmax(1),<br>    test_predict_label[:, 33:44].argmax(1),<br>    test_predict_label[:, 44:55].argmax(1),<br>]).T</p>
-<p>test_label_pred = []<br>for x in test_predict_label:<br>    test_label_pred.append(‘’.join(map(str, x[x!=10])))</p>
-<p>import pandas as pd<br>df_submit = pd.read_csv(‘../input/test_A_sample_submit.csv’)<br>df_submit[‘file_code’] = test_label_pred<br>df_submit.to_csv(‘renset18.csv’, index=None)<br>```</p>
-<ul>
-<li><h5 id="在训练完成2个Epoch后，模型在测试集上的成绩应该在0-33左右。"><a href="#在训练完成2个Epoch后，模型在测试集上的成绩应该在0-33左右。" class="headerlink" title="在训练完成2个Epoch后，模型在测试集上的成绩应该在0.33左右。"></a>在训练完成2个Epoch后，模型在测试集上的成绩应该在0.33左右。</h5></li>
-</ul>
+<h4 id="步骤6：对测试集样本进行预测，生成提交文件"><a href="#步骤6：对测试集样本进行预测，生成提交文件" class="headerlink" title="步骤6：对测试集样本进行预测，生成提交文件"></a>步骤6：对测试集样本进行预测，生成提交文件</h4><pre><code class="lang-python">test_path = glob.glob(&#39;../input/test_a/*.png&#39;)
+test_path.sort()
+test_label = [[1]] * len(test_path)
+print(len(val_path), len(val_label))
+
+test_loader = torch.utils.data.DataLoader(
+    SVHNDataset(test_path, test_label,
+                transforms.Compose([
+                    transforms.Resize((64, 128)),
+                    transforms.RandomCrop((60, 120)),
+                    # transforms.ColorJitter(0.3, 0.3, 0.2),
+                    # transforms.RandomRotation(5),
+                    transforms.ToTensor(),
+                    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+    ])), 
+    batch_size=40, 
+    shuffle=False, 
+    num_workers=10,
+)
+
+test_predict_label = predict(test_loader, model, 1)
+
+test_label = [&#39;&#39;.join(map(str, x)) for x in test_loader.dataset.img_label]
+test_predict_label = np.vstack([
+    test_predict_label[:, :11].argmax(1),
+    test_predict_label[:, 11:22].argmax(1),
+    test_predict_label[:, 22:33].argmax(1),
+    test_predict_label[:, 33:44].argmax(1),
+    test_predict_label[:, 44:55].argmax(1),
+]).T
+
+test_label_pred = []
+for x in test_predict_label:
+    test_label_pred.append(&#39;&#39;.join(map(str, x[x!=10])))
+
+import pandas as pd
+df_submit = pd.read_csv(&#39;../input/test_A_sample_submit.csv&#39;)
+df_submit[&#39;file_code&#39;] = test_label_pred
+df_submit.to_csv(&#39;renset18.csv&#39;, index=None)
+</code></pre>
+<p><strong>在训练完成2个Epoch后，模型在测试集上的成绩应该在0.33左右。</strong>    </p>
 
             </div>
             <hr>
