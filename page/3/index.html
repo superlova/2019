@@ -147,6 +147,50 @@
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2019/06/24/NLP学习笔记2/">
+        <p class="h4 index-header">NLP学习笔记2</p>
+      </a>
+
+      <a href="/2019/06/24/NLP学习笔记2/">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">1. 分词的概念和实现细节NLP的底层任务可分为词法分析、句法分析和语义分析，分词是词法分析中最基本的任务。中文分词是在一个中文序列的词与此之间加上空格或者其他边界标志进行分割，从而方便接下来步骤的处理。
+分词算法可分为两种，一种是基于词典的分词算法，另一种是基于字的分词算法。
+1.1 基于词典的分词算法：最大匹配分词算法，有正向和反向两种。主要思路是将词典构造成一颗Trie树，也成为词典树。以“他说的确实在理”这句话为例，构造Trie树如图所示：
+
+Trie树由词的公共前缀构成节点，降低了存储空间的同时提升查找效率。最大（正向）匹配分词将句子与Trie树进行匹配，在匹配到根结点时由下一个字重</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-06-24&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/notes/">notes</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/NLP/">NLP</a>&nbsp;
+          
+            <a href="/tags/deep-learning/">deep learning</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
       <a href="/2019/06/21/NLP学习笔记1/">
         <p class="h4 index-header">NLP学习笔记1</p>
       </a>
@@ -565,42 +609,6 @@ class Network(object):
     </div>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2019/05/25/华为的命运与中国的反应/">
-        <p class="h4 index-header">华为的命运与中国的反应</p>
-      </a>
-
-      <a href="/2019/05/25/华为的命运与中国的反应/">
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">美国将华为列入了黑名单，实施一系列与针对中兴类似的、外科手术式的精准打击。华为在劫难逃。那么华为或中国可以做什么来应对呢？中国会采取哪些手段？华为被列为美国“实体清单”无疑是当下最受关注的话题。显然，美国是想采取一系列精准打击，妄图将华为推入和中兴一样的境地。因此，无论是国内还是国外，线上还是线下，华为和中国的反应无疑是最受人关注的。鉴于国内新闻平台罕有客观分析的文章，我通过Quora论坛（又称作美国版知乎）摘录并翻译了Janus Dongye Qimeng对于该问题的精彩回答。他回答于5月22日，截至目前（25日）收获了5.9k个赞同。让我们来欣赏Janus对于该问题的精彩回答吧。
-链接：U</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-05-25&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/translation/">translation</a>&nbsp;
-          
-            <a href="/categories/translation/转载/">转载</a>&nbsp;
-          &nbsp;
-        
-        
-      </div>
-    </div>
-  </div>
-
 
 
   <nav aria-label="index posts navigation">
@@ -795,7 +803,7 @@ class Network(object):
         $(this).wrap(element);
       }
     );
-  </script>
+  </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
 
 
@@ -808,20 +816,5 @@ class Network(object):
 
 
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>
