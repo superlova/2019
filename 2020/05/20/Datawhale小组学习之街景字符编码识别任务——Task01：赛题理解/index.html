@@ -194,27 +194,22 @@
 <tr>
 <td>top</td>
 <td>左上角坐标X</td>
-<td></td>
 </tr>
 <tr>
 <td>height</td>
 <td>字符高度</td>
-<td></td>
 </tr>
 <tr>
 <td>left</td>
 <td>左上角最表Y</td>
-<td></td>
 </tr>
 <tr>
 <td>width</td>
 <td>字符宽度</td>
-<td></td>
 </tr>
 <tr>
 <td>label</td>
 <td>字符编码</td>
-<td></td>
 </tr>
 </tbody>
 </table>
@@ -873,7 +868,7 @@ df_submit.to_csv(&#39;renset18.csv&#39;, index=None)
         $(this).wrap(element);
       }
     );
-  </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </script>
 
 
 
@@ -886,5 +881,20 @@ df_submit.to_csv(&#39;renset18.csv&#39;, index=None)
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>
