@@ -168,8 +168,7 @@
             
             <div class="markdown-body">
               <p>看到一篇介绍推荐系统的评价方法与指标的文章，刚好本课题组也有个同学在做推荐系统相关的课题，并且该文章的评价指标部分对我目前的课题有启发作用，因此转载。<br><a id="more"></a></p>
-<h1 id="如何评价推荐系统以及其他智能系统"><a href="#如何评价推荐系统以及其他智能系统" class="headerlink" title="如何评价推荐系统以及其他智能系统"></a>如何评价推荐系统以及其他智能系统</h1><h2 id="1-评价推荐系统"><a href="#1-评价推荐系统" class="headerlink" title="1. 评价推荐系统"></a>1. 评价推荐系统</h2><p>本小节转载自<a href="https://www.jianshu.com/p/9d7c228eee59" target="_blank" rel="noopener">这里</a></p>
-<p>评测一个推荐系统时，需要考虑用户、物品提供商、推荐系统提供网站的利益，一个好的推荐系统是能够令三方共赢的系统。比如弹窗广告就不是一个好的推荐系统。</p>
+<h1 id="如何评价推荐系统以及其他智能系统"><a href="#如何评价推荐系统以及其他智能系统" class="headerlink" title="如何评价推荐系统以及其他智能系统"></a>如何评价推荐系统以及其他智能系统</h1><h2 id="1-评价推荐系统"><a href="#1-评价推荐系统" class="headerlink" title="1. 评价推荐系统"></a>1. <a href="https://www.jianshu.com/p/9d7c228eee59" target="_blank" rel="noopener">评价推荐系统</a></h2><p>评测一个推荐系统时，需要考虑用户、物品提供商、推荐系统提供网站的利益，一个好的推荐系统是能够令三方共赢的系统。比如弹窗广告就不是一个好的推荐系统。</p>
 <h3 id="1-1-评测实验方法"><a href="#1-1-评测实验方法" class="headerlink" title="1.1 评测实验方法"></a>1.1 评测实验方法</h3><h4 id="1-1-1-离线实验（offline-experiment）"><a href="#1-1-1-离线实验（offline-experiment）" class="headerlink" title="1.1.1 离线实验（offline experiment）"></a>1.1.1 离线实验（offline experiment）</h4><p>离线实验的方法的步骤如下：</p>
 <p>a）通过日志系统获得用户行为数据，并按照一定格式生成一个标准的数据集；<br>b）将数据集按照一定的规则分成训练集和测试集；<br>c）在训练集上训练用户兴趣模型，在测试集上进行预测；<br>d）通过事先定义的离线指标，评测算法在测试集上的预测结果。</p>
 <p>从以上步骤看出，离线实验的都是在数据集上完成的。意味着，它不需要一个实际的系统作为支撑，只需要有一个从日志中提取的数据集即可。</p>
@@ -615,7 +614,7 @@
 
     </script>
 
-    <script  src="https://cdn.staticfile.org/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" ></script>
+    <script  src="https://cdn.staticfile.org/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" ></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
   
 
@@ -628,20 +627,5 @@
 
 
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>
