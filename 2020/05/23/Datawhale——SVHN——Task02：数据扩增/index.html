@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content>
+  <meta name="author" content="Superlova">
+  <meta name="keywords" content>
+  <title>Datawhale——SVHN——Task02：数据扩增 - Superlova</title>
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<link rel="alternate" href="/atom.xml" title="Superlova" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Superlova</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期六, 五月 23日 2020, 9:15 晚上
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    1.7k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                      7 分钟
+                  </span>
+                
+
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5 z-depth-3" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <div class="markdown-body">
+              <p>训练模型第一步、数据读取和扩增！<br><a id="more"></a></p>
+<h2 id="数据读取"><a href="#数据读取" class="headerlink" title="数据读取"></a>数据读取</h2><p>图像领域的数据读取方法，使用Pillow或者OpenCV内置的函数即可。</p>
+<p>在读取图像时，还可以对原始图像添加扰动等，这就启发我们一件事：是不是对原数据增加一些扰动，就可以使其变成新的数据呢？</p>
+<p>下面介绍利用该思想的数据扩增环节。</p>
+<h2 id="数据扩增"><a href="#数据扩增" class="headerlink" title="数据扩增"></a>数据扩增</h2><h3 id="数据扩增为什么会有用"><a href="#数据扩增为什么会有用" class="headerlink" title="数据扩增为什么会有用"></a>数据扩增为什么会有用</h3><p>数据扩增的最常见作用，是增加数据集，用以缓解样本量不足导致的模型过拟合现象，从而提升模型的泛化性能。</p>
+<p>究其本质，还是扩展数据集的多样性。</p>
+<p>试想一下，我们如果想要试图训练一个完美模型，必然要利用完美的架构+完美的训练集，这个完美的训练集必然要覆盖到样本空间的方方面面。</p>
+<p>我们当然不可能真的搞到无限多的样本。所以为了尽可能趋近于这个目标，就要试图以有限的数据集覆盖无限的样本空间。</p>
+<p>每个样本在样本空间中就是一个坐标点。通过添加扰动，就能生成许多个在该样本点附近的增强样本。</p>
+<p>上一个利用样本空间中添加扰动、从而生成与原样本很相似的应用，叫做<strong>生成对抗样本</strong>。</p>
+<p>数据增强和对抗样本生成之间的区别在于，数据增强要保证扰动之后样本不能和原样本有区别；然而对抗样本生成则保证<strong>必须</strong>与原样本有区别。</p>
+<p>有一些学者也通过将对抗样本添加至模型重训练的方法，使模型的泛化性能得到了提高。这说明数据增强和对抗样本的生效原理是一样的，都是通过扩大样本覆盖的样本空间的程度，通俗来讲就是模型见多识广了，再碰到新的问题也不怕了。</p>
+<p>可以参考这篇论文：<a href="https://arxiv.org/abs/2003.08773" target="_blank" rel="noopener">Do CNNs Encode Data Augmentations?</a></p>
+<h3 id="数据扩增方法"><a href="#数据扩增方法" class="headerlink" title="数据扩增方法"></a>数据扩增方法</h3><p>大家都用的Pytorch吗？不会只有我自己用tensorflow吧。我来给大家介绍一下tensorflow是怎么做数据扩增的。</p>
+<p>参考：<a href="https://www.tensorflow.org/tutorials/images/data_augmentation" target="_blank" rel="noopener">TensorFlow Core</a></p>
+<h4 id="1-准备"><a href="#1-准备" class="headerlink" title="1. 准备"></a>1. 准备</h4><pre><code class="lang-python"># 首先安装一个tensorflow_docs的库
+!pip install git+https://github.com/tensorflow/docs
+
+import urllib # 负责下载网上的图片
+
+import tensorflow as tf
+from tensorflow.keras.datasets import mnist
+from tensorflow.keras import layers
+AUTOTUNE = tf.data.experimental.AUTOTUNE
+
+import tensorflow_docs as tfdocs
+import tensorflow_docs.plots
+
+import tensorflow_datasets as tfds
+
+import PIL.Image # 大名鼎鼎PIL
+
+import matplotlib.pyplot as plt
+import matplotlib as mpl
+mpl.rcParams[&#39;figure.figsize&#39;] = (12, 5)
+
+import numpy as np
+</code></pre>
+<p>下载一张示例图片：</p>
+<pre><code class="lang-python">image_path = tf.keras.utils.get_file(&quot;cat.jpg&quot;, &quot;https://storage.googleapis.com/download.tensorflow.org/example_images/320px-Felis_catus-cat_on_snow.jpg&quot;)
+PIL.Image.open(image_path)
+</code></pre>
+<p><img src="/2020/05/23/Datawhale——SVHN——Task02：数据扩增/2020-05-23-22-29-50.png" srcset="/img/loading.gif" alt></p>
+<p>将该图片解析成tensor</p>
+<pre><code class="lang-python">image_string=tf.io.read_file(image_path)
+image=tf.image.decode_jpeg(image_string,channels=3)
+</code></pre>
+<p>定义一个函数，用于可视化图像。</p>
+<pre><code class="lang-python">def visualize(original, augmented):
+  fig = plt.figure()
+  plt.subplot(1,2,1)
+  plt.title(&#39;Original image&#39;)
+  plt.imshow(original)
+
+  plt.subplot(1,2,2)
+  plt.title(&#39;Augmented image&#39;)
+  plt.imshow(augmented)
+</code></pre>
+<h4 id="2-执行数据扩增"><a href="#2-执行数据扩增" class="headerlink" title="2. 执行数据扩增"></a>2. 执行数据扩增</h4><p><strong>翻转图像</strong></p>
+<pre><code class="lang-python">flipped = tf.image.flip_left_right(image)
+visualize(image, flipped)
+</code></pre>
+<p><img src="/2020/05/23/Datawhale——SVHN——Task02：数据扩增/2020-05-23-22-32-30.png" srcset="/img/loading.gif" alt></p>
+<p><strong>灰度处理</strong></p>
+<pre><code class="lang-python">grayscaled = tf.image.rgb_to_grayscale(image)
+visualize(image, tf.squeeze(grayscaled))
+plt.colorbar()
+</code></pre>
+<p><img src="/2020/05/23/Datawhale——SVHN——Task02：数据扩增/2020-05-23-22-33-51.png" srcset="/img/loading.gif" alt></p>
+<p><strong>改变图像饱和度</strong></p>
+<pre><code class="lang-python">saturated = tf.image.adjust_saturation(image, 3)
+visualize(image, saturated)
+</code></pre>
+<p><img src="/2020/05/23/Datawhale——SVHN——Task02：数据扩增/2020-05-23-22-35-05.png" srcset="/img/loading.gif" alt></p>
+<p><strong>改变图像亮度</strong></p>
+<pre><code class="lang-python">bright = tf.image.adjust_brightness(image, 0.4)
+visualize(image, bright)
+</code></pre>
+<p><img src="/2020/05/23/Datawhale——SVHN——Task02：数据扩增/2020-05-23-22-35-39.png" srcset="/img/loading.gif" alt></p>
+<p><strong>旋转图像</strong></p>
+<pre><code class="lang-python">rotated = tf.image.rot90(image)
+visualize(image, rotated)
+</code></pre>
+<p><img src="/2020/05/23/Datawhale——SVHN——Task02：数据扩增/2020-05-23-22-36-11.png" srcset="/img/loading.gif" alt></p>
+<p><strong>中心放大并裁剪图像</strong></p>
+<pre><code class="lang-python">cropped = tf.image.central_crop(image, central_fraction=0.5)
+visualize(image,cropped)
+</code></pre>
+<p><img src="/2020/05/23/Datawhale——SVHN——Task02：数据扩增/2020-05-23-22-36-51.png" srcset="/img/loading.gif" alt></p>
+<p>等等此类操作，不一而足。大家感兴趣的可以查阅tensorflow的<code>tf.image</code>文档。</p>
+<h4 id="3-使用扩增数据集训练"><a href="#3-使用扩增数据集训练" class="headerlink" title="3. 使用扩增数据集训练"></a>3. 使用扩增数据集训练</h4><p>我们构造一个模型，该模型架构为纯全连接网络，数据集为MNIST手写数字识别数据集。我们可以直接在tensorflow_datasets这个库中使用这个数据集。</p>
+<pre><code class="lang-python">dataset, info =  tfds.load(&#39;mnist&#39;, as_supervised=True, with_info=True)
+train_dataset, test_dataset = dataset[&#39;train&#39;], dataset[&#39;test&#39;]
+
+num_train_examples= info.splits[&#39;train&#39;].num_examples
+</code></pre>
+<p>编写函数执行对原来数据集的扩增操作。</p>
+<pre><code class="lang-python">def convert(image, label):
+  image = tf.image.convert_image_dtype(image, tf.float32) # Cast and normalize the image to [0,1]
+  return image, label
+
+def augment(image,label):
+  image,label = convert(image, label)
+  image = tf.image.convert_image_dtype(image, tf.float32) # Cast and normalize the image to [0,1]
+  image = tf.image.resize_with_crop_or_pad(image, 34, 34) # Add 6 pixels of padding
+  image = tf.image.random_crop(image, size=[28, 28, 1]) # Random crop back to 28x28
+  image = tf.image.random_brightness(image, max_delta=0.5) # Random brightness
+
+  return image,label
+</code></pre>
+<pre><code class="lang-python">BATCH_SIZE = 64
+# Only use a subset of the data so it&#39;s easier to overfit, for this tutorial
+NUM_EXAMPLES = 2048
+</code></pre>
+<p>创建扩增后的数据集</p>
+<pre><code class="lang-python">augmented_train_batches = (
+    train_dataset
+    # Only train on a subset, so you can quickly see the effect.
+    .take(NUM_EXAMPLES)
+    .cache()
+    .shuffle(num_train_examples//4)
+    # The augmentation is added here.
+    .map(augment, num_parallel_calls=AUTOTUNE)
+    .batch(BATCH_SIZE)
+    .prefetch(AUTOTUNE)
+)
+</code></pre>
+<p>为了对照，我们创建没有扩增的数据集。</p>
+<pre><code class="lang-python">non_augmented_train_batches = (
+    train_dataset
+    # Only train on a subset, so you can quickly see the effect.
+    .take(NUM_EXAMPLES)
+    .cache()
+    .shuffle(num_train_examples//4)
+    # No augmentation.
+    .map(convert, num_parallel_calls=AUTOTUNE)
+    .batch(BATCH_SIZE)
+    .prefetch(AUTOTUNE)
+)
+</code></pre>
+<p>设置验证集。验证集与数据增不增强无关，反正我们不使用验证机训练，只用于最后的打分。</p>
+<pre><code class="lang-python">validation_batches = (
+    test_dataset
+    .map(convert, num_parallel_calls=AUTOTUNE)
+    .batch(2*BATCH_SIZE)
+)
+</code></pre>
+<p>建立模型。注意这个模型纯粹是为了体现数据扩增的效果而专门构建的，因为卷积网络CNN即便是不用数据扩增也能很好地解决MNIST手写数字识别问题，这样比较起来效果就不明显了。两层4096个神经元的全连接网络，激活函数为RELU。最后是一个softmax层分类。</p>
+<pre><code class="lang-python">def make_model():
+  model = tf.keras.Sequential([
+      layers.Flatten(input_shape=(28, 28, 1)),
+      layers.Dense(4096, activation=&#39;relu&#39;),
+      layers.Dense(4096, activation=&#39;relu&#39;),
+      layers.Dense(10)
+  ])
+  model.compile(optimizer = &#39;adam&#39;,
+                loss=tf.losses.SparseCategoricalCrossentropy(from_logits=True),
+                metrics=[&#39;accuracy&#39;])
+  return model
+</code></pre>
+<p>先使用<strong>没有经过数据扩增</strong>的数据训练模型，并记录其精度变化和loss变化：</p>
+<pre><code class="lang-python">model_without_aug = make_model()
+
+no_aug_history = model_without_aug.fit(non_augmented_train_batches, epochs=50, validation_data=validation_batches)
+</code></pre>
+<p>再使用<strong>经过扩增的数据</strong>训练模型，并记录。</p>
+<pre><code class="lang-python">model_with_aug = make_model()
+
+aug_history = model_with_aug.fit(augmented_train_batches, epochs=50, validation_data=validation_batches)
+</code></pre>
+<p>最后绘制图标，看一下表现。</p>
+<p>首先是精度随着训练轮次的变化曲线：</p>
+<pre><code class="lang-python">plotter = tfdocs.plots.HistoryPlotter()
+plotter.plot({&quot;Augmented&quot;: aug_history, &quot;Non-Augmented&quot;: no_aug_history}, metric = &quot;accuracy&quot;)
+plt.title(&quot;Accuracy&quot;)
+plt.ylim([0.75,1])
+</code></pre>
+<p><img src="/2020/05/23/Datawhale——SVHN——Task02：数据扩增/2020-05-23-22-49-01.png" srcset="/img/loading.gif" alt></p>
+<p>从图中可以看出，橙色线（没有数据增强的模型）在训练的时候很容易过拟合，但是在验证集上的精度不及蓝色线（数据增强的模型）。</p>
+<p>再来看loss变化。</p>
+<pre><code class="lang-python">plotter = tfdocs.plots.HistoryPlotter()
+plotter.plot({&quot;Augmented&quot;: aug_history, &quot;Non-Augmented&quot;: no_aug_history}, metric = &quot;loss&quot;)
+plt.title(&quot;Loss&quot;)
+plt.ylim([0,1])
+</code></pre>
+<p><img src="/2020/05/23/Datawhale——SVHN——Task02：数据扩增/2020-05-23-22-51-30.png" srcset="/img/loading.gif" alt></p>
+<p>这里看的就更明显了，橙色线在训练时的loss很快就下降到趋近0，这说明模型已经很难从未经增强的数据中学到东西了，产生了严重的过拟合。</p>
+<p>而蓝色线直到最后也在逐步地学习之中，我们可以得出结论，数据增强的确有助于避免过拟合、增强模型的泛化性能。</p>
+
+            </div>
+            <hr>
+            <div>
+              <p>
+                
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/notes/">notes</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/datawhale/">datawhale</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Python/">Python</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Data-Augmentation/">Data Augmentation</a>
+                    
+                  </span>
+                
+              </p>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc-start"></div>
+<div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var post = $('#post');
+      var toc = $('#toc');
+      var tocLimMax = post.offset().top + post.height() - navHeight;
+
+      $(window).scroll(function () {
+        var tocLimMin = $('#toc-start').offset().top - navHeight;
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': navHeight,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+      var offset = $('#board-ctn').css('margin-right')
+      $('#toc-ctn').css({
+        'right': offset
+      })
+    });
+  </script>
+
+
+
+
+
+
+
+
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-160806707-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+
+  
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Datawhale——SVHN——Task02：数据扩增&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

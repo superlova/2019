@@ -147,6 +147,47 @@
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2019/06/27/NLP学习笔记3/">
+        <p class="h4 index-header">NLP学习笔记3</p>
+      </a>
+
+      <a href="/2019/06/27/NLP学习笔记3/">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">1. TF-IDF原理。tf-idf（英语：term frequency–inverse document frequency）是一种用于信息检索与文本挖掘的常用加权技术。tf-idf是一种统计方法，用以评估一字词对于一个文件集或一个语料库中的其中一份文件的重要程度。字词的重要性随着它在文件中出现的次数成正比增加，但同时会随着它在语料库中出现的频率成反比下降。tf-idf加权的各种形式常被搜索引擎应用，作为文件与用户查询之间相关程度的度量或评级。除了tf-idf以外，互联网上的搜索引擎还会使用基于链接分析的评级方法，以确定文件在搜索结果中出现的顺序。
+原理在一份给定的文件里，词频（term f</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-06-27&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/notes/">notes</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/NLP/">NLP</a>&nbsp;
+          
+            <a href="/tags/deep-learning/">deep learning</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
       <a href="/2019/06/27/机器学习——集成方法/">
         <p class="h4 index-header">机器学习——集成方法</p>
       </a>
@@ -562,56 +603,6 @@ Receiver.java 需要一个命令行参数用于表示接受消息的端口号。
     </div>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2019/06/06/神经网络学习笔记note1/">
-        <p class="h4 index-header">神经网络学习笔记note1</p>
-      </a>
-
-      <a href="/2019/06/06/神经网络学习笔记note1/">
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">实现神经网络简单的神经网络实现。包含随机梯度下降算法、反向传播算法。
-class Network(object):
-
-    def __init__(self, sizes):
-        self.num_layers = len(sizes)
-        self.sizes = sizes
-        self.biases = [np.random.randn(y, 1) for y in sizes[1:]]
-        self.weights = [np.random.randn(y, x)
-                        for x, y in</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-06-06&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/notes/">notes</a>&nbsp;
-          
-            <a href="/categories/notes/转载/">转载</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/deep-learning/">deep learning</a>&nbsp;
-          
-            <a href="/tags/machcine-learning/">machcine learning</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
 
 
   <nav aria-label="index posts navigation">
@@ -806,7 +797,7 @@ class Network(object):
         $(this).wrap(element);
       }
     );
-  </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </script>
 
 
 
@@ -819,5 +810,20 @@ class Network(object):
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>
