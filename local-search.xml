@@ -4,6 +4,35 @@
   
   
   <entry>
+    <title>Datawhale——SVHN——Task03：字符识别</title>
+    <link href="/2020/05/27/Datawhale%E2%80%94%E2%80%94SVHN%E2%80%94%E2%80%94Task03%EF%BC%9A%E5%AD%97%E7%AC%A6%E8%AF%86%E5%88%AB/"/>
+    <url>/2020/05/27/Datawhale%E2%80%94%E2%80%94SVHN%E2%80%94%E2%80%94Task03%EF%BC%9A%E5%AD%97%E7%AC%A6%E8%AF%86%E5%88%AB/</url>
+    
+    <content type="html"><![CDATA[<p>介绍常见的字符识别模型<br><a id="more"></a></p><h2 id="用-tf-data-加载图片"><a href="#用-tf-data-加载图片" class="headerlink" title="用 tf.data 加载图片"></a>用 tf.data 加载图片</h2><h2 id="用CNN建立字符识别模型"><a href="#用CNN建立字符识别模型" class="headerlink" title="用CNN建立字符识别模型"></a>用CNN建立字符识别模型</h2>]]></content>
+    
+    
+    <categories>
+      
+      <category>notes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>datawhale</tag>
+      
+      <tag>Python</tag>
+      
+      <tag>Digit Recognition</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Datawhale——SVHN——Task02：数据扩增</title>
     <link href="/2020/05/23/Datawhale%E2%80%94%E2%80%94SVHN%E2%80%94%E2%80%94Task02%EF%BC%9A%E6%95%B0%E6%8D%AE%E6%89%A9%E5%A2%9E/"/>
     <url>/2020/05/23/Datawhale%E2%80%94%E2%80%94SVHN%E2%80%94%E2%80%94Task02%EF%BC%9A%E6%95%B0%E6%8D%AE%E6%89%A9%E5%A2%9E/</url>
