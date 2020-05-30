@@ -131,7 +131,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    2.7k 字
+                    3.1k 字
                   </span>
                 
 
@@ -139,7 +139,7 @@
                   
                   <span class="post-meta">
                       <i class="far fa-clock"></i>
-                      12 分钟
+                      14 分钟
                   </span>
                 
 
@@ -168,12 +168,7 @@
             
             <div class="markdown-body">
               <p>本次新人赛是Datawhale与天池联合发起的0基础入门系列赛事第二场 —— 零基础入门CV之街景字符识别比赛。<br><a id="more"></a></p>
-<h1 id="Datawhale小组学习之街景字符编码识别任务——Task01：赛题理解"><a href="#Datawhale小组学习之街景字符编码识别任务——Task01：赛题理解" class="headerlink" title="Datawhale小组学习之街景字符编码识别任务——Task01：赛题理解"></a>Datawhale小组学习之街景字符编码识别任务——Task01：赛题理解</h1><h2 id="0-学习目标"><a href="#0-学习目标" class="headerlink" title="0. 学习目标"></a>0. 学习目标</h2><ul>
-<li>理解赛题背景和赛题数据</li>
-<li>完成赛题报名和数据下载，理解赛题的解题思路</li>
-<li>了解赛题</li>
-</ul>
-<h2 id="1-大赛简介"><a href="#1-大赛简介" class="headerlink" title="1. 大赛简介"></a>1. 大赛简介</h2><p>本次新人赛是Datawhale与天池联合发起的0基础入门系列赛事第二场 —— 零基础入门CV之街景字符识别比赛。</p>
+<h1 id="Datawhale小组学习之街景字符编码识别任务——Task01：赛题理解"><a href="#Datawhale小组学习之街景字符编码识别任务——Task01：赛题理解" class="headerlink" title="Datawhale小组学习之街景字符编码识别任务——Task01：赛题理解"></a>Datawhale小组学习之街景字符编码识别任务——Task01：赛题理解</h1><h2 id="1-大赛简介"><a href="#1-大赛简介" class="headerlink" title="1. 大赛简介"></a>1. 大赛简介</h2><p>本次新人赛是Datawhale与天池联合发起的0基础入门系列赛事第二场 —— 零基础入门CV之街景字符识别比赛。</p>
 <h3 id="1-1-赛题数据介绍"><a href="#1-1-赛题数据介绍" class="headerlink" title="1.1 赛题数据介绍"></a>1.1 赛题数据介绍</h3><p>赛题来源自Google街景图像中的门牌号数据集（The Street View House Numbers Dataset, SVHN），该数据来自真实场景的门牌号。</p>
 <p>训练集数据包括3W张照片，验证集数据包括1W张照片，每张照片包括颜色图像和对应的编码类别和具体位置</p>
 <h3 id="1-2-参赛规则"><a href="#1-2-参赛规则" class="headerlink" title="1.2 参赛规则"></a>1.2 参赛规则</h3><ul>
@@ -216,6 +211,31 @@
 </div>
 <p>字符的坐标具体如下所示：<br><img src="/2020/05/20/Datawhale小组学习之街景字符编码识别任务——Task01：赛题理解/字符坐标.png" srcset="/img/loading.gif" alt="坐标">  </p>
 <p>在比赛数据（训练集和验证集）中，同一张图片中可能包括一个或者多个字符，因此在比赛数据的JSON标注中，会有两个字符的边框信息：<br>|原始图片|图片JSON标注|<br>|——|——-|<br><img src="/2020/05/20/Datawhale小组学习之街景字符编码识别任务——Task01：赛题理解/原始图片.png" srcset="/img/loading.gif" alt="19">    | <img src="/2020/05/20/Datawhale小组学习之街景字符编码识别任务——Task01：赛题理解/原始图片标注.png" srcset="/img/loading.gif" alt="标注">  |</p>
+<p>在<a href="http://ufldl.stanford.edu/housenumbers/" target="_blank" rel="noopener">SVHN官网</a>上下载数据集的话，有两种格式可供选择：</p>
+<h4 id="第一种格式"><a href="#第一种格式" class="headerlink" title="第一种格式"></a>第一种格式</h4><p>第一种格式的数据集，除了原始图像之外还包括边界框信息。每个tar.gz文件都包含png格式的原始图像，以及一个digitStruct.mat文件。边界框信息存储在digitStruct.mat文件中，而不是直接绘制在数据集中的图像上。以<code>.mat</code>结尾的文件是matlab专用文件，可以使用python的scipy库打开，内部装的是类似json的字典。</p>
+<p>digitStruct中的每个元素都有以下字段：</p>
+<ul>
+<li>name是一个字符串，其中包含相应图像的文件名。</li>
+<li>bbox是一个结构数组，包含图像中每个数字边界框的位置，大小和标签。</li>
+</ul>
+<p>例如：digitStruct（300）.bbox（2）.height则是第300张图片中第二个数字边界框的高度。</p>
+<h4 id="第二种格式"><a href="#第二种格式" class="headerlink" title="第二种格式"></a>第二种格式</h4><p>为了降低难度，将上述第一种格式的图片都被剪切到只剩下有效字符，并被缩放至32*32像素的标准大小，以方便识别。图片的边界框经过适当的选择，避免出现扭曲等状况。尽管如此，这种处理还是可能导致引入一些错误信息。</p>
+<p>train_32x32.mat和test_32x32.mat，<code>.mat</code>文件中包含两个变量,X是一个4D的矩阵，维度是(32,32,3,n),n是数据个数,y是label变量。看一下前十张图：</p>
+<pre><code class="lang-python">import scipy.io as sio
+import matplotlib.pyplot as plt
+
+print (&#39;Loading Matlab data.&#39;)
+mat = sio.loadmat(&#39;train_32x32.mat&#39;)
+data = mat[&#39;X&#39;]
+label = mat[&#39;y&#39;]
+for i in range(10):
+    plt.subplot(2,5,i+1)
+    plt.title(label[i][0])
+    plt.imshow(data[...,i])
+    plt.axis(&#39;off&#39;)
+plt.show()
+</code></pre>
+<p><img src="/2020/05/20/Datawhale小组学习之街景字符编码识别任务——Task01：赛题理解/2020-05-30-22-17-20.png" srcset="/img/loading.gif" alt></p>
 <h3 id="1-4-成绩评定方式"><a href="#1-4-成绩评定方式" class="headerlink" title="1.4 成绩评定方式"></a>1.4 成绩评定方式</h3><p>评价标准为准确率。<br>选手提交结果与实际图片的编码进行对比，以编码整体识别准确率为评价指标，结果越大越好，具体计算公式如下：</p>
 <p> Score=编码识别正确的数量/测试集图片数量   </p>
 <h3 id="1-5-结果提交格式"><a href="#1-5-结果提交格式" class="headerlink" title="1.5 结果提交格式"></a>1.5 结果提交格式</h3><p>提交前请确保预测结果的格式与sample_submit.csv中的格式一致，以及提交文件后缀名为csv。<br>形式如下：<br>file_name, file_code<br>0010000.jpg,451<br>0010001.jpg,232<br>0010002.jpg,45<br>0010003.jpg,67<br>0010004.jpg,191<br>0010005.jpg,892 </p>
