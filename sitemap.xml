@@ -2,30 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://superlova.github.io/2020/05/23/Datawhale%E2%80%94%E2%80%94SVHN%E2%80%94%E2%80%94Task02%EF%BC%9A%E6%95%B0%E6%8D%AE%E6%89%A9%E5%A2%9E/</loc>
+    
+    <lastmod>2020-06-02T06:57:05.053Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://superlova.github.io/2020/06/02/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91A-survey-on-Image-Data-Augmentation-for-Deep-Learning/</loc>
+    
+    <lastmod>2020-06-02T06:52:12.004Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://superlova.github.io/2020/06/02/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91EDA-Easy-Data-Augmentation-Techniques-for-Boosting-Performance-on-Text-Classification-Tasks/</loc>
     
-    <lastmod>2020-06-02T06:25:43.475Z</lastmod>
+    <lastmod>2020-06-02T06:50:44.567Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://superlova.github.io/2020/06/02/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91Adversarial-Attacks-on-Deep-Learning-Models-in-Natural-Language-Processing-A-Survey/</loc>
     
-    <lastmod>2020-06-02T06:22:12.274Z</lastmod>
+    <lastmod>2020-06-02T06:50:40.788Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://superlova.github.io/2020/06/02/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91Fuzz-Testing-based-Data-Augmentation-to-Improve-Robustness-of-Deep-Neural-Networks/</loc>
     
-    <lastmod>2020-06-02T06:16:10.536Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://superlova.github.io/2020/05/23/Datawhale%E2%80%94%E2%80%94SVHN%E2%80%94%E2%80%94Task02%EF%BC%9A%E6%95%B0%E6%8D%AE%E6%89%A9%E5%A2%9E/</loc>
-    
-    <lastmod>2020-06-02T06:03:55.546Z</lastmod>
+    <lastmod>2020-06-02T06:50:27.694Z</lastmod>
     
   </url>
   
