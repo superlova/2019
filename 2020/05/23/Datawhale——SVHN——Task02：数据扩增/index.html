@@ -131,7 +131,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    1.7k 字
+                    2.3k 字
                   </span>
                 
 
@@ -139,7 +139,7 @@
                   
                   <span class="post-meta">
                       <i class="far fa-clock"></i>
-                      7 分钟
+                      9 分钟
                   </span>
                 
 
@@ -169,9 +169,9 @@
             <div class="markdown-body">
               <p>训练模型第一步、数据读取和扩增！<br><a id="more"></a></p>
 <h2 id="数据读取"><a href="#数据读取" class="headerlink" title="数据读取"></a>数据读取</h2><p>图像领域的数据读取方法，使用Pillow或者OpenCV内置的函数即可。</p>
-<p>在读取图像时，还可以对原始图像添加扰动等，这就启发我们一件事：是不是对原数据增加一些扰动，就可以使其变成新的数据呢？</p>
+<h2 id="数据扩增"><a href="#数据扩增" class="headerlink" title="数据扩增"></a>数据扩增</h2><p>在读取图像时，还可以对原始图像添加扰动等，这就启发我们一件事：是不是对原数据增加一些扰动，就可以使其变成新的数据呢？</p>
 <p>下面介绍利用该思想的数据扩增环节。</p>
-<h2 id="数据扩增"><a href="#数据扩增" class="headerlink" title="数据扩增"></a>数据扩增</h2><h3 id="数据扩增为什么会有用"><a href="#数据扩增为什么会有用" class="headerlink" title="数据扩增为什么会有用"></a>数据扩增为什么会有用</h3><p>数据扩增的最常见作用，是增加数据集，用以缓解样本量不足导致的模型过拟合现象，从而提升模型的泛化性能。</p>
+<h3 id="1-数据扩增为什么会有用"><a href="#1-数据扩增为什么会有用" class="headerlink" title="1. 数据扩增为什么会有用"></a>1. 数据扩增为什么会有用</h3><p>数据扩增的最常见作用，是增加数据集，用以缓解样本量不足导致的模型过拟合现象，从而提升模型的泛化性能。</p>
 <p>究其本质，还是扩展数据集的多样性。</p>
 <p>试想一下，我们如果想要试图训练一个完美模型，必然要利用完美的架构+完美的训练集，这个完美的训练集必然要覆盖到样本空间的方方面面。</p>
 <p>我们当然不可能真的搞到无限多的样本。所以为了尽可能趋近于这个目标，就要试图以有限的数据集覆盖无限的样本空间。</p>
@@ -180,7 +180,27 @@
 <p>数据增强和对抗样本生成之间的区别在于，数据增强要保证扰动之后样本不能和原样本有区别；然而对抗样本生成则保证<strong>必须</strong>与原样本有区别。</p>
 <p>有一些学者也通过将对抗样本添加至模型重训练的方法，使模型的泛化性能得到了提高。这说明数据增强和对抗样本的生效原理是一样的，都是通过扩大样本覆盖的样本空间的程度，通俗来讲就是模型见多识广了，再碰到新的问题也不怕了。</p>
 <p>可以参考这篇论文：<a href="https://arxiv.org/abs/2003.08773" target="_blank" rel="noopener">Do CNNs Encode Data Augmentations?</a></p>
-<h3 id="数据扩增方法"><a href="#数据扩增方法" class="headerlink" title="数据扩增方法"></a>数据扩增方法</h3><p>大家都用的Pytorch吗？不会只有我自己用tensorflow吧。我来给大家介绍一下tensorflow是怎么做数据扩增的。</p>
+<h3 id="2-常见的数据扩增"><a href="#2-常见的数据扩增" class="headerlink" title="2. 常见的数据扩增"></a>2. 常见的数据扩增</h3><h4 id="2-1-图像数据扩增"><a href="#2-1-图像数据扩增" class="headerlink" title="2.1 图像数据扩增"></a>2.1 图像数据扩增</h4><ul>
+<li><p>色彩抖动（Color Jittering）<br>调整图片的亮度、饱和度、对比度，针对图像的颜色进行的数据增强。<br>对比度受限自适应直方图均衡化算法（Clahe），锐化（Sharpen），凸点（Emboss）</p>
+</li>
+<li><p>主成分噪声（PCA  Jittering）<br>首先按照RGB三个颜色通道计算均值和标准差，对网络的输入数据进行规范化；再在整个训练集上计算协方差矩阵，进行特征分解，得到特征向量和特征值，最后做PCA Jittering；最后对RGB空间做PCA，然后对主成分做一个(0, 0.1)的高斯扰动。</p>
+</li>
+<li><p>弹性变换（Elastic Transform）</p>
+</li>
+</ul>
+<p>算法一开始是由Patrice等人在2003年的ICDAR上发表的《Best Practices for Convolutional Neural Networks Applied to Visual Document Analysis》提出的，最开始应用在mnist手写体数字识别数据集中。当前也有很多人把该方法应用到手写体汉字的识别问题中。</p>
+<p>首先对于图像中的每个像素点，产生对应的随机数对$(\Delta x, \Delta y)$，大小介于-1~1之间，分别表示该像素点的x方向和y方向的移动距离；<br>然后生成一个以0为均值，以σ为标准差的高斯核k_nn，并用前面的随机数与之做卷积，并将结果作用于原图像。</p>
+<p>参考：<a href="https://blog.csdn.net/lhanchao/article/details/54234490" target="_blank" rel="noopener">https://blog.csdn.net/lhanchao/article/details/54234490</a></p>
+<p>还有诸如透视变换（Perspective Transform）、分段仿射变换（Piecewise Affine transforms）、枕形畸变（Pincushion Distortion）等不同的图像变换操作。</p>
+<p>根据Datawhale大佬分享，对于本次题目（SVHN街道彩色数字识别），最常见的、最有效的数据扩增方法是：</p>
+<ul>
+<li>随机改变大小（resize）</li>
+<li>随机切割（randomcrop），即从原始图像中，随机的crop出一些图像。</li>
+</ul>
+<p>鉴于本次数据集中的图片大小不一，一般一开始我们都需要resize到指定大小。但也有的文章中提到了，先对图片resize会使得图片长宽比发生变化，造成失真。所以我们要具体问题具体分析。</p>
+<p>我在博客中也有分享过一篇讲述图像数据增强的<a href>相关论文</a>，大家可以看一下。</p>
+<h4 id="2-2-文本数据增强"><a href="#2-2-文本数据增强" class="headerlink" title="2.2 文本数据增强"></a>2.2 文本数据增强</h4><p>此部分参考我的<a href>文本数据增强</a>，而且由于本次赛题并不必进行文本数据增强，因此就不在这里赘述了。</p>
+<h3 id="3-数据扩增实战——使用tensorflow"><a href="#3-数据扩增实战——使用tensorflow" class="headerlink" title="3.. 数据扩增实战——使用tensorflow"></a>3.. 数据扩增实战——使用tensorflow</h3><p>大家都用的Pytorch吗？不会只有我自己用tensorflow吧。我来给大家介绍一下tensorflow是怎么做数据扩增的。</p>
 <p>参考：<a href="https://www.tensorflow.org/tutorials/images/data_augmentation" target="_blank" rel="noopener">TensorFlow Core</a></p>
 <h4 id="1-准备"><a href="#1-准备" class="headerlink" title="1. 准备"></a>1. 准备</h4><pre><code class="lang-python"># 首先安装一个tensorflow_docs的库
 !pip install git+https://github.com/tensorflow/docs
@@ -635,6 +655,32 @@ plt.ylim([0,1])
   </script>
 
 
+
+  
+
+  
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+          tex2jax: {
+              inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+              processEscapes: true,
+              skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+          }
+      });
+
+      MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+
+    </script>
+
+    <script  src="https://cdn.staticfile.org/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" ></script>
+
+  
 
 
 

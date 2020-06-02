@@ -4,6 +4,215 @@
   
   
   <entry>
+    <title>【论文阅读笔记】Adversarial Attacks on Deep Learning Models in Natural Language Processing: A Survey</title>
+    <link href="/2020/06/02/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91Adversarial-Attacks-on-Deep-Learning-Models-in-Natural-Language-Processing-A-Survey/"/>
+    <url>/2020/06/02/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91Adversarial-Attacks-on-Deep-Learning-Models-in-Natural-Language-Processing-A-Survey/</url>
+    
+    <content type="html"><![CDATA[<p>文本领域的对抗样本生成技术综述。<br><a id="more"></a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>paper</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>NLP</tag>
+      
+      <tag>Adversarial Attacks</tag>
+      
+      <tag>Robustness</tag>
+      
+      <tag>Deep Neural Networks</tag>
+      
+      <tag>survey</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>【论文阅读笔记】 Fuzz Testing based Data Augmentation to Improve Robustness of Deep Neural Networks</title>
+    <link href="/2020/06/02/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91Fuzz-Testing-based-Data-Augmentation-to-Improve-Robustness-of-Deep-Neural-Networks/"/>
+    <url>/2020/06/02/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91Fuzz-Testing-based-Data-Augmentation-to-Improve-Robustness-of-Deep-Neural-Networks/</url>
+    
+    <content type="html"><![CDATA[<p>通过模糊测试进行数据增强，数据增强新思路。<br><a id="more"></a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>paper</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Data Augmentation</tag>
+      
+      <tag>Robustness</tag>
+      
+      <tag>Deep Neural Networks</tag>
+      
+      <tag>Fuzz Testing</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>【论文阅读笔记】EDA: Easy Data Augmentation Techniques for Boosting Performance on Text Classification Tasks</title>
+    <link href="/2020/06/02/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91EDA-Easy-Data-Augmentation-Techniques-for-Boosting-Performance-on-Text-Classification-Tasks/"/>
+    <url>/2020/06/02/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91EDA-Easy-Data-Augmentation-Techniques-for-Boosting-Performance-on-Text-Classification-Tasks/</url>
+    
+    <content type="html"><![CDATA[<p>这篇论文介绍了一个文本领域的数据增强工具，提出了一些数据增强方法。<br><a id="more"></a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>paper</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Data Augmentation</tag>
+      
+      <tag>NLP</tag>
+      
+      <tag>Deep Neural Networks</tag>
+      
+      <tag>Text Classification</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Datawhale——SVHN——Task05：模型集成</title>
+    <link href="/2020/06/02/Datawhale%E2%80%94%E2%80%94SVHN%E2%80%94%E2%80%94Task05%EF%BC%9A%E6%A8%A1%E5%9E%8B%E9%9B%86%E6%88%90/"/>
+    <url>/2020/06/02/Datawhale%E2%80%94%E2%80%94SVHN%E2%80%94%E2%80%94Task05%EF%BC%9A%E6%A8%A1%E5%9E%8B%E9%9B%86%E6%88%90/</url>
+    
+    <content type="html"><![CDATA[<p>模型的训练和验证过程，基本到了最后咯。<br><a id="more"></a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>notes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>datawhale</tag>
+      
+      <tag>Python</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>numpy拼合数组方法大全</title>
+    <link href="/2020/06/01/numpy%E6%8B%BC%E5%90%88%E6%95%B0%E7%BB%84/"/>
+    <url>/2020/06/01/numpy%E6%8B%BC%E5%90%88%E6%95%B0%E7%BB%84/</url>
+    
+    <content type="html"><![CDATA[<p>numpy的一大特色就是其内部的矩阵向量运算。矩阵之间的拼接方法，你掌握多少？<br><a id="more"></a></p><h2 id="1-append拼接"><a href="#1-append拼接" class="headerlink" title="1. append拼接"></a>1. append拼接</h2><p>我们都知道对于Python原生列表list来说，append是最方便的添加元素的方法，一句list.append(elem)就能在列表最后添加一个元素。</p><p>在numpy中，append也是一个直观且好用的方法，np.append(A,B)能够直接拼合两个ndarray数组。</p><p>首先我们新建两个三维数组，一个全为零，一个全为一。</p><pre><code class="lang-python">C = np.zeros((2,2,2))D = np.ones((2,2,2))print(&quot;C: &quot;, C, C.shape)print(&quot;D: &quot;, D, D.shape)C:  [[[0. 0.]  [0. 0.]] [[0. 0.]  [0. 0.]]] shape=(2, 2, 2)D:  [[[1. 1.]  [1. 1.]] [[1. 1.]  [1. 1.]]] shape=(2, 2, 2)</code></pre><p>然后我们采用不同的方法将其拼合在一起。</p><p>首先是append(C,D)这种直观的方法，可以看到C和D都被展开成了一维。</p><pre><code class="lang-python">np.append(C,D)array([0., 0., 0., 0., 0., 0., 0., 0., 1., 1., 1., 1., 1., 1., 1., 1.])</code></pre><p>在很多时候我们希望数组拼接时能够保持原有的维度，按照行拼接/列拼接/其他维度拼接。此时只需要改动append的参数axis即可。</p><pre><code class="lang-python">np.append(C,D,axis=0)array([[[0., 0.],        [0., 0.]],       [[0., 0.],        [0., 0.]],       [[1., 1.],        [1., 1.]],       [[1., 1.],        [1., 1.]]])np.append(C,D,axis=1)array([[[0., 0.],        [0., 0.],        [1., 1.],        [1., 1.]],       [[0., 0.],        [0., 0.],        [1., 1.],        [1., 1.]]])np.append(C,D,axis=2)array([[[0., 0., 1., 1.],        [0., 0., 1., 1.]],       [[0., 0., 1., 1.],        [0., 0., 1., 1.]]])</code></pre><p>对于三维数组，axis=0为层，axis=1为行，axis=2为列。这不难理解，因为确定单位数组中元素位置的坐标就是(层，行，列)</p><h2 id="2-concatenate拼接"><a href="#2-concatenate拼接" class="headerlink" title="2. concatenate拼接"></a>2. concatenate拼接</h2><p>concatenate从字面意义上就让人明白这个函数专门负责数组拼接。不仅仅是两个，还可以负责多个数组一起拼接。理论上来说concatenate的速度和内存消耗都比append要小，但我并没有实际做实验验证。</p><pre><code class="lang-python">np.concatenate((C,D)) # default axis=0array([[[0., 0.],        [0., 0.]],       [[0., 0.],        [0., 0.]],       [[1., 1.],        [1., 1.]],       [[1., 1.],        [1., 1.]]])np.concatenate((C,D), axis=1) # =np.append(C,D,axis=1)array([[[0., 0.],        [0., 0.],        [1., 1.],        [1., 1.]],       [[0., 0.],        [0., 0.],        [1., 1.],        [1., 1.]]])</code></pre><h2 id="3-stack系列"><a href="#3-stack系列" class="headerlink" title="3. stack系列"></a>3. stack系列</h2><p>stack系列函数包括np.stack/hstack/vstack/dstack/column_stack/row_stack，顾名思义，hstack是按照横向拼接，vstack竖着拼接，dstack则是层叠数组。其实我最烦这种抽象描述了，因为二维数组和三维数组/高维数组的抽象描述根本不一致，还是axis好。不明白axis的同学可以看<a href="https://superlova.github.io/2020/05/19/numpy%E4%B8%ADaxis%E7%9A%84%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3/">这篇文章</a>。</p><pre><code class="lang-python">np.hstack((C,D)) # = np.append(C,D,axis=1) = np.column_stack()array([[[0., 0.],        [0., 0.],        [1., 1.],        [1., 1.]],       [[0., 0.],        [0., 0.],        [1., 1.],        [1., 1.]]])np.vstack((C,D)) # =np.append(C,D,axis=0) = np.row_stack()array([[[0., 0.],        [0., 0.]],       [[0., 0.],        [0., 0.]],       [[1., 1.],        [1., 1.]],       [[1., 1.],        [1., 1.]]])np.dstack((C,D)) # =np.append(C,D,aixs=2)array([[[0., 0., 1., 1.],        [0., 0., 1., 1.]],       [[0., 0., 1., 1.],        [0., 0., 1., 1.]]])</code></pre><h2 id="4-np-r"><a href="#4-np-r" class="headerlink" title="4. np.r_[]"></a>4. np.r_[]</h2><p>神奇的numpy总能给出神奇的解法。np.r_是构建数组/拼合数组的最简便写法，但不一定是好理解的。这种写法和之前写的append没什么不同，但是更加简洁。你也可以使用np.r_做出更加复杂的功能。</p><p>一言以蔽之，np.r_[]表达式能够快速使得多个在中括号里面的array/array切片，按照axis=0拼接起来。</p><p>np.r_[]存在两种使用情况：</p><ol><li>如果中括号内部是由若干逗号(comma,)分隔的array，就将他们按照axis=0拼接起来。</li><li>如果中括号内部包括矩阵切片(slices)或者标量(scalars)，就将他们全部变成一维数组首尾相接。</li></ol><p><strong>注意：</strong></p><ul><li>中括号<code>[3:6:1]</code>内部代表的切片，其含义相当于<code>np.arange(3,6,1)</code>，即在<code>[3,6)</code>范围内，从3开始走一步取一个元素，也就是<code>[3,4,5]</code>。</li><li>中括号<code>[0:5:3j]</code>在最后加了字母<code>j</code>，相当于<code>np.linspace(0,5,3,endpoint=True)</code>，在<code>[0,5]</code>范围内，均匀地取三个元素。</li></ul><pre><code class="lang-python">np.r_[C,D] # =np.append(C,D,axis=0)array([[[0., 0.],        [0., 0.]],       [[0., 0.],        [0., 0.]],       [[1., 1.],        [1., 1.]],       [[1., 1.],        [1., 1.]]])np.r_[0:10:3, 0:5:4j]array([0.        , 3.        , 6.        , 9.        , 0.        ,       1.66666667, 3.33333333, 5.        ])</code></pre><p>在中括号内，如果最开始是一个<strong>特定的字符串</strong>，np.r_会试图根据字符串的含义，改变其输出格式。</p><ul><li><code>np.r_[&#39;r&#39;, index_expression]</code>和<code>np.r_[&#39;c&#39;, index_expression]</code>将输出从array类型转变成matrix类型。<code>np.r_[&#39;c&#39;, index_expression]</code>会把一维index_expression组装成N*1的列向量。</li></ul><pre><code class="lang-python">np.r_[&quot;r&quot;, 0:10:3, 0:5:4j]matrix([[0.        , 3.        , 6.        , 9.        , 0.        ,         1.66666667, 3.33333333, 5.        ]])np.r_[&quot;c&quot;, 0:10:3, 0:5:4j]matrix([[0.        ],        [3.        ],        [6.        ],        [9.        ],        [0.        ],        [1.66666667],        [3.33333333],        [5.        ]])</code></pre><ul><li><code>np.r_[&quot;n&quot;, index_expression]</code>前面字符串是整数，则拼接时将会按照axis=n进行拼接。</li></ul><pre><code class="lang-python">np.r_[&quot;-1&quot;,C,D]array([[[0., 0., 1., 1.],        [0., 0., 1., 1.]],       [[0., 0., 1., 1.],        [0., 0., 1., 1.]]])</code></pre><h2 id="5-np-c"><a href="#5-np-c" class="headerlink" title="5. np.c_"></a>5. np.c_</h2><p>在日常使用时，我们经常需要按照最后一个维度拼合两个数组，也就是np.r_[‘-1’,index_expression]。此时我们可以直接使用<code>np.c_[]</code></p><pre><code class="lang-python">np.c_[C,D] # =np.append(C,D,axis=2)array([[[0., 0., 1., 1.],        [0., 0., 1., 1.]],       [[0., 0., 1., 1.],        [0., 0., 1., 1.]]])np.c_[0:10:3, 0:5:4j]array([[0.        , 0.        ],       [3.        , 1.66666667],       [6.        , 3.33333333],       [9.        , 5.        ]])</code></pre><p>关于numpy中的<code>np.c_</code>和<code>np.r_</code>相关知识，可以参考<a href="https://numpy.org/devdocs/reference/generated/numpy.r_.html#numpy.r_" target="_blank" rel="noopener">官方文档</a>，里面有关于中括号前参数的详细解释。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>notes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Python</tag>
+      
+      <tag>numpy</tag>
+      
+      <tag>concatenate</tag>
+      
+      <tag>array</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>移动硬盘文件或目录损坏且无法读取解决方法</title>
+    <link href="/2020/05/31/%E7%A7%BB%E5%8A%A8%E7%A1%AC%E7%9B%98%E6%96%87%E4%BB%B6%E6%88%96%E7%9B%AE%E5%BD%95%E6%8D%9F%E5%9D%8F%E4%B8%94%E6%97%A0%E6%B3%95%E8%AF%BB%E5%8F%96%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/"/>
+    <url>/2020/05/31/%E7%A7%BB%E5%8A%A8%E7%A1%AC%E7%9B%98%E6%96%87%E4%BB%B6%E6%88%96%E7%9B%AE%E5%BD%95%E6%8D%9F%E5%9D%8F%E4%B8%94%E6%97%A0%E6%B3%95%E8%AF%BB%E5%8F%96%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/</url>
+    
+    <content type="html"><![CDATA[<h2 id="问题描述："><a href="#问题描述：" class="headerlink" title="问题描述："></a>问题描述：</h2><p>家里的移动硬盘寿命已有4年之久，里面存储了200多G的学习资料（字面意思）。今天我将其插在系统为win10的电脑上，却出现了以下情况：</p><ul><li>硬盘通电指示灯亮；</li><li>右下角托盘区域出现usb插入提示，并可以点击“安全删除硬件”；</li><li>在“我的电脑”界面，显示“本地磁盘 D:”，但是双击之后出现错误“文件或目录损坏且无法读取”。</li></ul><p>重启电脑、重新插拔、更换另一台win7系统的电脑，都是该状况。至此基本确定是移动硬盘本身的问题。</p><h2 id="硬盘参数："><a href="#硬盘参数：" class="headerlink" title="硬盘参数："></a>硬盘参数：</h2><ul><li>黑甲虫 640G 移动机械硬盘</li><li>磁盘格式为NTFS</li><li>使用4年有余</li><li>之前出现过数据丢失的状况，转移敏感数据之后，在该盘中只留有非敏感的学习资料，约280G</li></ul><p>查阅资料可知，我这种错误大概率是由于某次未断电插拔硬盘导致的文件目录错误。好消息是，这种错误可以通过一句简单的指令解决。</p><h2 id="解决方案："><a href="#解决方案：" class="headerlink" title="解决方案："></a>解决方案：</h2><ol><li>打开cmd</li><li>输入 chkdsk D: /f 请注意，我的移动硬盘盘符为D:</li></ol><p>参考：<a href="https://cloud.tencent.com/developer/article/1487000" target="_blank" rel="noopener">https://cloud.tencent.com/developer/article/1487000</a></p><p>chkdsk 参数说明：</p><p>volume 指定驱动器(后面跟一个冒号)、装入点或卷名。<br>filename 仅用于 FAT/FAT32: 指定要检查是否有碎片的文件<br>/F 修复磁盘上的错误。<br>/V　 在 FAT/FAT32 上: 显示磁盘上每个文件的完整路径和名称。在 NTFS 上: 如果有清除消息，将其显示。<br>/R 查找不正确的扇区并恢复可读信息(隐含 /F)。<br>/L:size 仅用于 NTFS:? 将日志文件大小改成指定的 KB 数。如果没有指定大小，则显示当前的大小。<br>/X 如果必要，强制卷先卸下。卷的所有打开的句柄就会无效(隐含 /F)<br>/I 仅用于 NTFS: 对索引项进行强度较小的检查<br>/C 仅用于 NTFS: 跳过文件夹结构的循环检查。<br>/I 和 /C 命令行开关跳过卷的某些检查，减少运行 Chkdsk 所需的时间</p><h2 id="原因分析"><a href="#原因分析" class="headerlink" title="原因分析"></a>原因分析</h2><p>这种错误一般产生于外置移动硬盘上面，或者外置U盘等等。之所以产生这些问题，一般有以下几个原因：</p><ol><li>没有点击“安全删除硬件”直接拔USB接口导致系统没有完成读写操作。这会使得文件目录不完整，损坏文件目录系统。</li><li>劣质产品，或者劣质硬盘盒。硬盘盒内部的电源、电路供电不稳定，也会产生文件系统错误的状况。</li><li>停电了</li></ol><h2 id="恢复效果质量"><a href="#恢复效果质量" class="headerlink" title="恢复效果质量"></a>恢复效果质量</h2><p>如果是大移动硬盘并且是NTFS分区格式的，恢复质量十分理想，基本都能成功恢复文件和目录结构。</p><p>如果是FAT或FAT32格式，根据损坏程度不同，恢复质量效果比NTFS格式结构的分区稍差一些，所以日常使用建议使用NTFS格式分区，其数据安全性更高一些。</p><p>一般情况下，CHKDSK可以成功修复出错的分区。但仍有可能没有反应。此时建议不要拔出设备，重启电脑，再观察是否仍然错误。 如果故障依然存在，可以尝试用EasyRecovery、R-STUDIO等软件恢复分区数据。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>record</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>hardware</tag>
+      
+      <tag>移动硬盘</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>numpy中delete的使用方法</title>
+    <link href="/2020/05/31/np-delete%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/"/>
+    <url>/2020/05/31/np-delete%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/</url>
+    
+    <content type="html"><![CDATA[<p>本文将介绍np.delete中的参数及使用方法<br><a id="more"></a></p><h2 id="Python中列表元素删除"><a href="#Python中列表元素删除" class="headerlink" title="Python中列表元素删除"></a>Python中列表元素删除</h2><p>在列表中删除元素，我们可以：</p><pre><code class="lang-python">list_a = [1,2,3,4,5]list_a.pop(-1)print(list_a) # [1,2,3,4]del list_a[0]print(list_a) # [2,3,4]del list[1:]print(list_a) # [2]</code></pre><h2 id="在numpy的ndarray中删除元素"><a href="#在numpy的ndarray中删除元素" class="headerlink" title="在numpy的ndarray中删除元素"></a>在numpy的ndarray中删除元素</h2><p>numpy中的数组ndarray是定长数组，对ndarray的处理不像对python中列表的处理那么方便。想要删除ndarray中的元素，我们往往只能退而求其次，返回一个没有对应元素的副本。在numpy中我们一般使用delete函数。此外，numpy的delete是可以删除数组的整行和整列的。</p><p>简单介绍一下<code>np.delete</code>：</p><pre><code class="lang-python">numpy.delete(arr, obj, axis=None)</code></pre><ul><li>arr：输入数组</li><li>obj：切片，整数，表示哪个子数组要被移除</li><li>axis：删除子数组的轴</li><li>返回：一个新的子数组</li></ul><p>下面是使用举例：</p><pre><code class="lang-python">A = np.arange(15).reshape((3,5))print(A)[[ 0  1  2  3  4] [ 5  6  7  8  9] [10 11 12 13 14]]B = np.delete(A, 1) # 先把A给ravel成一维数组，再删除第1个元素。C = np.delete(A, 1, axis=0) # axis=0代表按行操作D = np.delete(A, 1, axis=1) # axis=1代表按列操作print(A) # 并没有改变，delete不会操作原数组。[[ 0  1  2  3  4] [ 5  6  7  8  9] [10 11 12 13 14]]print(B) # 先把A给ravel成一维数组，再删除第1个元素。[ 0  2  3  4  5  6  7  8  9 10 11 12 13 14]print(C) # axis=0代表按行操作[[ 0  1  2  3  4] [10 11 12 13 14]]print(D) # axis=1代表按列操作[[ 0  2  3  4] [ 5  7  8  9] [10 12 13 14]]</code></pre><p>不了解axis的读者可以看我写的<a href="https://superlova.github.io/2020/05/19/numpy%E4%B8%ADaxis%E7%9A%84%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3/">这篇文章</a>。</p><h2 id="在np-delete的index参数中应用切片操作"><a href="#在np-delete的index参数中应用切片操作" class="headerlink" title="在np.delete的index参数中应用切片操作"></a>在np.delete的index参数中应用切片操作</h2><p>index参数必须是个由整数元素组成的列表，内部存放着的整数代表着目标array的下标。</p><p>当我想实现删除从第5个到第100个之间的所有元素时，不能使用slice，这就比较尴尬了。</p><pre><code class="lang-python">In [5]: np.delete(x, [3:6])  File &quot;&lt;ipython-input-215-0a5bf5cc05ba&gt;&quot;, line 1    np.delete(x, [3:6])                   ^SyntaxError: invalid syntax</code></pre><p>我们没办法在函数参数部分让其接受slice。怎么解决呢？我们可以把参数从<code>[start:end]</code>换成<code>A[start:end]</code>吗？</p><pre><code class="lang-python">A = np.arange(10)*2print(A)[ 0  2  4  6  8 10 12 14 16 18]B = np.delete(A, A[1:4]) # 搞错了吧！预期结果：0 8 10 12 14 16 18print(B)[ 0  2  6 10 14 16 18]</code></pre><p>我们这段代码能够执行，但是不是我们想要的结果。什么原因呢？是因为np.delete的index参数接受的是下标数组，而A[1:4]=[2,4,6]，那么np.delete就忠实地执行了删除第2、4、6个元素的任务。但我们的本意只是想删除下标从1到4的元素而已。</p><pre><code class="lang-python">D = np.delete(A, [1,2,3])print(D) # [ 0  8 10 12 14 16 18]</code></pre><p>要想使用slice，可以采用下列方式：1. <code>slice</code>函数或者<code>range</code>函数；2. <code>np.s_</code></p><pre><code class="lang-python">C = np.delete(A, slice(1,4))print(C) # [ 0  8 10 12 14 16 18]E = np.delete(A, np.s_[1:4])print(E) # [ 0  8 10 12 14 16 18]</code></pre><p>其实<code>np.s_[1:4]</code>只不过是很方便产生slice(1,4)的一种方式而已。</p><h2 id="其他实用的方法"><a href="#其他实用的方法" class="headerlink" title="其他实用的方法"></a>其他实用的方法</h2><p>除此之外，我们还可以采用mask的方式选择原数组中的元素组成新数组</p><pre><code class="lang-python">mask = np.ones((len(A),), dtype=bool)mask[[1,2,3]] = Falseprint(A[mask]) # [ 0  8 10 12 14 16 18]</code></pre><p>或者干脆采用数组拼合的方式</p><pre><code class="lang-python">G = np.empty(len(A)-len(A[1:4]), dtype=int)G[0:1] = A[0:1]G[1:len(G)] = A[4:]print(G) # [ 0  8 10 12 14 16 18]</code></pre><p>后两种方法不像我们想象的那么没用，反而很常见，尤其是mask方法。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>notes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Python</tag>
+      
+      <tag>numpy</tag>
+      
+      <tag>slice</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Datawhale——SVHN——Task04：模型训练与验证</title>
     <link href="/2020/05/30/Datawhale%E2%80%94%E2%80%94SVHN%E2%80%94%E2%80%94Task04%EF%BC%9A%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E4%B8%8E%E9%AA%8C%E8%AF%81/"/>
     <url>/2020/05/30/Datawhale%E2%80%94%E2%80%94SVHN%E2%80%94%E2%80%94Task04%EF%BC%9A%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E4%B8%8E%E9%AA%8C%E8%AF%81/</url>
@@ -68,7 +277,7 @@
     <link href="/2020/05/23/Datawhale%E2%80%94%E2%80%94SVHN%E2%80%94%E2%80%94Task02%EF%BC%9A%E6%95%B0%E6%8D%AE%E6%89%A9%E5%A2%9E/"/>
     <url>/2020/05/23/Datawhale%E2%80%94%E2%80%94SVHN%E2%80%94%E2%80%94Task02%EF%BC%9A%E6%95%B0%E6%8D%AE%E6%89%A9%E5%A2%9E/</url>
     
-    <content type="html"><![CDATA[<p>训练模型第一步、数据读取和扩增！<br><a id="more"></a></p><h2 id="数据读取"><a href="#数据读取" class="headerlink" title="数据读取"></a>数据读取</h2><p>图像领域的数据读取方法，使用Pillow或者OpenCV内置的函数即可。</p><p>在读取图像时，还可以对原始图像添加扰动等，这就启发我们一件事：是不是对原数据增加一些扰动，就可以使其变成新的数据呢？</p><p>下面介绍利用该思想的数据扩增环节。</p><h2 id="数据扩增"><a href="#数据扩增" class="headerlink" title="数据扩增"></a>数据扩增</h2><h3 id="数据扩增为什么会有用"><a href="#数据扩增为什么会有用" class="headerlink" title="数据扩增为什么会有用"></a>数据扩增为什么会有用</h3><p>数据扩增的最常见作用，是增加数据集，用以缓解样本量不足导致的模型过拟合现象，从而提升模型的泛化性能。</p><p>究其本质，还是扩展数据集的多样性。</p><p>试想一下，我们如果想要试图训练一个完美模型，必然要利用完美的架构+完美的训练集，这个完美的训练集必然要覆盖到样本空间的方方面面。</p><p>我们当然不可能真的搞到无限多的样本。所以为了尽可能趋近于这个目标，就要试图以有限的数据集覆盖无限的样本空间。</p><p>每个样本在样本空间中就是一个坐标点。通过添加扰动，就能生成许多个在该样本点附近的增强样本。</p><p>上一个利用样本空间中添加扰动、从而生成与原样本很相似的应用，叫做<strong>生成对抗样本</strong>。</p><p>数据增强和对抗样本生成之间的区别在于，数据增强要保证扰动之后样本不能和原样本有区别；然而对抗样本生成则保证<strong>必须</strong>与原样本有区别。</p><p>有一些学者也通过将对抗样本添加至模型重训练的方法，使模型的泛化性能得到了提高。这说明数据增强和对抗样本的生效原理是一样的，都是通过扩大样本覆盖的样本空间的程度，通俗来讲就是模型见多识广了，再碰到新的问题也不怕了。</p><p>可以参考这篇论文：<a href="https://arxiv.org/abs/2003.08773" target="_blank" rel="noopener">Do CNNs Encode Data Augmentations?</a></p><h3 id="数据扩增方法"><a href="#数据扩增方法" class="headerlink" title="数据扩增方法"></a>数据扩增方法</h3><p>大家都用的Pytorch吗？不会只有我自己用tensorflow吧。我来给大家介绍一下tensorflow是怎么做数据扩增的。</p><p>参考：<a href="https://www.tensorflow.org/tutorials/images/data_augmentation" target="_blank" rel="noopener">TensorFlow Core</a></p><h4 id="1-准备"><a href="#1-准备" class="headerlink" title="1. 准备"></a>1. 准备</h4><pre><code class="lang-python"># 首先安装一个tensorflow_docs的库!pip install git+https://github.com/tensorflow/docsimport urllib # 负责下载网上的图片import tensorflow as tffrom tensorflow.keras.datasets import mnistfrom tensorflow.keras import layersAUTOTUNE = tf.data.experimental.AUTOTUNEimport tensorflow_docs as tfdocsimport tensorflow_docs.plotsimport tensorflow_datasets as tfdsimport PIL.Image # 大名鼎鼎PILimport matplotlib.pyplot as pltimport matplotlib as mplmpl.rcParams[&#39;figure.figsize&#39;] = (12, 5)import numpy as np</code></pre><p>下载一张示例图片：</p><pre><code class="lang-python">image_path = tf.keras.utils.get_file(&quot;cat.jpg&quot;, &quot;https://storage.googleapis.com/download.tensorflow.org/example_images/320px-Felis_catus-cat_on_snow.jpg&quot;)PIL.Image.open(image_path)</code></pre><p><img src="/2020/05/23/Datawhale——SVHN——Task02：数据扩增/2020-05-23-22-29-50.png" srcset="/img/loading.gif" alt></p><p>将该图片解析成tensor</p><pre><code class="lang-python">image_string=tf.io.read_file(image_path)image=tf.image.decode_jpeg(image_string,channels=3)</code></pre><p>定义一个函数，用于可视化图像。</p><pre><code class="lang-python">def visualize(original, augmented):  fig = plt.figure()  plt.subplot(1,2,1)  plt.title(&#39;Original image&#39;)  plt.imshow(original)  plt.subplot(1,2,2)  plt.title(&#39;Augmented image&#39;)  plt.imshow(augmented)</code></pre><h4 id="2-执行数据扩增"><a href="#2-执行数据扩增" class="headerlink" title="2. 执行数据扩增"></a>2. 执行数据扩增</h4><p><strong>翻转图像</strong></p><pre><code class="lang-python">flipped = tf.image.flip_left_right(image)visualize(image, flipped)</code></pre><p><img src="/2020/05/23/Datawhale——SVHN——Task02：数据扩增/2020-05-23-22-32-30.png" srcset="/img/loading.gif" alt></p><p><strong>灰度处理</strong></p><pre><code class="lang-python">grayscaled = tf.image.rgb_to_grayscale(image)visualize(image, tf.squeeze(grayscaled))plt.colorbar()</code></pre><p><img src="/2020/05/23/Datawhale——SVHN——Task02：数据扩增/2020-05-23-22-33-51.png" srcset="/img/loading.gif" alt></p><p><strong>改变图像饱和度</strong></p><pre><code class="lang-python">saturated = tf.image.adjust_saturation(image, 3)visualize(image, saturated)</code></pre><p><img src="/2020/05/23/Datawhale——SVHN——Task02：数据扩增/2020-05-23-22-35-05.png" srcset="/img/loading.gif" alt></p><p><strong>改变图像亮度</strong></p><pre><code class="lang-python">bright = tf.image.adjust_brightness(image, 0.4)visualize(image, bright)</code></pre><p><img src="/2020/05/23/Datawhale——SVHN——Task02：数据扩增/2020-05-23-22-35-39.png" srcset="/img/loading.gif" alt></p><p><strong>旋转图像</strong></p><pre><code class="lang-python">rotated = tf.image.rot90(image)visualize(image, rotated)</code></pre><p><img src="/2020/05/23/Datawhale——SVHN——Task02：数据扩增/2020-05-23-22-36-11.png" srcset="/img/loading.gif" alt></p><p><strong>中心放大并裁剪图像</strong></p><pre><code class="lang-python">cropped = tf.image.central_crop(image, central_fraction=0.5)visualize(image,cropped)</code></pre><p><img src="/2020/05/23/Datawhale——SVHN——Task02：数据扩增/2020-05-23-22-36-51.png" srcset="/img/loading.gif" alt></p><p>等等此类操作，不一而足。大家感兴趣的可以查阅tensorflow的<code>tf.image</code>文档。</p><h4 id="3-使用扩增数据集训练"><a href="#3-使用扩增数据集训练" class="headerlink" title="3. 使用扩增数据集训练"></a>3. 使用扩增数据集训练</h4><p>我们构造一个模型，该模型架构为纯全连接网络，数据集为MNIST手写数字识别数据集。我们可以直接在tensorflow_datasets这个库中使用这个数据集。</p><pre><code class="lang-python">dataset, info =  tfds.load(&#39;mnist&#39;, as_supervised=True, with_info=True)train_dataset, test_dataset = dataset[&#39;train&#39;], dataset[&#39;test&#39;]num_train_examples= info.splits[&#39;train&#39;].num_examples</code></pre><p>编写函数执行对原来数据集的扩增操作。</p><pre><code class="lang-python">def convert(image, label):  image = tf.image.convert_image_dtype(image, tf.float32) # Cast and normalize the image to [0,1]  return image, labeldef augment(image,label):  image,label = convert(image, label)  image = tf.image.convert_image_dtype(image, tf.float32) # Cast and normalize the image to [0,1]  image = tf.image.resize_with_crop_or_pad(image, 34, 34) # Add 6 pixels of padding  image = tf.image.random_crop(image, size=[28, 28, 1]) # Random crop back to 28x28  image = tf.image.random_brightness(image, max_delta=0.5) # Random brightness  return image,label</code></pre><pre><code class="lang-python">BATCH_SIZE = 64# Only use a subset of the data so it&#39;s easier to overfit, for this tutorialNUM_EXAMPLES = 2048</code></pre><p>创建扩增后的数据集</p><pre><code class="lang-python">augmented_train_batches = (    train_dataset    # Only train on a subset, so you can quickly see the effect.    .take(NUM_EXAMPLES)    .cache()    .shuffle(num_train_examples//4)    # The augmentation is added here.    .map(augment, num_parallel_calls=AUTOTUNE)    .batch(BATCH_SIZE)    .prefetch(AUTOTUNE))</code></pre><p>为了对照，我们创建没有扩增的数据集。</p><pre><code class="lang-python">non_augmented_train_batches = (    train_dataset    # Only train on a subset, so you can quickly see the effect.    .take(NUM_EXAMPLES)    .cache()    .shuffle(num_train_examples//4)    # No augmentation.    .map(convert, num_parallel_calls=AUTOTUNE)    .batch(BATCH_SIZE)    .prefetch(AUTOTUNE))</code></pre><p>设置验证集。验证集与数据增不增强无关，反正我们不使用验证机训练，只用于最后的打分。</p><pre><code class="lang-python">validation_batches = (    test_dataset    .map(convert, num_parallel_calls=AUTOTUNE)    .batch(2*BATCH_SIZE))</code></pre><p>建立模型。注意这个模型纯粹是为了体现数据扩增的效果而专门构建的，因为卷积网络CNN即便是不用数据扩增也能很好地解决MNIST手写数字识别问题，这样比较起来效果就不明显了。两层4096个神经元的全连接网络，激活函数为RELU。最后是一个softmax层分类。</p><pre><code class="lang-python">def make_model():  model = tf.keras.Sequential([      layers.Flatten(input_shape=(28, 28, 1)),      layers.Dense(4096, activation=&#39;relu&#39;),      layers.Dense(4096, activation=&#39;relu&#39;),      layers.Dense(10)  ])  model.compile(optimizer = &#39;adam&#39;,                loss=tf.losses.SparseCategoricalCrossentropy(from_logits=True),                metrics=[&#39;accuracy&#39;])  return model</code></pre><p>先使用<strong>没有经过数据扩增</strong>的数据训练模型，并记录其精度变化和loss变化：</p><pre><code class="lang-python">model_without_aug = make_model()no_aug_history = model_without_aug.fit(non_augmented_train_batches, epochs=50, validation_data=validation_batches)</code></pre><p>再使用<strong>经过扩增的数据</strong>训练模型，并记录。</p><pre><code class="lang-python">model_with_aug = make_model()aug_history = model_with_aug.fit(augmented_train_batches, epochs=50, validation_data=validation_batches)</code></pre><p>最后绘制图标，看一下表现。</p><p>首先是精度随着训练轮次的变化曲线：</p><pre><code class="lang-python">plotter = tfdocs.plots.HistoryPlotter()plotter.plot({&quot;Augmented&quot;: aug_history, &quot;Non-Augmented&quot;: no_aug_history}, metric = &quot;accuracy&quot;)plt.title(&quot;Accuracy&quot;)plt.ylim([0.75,1])</code></pre><p><img src="/2020/05/23/Datawhale——SVHN——Task02：数据扩增/2020-05-23-22-49-01.png" srcset="/img/loading.gif" alt></p><p>从图中可以看出，橙色线（没有数据增强的模型）在训练的时候很容易过拟合，但是在验证集上的精度不及蓝色线（数据增强的模型）。</p><p>再来看loss变化。</p><pre><code class="lang-python">plotter = tfdocs.plots.HistoryPlotter()plotter.plot({&quot;Augmented&quot;: aug_history, &quot;Non-Augmented&quot;: no_aug_history}, metric = &quot;loss&quot;)plt.title(&quot;Loss&quot;)plt.ylim([0,1])</code></pre><p><img src="/2020/05/23/Datawhale——SVHN——Task02：数据扩增/2020-05-23-22-51-30.png" srcset="/img/loading.gif" alt></p><p>这里看的就更明显了，橙色线在训练时的loss很快就下降到趋近0，这说明模型已经很难从未经增强的数据中学到东西了，产生了严重的过拟合。</p><p>而蓝色线直到最后也在逐步地学习之中，我们可以得出结论，数据增强的确有助于避免过拟合、增强模型的泛化性能。</p>]]></content>
+    <content type="html"><![CDATA[<p>训练模型第一步、数据读取和扩增！<br><a id="more"></a></p><h2 id="数据读取"><a href="#数据读取" class="headerlink" title="数据读取"></a>数据读取</h2><p>图像领域的数据读取方法，使用Pillow或者OpenCV内置的函数即可。</p><h2 id="数据扩增"><a href="#数据扩增" class="headerlink" title="数据扩增"></a>数据扩增</h2><p>在读取图像时，还可以对原始图像添加扰动等，这就启发我们一件事：是不是对原数据增加一些扰动，就可以使其变成新的数据呢？</p><p>下面介绍利用该思想的数据扩增环节。</p><h3 id="1-数据扩增为什么会有用"><a href="#1-数据扩增为什么会有用" class="headerlink" title="1. 数据扩增为什么会有用"></a>1. 数据扩增为什么会有用</h3><p>数据扩增的最常见作用，是增加数据集，用以缓解样本量不足导致的模型过拟合现象，从而提升模型的泛化性能。</p><p>究其本质，还是扩展数据集的多样性。</p><p>试想一下，我们如果想要试图训练一个完美模型，必然要利用完美的架构+完美的训练集，这个完美的训练集必然要覆盖到样本空间的方方面面。</p><p>我们当然不可能真的搞到无限多的样本。所以为了尽可能趋近于这个目标，就要试图以有限的数据集覆盖无限的样本空间。</p><p>每个样本在样本空间中就是一个坐标点。通过添加扰动，就能生成许多个在该样本点附近的增强样本。</p><p>上一个利用样本空间中添加扰动、从而生成与原样本很相似的应用，叫做<strong>生成对抗样本</strong>。</p><p>数据增强和对抗样本生成之间的区别在于，数据增强要保证扰动之后样本不能和原样本有区别；然而对抗样本生成则保证<strong>必须</strong>与原样本有区别。</p><p>有一些学者也通过将对抗样本添加至模型重训练的方法，使模型的泛化性能得到了提高。这说明数据增强和对抗样本的生效原理是一样的，都是通过扩大样本覆盖的样本空间的程度，通俗来讲就是模型见多识广了，再碰到新的问题也不怕了。</p><p>可以参考这篇论文：<a href="https://arxiv.org/abs/2003.08773" target="_blank" rel="noopener">Do CNNs Encode Data Augmentations?</a></p><h3 id="2-常见的数据扩增"><a href="#2-常见的数据扩增" class="headerlink" title="2. 常见的数据扩增"></a>2. 常见的数据扩增</h3><h4 id="2-1-图像数据扩增"><a href="#2-1-图像数据扩增" class="headerlink" title="2.1 图像数据扩增"></a>2.1 图像数据扩增</h4><ul><li><p>色彩抖动（Color Jittering）<br>调整图片的亮度、饱和度、对比度，针对图像的颜色进行的数据增强。<br>对比度受限自适应直方图均衡化算法（Clahe），锐化（Sharpen），凸点（Emboss）</p></li><li><p>主成分噪声（PCA  Jittering）<br>首先按照RGB三个颜色通道计算均值和标准差，对网络的输入数据进行规范化；再在整个训练集上计算协方差矩阵，进行特征分解，得到特征向量和特征值，最后做PCA Jittering；最后对RGB空间做PCA，然后对主成分做一个(0, 0.1)的高斯扰动。</p></li><li><p>弹性变换（Elastic Transform）</p></li></ul><p>算法一开始是由Patrice等人在2003年的ICDAR上发表的《Best Practices for Convolutional Neural Networks Applied to Visual Document Analysis》提出的，最开始应用在mnist手写体数字识别数据集中。当前也有很多人把该方法应用到手写体汉字的识别问题中。</p><p>首先对于图像中的每个像素点，产生对应的随机数对$(\Delta x, \Delta y)$，大小介于-1~1之间，分别表示该像素点的x方向和y方向的移动距离；<br>然后生成一个以0为均值，以σ为标准差的高斯核k_nn，并用前面的随机数与之做卷积，并将结果作用于原图像。</p><p>参考：<a href="https://blog.csdn.net/lhanchao/article/details/54234490" target="_blank" rel="noopener">https://blog.csdn.net/lhanchao/article/details/54234490</a></p><p>还有诸如透视变换（Perspective Transform）、分段仿射变换（Piecewise Affine transforms）、枕形畸变（Pincushion Distortion）等不同的图像变换操作。</p><p>根据Datawhale大佬分享，对于本次题目（SVHN街道彩色数字识别），最常见的、最有效的数据扩增方法是：</p><ul><li>随机改变大小（resize）</li><li>随机切割（randomcrop），即从原始图像中，随机的crop出一些图像。</li></ul><p>鉴于本次数据集中的图片大小不一，一般一开始我们都需要resize到指定大小。但也有的文章中提到了，先对图片resize会使得图片长宽比发生变化，造成失真。所以我们要具体问题具体分析。</p><p>我在博客中也有分享过一篇讲述图像数据增强的<a href>相关论文</a>，大家可以看一下。</p><h4 id="2-2-文本数据增强"><a href="#2-2-文本数据增强" class="headerlink" title="2.2 文本数据增强"></a>2.2 文本数据增强</h4><p>此部分参考我的<a href>文本数据增强</a>，而且由于本次赛题并不必进行文本数据增强，因此就不在这里赘述了。</p><h3 id="3-数据扩增实战——使用tensorflow"><a href="#3-数据扩增实战——使用tensorflow" class="headerlink" title="3.. 数据扩增实战——使用tensorflow"></a>3.. 数据扩增实战——使用tensorflow</h3><p>大家都用的Pytorch吗？不会只有我自己用tensorflow吧。我来给大家介绍一下tensorflow是怎么做数据扩增的。</p><p>参考：<a href="https://www.tensorflow.org/tutorials/images/data_augmentation" target="_blank" rel="noopener">TensorFlow Core</a></p><h4 id="1-准备"><a href="#1-准备" class="headerlink" title="1. 准备"></a>1. 准备</h4><pre><code class="lang-python"># 首先安装一个tensorflow_docs的库!pip install git+https://github.com/tensorflow/docsimport urllib # 负责下载网上的图片import tensorflow as tffrom tensorflow.keras.datasets import mnistfrom tensorflow.keras import layersAUTOTUNE = tf.data.experimental.AUTOTUNEimport tensorflow_docs as tfdocsimport tensorflow_docs.plotsimport tensorflow_datasets as tfdsimport PIL.Image # 大名鼎鼎PILimport matplotlib.pyplot as pltimport matplotlib as mplmpl.rcParams[&#39;figure.figsize&#39;] = (12, 5)import numpy as np</code></pre><p>下载一张示例图片：</p><pre><code class="lang-python">image_path = tf.keras.utils.get_file(&quot;cat.jpg&quot;, &quot;https://storage.googleapis.com/download.tensorflow.org/example_images/320px-Felis_catus-cat_on_snow.jpg&quot;)PIL.Image.open(image_path)</code></pre><p><img src="/2020/05/23/Datawhale——SVHN——Task02：数据扩增/2020-05-23-22-29-50.png" srcset="/img/loading.gif" alt></p><p>将该图片解析成tensor</p><pre><code class="lang-python">image_string=tf.io.read_file(image_path)image=tf.image.decode_jpeg(image_string,channels=3)</code></pre><p>定义一个函数，用于可视化图像。</p><pre><code class="lang-python">def visualize(original, augmented):  fig = plt.figure()  plt.subplot(1,2,1)  plt.title(&#39;Original image&#39;)  plt.imshow(original)  plt.subplot(1,2,2)  plt.title(&#39;Augmented image&#39;)  plt.imshow(augmented)</code></pre><h4 id="2-执行数据扩增"><a href="#2-执行数据扩增" class="headerlink" title="2. 执行数据扩增"></a>2. 执行数据扩增</h4><p><strong>翻转图像</strong></p><pre><code class="lang-python">flipped = tf.image.flip_left_right(image)visualize(image, flipped)</code></pre><p><img src="/2020/05/23/Datawhale——SVHN——Task02：数据扩增/2020-05-23-22-32-30.png" srcset="/img/loading.gif" alt></p><p><strong>灰度处理</strong></p><pre><code class="lang-python">grayscaled = tf.image.rgb_to_grayscale(image)visualize(image, tf.squeeze(grayscaled))plt.colorbar()</code></pre><p><img src="/2020/05/23/Datawhale——SVHN——Task02：数据扩增/2020-05-23-22-33-51.png" srcset="/img/loading.gif" alt></p><p><strong>改变图像饱和度</strong></p><pre><code class="lang-python">saturated = tf.image.adjust_saturation(image, 3)visualize(image, saturated)</code></pre><p><img src="/2020/05/23/Datawhale——SVHN——Task02：数据扩增/2020-05-23-22-35-05.png" srcset="/img/loading.gif" alt></p><p><strong>改变图像亮度</strong></p><pre><code class="lang-python">bright = tf.image.adjust_brightness(image, 0.4)visualize(image, bright)</code></pre><p><img src="/2020/05/23/Datawhale——SVHN——Task02：数据扩增/2020-05-23-22-35-39.png" srcset="/img/loading.gif" alt></p><p><strong>旋转图像</strong></p><pre><code class="lang-python">rotated = tf.image.rot90(image)visualize(image, rotated)</code></pre><p><img src="/2020/05/23/Datawhale——SVHN——Task02：数据扩增/2020-05-23-22-36-11.png" srcset="/img/loading.gif" alt></p><p><strong>中心放大并裁剪图像</strong></p><pre><code class="lang-python">cropped = tf.image.central_crop(image, central_fraction=0.5)visualize(image,cropped)</code></pre><p><img src="/2020/05/23/Datawhale——SVHN——Task02：数据扩增/2020-05-23-22-36-51.png" srcset="/img/loading.gif" alt></p><p>等等此类操作，不一而足。大家感兴趣的可以查阅tensorflow的<code>tf.image</code>文档。</p><h4 id="3-使用扩增数据集训练"><a href="#3-使用扩增数据集训练" class="headerlink" title="3. 使用扩增数据集训练"></a>3. 使用扩增数据集训练</h4><p>我们构造一个模型，该模型架构为纯全连接网络，数据集为MNIST手写数字识别数据集。我们可以直接在tensorflow_datasets这个库中使用这个数据集。</p><pre><code class="lang-python">dataset, info =  tfds.load(&#39;mnist&#39;, as_supervised=True, with_info=True)train_dataset, test_dataset = dataset[&#39;train&#39;], dataset[&#39;test&#39;]num_train_examples= info.splits[&#39;train&#39;].num_examples</code></pre><p>编写函数执行对原来数据集的扩增操作。</p><pre><code class="lang-python">def convert(image, label):  image = tf.image.convert_image_dtype(image, tf.float32) # Cast and normalize the image to [0,1]  return image, labeldef augment(image,label):  image,label = convert(image, label)  image = tf.image.convert_image_dtype(image, tf.float32) # Cast and normalize the image to [0,1]  image = tf.image.resize_with_crop_or_pad(image, 34, 34) # Add 6 pixels of padding  image = tf.image.random_crop(image, size=[28, 28, 1]) # Random crop back to 28x28  image = tf.image.random_brightness(image, max_delta=0.5) # Random brightness  return image,label</code></pre><pre><code class="lang-python">BATCH_SIZE = 64# Only use a subset of the data so it&#39;s easier to overfit, for this tutorialNUM_EXAMPLES = 2048</code></pre><p>创建扩增后的数据集</p><pre><code class="lang-python">augmented_train_batches = (    train_dataset    # Only train on a subset, so you can quickly see the effect.    .take(NUM_EXAMPLES)    .cache()    .shuffle(num_train_examples//4)    # The augmentation is added here.    .map(augment, num_parallel_calls=AUTOTUNE)    .batch(BATCH_SIZE)    .prefetch(AUTOTUNE))</code></pre><p>为了对照，我们创建没有扩增的数据集。</p><pre><code class="lang-python">non_augmented_train_batches = (    train_dataset    # Only train on a subset, so you can quickly see the effect.    .take(NUM_EXAMPLES)    .cache()    .shuffle(num_train_examples//4)    # No augmentation.    .map(convert, num_parallel_calls=AUTOTUNE)    .batch(BATCH_SIZE)    .prefetch(AUTOTUNE))</code></pre><p>设置验证集。验证集与数据增不增强无关，反正我们不使用验证机训练，只用于最后的打分。</p><pre><code class="lang-python">validation_batches = (    test_dataset    .map(convert, num_parallel_calls=AUTOTUNE)    .batch(2*BATCH_SIZE))</code></pre><p>建立模型。注意这个模型纯粹是为了体现数据扩增的效果而专门构建的，因为卷积网络CNN即便是不用数据扩增也能很好地解决MNIST手写数字识别问题，这样比较起来效果就不明显了。两层4096个神经元的全连接网络，激活函数为RELU。最后是一个softmax层分类。</p><pre><code class="lang-python">def make_model():  model = tf.keras.Sequential([      layers.Flatten(input_shape=(28, 28, 1)),      layers.Dense(4096, activation=&#39;relu&#39;),      layers.Dense(4096, activation=&#39;relu&#39;),      layers.Dense(10)  ])  model.compile(optimizer = &#39;adam&#39;,                loss=tf.losses.SparseCategoricalCrossentropy(from_logits=True),                metrics=[&#39;accuracy&#39;])  return model</code></pre><p>先使用<strong>没有经过数据扩增</strong>的数据训练模型，并记录其精度变化和loss变化：</p><pre><code class="lang-python">model_without_aug = make_model()no_aug_history = model_without_aug.fit(non_augmented_train_batches, epochs=50, validation_data=validation_batches)</code></pre><p>再使用<strong>经过扩增的数据</strong>训练模型，并记录。</p><pre><code class="lang-python">model_with_aug = make_model()aug_history = model_with_aug.fit(augmented_train_batches, epochs=50, validation_data=validation_batches)</code></pre><p>最后绘制图标，看一下表现。</p><p>首先是精度随着训练轮次的变化曲线：</p><pre><code class="lang-python">plotter = tfdocs.plots.HistoryPlotter()plotter.plot({&quot;Augmented&quot;: aug_history, &quot;Non-Augmented&quot;: no_aug_history}, metric = &quot;accuracy&quot;)plt.title(&quot;Accuracy&quot;)plt.ylim([0.75,1])</code></pre><p><img src="/2020/05/23/Datawhale——SVHN——Task02：数据扩增/2020-05-23-22-49-01.png" srcset="/img/loading.gif" alt></p><p>从图中可以看出，橙色线（没有数据增强的模型）在训练的时候很容易过拟合，但是在验证集上的精度不及蓝色线（数据增强的模型）。</p><p>再来看loss变化。</p><pre><code class="lang-python">plotter = tfdocs.plots.HistoryPlotter()plotter.plot({&quot;Augmented&quot;: aug_history, &quot;Non-Augmented&quot;: no_aug_history}, metric = &quot;loss&quot;)plt.title(&quot;Loss&quot;)plt.ylim([0,1])</code></pre><p><img src="/2020/05/23/Datawhale——SVHN——Task02：数据扩增/2020-05-23-22-51-30.png" srcset="/img/loading.gif" alt></p><p>这里看的就更明显了，橙色线在训练时的loss很快就下降到趋近0，这说明模型已经很难从未经增强的数据中学到东西了，产生了严重的过拟合。</p><p>而蓝色线直到最后也在逐步地学习之中，我们可以得出结论，数据增强的确有助于避免过拟合、增强模型的泛化性能。</p>]]></content>
     
     
     <categories>
@@ -393,11 +602,11 @@
     
     <tags>
       
+      <tag>array</tag>
+      
       <tag>algorithm</tag>
       
       <tag>lintcode</tag>
-      
-      <tag>array</tag>
       
     </tags>
     
@@ -424,11 +633,11 @@
       
       <tag>C++</tag>
       
-      <tag>STL</tag>
-      
       <tag>string</tag>
       
       <tag>regex</tag>
+      
+      <tag>STL</tag>
       
     </tags>
     
@@ -455,11 +664,11 @@
       
       <tag>C++</tag>
       
+      <tag>STL</tag>
+      
       <tag>map</tag>
       
       <tag>set</tag>
-      
-      <tag>STL</tag>
       
     </tags>
     
