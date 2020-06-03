@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content>
+  <meta name="author" content="Superlova">
+  <meta name="keywords" content>
+  <title>【学习笔记】使用LSTM训练imdb情感分类模型 - Superlova</title>
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<link rel="alternate" href="/atom.xml" title="Superlova" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Superlova</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期三, 六月 3日 2020, 6:03 晚上
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    1.2k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                      4 分钟
+                  </span>
+                
+
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5 z-depth-3" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <div class="markdown-body">
+              <p>使用LSTM训练最简单的IMDB影评分类任务，总结文本分类任务常见流程。<br><a id="more"></a></p>
+<h2 id="1-查看数据集"><a href="#1-查看数据集" class="headerlink" title="1. 查看数据集"></a>1. 查看数据集</h2><h3 id="1-1-官网上的数据集压缩包"><a href="#1-1-官网上的数据集压缩包" class="headerlink" title="1.1 官网上的数据集压缩包"></a>1.1 官网上的数据集压缩包</h3><p>从IMDB官网上下载的数据集，是一个压缩包<code>aclImdb_v1.tar.gz</code>。解压后的目录如下：<br><img src="/2020/06/03/【学习笔记】使用LSTM训练imdb情感分类模型/2020-06-03-18-12-58.png" srcset="/img/loading.gif" alt></p>
+<ul>
+<li><code>test</code></li>
+<li><code>train</code></li>
+<li><code>imdb.vocab</code></li>
+<li><code>imdbEr.txt</code></li>
+<li><code>README</code></li>
+</ul>
+<p>其内部不仅有完整的影评文件，还包含该影评的链接等信息。</p>
+<h3 id="1-2-keras自带的数据集"><a href="#1-2-keras自带的数据集" class="headerlink" title="1.2 keras自带的数据集"></a>1.2 keras自带的数据集</h3><p>keras里的IMDB影评数据集，内部结构分为两个部分：影评部分和情感标签部分，也就是数据集的X和y部分。</p>
+<p>X部分的每条影评都被编码为一个整数列表。另外，每个单词的在单词表中的编码越小，代表在影评中出现频率越高。这使得我们能在取数据时指定只使用某一出现频率内范围的单词（其他单词由于出现频率太低，可以直接标记为未知）。</p>
+<p>“0”在数据集中代表“未知”单词。</p>
+<p>我们采用内置的<code>load_data</code>函数来取出数据。</p>
+<pre><code class="lang-python">tf.keras.datasets.imdb.load_data(
+    path=&#39;imdb.npz&#39;, num_words=None, skip_top=0, maxlen=None, seed=113,
+    start_char=1, oov_char=2, index_from=3, **kwargs
+)
+</code></pre>
+<p>num_words: 即设定取出现频率在前num_words的单词。如果不填，所有单词表中的单词都会标记。<br>skip_top: 设定前skip_top频率出现的单词不予标记。这可能是由于高频出现的单词信息量太低（如the、a等）。<br>maxlen: 设定最大影评长度，超过该长度的影评都会被截断。<br>x_train, x_test: 返回影评列表，长度为影评个数（25000个训练，25000个测试），每个影评是整数数组。<br>y_train, y_test: 返回整数数组，长度为影评个数，代表影评的情感倾向（0或1）。</p>
+<pre><code class="lang-python">from tensorflow.keras.datasets import imdb
+max_features = 50000 # 取前50000个最常见的单词，组建词典
+(x_train, y_train), (x_test, y_test) = imdb.load_data(num_words=max_features)
+</code></pre>
+<p>需要注意的是这个<code>max_features</code>与数据集的数目没有关系，不要搞混了。</p>
+<h2 id="2-数据预处理"><a href="#2-数据预处理" class="headerlink" title="2. 数据预处理"></a>2. 数据预处理</h2><pre><code class="lang-python">from tensorflow.keras.preprocessing import sequence
+print(&#39;Pad sequences (samples x time)&#39;)
+x_train = sequence.pad_sequences(x_train, maxlen=maxlen)
+x_test = sequence.pad_sequences(x_test, maxlen=maxlen)
+X_train
+array([[    0,     0,     0, ...,    19,   178,    32],
+       [    0,     0,     0, ...,    16,   145,    95],
+       [    0,     0,     0, ...,     7,   129,   113],
+       ...,
+       [    0,     0,     0, ...,     4,  3586, 22459],
+       [    0,     0,     0, ...,    12,     9,    23],
+       [    0,     0,     0, ...,   204,   131,     9]], dtype=int32)
+</code></pre>
+<p>经过这个函数处理，每条影评被规整成了长度为500的整形元素列表，长度不够500个单词的影评，在最前面加0；长度不够的则在最后截断。</p>
+<h2 id="3-模型构建"><a href="#3-模型构建" class="headerlink" title="3. 模型构建"></a>3. 模型构建</h2><p><strong>Embedding层</strong></p>
+<p>在最开始我们加入了Embedding层，max_features是字典长度，也可以说是one-hot向量长度。<br>input_length=500为每个序列为500个单词构成。<br>input_shape=(max_features,)表明one-hot的维度，这两个都可以不填，直接通过fit的时候推断出来</p>
+<p><strong>LSTM层</strong></p>
+<p>LSTM层的参数是output_dim，这个参数可以自定义，因为它不受之前影响，只表明输出的维度。</p>
+<p>同时也是是门结构（forget门、update门、output门）的维度。之所以理解成维度，是因为LSTM中隐藏单元个数这个概念不好理解。其实该参数名称为<code>units</code>，官方说法就是“隐藏单元个数”。</p>
+<p>LSTM层的输入是形如（samples，timesteps，input_dim）的3D张量；输出是形如（samples，timesteps，output_dim）的3D张量，或者返回形如（samples，output_dim）的2D张量。二者区别在于，若LSTM层中参数<code>return_sequences=True</code>，就返回带时间步的张量。</p>
+<p>若我们有很多LSTM层，我们可以把很多LSTM层串在一起，为了方便LSTM层与层之间的信息传递，可以设置<code>return_sequences=True</code>。但是最后一个LSTM层return_sequences通常为false，此时输出的就是每个样本的结果张量。</p>
+<p>假如我们输入有25000个句子，每个句子都由500个单词组成，而每个单词用64维的词向量表示。那么样本数目samples=25000，时间步timesteps=500（可以简单地理解timesteps就是输入序列的长度input_length），前一层Embedding词向量输出维度input_dim=128。</p>
+<p>也就是说通过LSTM，把词的维度由128转变成了100。</p>
+<p>在LSTM层中还可以设置Dropout，这一点在之后会详细说明。</p>
+<p><strong>全连接层</strong></p>
+<p>汇总至一个神经元的全连接层，即sigmoid层，判断0或1即可。</p>
+<pre><code class="lang-python">from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Embedding, LSTM
+model = Sequential() 
+model.add(Embedding(max_features, 128, input_length=500, input_shape=(max_features,))) 
+model.add(LSTM(100, dropout=0.2, recurrent_dropout=0.2))
+model.add(Dense(1, activation=&#39;sigmoid&#39;)) 
+model.compile(loss=&#39;binary_crossentropy&#39;,optimizer=&#39;adam&#39;, metrics=[&#39;accuracy&#39;]) 
+print(model.summary())
+</code></pre>
+<h2 id="4-模型训练和保存"><a href="#4-模型训练和保存" class="headerlink" title="4. 模型训练和保存"></a>4. 模型训练和保存</h2><pre><code class="lang-python">model.fit(X_train, y_train, validation_data=(X_test, y_test), epoch=10, batch_size=64) 
+scores = model.evaluate(X_test, y_test, verbose=0)
+print(&quot;Accuracy: %.2f%%&quot; % (scores[1]*100))
+model.save(&#39;models/sentiment-lstm.h5&#39;)
+</code></pre>
+
+            </div>
+            <hr>
+            <div>
+              <p>
+                
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/notes/">notes</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Python/">Python</a>
+                    
+                      <a class="hover-with-bg" href="/tags/LSTM/">LSTM</a>
+                    
+                      <a class="hover-with-bg" href="/tags/IMDB/">IMDB</a>
+                    
+                  </span>
+                
+              </p>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc-start"></div>
+<div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var post = $('#post');
+      var toc = $('#toc');
+      var tocLimMax = post.offset().top + post.height() - navHeight;
+
+      $(window).scroll(function () {
+        var tocLimMin = $('#toc-start').offset().top - navHeight;
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': navHeight,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+      var offset = $('#board-ctn').css('margin-right')
+      $('#toc-ctn').css({
+        'right': offset
+      })
+    });
+  </script>
+
+
+
+
+
+
+
+
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-160806707-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+
+  
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "【学习笔记】使用LSTM训练imdb情感分类模型&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>
