@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://superlova.github.io/"/>
-  <updated>2020-06-03T14:40:27.579Z</updated>
+  <updated>2020-06-08T02:15:04.116Z</updated>
   <id>https://superlova.github.io/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>【经验分享】停电了怎么办？Python获取Windows电源连接信息</title>
+    <link href="https://superlova.github.io/2020/06/08/%E3%80%90%E7%BB%8F%E9%AA%8C%E5%88%86%E4%BA%AB%E3%80%91%E5%81%9C%E7%94%B5%E4%BA%86%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9FPython%E8%8E%B7%E5%8F%96Windows%E7%94%B5%E6%BA%90%E8%BF%9E%E6%8E%A5%E4%BF%A1%E6%81%AF/"/>
+    <id>https://superlova.github.io/2020/06/08/%E3%80%90%E7%BB%8F%E9%AA%8C%E5%88%86%E4%BA%AB%E3%80%91%E5%81%9C%E7%94%B5%E4%BA%86%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9FPython%E8%8E%B7%E5%8F%96Windows%E7%94%B5%E6%BA%90%E8%BF%9E%E6%8E%A5%E4%BF%A1%E6%81%AF/</id>
+    <published>2020-06-08T01:42:45.000Z</published>
+    <updated>2020-06-08T02:15:04.116Z</updated>
+    
+    <content type="html"><![CDATA[<p>一旦停电，就令笔记本电脑发出响声、发送信息……。看似简单的功能，该如何利用Python实现呢？<br><a id="more"></a></p><p>采用笔记本电脑办公的好处是不必害怕突然停电。然而笔记本电脑不可能使用电池工作太久，此时必须尽快通知管理人员，恢复供电。</p><p>看似简单的功能，只需在Windows中注册一个HANDLE，负责接收电源适配器更改这一事件即可。但是本人没有Windows编程和系统编程的经验，只对Python熟悉。如何实现这一功能？</p><p>废话不多说，下面是代码。</p><pre><code class="lang-python">import win32conimport win32apiimport win32guiimport timefrom ctypes import POINTER, windll, Structure, cast, CFUNCTYPE, c_int, c_uint, c_void_p, c_boolfrom comtypes import GUIDfrom ctypes.wintypes import HANDLE, DWORDPBT_POWERSETTINGCHANGE = 0x8013GUID_CONSOLE_DISPLAY_STATE = &#39;{6FE69556-704A-47A0-8F24-C28D936FDA47}&#39;GUID_ACDC_POWER_SOURCE = &#39;{5D3E9A59-E9D5-4B00-A6BD-FF34FF516548}&#39;GUID_BATTERY_PERCENTAGE_REMAINING = &#39;{A7AD8041-B45A-4CAE-87A3-EECBB468A9E1}&#39;GUID_MONITOR_POWER_ON = &#39;{02731015-4510-4526-99E6-E5A17EBD1AEA}&#39;GUID_SYSTEM_AWAYMODE = &#39;{98A7F580-01F7-48AA-9C0F-44352C29E5C0}&#39;class POWERBROADCAST_SETTING(Structure):    _fields_ = [(&quot;PowerSetting&quot;, GUID),                (&quot;DataLength&quot;, DWORD),                (&quot;Data&quot;, DWORD)]def wndproc(hwnd, msg, wparam, lparam):    if msg == win32con.WM_POWERBROADCAST:        if wparam == win32con.PBT_APMPOWERSTATUSCHANGE:            print(&#39;Power status has changed&#39;)        if wparam == win32con.PBT_APMRESUMEAUTOMATIC:            print(&#39;System resume&#39;)        if wparam == win32con.PBT_APMRESUMESUSPEND:            print(&#39;System resume by user input&#39;)        if wparam == win32con.PBT_APMSUSPEND:            print(&#39;System suspend&#39;)        if wparam == PBT_POWERSETTINGCHANGE:            print(&#39;Power setting changed...&#39;)            settings = cast(lparam, POINTER(POWERBROADCAST_SETTING)).contents            power_setting = str(settings.PowerSetting)            data_length = settings.DataLength            data = settings.Data            if power_setting == GUID_CONSOLE_DISPLAY_STATE:                if data == 0: print(&#39;Display off&#39;)                if data == 1: print(&#39;Display on&#39;)                if data == 2: print(&#39;Display dimmed&#39;)            elif power_setting == GUID_ACDC_POWER_SOURCE:                if data == 0: print(&#39;AC power&#39;)                if data == 1:                    print(&#39;Battery power&#39;)                    #################################################                    playsound(&#39;alert.mp3&#39;) # 此处自定义你的操作                    #################################################                if data == 2: print(&#39;Short term power&#39;)            elif power_setting == GUID_BATTERY_PERCENTAGE_REMAINING:                print(&#39;battery remaining: %s&#39; % data)            elif power_setting == GUID_MONITOR_POWER_ON:                if data == 0: print(&#39;Monitor off&#39;)                if data == 1: print(&#39;Monitor on&#39;)            elif power_setting == GUID_SYSTEM_AWAYMODE:                if data == 0: print(&#39;Exiting away mode&#39;)                if data == 1: print(&#39;Entering away mode&#39;)            else:                print(&#39;unknown GUID&#39;)        return True    return Falseif __name__ == &quot;__main__&quot;:    print(&quot;*** STARTING ***&quot;)    hinst = win32api.GetModuleHandle(None)    wndclass = win32gui.WNDCLASS()    wndclass.hInstance = hinst    wndclass.lpszClassName = &quot;testWindowClass&quot;    CMPFUNC = CFUNCTYPE(c_bool, c_int, c_uint, c_uint, c_void_p)    wndproc_pointer = CMPFUNC(wndproc)    wndclass.lpfnWndProc = {win32con.WM_POWERBROADCAST : wndproc_pointer}    try:        myWindowClass = win32gui.RegisterClass(wndclass)        hwnd = win32gui.CreateWindowEx(win32con.WS_EX_LEFT,                                     myWindowClass,                                     &quot;testMsgWindow&quot;,                                     0,                                     0,                                     0,                                     win32con.CW_USEDEFAULT,                                     win32con.CW_USEDEFAULT,                                     0,                                     0,                                     hinst,                                     None)    except Exception as e:        print(&quot;Exception: %s&quot; % str(e))    if hwnd is None:        print(&quot;hwnd is none!&quot;)    else:        print(&quot;hwnd: %s&quot; % hwnd)    guids_info = {                    &#39;GUID_MONITOR_POWER_ON&#39; : GUID_MONITOR_POWER_ON,                    &#39;GUID_SYSTEM_AWAYMODE&#39; : GUID_SYSTEM_AWAYMODE,                    &#39;GUID_CONSOLE_DISPLAY_STATE&#39; : GUID_CONSOLE_DISPLAY_STATE,                    &#39;GUID_ACDC_POWER_SOURCE&#39; : GUID_ACDC_POWER_SOURCE,                    &#39;GUID_BATTERY_PERCENTAGE_REMAINING&#39; : GUID_BATTERY_PERCENTAGE_REMAINING                 }    for name, guid_info in guids_info.items():        result = windll.user32.RegisterPowerSettingNotification(HANDLE(hwnd), GUID(guid_info), DWORD(0))        print(&#39;registering&#39;, name)        print(&#39;result:&#39;, hex(result))        print(&#39;lastError:&#39;, win32api.GetLastError())        print()    print(&#39;\nEntering loop&#39;)    while True:        win32gui.PumpWaitingMessages()        time.sleep(1)</code></pre><p>COM: The Component Object Model 组件对象模型，是微软的一套软件组件的二进制接口标准。COM使得跨编程语言的进程间通信、动态对象创建成为可能。</p><p>COM实质上是一种语言无关的对象实现方式，这使其可以在创建环境不同的场合、甚至跨计算机的分布环境下被复用。COM允许复用这些对象，而不必知道对象内部是如何实现，因为组件实现者必须提供良好定义的接口从而屏蔽实现细节。通过引用计数，组件对象自己负责动态创建与销毁，从而屏蔽了不同编程语言之间的内存分配语义差异。</p><p>对于某些应用程序来说，COM已经部分被.NET框架取代。.NET Framework是新一代的Microsoft Windows应用程序开发平台。</p><p>COM是基于组件对象方式概念来设计的，在基础中，至少要让每个组件都可以支持二个功能：</p><p>查询组件中有哪些接口<br>让组件做自我生命管理，此概念的实践即为引用计数（Reference Counting）</p><p>GUID 是一个 128 位整数（16 字节），COM将其用于计算机和网络的唯一标识符。全局唯一标识符（英语：Globally Unique Identifier，缩写：GUID；发音为/ˈɡuːɪd/或/ˈɡwɪd/）是一种由算法生成的唯一标识，通常表示成32个16进制数字（0－9，A－F）组成的字符串，如：{21EC2020-3AEA-1069-A2DD-08002B30309D}，它实质上是一个128位长的二进制整数。</p><p>Windows操作系统使用GUID来标识COM对象中的类和界面。一个脚本可以不需知道DLL的位置和名字直接通过GUID来激活其中的类或对象。</p><p>参考：<a href="https://stackoverflow.com/questions/48720924/python-3-detect-monitor-power-state-in-windows" target="_blank" rel="noopener">https://stackoverflow.com/questions/48720924/python-3-detect-monitor-power-state-in-windows</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;一旦停电，就令笔记本电脑发出响声、发送信息……。看似简单的功能，该如何利用Python实现呢？&lt;br&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="record" scheme="https://superlova.github.io/categories/record/"/>
+    
+    
+      <category term="Python" scheme="https://superlova.github.io/tags/Python/"/>
+    
+      <category term="Windows" scheme="https://superlova.github.io/tags/Windows/"/>
+    
+      <category term="PowerOff" scheme="https://superlova.github.io/tags/PowerOff/"/>
+    
+  </entry>
   
   <entry>
     <title>【经验分享】TensorFlow模型训练和保存</title>
@@ -91,13 +118,13 @@
     
       <category term="NLP" scheme="https://superlova.github.io/tags/NLP/"/>
     
-      <category term="Adversarial Attacks" scheme="https://superlova.github.io/tags/Adversarial-Attacks/"/>
-    
       <category term="Robustness" scheme="https://superlova.github.io/tags/Robustness/"/>
     
       <category term="Deep Neural Networks" scheme="https://superlova.github.io/tags/Deep-Neural-Networks/"/>
     
       <category term="survey" scheme="https://superlova.github.io/tags/survey/"/>
+    
+      <category term="Adversarial Attacks" scheme="https://superlova.github.io/tags/Adversarial-Attacks/"/>
     
   </entry>
   
@@ -240,9 +267,9 @@
     
       <category term="Python" scheme="https://superlova.github.io/tags/Python/"/>
     
-      <category term="numpy" scheme="https://superlova.github.io/tags/numpy/"/>
-    
       <category term="array" scheme="https://superlova.github.io/tags/array/"/>
+    
+      <category term="numpy" scheme="https://superlova.github.io/tags/numpy/"/>
     
       <category term="concatenate" scheme="https://superlova.github.io/tags/concatenate/"/>
     
@@ -543,36 +570,6 @@
       <category term="Python" scheme="https://superlova.github.io/tags/Python/"/>
     
       <category term="decorator" scheme="https://superlova.github.io/tags/decorator/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>深度学习工作站调研--结合政府采购网信息</title>
-    <link href="https://superlova.github.io/2020/05/11/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%B7%A5%E4%BD%9C%E7%AB%99%E8%B0%83%E7%A0%94-%E7%BB%93%E5%90%88%E6%94%BF%E5%BA%9C%E9%87%87%E8%B4%AD%E7%BD%91%E4%BF%A1%E6%81%AF/"/>
-    <id>https://superlova.github.io/2020/05/11/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%B7%A5%E4%BD%9C%E7%AB%99%E8%B0%83%E7%A0%94-%E7%BB%93%E5%90%88%E6%94%BF%E5%BA%9C%E9%87%87%E8%B4%AD%E7%BD%91%E4%BF%A1%E6%81%AF/</id>
-    <published>2020-05-11T03:59:50.000Z</published>
-    <updated>2020-05-20T02:36:25.578Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="服务器调研-2020年5月10日"><a href="#服务器调研-2020年5月10日" class="headerlink" title="服务器调研 2020年5月10日"></a>服务器调研 2020年5月10日</h1><p><strong>调研目标：</strong></p><ul><li>目前典型的计算机，包括商用台式机、工作站、服务器</li><li>搭配目前典型的GPU卡</li><li>GPU适配计算机，需要厂家网站公开的列表，特别是对于服务器。如果厂家没有，需要致电厂商（非销售商）的技术支持。</li></ul><h2 id="1-制约性能的典型项目"><a href="#1-制约性能的典型项目" class="headerlink" title="1. 制约性能的典型项目"></a>1. 制约性能的典型项目</h2><h3 id="1-1-主板"><a href="#1-1-主板" class="headerlink" title="1.1 主板"></a>1.1 主板</h3><p>Intel部分芯片组不支持PCIe 3.0接口，无法发挥显卡的最佳速度。</p><h4 id="名词解释："><a href="#名词解释：" class="headerlink" title="名词解释："></a>名词解释：</h4><p><img src="/2020/05/11/深度学习工作站调研-结合政府采购网信息/2020-05-10-21-33-30.png" srcset="/img/loading.gif" alt><br><strong>PCI Express / PCI-e</strong><br>PCI-E的全名叫PCI Express，简称PCI-E，官方简称PCIe，他是计算机内部的一种高速总线。PCI-E既是通道，也是接口，当他以接口形式存在的时候，就是我们主板上那长长的槽。PCI-E接口目前最大的作用就是插显卡<br><img src="/2020/05/11/深度学习工作站调研-结合政府采购网信息/2020-05-10-21-32-30.png" srcset="/img/loading.gif" alt></p><p><strong>PCI Express 修订版 / PCIe版本</strong><br>PCIe所能承受的带宽一般以版本和长度来区分，目前最流行的PCIe版本是3.0，最新的版本是4.0，目前只有高端主板支持4.0，只有比2080ti还要高端的显卡才需要4.0。</p><p><strong>PCI Express 配置</strong><br>通俗的说就是插槽长度。X1长度是最短的，所能承受的带宽大约是986MB/S。X2长度就是2GB/S，X4长度就是4GB/S，那X16长度就是16GB/S。当前主流显卡，均采用PCIE×16插槽结构。只要具有PCIE×16插槽的主板，都是可以安装独立显卡的。<br>英特尔官网的意义没大看懂，真正有意义的是“支持的处理器 PCI Express 端口配置”这一项。</p><p><strong>支持的处理器 PCI Express 端口配置</strong><br>以Z390主板为例，该主板1x16 or 2x8 or 1x8+2x4，意思就是可以插1个长度为16X的显卡，也可以插两个长度为8X的固态硬盘之类的，但是如果同时插上显卡和固态硬盘，就会出现抢通道的现象：显卡占用16个通道，两个固态占用16个通道，然而<strong>PCI Express 通道数的最大值</strong>就只有24个，通道不够用就会导致限速，甚至无法正常运转。</p><p><img src="/2020/05/11/深度学习工作站调研-结合政府采购网信息/2020-05-10-22-13-34.png" srcset="/img/loading.gif" alt><br><img src="/2020/05/11/深度学习工作站调研-结合政府采购网信息/2020-05-10-22-13-57.png" srcset="/img/loading.gif" alt><br><img src="/2020/05/11/深度学习工作站调研-结合政府采购网信息/2020-05-10-22-14-07.png" srcset="/img/loading.gif" alt><br><img src="/2020/05/11/深度学习工作站调研-结合政府采购网信息/2020-05-10-22-14-15.png" srcset="/img/loading.gif" alt></p><p>以上是当前在售处理器搭配主板（芯片组）的特性支持情况，仅供参考，并不是说某块主板用了上述某个芯片组芯片就会具备这么多的扩展接口及能力，具体还要看主板厂商针对这个版型作出什么样的“阉割”调整。</p><h3 id="1-2-电源"><a href="#1-2-电源" class="headerlink" title="1.2 电源"></a>1.2 电源</h3><p><img src="/2020/05/11/深度学习工作站调研-结合政府采购网信息/2020-05-10-22-11-24.png" srcset="/img/loading.gif" alt="顶级游戏显卡及需要的电源功率大小"></p><h2 id="2-目前典型计算机"><a href="#2-目前典型计算机" class="headerlink" title="2. 目前典型计算机"></a>2. 目前典型计算机</h2><p>服务器对显卡的支持不如工作站，台式机的性能过低，因此本调查汇聚于工作站查询。</p><h3 id="2-1-服务器"><a href="#2-1-服务器" class="headerlink" title="2.1 服务器"></a>2.1 服务器</h3><p>服务器按外形划分可以划分为：塔式服务器、机架式服务器、刀片式服务器。<br>服务器除了一些低端的塔式机能用显卡以外，其他的都不支持显度卡，当然机架式服务器很薄根本就没有显卡的空间。<br>如果购买服务器，官方售后将不会主动为你安装个人家用系列显卡，转而推销商业计算卡。<br><img src="/2020/05/11/深度学习工作站调研-结合政府采购网信息/2020-05-10-15-26-49.png" srcset="/img/loading.gif" alt></p><p>截至2020年5月，服务器热销品牌Top-10（取自<a href="http://top.zol.com.cn/compositor/server.html" target="_blank" rel="noopener">ZOL网</a>）：<br>Dell、华为、浪潮、联想、惠普、H3C、ThinkServer、中科曙光、宝德、IBM。</p><h3 id="2-2-工作站"><a href="#2-2-工作站" class="headerlink" title="2.2 工作站"></a>2.2 工作站</h3><p>工作站的机箱主要以塔式为主，和一般家用主机机箱差距不大。<br>工作站对显卡的支持比服务器强很多，具体来说，工作站的主板对PCI-E的接口支持更好。</p><p>以下价格和资料全部取自于北京市政府采购网。</p><p><strong>神舟</strong><br>HFMPB2O8型号支持双路2080ti或TITAN<br><a href="http://114.255.53.119:81/bgpc_office_manage/produce/parmsInfo.htm?topPk=1r6e15444412038777n5&amp;tiitPk=BG_002X&amp;tioPk=" target="_blank" rel="noopener">HFMPB2O8</a>    78,016.00 自带2080ti<br><a href="http://114.255.53.119:81/bgpc_office_manage/produce/parmsInfo.htm?topPk=2g0v15681729710791z0&amp;tiitPk=BG_002X&amp;tioPk=" target="_blank" rel="noopener">HFMPB99K</a>  55,691.28   自带2080ti<br><a href="http://114.255.53.119:81/bgpc_office_manage/produce/parmsInfo.htm?topPk=6u7m15621197126648s6&amp;tiitPk=BG_002X&amp;tioPk=" target="_blank" rel="noopener">HFMPB3IR</a>  32,870.00   C422可更换更高级显卡<br><a href="http://114.255.53.119:81/bgpc_office_manage/produce/parmsInfo.htm?topPk=8n5x15444417182251i6&amp;tiitPk=BG_002X&amp;tioPk=" target="_blank" rel="noopener">HFMPB3J9</a>  29,980.00   自带2080</p><p><strong>联想</strong><br><a href="http://114.255.53.119:81/bgpc_office_manage/produce/parmsInfo.htm?topPk=6h7y15571256822209c5&amp;tiitPk=BG_002X&amp;tioPk=" target="_blank" rel="noopener">Think Station P520</a>   46,920.00    C422可更换更高级显卡<br><a href="http://114.255.53.119:81/bgpc_office_manage/produce/parmsInfo.htm?topPk=1s8z15571265520623u2&amp;tiitPk=BG_002X&amp;tioPk=" target="_blank" rel="noopener">ThinkStation P720</a> 35,000.00   C622可更换更高级 </p><p><strong>宏碁</strong><br><a href="http://114.255.53.119:81/bgpc_office_manage/produce/parmsInfo.htm?topPk=7w0g15281019011939v9&amp;tiitPk=BG_002X&amp;tioPk=" target="_blank" rel="noopener">AP150 F4</a> 38,500.00    C622可更换更高级 </p><p><strong>浪潮</strong><br>浪潮是自研主板，不过其主板支持PCIe 16x，理论上只要供电足够即可安装包括2080Ti在内的显卡<br><a href="http://114.255.53.119:81/bgpc_office_manage/produce/parmsInfo.htm?topPk=3f4m15287143876139q2&amp;tiitPk=BG_002X&amp;tioPk=" target="_blank" rel="noopener">P8000</a>    37,260.00</p><p><strong>惠普</strong><br><a href="http://114.255.53.119:81/bgpc_office_manage/produce/parmsInfo.htm?topPk=4g2q15281081290990x3&amp;tiitPk=BG_002X&amp;tioPk=" target="_blank" rel="noopener">HP Z4 G4</a>  15,900.00   C622可更换更高级<br><a href="http://114.255.53.119:81/bgpc_office_manage/produce/parmsInfo.htm?topPk=4v9p15281082398434h6&amp;tiitPk=BG_002X&amp;tioPk=" target="_blank" rel="noopener">HP Z6 G4</a>  23,500.00   C622可更换更高级<br><a href="http://114.255.53.119:81/bgpc_office_manage/produce/parmsInfo.htm?topPk=0z0m15314586871347z2&amp;tiitPk=BG_002X&amp;tioPk=" target="_blank" rel="noopener">HP Z8 G4</a>  35,800.00   C622可更换更高级 </p><p><strong>苹果</strong><br>苹果的主板仅支持AMD的显卡，A卡不能用作深度学习。</p><h3 id="2-3-商用台式机"><a href="#2-3-商用台式机" class="headerlink" title="2.3 商用台式机"></a>2.3 商用台式机</h3><p>即普通台式机。普通台式机难以支撑深度学习任务。</p><h2 id="3-显卡介绍"><a href="#3-显卡介绍" class="headerlink" title="3. 显卡介绍"></a>3. 显卡介绍</h2><p>显卡分为Nvidia显卡和AMD显卡，其中Nvidia显卡可以用来深度学习训练和推理。</p><p>比较显卡性能，可以去<a href="https://versus.com/cn" target="_blank" rel="noopener">这个网站</a></p><h3 id="3-1-Nvidia显卡简介"><a href="#3-1-Nvidia显卡简介" class="headerlink" title="3.1 Nvidia显卡简介"></a>3.1 Nvidia显卡简介</h3><p><a href="https://www.bybusa.com/gpu-rank" target="_blank" rel="noopener">2020年显卡天梯图</a></p><p><img src="/2020/05/11/深度学习工作站调研-结合政府采购网信息/2020-05-10-22-23-18.png" srcset="/img/loading.gif" alt="2020年显卡天梯图"></p><p>目前最强的显卡是2080ti。预计在2020年底的3080ti发布之前，2080ti还会持续称霸显卡江湖。</p><h3 id="3-2-游戏显卡"><a href="#3-2-游戏显卡" class="headerlink" title="3.2 游戏显卡"></a>3.2 游戏显卡</h3><p>对游戏显卡的调研，参考<a href="https://post.smzdm.com/p/a6lrwk3e/" target="_blank" rel="noopener">“什么值得买”上的调研</a>以及<a href="https://www.cnblogs.com/xiaozhi_5638/p/10923351.html" target="_blank" rel="noopener">这个网址</a>。</p><p><img src="/2020/05/11/深度学习工作站调研-结合政府采购网信息/2020-05-10-22-09-38.png" srcset="/img/loading.gif" alt="游戏显卡一览"></p><p><strong>Geforce系列</strong></p><p>这个系列是销量最多、大众最为熟悉的显卡，一般用来打游戏。价格便宜，最新出来的旗舰卡RTX 2080Ti京东售价大概1w左右，根据不同的品牌，价格有所波动。低配置的便宜的一千就能买到。官方定位是消费级，但是它在深度学习上的表现也非常不错，很多人用来做推理、训练，单张卡的性能跟深度学习专业卡Tesla系列比起来其实差不太多，但是性价比却高很多。比如已经停产的GTX 1080显卡的参数基本和深度学习入门级显卡Tesla P4一样，用来做训练和推理的效果比Tesla P4还要好，可是GTX 1080一张卡才卖5000~6000左右，而Tesla P4要卖到1.4w。</p><p>究其原因，很大程度上在于英伟达官方禁止使用GTX、RTX系列显卡用于深度学习等用途，一经使用，自动过保。除了商业考虑外，还包括：Tesla多块显卡合起来的性能不会受很大影响，且Tesla系列显卡功耗优化非常明显，基本都是被动散热，不提供风扇，更适合数据中心机房工作环境等。</p><h3 id="3-3-计算显卡"><a href="#3-3-计算显卡" class="headerlink" title="3.3 计算显卡"></a>3.3 计算显卡</h3><p>专业级显卡的介绍参考<a href="https://product.pconline.com.cn/itbk/diy/graphics/1802/10846244.html" target="_blank" rel="noopener">“什么值得买”上的调研</a>以及<a href="https://www.cnblogs.com/xiaozhi_5638/p/10923351.html" target="_blank" rel="noopener">这个网址</a>。</p><p><strong>Quadro系列</strong><br>Quadro系列显卡一般用于特定行业，比如设计、建筑等，图像处理专业显卡，比如CAD、Maya等软件，一般人很少用到，价格相对来讲也稍微贵一些，最新的包括RTX 3000/4000/6000/8000型号。</p><p><strong>Tesla系列</strong><br>Tesla系列显卡定位并行计算，一般用于数据中心，具体点，比如用于深度学习，做训练、推理等。阿里云、Amazon云有非常多的GPU服务器，基本都采用Tesla系列显卡。这个系列显卡有个特别明显的特征，那就是贵。Tesla系列入门级显卡 Tesla P4，前面提到过，用来做深度学习的效果比GTX 1080还差，但是价格是后者的3倍多。像其他更高级别的Tesla V100、Tesla P100 价格高达8w、4w，这种价位的显卡虽然性能强劲，但是一般人是买不起的，只有企业数据中心才会部署这种显卡。</p><h3 id="3-4-显卡性能指标"><a href="#3-4-显卡性能指标" class="headerlink" title="3.4 显卡性能指标"></a>3.4 显卡性能指标</h3><p>本部分请参考<a href="https://www.cnblogs.com/xiaozhi_5638/p/10923351.html" target="_blank" rel="noopener">这里</a>。</p><h3 id="3-4-显卡罗列"><a href="#3-4-显卡罗列" class="headerlink" title="3.4 显卡罗列"></a>3.4 显卡罗列</h3><p>政府采购网上，值得采购的显卡如下</p><div class="table-container"><table><thead><tr><th>型号</th><th>价格</th></tr></thead><tbody><tr><td>p5000</td><td>27000</td></tr><tr><td>p6000</td><td>43500</td></tr><tr><td>2080</td><td>13500</td></tr><tr><td>k4000</td><td>42450</td></tr><tr><td>p4000</td><td>6800</td></tr><tr><td>2070s</td><td>8000</td></tr><tr><td>8000</td><td>93350</td></tr><tr><td>2080ti</td><td>16000</td></tr><tr><td>1080ti</td><td>8620</td></tr><tr><td>p4</td><td>28000</td></tr><tr><td>2080</td><td>10290</td></tr><tr><td>2060</td><td>5000</td></tr><tr><td>titan rtx</td><td>30000</td></tr><tr><td>p1000</td><td>3500</td></tr><tr><td>2070</td><td>7500</td></tr><tr><td>m2000</td><td>2982</td></tr><tr><td>titan v</td><td>37500</td></tr></tbody></table></div>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;服务器调研-2020年5月10日&quot;&gt;&lt;a href=&quot;#服务器调研-2020年5月10日&quot; class=&quot;headerlink&quot; title=&quot;服务器调研 2020年5月10日&quot;&gt;&lt;/a&gt;服务器调研 2020年5月10日&lt;/h1&gt;&lt;p&gt;&lt;strong&gt;调研目标：&lt;
-      
-    
-    </summary>
-    
-    
-      <category term="record" scheme="https://superlova.github.io/categories/record/"/>
-    
-    
-      <category term="PCIe" scheme="https://superlova.github.io/tags/PCIe/"/>
-    
-      <category term="显卡" scheme="https://superlova.github.io/tags/%E6%98%BE%E5%8D%A1/"/>
-    
-      <category term="工作站" scheme="https://superlova.github.io/tags/%E5%B7%A5%E4%BD%9C%E7%AB%99/"/>
     
   </entry>
   
