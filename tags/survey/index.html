@@ -16,7 +16,7 @@
   <meta name="description" content>
   <meta name="author" content="Superlova">
   <meta name="keywords" content>
-  <title>标签 - survey - Superlova</title>
+  <title>标签 - Survey - Superlova</title>
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
@@ -139,22 +139,16 @@
                 
 
 <div class="list-group">
-<!--  <p class="h4">共计 2 篇文章</p>-->
+<!--  <p class="h4">共计 1 篇文章</p>-->
   <hr>
   
     
       
       <p class="h5">2020</p>
     
-    <a href="/2020/06/02/【论文阅读笔记】Adversarial-Attacks-on-Deep-Learning-Models-in-Natural-Language-Processing-A-Survey/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">【论文阅读笔记】Adversarial Attacks on Deep Learning Models in Natural Language Processing: A Survey</span>
-      <span style="float: right;">06-02</span>
-    </a>
-  
-    
-    <a href="/2020/06/02/【论文阅读笔记】A-survey-on-Image-Data-Augmentation-for-Deep-Learning/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">【论文阅读笔记】A survey on Image Data Augmentation for Deep Learning</span>
-      <span style="float: right;">06-02</span>
+    <a href="/2020/06/20/【论文阅读笔记】Fuzzing-A-Survey/" class="list-group-item list-group-item-action">
+      <span class="archive-post-title">【论文阅读笔记】Fuzzing: A Survey</span>
+      <span style="float: right;">06-20</span>
     </a>
   
 </div>
@@ -285,7 +279,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "标签 - survey&nbsp;",
+        "标签 - Survey&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,
@@ -357,6 +351,19 @@
         tex2jax: {
             inlineMath: [ ["$","$"], ["\\(","\\)"] ],
             skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>
+ript', 'style', 'textarea', 'pre', 'code'],
             processEscapes: true
         }
     });

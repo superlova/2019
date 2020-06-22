@@ -2,6 +2,76 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://superlova.github.io/2020/03/25/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91Coverage%20Guided%20Testing%20for%20Recurrent%20Neural%20Networks%20/</loc>
+    
+    <lastmod>2020-06-22T14:36:30.629Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://superlova.github.io/2020/06/20/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91DeepXplore-Automated-Whitebox-Testing-of-Deep-Learning-Systems/</loc>
+    
+    <lastmod>2020-06-22T14:28:58.942Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://superlova.github.io/2020/06/20/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91DeepTest-Automated-Testing-of-Deep-Neural-Network-driven-Autonomous-Cars/</loc>
+    
+    <lastmod>2020-06-22T14:28:50.240Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://superlova.github.io/2020/06/20/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91Deep-Gauge-Multi-Granularity-Testing-Criteria-for-Deep-Learning-Systems/</loc>
+    
+    <lastmod>2020-06-22T14:28:38.668Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://superlova.github.io/2020/06/20/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91DeepCT-Tomographic-Combinatorial-Testing-for-Deep-Learning-Systems/</loc>
+    
+    <lastmod>2020-06-22T14:28:24.405Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://superlova.github.io/2020/06/20/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91Fuzzing-A-Survey/</loc>
+    
+    <lastmod>2020-06-20T04:06:09.757Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://superlova.github.io/2020/06/20/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91LSTM%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84%E7%AE%80%E4%BB%8B%E4%B8%8E%E5%AF%B9%E5%BA%94%E7%9A%84keras%E5%AE%9E%E7%8E%B0/</loc>
+    
+    <lastmod>2020-06-20T03:54:08.330Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://superlova.github.io/2020/06/20/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91Deep-Text-Classification-Can-be-Fooled/</loc>
+    
+    <lastmod>2020-06-20T01:22:19.456Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://superlova.github.io/2020/06/09/%E3%80%90%E7%BB%8F%E9%AA%8C%E5%88%86%E4%BA%AB%E3%80%91IMDb%E6%95%B0%E6%8D%AE%E9%9B%86%E7%9A%84%E9%A2%84%E5%A4%84%E7%90%86/</loc>
+    
+    <lastmod>2020-06-10T07:01:36.220Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://superlova.github.io/2020/06/09/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B8%AD%E5%A4%84%E7%90%86%E6%96%87%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%9A%84%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95/</loc>
+    
+    <lastmod>2020-06-10T00:44:12.566Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://superlova.github.io/2020/06/08/%E3%80%90%E7%BB%8F%E9%AA%8C%E5%88%86%E4%BA%AB%E3%80%91%E5%81%9C%E7%94%B5%E4%BA%86%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9FPython%E8%8E%B7%E5%8F%96Windows%E7%94%B5%E6%BA%90%E8%BF%9E%E6%8E%A5%E4%BF%A1%E6%81%AF/</loc>
     
     <lastmod>2020-06-08T02:15:04.116Z</lastmod>
@@ -26,13 +96,6 @@
     <loc>https://superlova.github.io/2020/03/19/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91DeepStellar%20Model-Based%20Quantitative%20Analysis%20of%20Stateful%20Deep%20Learning%20Systems/</loc>
     
     <lastmod>2020-06-03T07:31:36.315Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://superlova.github.io/2020/03/25/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91Coverage%20Guided%20Testing%20for%20Recurrent%20Neural%20Networks%20/</loc>
-    
-    <lastmod>2020-06-03T00:38:02.469Z</lastmod>
     
   </url>
   

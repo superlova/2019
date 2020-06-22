@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content>
+  <meta name="author" content="Superlova">
+  <meta name="keywords" content>
+  <title>【学习笔记】机器学习中处理文本数据的常用方法 - Superlova</title>
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<link rel="alternate" href="/atom.xml" title="Superlova" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Superlova</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期二, 六月 9日 2020, 10:52 晚上
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    1.4k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                      6 分钟
+                  </span>
+                
+
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5 z-depth-3" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <div class="markdown-body">
+              <p>总结词袋模型、Tf-idf等文本特征提取方法<br><a id="more"></a></p>
+<h2 id="一、词袋模型"><a href="#一、词袋模型" class="headerlink" title="一、词袋模型"></a>一、词袋模型</h2><p>文本数据通常被表示为由字符组成的字符串。我们需要先处理数据，然后才能对其应用机器学习算法。</p>
+<p>在文本分析的语境中，数据集通常被称为语料库（corpus），每个由单个文本表示的数据点被称为文档（document）。</p>
+<p>最简单的处理方法，是<strong>只计算语料库中每个单词在每个文本中的出现频次</strong>。这种文本处理模型称之为<strong>词袋模型</strong>。</p>
+<p>不考虑词语出现的顺序，每个出现过的词汇单独作为一列特征，这些不重复的特征词汇集合为词表。</p>
+<p>每一个文本都可以在很长的词表上统计出一个很多列的特征向量。如果每个文本都出现的词汇，一般被标记为<strong>停用词</strong>不计入特征向量。</p>
+<p>为了搞清楚词袋模型，也就是<code>CountVectorizer</code>到底做了什么，我们执行以下代码：</p>
+<pre><code class="lang-python">bards_words =[&quot;The fool doth think he is wise,&quot;,
+    &quot;but the wise man knows himself to be a fool&quot;]
+</code></pre>
+<p>我们导入 CountVectorizer 并将其实例化，然后对 bards_words 进行拟合，如下所示：</p>
+<pre><code class="lang-python">from sklearn.feature_extraction.text import CountVectorizer
+vect = CountVectorizer()
+vect.fit(bards_words)
+</code></pre>
+<p>拟合 CountVectorizer 包括训练数据的分词与词表的构建，我们可以通过 vocabulary_ 属性来访问词表：</p>
+<pre><code class="lang-python">print(&quot;Vocabulary size: {}&quot;.format(len(vect.vocabulary_)))
+print(&quot;Vocabulary content:\n {}&quot;.format(vect.vocabulary_))
+#------------------#
+Vocabulary size: 13
+Vocabulary content:
+{&#39;the&#39;: 9, &#39;himself&#39;: 5, &#39;wise&#39;: 12, &#39;he&#39;: 4, &#39;doth&#39;: 2,
+ &#39;to&#39;: 11, &#39;knows&#39;: 7,&#39;man&#39;: 8, &#39;fool&#39;: 3, &#39;is&#39;: 6, &#39;be&#39;: 0, 
+ &#39;think&#39;: 10, &#39;but&#39;: 1}
+</code></pre>
+<p>词表共包含 13 个词，从 “be” 到 “wise”。<br>我们可以调用 transform 方法来创建训练数据的词袋表示：</p>
+<pre><code class="lang-python">bag_of_words = vect.transform(bards_words)
+print(&quot;bag_of_words: {}&quot;.format(repr(bag_of_words)))
+#--------------------#
+bag_of_words: &lt;2x13 sparse matrix of type &#39;&lt;class &#39;numpy.int64&#39;&gt;&#39;
+with 16 stored elements in Compressed Sparse Row format&gt;
+</code></pre>
+<p>词袋表示保存在一个 SciPy 稀疏矩阵中，这种数据格式只保存非零元素。这个矩阵的形状为 2×13，每行对应于两个数据点之一，每个特征对应于词表中的一个单词。要想查看稀疏矩阵的实际内容，可以使用 toarray 方法将其转换为“密集的”NumPy 数组（保存所有 0 元素）：</p>
+<pre><code class="lang-python">print(&quot;Dense representation of bag_of_words:\n{}&quot;.format(
+    bag_of_words.toarray()))
+#---------------------#
+Dense representation of bag_of_words:
+[[0 0 1 1 1 0 1 0 0 1 1 0 1]
+[1 1 0 1 0 1 0 1 1 1 0 1 1]]
+</code></pre>
+<p>删除没有信息量的单词，除了使用<code>min_df</code>参数设定词例至少需要在多少个文档中出现过之外，还可以通过添加停用词的方法。</p>
+<h2 id="二、用tf-idf缩放数据"><a href="#二、用tf-idf缩放数据" class="headerlink" title="二、用tf-idf缩放数据"></a>二、用tf-idf缩放数据</h2><p>词频 - 逆向文档频率（term frequency–inverse document frequency，tf-idf）方法，对在某个特定文档中经常出现的术语给予很高的权重，但对在语料库的许多文档中都经常出现的术语给予的权重却不高。</p>
+<p>scikit-learn 在两个类中实现了 tf-idf 方法：TfidfTransformer 和 TfidfVectorizer，前者接受 CountVectorizer 生成的稀疏矩阵并将其变换，后者接受文本数据并完成词袋特征提取与 tf-idf 变换。</p>
+<p>单词w在文档d中的tf-idf分数为：</p>
+<p><img src="/2020/06/09/【学习笔记】机器学习中处理文本数据的常用方法/2020-06-09-23-20-54.png" srcset="/img/loading.gif" alt></p>
+<p>式中，tf为词频，Term Frequency, 表示一个词在一个文档中的出现频率。该频率最后要除以该文档的长度，用以归一化。</p>
+<p>式中，$N$为总文档数，$N_w$为带有单词$w$的文档数。由于分子比分母大，所以该 $\log$ 值必不可能小于零。</p>
+<pre><code class="lang-python">from sklearn.feature_extraction.text import TfidfVectorizer
+corpus=[&quot;I come to China to travel&quot;,
+&quot;This is a car polupar in China&quot;,
+&quot;I love tea and Apple &quot;,
+&quot;The work is to write some papers in science&quot;]
+tfidf = TfidfVectorizer()
+vector = tfidf.fit_transform(corpus)
+print(vector)
+
+#---------------#
+(0, 16)    0.4424621378947393
+(0, 3)    0.348842231691988
+(0, 15)    0.697684463383976
+(0, 4)    0.4424621378947393
+(1, 5)    0.3574550433419527
+(1, 9)    0.45338639737285463
+(1, 2)    0.45338639737285463
+(1, 6)    0.3574550433419527
+(1, 14)    0.45338639737285463
+(1, 3)    0.3574550433419527
+(2, 1)    0.5
+(2, 0)    0.5
+(2, 12)    0.5
+(2, 7)    0.5
+(3, 10)    0.3565798233381452
+(3, 8)    0.3565798233381452
+(3, 11)    0.3565798233381452
+(3, 18)    0.3565798233381452
+(3, 17)    0.3565798233381452
+(3, 13)    0.3565798233381452
+(3, 5)    0.2811316284405006
+(3, 6)    0.2811316284405006
+(3, 15)    0.2811316284405006
+</code></pre>
+<p>返回值什么意思呢？(0, 16)代表第0个文档，第一个单词在单词表（词袋）中的位置是第16个，该单词的tf-idf值为0.44246213；第二个单词在词袋中第3个位置……</p>
+<p>显然这是个经过压缩的系数矩阵，每一行的元组表明该元素在稀疏矩阵中的位置，其值为右边的tf-idf值，代表一个单词。可以通过<code>.toarray()</code>方法令其恢复到系数矩阵状态。</p>
+<pre><code class="lang-python">print(vector.toarray().shape)
+print(len(vector.toarray()))
+print(type(vector.toarray()))
+print(vector.toarray())
+#-----------------------------#
+(4, 19)
+4
+&lt;class &#39;numpy.ndarray&#39;&gt;
+[[0. 0. 0. 0.34884223 0.44246214 0.
+  0. 0. 0. 0. 0. 0.
+  0. 0. 0. 0.69768446 0.44246214 0.
+  0. ]
+
+ [0. 0. 0.4533864  0.35745504 0. 0.35745504
+  0.35745504 0. 0. 0.4533864  0. 0.
+  0. 0. 0.4533864  0. 0. 0.
+  0. ]
+
+ [0.5 0.5 0. 0. 0. 0.
+  0. 0.5 0. 0. 0. 0.
+  0.5 0. 0. 0. 0. 0.
+  0. ]
+
+ [0. 0. 0. 0. 0. 0.28113163
+  0.28113163 0. 0.35657982 0. 0.35657982 0.35657982
+  0. 0.35657982 0. 0.28113163 0. 0.35657982
+  0.35657982]]
+</code></pre>
+<h2 id="三、多元词袋"><a href="#三、多元词袋" class="headerlink" title="三、多元词袋"></a>三、多元词袋</h2><p>词袋模型将一段文档拆分成单词后，忽略了单词的上下文可能对文档的含义造成影响。</p>
+<p>因此可以通过</p>
+<h2 id="四、英语的词干提取与词形还原"><a href="#四、英语的词干提取与词形还原" class="headerlink" title="四、英语的词干提取与词形还原"></a>四、英语的词干提取与词形还原</h2><h2 id="五、中文的分词"><a href="#五、中文的分词" class="headerlink" title="五、中文的分词"></a>五、中文的分词</h2><h2 id="六、主题建模与文档聚类"><a href="#六、主题建模与文档聚类" class="headerlink" title="六、主题建模与文档聚类"></a>六、主题建模与文档聚类</h2>
+            </div>
+            <hr>
+            <div>
+              <p>
+                
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/notes/">notes</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Python/">Python</a>
+                    
+                      <a class="hover-with-bg" href="/tags/IMDb/">IMDb</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Machine-Learning/">Machine Learning</a>
+                    
+                  </span>
+                
+              </p>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc-start"></div>
+<div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var post = $('#post');
+      var toc = $('#toc');
+      var tocLimMax = post.offset().top + post.height() - navHeight;
+
+      $(window).scroll(function () {
+        var tocLimMin = $('#toc-start').offset().top - navHeight;
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': navHeight,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+      var offset = $('#board-ctn').css('margin-right')
+      $('#toc-ctn').css({
+        'right': offset
+      })
+    });
+  </script>
+
+
+
+
+
+
+
+
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-160806707-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+
+  
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "【学习笔记】机器学习中处理文本数据的常用方法&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

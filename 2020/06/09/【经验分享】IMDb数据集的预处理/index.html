@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content>
+  <meta name="author" content="Superlova">
+  <meta name="keywords" content>
+  <title>【经验分享】IMDb数据集的预处理 - Superlova</title>
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<link rel="alternate" href="/atom.xml" title="Superlova" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Superlova</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期二, 六月 9日 2020, 10:48 晚上
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    1.3k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                      7 分钟
+                  </span>
+                
+
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5 z-depth-3" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <div class="markdown-body">
+              <p>IMDb从官网下载与从keras直接调用的处理方法是不同的。<br><a id="more"></a></p>
+<h2 id="一、IMDb数据集的处理方法"><a href="#一、IMDb数据集的处理方法" class="headerlink" title="一、IMDb数据集的处理方法"></a>一、IMDb数据集的处理方法</h2><h3 id="1-官网下载法"><a href="#1-官网下载法" class="headerlink" title="1. 官网下载法"></a>1. 官网下载法</h3><pre><code class="lang-python">import pandas as pd
+import numpy as np
+from sklearn.datasets import load_files
+</code></pre>
+<pre><code class="lang-shell">!wget http://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz
+!tar -zxvf aclImdb_v1.tar.gz
+!ls
+</code></pre>
+<p>对于 v1.0 版数据，其训练集大小是 75 000，而不是 25 000，因为其中还包含 50 000 个用于无监督学习的无标签文档。</p>
+<p>在进行后续操作之前，建议先将这 50 000 个无标签文档从训练集中剔除。</p>
+<pre><code class="lang-bash">!mkdir aclImdb/train_unlabel
+!mv aclImdb/train/unsupBow.feat aclImdb/train_unlabel
+!mv aclImdb/train/urls_unsup.txt aclImdb/train_unlabel
+!mv aclImdb/train/unsup aclImdb/train_unlabel
+</code></pre>
+<pre><code class="lang-python">reviews_train = load_files(&quot;aclImdb/train/&quot;)
+text_train, y_train = reviews_train.data, reviews_train.target
+reviews_test = load_files(&quot;aclImdb/test/&quot;)
+text_test, y_test = reviews_test.data, reviews_test.target
+# 删掉HTML换行符
+text_train = [doc.replace(b&quot;&lt;br /&gt;&quot;, b&quot; &quot;) for doc in text_train]
+text_test = [doc.replace(b&quot;&lt;br /&gt;&quot;, b&quot; &quot;) for doc in text_test]
+
+print(&quot;type of text_train: {}&quot;.format(type(text_train))) # 查看训练集类型：list
+print(&quot;length of text_train: {}&quot;.format(len(text_train))) # 查看训练集大小
+print(&quot;text_train[1]:\n{}&quot;.format(text_train[1])) # 查看第二段文本
+print(&quot;Samples per class (training): {}&quot;.format(np.bincount(y_train))) # 查看数据集是否均等
+#------------------------------------------------#
+type of text_train: &lt;class &#39;list&#39;&gt;
+length of text_train: 25000
+text_train[1]:
+b&#39;Words can\&#39;t describe how bad this movie is. I can\&#39;t explain it by writing only. You have too see it for yourself to get at grip of how horrible a movie really can be. Not that I recommend you to do that. There are so many clich\xc3\xa9s, mistakes (and all other negative things you can imagine) here that will just make you cry. To start with the technical first, there are a LOT of mistakes regarding the airplane. I won\&#39;t list them here, but just mention the coloring of the plane. They didn\&#39;t even manage to show an airliner in the colors of a fictional airline, but instead used a 747 painted in the original Boeing livery. Very bad. The plot is stupid and has been done many times before, only much, much better. There are so many ridiculous moments here that i lost count of it really early. Also, I was on the bad guys\&#39; side all the time in the movie, because the good guys were so stupid. &quot;Executive Decision&quot; should without a doubt be you\&#39;re choice over this one, even the &quot;Turbulence&quot;-movies are better. In fact, every other movie in the world is better than this one.&#39;
+Samples per class (training): [12500 12500]
+</code></pre>
+<p>采用词袋模型整理数据</p>
+<pre><code class="lang-python">vect = CountVectorizer().fit(text_train)
+X_train = vect.transform(text_train)
+print(&quot;X_train:\n{}&quot;.format(repr(X_train)))
+#---------------------------#
+X_train:
+&lt;25000x74849 sparse matrix of type &#39;&lt;class &#39;numpy.int64&#39;&gt;&#39;
+with 3431196 stored elements in Compressed Sparse Row format&gt;
+</code></pre>
+<p>X_train 是训练数据的词袋表示，其形状为 25 000×74 849，这表示词表中包含 74 849 个元素。数据被保存为 SciPy 稀疏矩阵。</p>
+<p>访问词表的另一种方法是使用向量器（vectorizer）的 get_feature_name 方法，它将返回一个列表，每个元素对应于一个特征：</p>
+<p>feature_names = vect.get_feature_names()<br>print(“Number of features: {}”.format(len(feature_names)))<br>print(“First 20 features:\n{}”.format(feature_names[:20]))<br>print(“Features 20010 to 20030:\n{}”.format(feature_names[20010:20030]))<br>print(“Every 2000th feature:\n{}”.format(feature_names[::2000]))</p>
+<p>Number of features: 74849<br>First 20 features:<br>[‘00’, ‘000’, ‘0000000000001’, ‘00001’, ‘00015’, ‘000s’, ‘001’, ‘003830’,<br>‘006’, ‘007’, ‘0079’, ‘0080’, ‘0083’, ‘0093638’, ‘00am’, ‘00pm’, ‘00s’,’01’, ‘01pm’, ‘02’]<br>Features 20010 to 20030:<br>[‘dratted’, ‘draub’, ‘draught’, ‘draughts’, ‘draughtswoman’, ‘draw’, ‘drawback’,<br>‘drawbacks’, ‘drawer’, ‘drawers’, ‘drawing’, ‘drawings’, ‘drawl’,<br>‘drawled’, ‘drawling’, ‘drawn’, ‘draws’, ‘draza’, ‘dre’, ‘drea’]<br>Every 2000th feature:<br>[‘00’, ‘aesir’, ‘aquarian’, ‘barking’, ‘blustering’, ‘beête’, ‘chicanery’,<br>‘condensing’, ‘cunning’, ‘detox’, ‘draper’, ‘enshrined’, ‘favorit’, ‘freezer’,<br>‘goldman’, ‘hasan’, ‘huitieme’, ‘intelligible’, ‘kantrowitz’, ‘lawful’,<br>‘maars’, ‘megalunged’, ‘mostey’, ‘norrland’, ‘padilla’, ‘pincher’,<br>‘promisingly’, ‘receptionist’, ‘rivals’, ‘schnaas’, ‘shunning’, ‘sparse’,<br>‘subset’, ‘temptations’, ‘treatises’, ‘unproven’, ‘walkman’, ‘xylophonist’]</p>
+<p>词表的前 10 个元素都是数字。所有这些数字都出现在评论中的某处，因此被提取为单词。</p>
+<h3 id="2-使用keras自带的IMDb数据集"><a href="#2-使用keras自带的IMDb数据集" class="headerlink" title="2. 使用keras自带的IMDb数据集"></a>2. 使用keras自带的IMDb数据集</h3><pre><code class="lang-python">from tensorflow.keras.datasets import imdb
+(X_train, y_train), (X_test, y_test) = imdb.load_data(num_words=10000) # 仅保留训练数据中前10000个最经常出现的单词，低频单词被舍弃
+
+print(&#39;len of X_train: {}&#39;.format(len(X_train)))
+print(&#39;shape of X_train: {}&#39;.format(X_train.shape))
+print(&#39;first of X_train: {}&#39;.format(X_train[0]))
+print(&#39;training sample per class: {}&#39;.format(np.bincount(y_train)))
+#-------------------#
+len of X_train: 25000
+shape of X_train: (25000,)
+first of X_train: [1, 14, 22, 16, 43, 530, 973, 1622, 1385, 65, 458, 4468, 66, 3941, 4, 173, 36, 256, 5, 25, 100, 43, 838, 112, 50, 670, 2, 9, 35, 480, 284, 5, 150, 4, 172, 112, 167, 2, 336, 385, 39, 4, 172, 4536, 1111, 17, 546, 38, 13, 447, 4, 192, 50, 16, 6, 147, 2025, 19, 14, 22, 4, 1920, 4613, 469, 4, 22, 71, 87, 12, 16, 43, 530, 38, 76, 15, 13, 1247, 4, 22, 17, 515, 17, 12, 16, 626, 18, 2, 5, 62, 386, 12, 8, 316, 8, 106, 5, 4, 2223, 5244, 16, 480, 66, 3785, 33, 4, 130, 12, 16, 38, 619, 5, 25, 124, 51, 36, 135, 48, 25, 1415, 33, 6, 22, 12, 215, 28, 77, 52, 5, 14, 407, 16, 82, 2, 8, 4, 107, 117, 5952, 15, 256, 4, 2, 7, 3766, 5, 723, 36, 71, 43, 530, 476, 26, 400, 317, 46, 7, 4, 2, 1029, 13, 104, 88, 4, 381, 15, 297, 98, 32, 2071, 56, 26, 141, 6, 194, 7486, 18, 4, 226, 22, 21, 134, 476, 26, 480, 5, 144, 30, 5535, 18, 51, 36, 28, 224, 92, 25, 104, 4, 226, 65, 16, 38, 1334, 88, 12, 16, 283, 5, 16, 4472, 113, 103, 32, 15, 16, 5345, 19, 178, 32]
+training sample per class: [12500 12500]
+</code></pre>
+<p>可以看到keras已经把IMDb数据集给提前整理过了。此处每条数据都是一个向量，每个数值代表一个单词。数值的大小代表了该单词在单词表中的位置。显然，每条数据向量的长度不一定相同。</p>
+<p>为了方便处理，我们可以规定每条文档的长度为maxlen</p>
+<pre><code class="lang-python">from tensorflow.keras.preprocessing import sequence
+print(&#39;Pad sequences (samples x time)&#39;)
+x_train = sequence.pad_sequences(x_train, maxlen=maxlen)
+x_test = sequence.pad_sequences(x_test, maxlen=maxlen)
+print(&#39;x_train shape:&#39;, x_train.shape)
+print(&#39;x_test shape:&#39;, x_test.shape)
+#-------------------#
+Pad sequences (samples x time)
+x_train shape: (25000, 80)
+x_test shape: (25000, 80)
+</code></pre>
+<p>训练集中一共25000条文档，其中12500个正类，12500个负类。每个文档都是由80个数字组成的向量。测试集亦然。</p>
+
+            </div>
+            <hr>
+            <div>
+              <p>
+                
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/record/">record</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Python/">Python</a>
+                    
+                      <a class="hover-with-bg" href="/tags/IMDb/">IMDb</a>
+                    
+                      <a class="hover-with-bg" href="/tags/preprocessing/">preprocessing</a>
+                    
+                  </span>
+                
+              </p>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc-start"></div>
+<div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var post = $('#post');
+      var toc = $('#toc');
+      var tocLimMax = post.offset().top + post.height() - navHeight;
+
+      $(window).scroll(function () {
+        var tocLimMin = $('#toc-start').offset().top - navHeight;
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': navHeight,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+      var offset = $('#board-ctn').css('margin-right')
+      $('#toc-ctn').css({
+        'right': offset
+      })
+    });
+  </script>
+
+
+
+
+
+
+
+
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-160806707-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+
+  
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "【经验分享】IMDb数据集的预处理&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>
