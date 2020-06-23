@@ -149,9 +149,9 @@
     
     <tags>
       
-      <tag>LSTM</tag>
-      
       <tag>RNN</tag>
+      
+      <tag>LSTM</tag>
       
       <tag>Keras</tag>
       
@@ -1002,11 +1002,11 @@
       
       <tag>C++</tag>
       
+      <tag>STL</tag>
+      
       <tag>string</tag>
       
       <tag>regex</tag>
-      
-      <tag>STL</tag>
       
     </tags>
     
@@ -1033,11 +1033,11 @@
       
       <tag>C++</tag>
       
-      <tag>STL</tag>
-      
       <tag>map</tag>
       
       <tag>set</tag>
+      
+      <tag>STL</tag>
       
     </tags>
     
