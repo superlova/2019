@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>Superlova</title>
   
-  <subtitle>Be a better man...</subtitle>
+  <subtitle>Welcome...</subtitle>
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://superlova.github.io/"/>
@@ -166,9 +166,9 @@
       <category term="notes" scheme="https://superlova.github.io/categories/notes/"/>
     
     
-      <category term="RNN" scheme="https://superlova.github.io/tags/RNN/"/>
-    
       <category term="LSTM" scheme="https://superlova.github.io/tags/LSTM/"/>
+    
+      <category term="RNN" scheme="https://superlova.github.io/tags/RNN/"/>
     
       <category term="Keras" scheme="https://superlova.github.io/tags/Keras/"/>
     

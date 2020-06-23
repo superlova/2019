@@ -109,7 +109,7 @@
 </nav>
 
     <div class="view intro-2" id="background" parallax=true
-         style="background: url('/img/default.png') no-repeat center center;
+         style="background: url('/img/cover_2.jpg') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask rgba-black-light flex-center">
@@ -144,6 +144,13 @@
                 
 
                 
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  <span id="busuanzi_container_page_pv" class="post-meta" style="display: none">
+                    <i class="far fa-eye" aria-hidden="true"></i>
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>
+                
               </p>
             
           </div>
@@ -165,6 +172,9 @@
       <div class="container nopadding-md" id="board-ctn">
         <div class="py-5 z-depth-3" id="board">
           <div class="post-content mx-auto" id="post">
+            
+              <p
+                class="note note-warning">本文最后更新于：星期一, 六月 22日 2020, 11:47 晚上</p>
             
             <div class="markdown-body">
               <p>本文类比软件测试中覆盖率的概念，提出LSTM网络的覆盖率，并为带有LSTM网络结构的深度学习模型开发了一种覆盖率引导的模糊测试方法，并整合成测试工具testRNN。该测试主要是为了衡量网络的鲁棒性。<br><a id="more"></a></p>
@@ -412,6 +422,24 @@ J_{T C}(x)=\left\|u_{x}^{\left[t_{1}, t_{2}\right]}-u_{\text {target}}\right\|_{
             </div>
 
             
+              <!-- Comments -->
+              <div class="comments" id="comments">
+                
+                
+  <script defer src="https://utteranc.es/client.js"
+          repo="superlova / superlova.github.io"
+          issue-term="pathname"
+  
+          label="utterances"
+    
+          theme="github-light"
+          crossorigin="anonymous"
+  >
+  </script>
+
+
+              </div>
+            
           </div>
         </div>
       </div>
@@ -477,6 +505,23 @@ J_{T C}(x)=\left\|u_{x}^{\left[t_{1}, t_{2}\right]}-u_{\text {target}}\right\|_{
       <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
     </div>
     
+  <div>
+    
+      <!-- 不蒜子统计PV -->
+      
+      <span id="busuanzi_container_site_pv" style="display: none">
+      总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    </span>
+    
+    
+      <!-- 不蒜子统计UV -->
+      
+      <span id="busuanzi_container_site_uv" style="display: none">
+      总访客数 <span id="busuanzi_value_site_uv"></span> 人
+    </span>
+    
+  </div>
+
 
     
 
@@ -551,6 +596,8 @@ J_{T C}(x)=\left\|u_{x}^{\left[t_{1}, t_{2}\right]}-u_{\text {target}}\right\|_{
 
 
 
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
 
 
 
@@ -558,25 +605,18 @@ J_{T C}(x)=\left\|u_{x}^{\left[t_{1}, t_{2}\right]}-u_{\text {target}}\right\|_{
 
 
   
-
-  
-    <!-- Google Analytics -->
+    <!-- Baidu Analytics -->
     <script defer>
-      (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function () {
-          (i[r].q = i[r].q || []).push(arguments)
-        }, i[r].l = 1 * new Date();
-        a = s.createElement(o),
-          m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m)
-      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-
-      ga('create', 'UA-160806707-1', 'auto');
-      ga('send', 'pageview');
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?1040bcc5d25d5f4a9cb5e9855eb2c6db";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
     </script>
+  
+
   
 
   
@@ -605,7 +645,7 @@ J_{T C}(x)=\left\|u_{x}^{\left[t_{1}, t_{2}\right]}-u_{\text {target}}\right\|_{
         "【论文阅读笔记】Coverage Guided Testing for Recurrent Neural Networks&nbsp;",
       ],
       cursorChar: "_",
-      typeSpeed: 70,
+      typeSpeed: 90,
       loop: false,
     });
     typed.stop();
@@ -659,32 +699,6 @@ J_{T C}(x)=\left\|u_{x}^{\left[t_{1}, t_{2}\right]}-u_{\text {target}}\right\|_{
   </script>
 
 
-
-  
-
-  
-    <!-- MathJax -->
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-          tex2jax: {
-              inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-              processEscapes: true,
-              skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-          }
-      });
-
-      MathJax.Hub.Queue(function() {
-          var all = MathJax.Hub.getAllJax(), i;
-          for(i=0; i < all.length; i += 1) {
-              all[i].SourceElement().parentNode.className += ' has-jax';
-          }
-      });
-
-    </script>
-
-    <script  src="https://cdn.staticfile.org/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" ></script>
-
-  
 
 
 
