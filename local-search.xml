@@ -149,9 +149,9 @@
     
     <tags>
       
-      <tag>LSTM</tag>
-      
       <tag>RNN</tag>
+      
+      <tag>LSTM</tag>
       
       <tag>Keras</tag>
       
@@ -166,7 +166,7 @@
     <link href="/2020/06/20/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91Deep-Text-Classification-Can-be-Fooled/"/>
     <url>/2020/06/20/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91Deep-Text-Classification-Can-be-Fooled/</url>
     
-    <content type="html"><![CDATA[<a id="more"></a>]]></content>
+    <content type="html"><![CDATA[<p>国内人民大学的一篇论文，被IJCAI-2018接收。主要研究文本领域的对抗样本生成，被测模型是文本分类领域的模型。<br><a id="more"></a></p><h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1. 引言"></a>1. 引言</h2><p>当前的对抗样本生成领域集中在图像的扰动和生成，文本领域少有涉及。</p><p><strong>文本对抗样本应当满足</strong>：</p><ul><li>使模型分类错误</li><li>与原样本相比，扰动难以察觉</li><li>实用性，即文本含义不发生改变</li></ul><p><strong>本文采用的生成思路</strong>：</p><ul><li>三种扰动策略：插入、修改和删除</li><li>自然语言水印</li><li>白盒+黑盒</li></ul><blockquote><p>自然语言水印（Natural Language Watermarking）是通过修改文本元素（如线条，文字或字符）的外观，或更改文本格式或字体（例如，通过-文字中的单词和字母间距）来嵌入信息的技术。</p></blockquote><h2 id="2-目标模型和数据集"><a href="#2-目标模型和数据集" class="headerlink" title="2. 目标模型和数据集"></a>2. 目标模型和数据集</h2><p><strong>字符级模型</strong>：</p><ul><li>以字母为单位，编码长度为字母表大小（26+空白符个数）</li><li>结构：6conv + 3fc</li><li>数据集：DBPedia，包含14个类别，56000训练、70000测试</li></ul><p><strong>单词级模型</strong>：</p><ul><li>以单词为单位，编码长度为单词表大小（数万到数十万）</li><li>结构：embedding + conv + maxpooling + fc(带dropout) + softmax</li><li>数据集：影评MR、产品评价CR、产品意见MPQA，都是二分类</li></ul><h2 id="3-白盒攻击"><a href="#3-白盒攻击" class="headerlink" title="3. 白盒攻击"></a>3. 白盒攻击</h2><p>所谓白盒攻击，就是在已知被测模型内部信息的情况下开展的攻击。由于已知信息较多，所以攻击起来也比较容易。</p><p>白盒攻击生成对抗样本的思想在图像领域用的比较多。比如利用网络参数和损失函数进行指导攻击过程的FGSM算法。</p><p>本文采用的白盒攻击手段，也是利用模型内部的参数和网络训练时的损失函数作为引导，但是不会直接生成对抗样本，而是<strong>首先识别对分类有重大贡献的文本项</strong>。</p><h3 id="HTP：Hot-Training-Phrases"><a href="#HTP：Hot-Training-Phrases" class="headerlink" title="HTP：Hot Training Phrases"></a>HTP：Hot Training Phrases</h3><p>以字符级模型为例，识别过程如下：</p><ol><li>输入训练样本x，计算cost gradients ∇x C(M, x, label)；</li><li>每个样本x选取令gradient最大的前50个字符定义为<strong>hot character</strong>；</li><li>包含3个及以上hot characters的单词定义为<strong>hot word</strong>；</li><li>相邻的hot words定义为<strong>hot phrase</strong>；</li><li>不同类别有不同的hot phrase，代表着该类对分类贡献最大的词组；</li><li>每个类别中最常出现的hot phrase定义为<strong>Hot Training Phrases (HTPs)</strong>。</li></ol><p>下图是DBPedia的Building类别文本数据集中的HTP词汇排名前10。<br><img src="/2020/06/20/【论文阅读笔记】Deep-Text-Classification-Can-be-Fooled/2020-06-23-20-11-30.png" srcset="/img/loading.gif" alt></p><h3 id="HSP：Hot-Sample-Phrases"><a href="#HSP：Hot-Sample-Phrases" class="headerlink" title="HSP：Hot Sample Phrases"></a>HSP：Hot Sample Phrases</h3><p>给定样本x，识别x中的hot phrase作为操作位置，该位置的单词或词组就定义为<strong>Hot Sample Phrases (HSPs)</strong>。</p><h3 id="Attacking-Character-level-DNN"><a href="#Attacking-Character-level-DNN" class="headerlink" title="Attacking Character-level DNN"></a>Attacking Character-level DNN</h3><h4 id="Insertion"><a href="#Insertion" class="headerlink" title="Insertion"></a><strong>Insertion</strong></h4><p>通过在样本的HSP位置插入以下内容实现变异操作：</p><ul><li>HTP；</li><li>可有可无的事实（文本水印算法生成）；</li><li>不伤害文本主语义的伪造事实（文本水印算法生成）。</li></ul><p>下面是三个通过插入红色文本造成标签改变的例子。<br><img src="/2020/06/20/【论文阅读笔记】Deep-Text-Classification-Can-be-Fooled/2020-06-23-20-11-43.png" srcset="/img/loading.gif" alt="Figure2"><br><img src="/2020/06/20/【论文阅读笔记】Deep-Text-Classification-Can-be-Fooled/2020-06-23-20-11-56.png" srcset="/img/loading.gif" alt="Figure3"><br><img src="/2020/06/20/【论文阅读笔记】Deep-Text-Classification-Can-be-Fooled/Figure4.png" srcset="/img/loading.gif" alt="Figure4"></p><h4 id="Modification"><a href="#Modification" class="headerlink" title="Modification"></a><strong>Modification</strong></h4><p>对HSP稍加操作，比如typo-based watermarking technique（基于错别字的水印技术）：</p><ul><li>(1)替换以常见的错误拼写（需要有错别字语料库）</li><li>(2)替换以外观相似的字符</li></ul><p>下图是替换操作后生成对抗样本的一个例子。<br><img src="/2020/06/20/【论文阅读笔记】Deep-Text-Classification-Can-be-Fooled/Figure5.png" srcset="/img/loading.gif" alt></p><p>下图是将film替换成flim后模型内部损失函数梯度的改变。<br><img src="/2020/06/20/【论文阅读笔记】Deep-Text-Classification-Can-be-Fooled/Figure6.png" srcset="/img/loading.gif" alt></p><h4 id="Removal"><a href="#Removal" class="headerlink" title="Removal"></a><strong>Removal</strong></h4><p>删除HSP可降低模型对样本的confidence。只能删除HSPs中起辅助作用的词，要不然会改变本来的含义。</p><p>下面是通过删除来导致置信程度下降的例子。<br><img src="/2020/06/20/【论文阅读笔记】Deep-Text-Classification-Can-be-Fooled/Figure7.png" srcset="/img/loading.gif" alt></p><h4 id="Combination"><a href="#Combination" class="headerlink" title="Combination"></a><strong>Combination</strong></h4><p>组合上述三种手法。</p><p><img src="/2020/06/20/【论文阅读笔记】Deep-Text-Classification-Can-be-Fooled/Figure8.png" srcset="/img/loading.gif" alt></p><h3 id="Attacking-Word-level-DNN"><a href="#Attacking-Word-level-DNN" class="headerlink" title="Attacking Word-level DNN"></a>Attacking Word-level DNN</h3><p>单词级模型也是同理，不仅如此，甚至省了hot-character这一步。下面是几个例子。</p><p><img src="/2020/06/20/【论文阅读笔记】Deep-Text-Classification-Can-be-Fooled/Figure9.png" srcset="/img/loading.gif" alt></p><p><img src="/2020/06/20/【论文阅读笔记】Deep-Text-Classification-Can-be-Fooled/Figure10.png" srcset="/img/loading.gif" alt></p><h2 id="4-黑盒攻击"><a href="#4-黑盒攻击" class="headerlink" title="4. 黑盒攻击"></a>4. 黑盒攻击</h2><p>黑盒攻击显然不能通过比较Cost Gradient的方式确定HTP和HSP了。但是我们可以采用其他方法确定HTP和HSP。</p><p>具体地，我们通过生成一些测试样本来探测目标模型，判断哪些是Hot Phrases。</p><p>生成方法：</p><ul><li>用若干空格逐个代替单词（空格个数与单词长度相同）</li><li>将测试样本的分类结果与种子进行比较</li><li>偏差越大，相应单词对正确分类的重要性就越大</li><li>带来最大偏差的单词被标识为种子样本的HSP</li></ul><p><img src="/2020/06/20/【论文阅读笔记】Deep-Text-Classification-Can-be-Fooled/Figure11.png" srcset="/img/loading.gif" alt></p><p>下面是黑盒攻击确定的HTP之后进行攻击的例子：</p><p><img src="/2020/06/20/【论文阅读笔记】Deep-Text-Classification-Can-be-Fooled/Figure12.png" srcset="/img/loading.gif" alt></p><h2 id="5-Evaluation"><a href="#5-Evaluation" class="headerlink" title="5. Evaluation"></a>5. Evaluation</h2><h3 id="Q1-Can-our-method-perform-effective-source-target-misclassification-attack"><a href="#Q1-Can-our-method-perform-effective-source-target-misclassification-attack" class="headerlink" title="Q1: Can our method perform effective source/target misclassification attack?"></a>Q1: Can our method perform effective source/target misclassification attack?</h3><p>这个问题是问本方法能不能对模型实行定向的攻击，即“指哪打哪”，无论哪个类别的样本都能通过适当修改，突变成指定类别。</p><p><img src="/2020/06/20/【论文阅读笔记】Deep-Text-Classification-Can-be-Fooled/Fig13.png" srcset="/img/loading.gif" alt></p><p><img src="/2020/06/20/【论文阅读笔记】Deep-Text-Classification-Can-be-Fooled/Fig14.png" srcset="/img/loading.gif" alt></p><p>通过上表可知，source栏是源类别。target栏是目标类别，No栏是样本编号。本来都是类别source中定义的样本，经过右边三栏的突变方法，最终都以较高置信度被模型分类成了target栏中的类别。可以证明此方法确实能实现定向突变、定向攻击。</p><h3 id="Q2-Can-the-adversarial-samples-avoid-being-distinguished-by-human-observers-and-still-keep-the-utility"><a href="#Q2-Can-the-adversarial-samples-avoid-being-distinguished-by-human-observers-and-still-keep-the-utility" class="headerlink" title="Q2: Can the adversarial samples avoid being distinguished by human observers and still keep the utility?"></a>Q2: Can the adversarial samples avoid being distinguished by human observers and still keep the utility?</h3><p>这个问题是问对抗样本是不是能够避免被人类识别。毕竟文本突变还是很容易被人类识别的。</p><p>本论文是这么设计实验的：</p><ul><li>找23名学生，每个人都提供了20个文本样本，其中一半带有扰动，对每个样本进行手动分类</li><li>如果他们认为样品是人为修改的，则要求他们查明修改的位置</li><li>原样本准确率：94.2%</li><li>扰动样本准确率：94.8%</li><li>总共生成594个变化，有240个被受试者标记为已修改的位置，其中12个正确。准确率为12/240 = 5.0％，召回率为12/594 = 2.0％</li></ul><p>可以看到虽然样本数比较小，但是结果还是很显著的，在那23个同学都比较靠谱的前提下，该算法还是能够保证生成的文本与原文本差距不大的。</p><h3 id="Q3-Is-our-method-efficient-enough"><a href="#Q3-Is-our-method-efficient-enough" class="headerlink" title="Q3: Is our method efficient enough?"></a>Q3: Is our method efficient enough?</h3><p>算法效率其实不是很重要，毕竟在实践中，攻击者往往愿意花费更多时间来制作理想的对抗性样本。</p><p>白盒攻击（计算梯度、确定HTP），总共116小时，平均每类8.29小时；<br>黑盒攻击（生成样本、确定HTP），总共107小时，平均每类7.63小时。</p><h3 id="Q4-White-box-and-black-box-which-is-more-powerful"><a href="#Q4-White-box-and-black-box-which-is-more-powerful" class="headerlink" title="Q4: White-box and black-box, which is more powerful?"></a>Q4: White-box and black-box, which is more powerful?</h3><p>两种方式都有效并且彼此互补。</p><p>下图分别是黑盒和白盒生成的HTP比较，可以看到都是比较类似的。</p><p><img src="/2020/06/20/【论文阅读笔记】Deep-Text-Classification-Can-be-Fooled/Fig15.png" srcset="/img/loading.gif" alt></p><h2 id="6-读后感"><a href="#6-读后感" class="headerlink" title="6. 读后感"></a>6. 读后感</h2><p>其实本篇文章的思想并不复杂，核心是确定一段文本的HTP和HSP。所谓HTP可以认为是，模型一看到这种词就相信这句话是该类别的了。那如果把类别1的句子x中的HSP给替换成类别2的HTP，的确可能让模型以为句子x是类别2的句子了。</p><p>所以延伸出来一个方向，那就是确定HSP和HTP的方法上。对于白盒攻击，还是查看内部的信息，然后计算梯度，这是一种比较传统的方法。对于黑盒攻击，则是遍历所有可能删除的单词，从结果上来看，比较这些删除单词的重要程度。</p><p>所以说有没有其他方法能够衡量单词的重要程度？这是一个值得研究的方向。</p>]]></content>
     
     
     <categories>
@@ -178,11 +178,11 @@
     
     <tags>
       
-      <tag>RNN</tag>
+      <tag>NLP</tag>
       
       <tag>testing</tag>
       
-      <tag>testRNN</tag>
+      <tag>DNN</tag>
       
     </tags>
     
@@ -209,9 +209,9 @@
       
       <tag>Python</tag>
       
-      <tag>IMDb</tag>
-      
       <tag>Machine Learning</tag>
+      
+      <tag>IMDb</tag>
       
     </tags>
     
@@ -354,13 +354,13 @@
       
       <tag>NLP</tag>
       
-      <tag>Adversarial Attacks</tag>
-      
       <tag>Robustness</tag>
       
       <tag>Deep Neural Networks</tag>
       
       <tag>survey</tag>
+      
+      <tag>Adversarial Attacks</tag>
       
     </tags>
     
@@ -513,11 +513,11 @@
       
       <tag>Python</tag>
       
+      <tag>array</tag>
+      
       <tag>numpy</tag>
       
       <tag>concatenate</tag>
-      
-      <tag>array</tag>
       
     </tags>
     
@@ -930,7 +930,7 @@
     <link href="/2020/03/25/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91RNN-Test-Adversarial-Testing-Framework-for-Recurrent-Neural-Network-Systems/"/>
     <url>/2020/03/25/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91RNN-Test-Adversarial-Testing-Framework-for-Recurrent-Neural-Network-Systems/</url>
     
-    <content type="html"><![CDATA[<a id="more"></a>]]></content>
+    <content type="html"><![CDATA[<a id="more"></a><p>近年来对于对抗样本的研究主要集中于图像领域，少部分集中在音频领域。而这两种领域的突变攻击，都局限于DNN模型，RNN模型的对抗样本生成则鲜有研究（当时）。</p><p>RNN的对抗测试面临某些挑战，概括为三方面。</p><p>首先，没有明显的类别标签，就没有规则来识别对抗性输入。对于没有应用于分类的顺序输出，没有标准将输出确定为关于变化程度的错误输出。</p><p>其次，对诸如文本之类的顺序输入进行突变很难确保微小的扰动。将扰动应用于离散空间中的单词总是无法获得合法的输入，并且显式修改对于人类是可区分的。</p><p>第三，现有的基于CNN的基于神经元的覆盖度量未能考虑RNN结构的特征，因此无法直接采用。</p>]]></content>
     
     
     <categories>
@@ -971,11 +971,11 @@
     
     <tags>
       
-      <tag>array</tag>
-      
       <tag>algorithm</tag>
       
       <tag>lintcode</tag>
+      
+      <tag>array</tag>
       
     </tags>
     
