@@ -759,15 +759,10 @@ GPU适配计算机，需要厂家网站公开的列表，特别是对于服务�
         
         
           
+          
         
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">
-近年来对于对抗样本的研究主要集中于图像领域，少部分集中在音频领域。而这两种领域的突变攻击，都局限于DNN模型，RNN模型的对抗样本生成则鲜有研究（当时）。
-RNN的对抗测试面临某些挑战，概括为三方面。
-首先，没有明显的类别标签，就没有规则来识别对抗性输入。对于没有应用于分类的顺序输出，没有标准将输出确定为关于变化程度的错误输出。
-其次，对诸如文本之类的顺序输入进行突变很难确保微小的扰动。将扰动应用于离散空间中的单词总是无法获得合法的输入，并且显式修改对于人类是可区分的。
-第三，现有的基于CNN的基于神经元的覆盖度量未能考虑RNN结构的特征，因此无法直接采用。
-</div>
+        <div class="index-excerpt" style="max-height: none;">
+          <div class="index-text mb-1">清华大学和北邮作者共著的大作，思想挺新颖但是至今为止都是挂在arxiv上。读完之后给人感觉像是草稿，机翻色彩严重……...</div>
         </div>
       </a>
 
@@ -888,11 +883,11 @@ RNN的对抗测试面临某些挑战，概括为三方面。
           
             <a href="/tags/C/">C++</a>&nbsp;
           
-            <a href="/tags/STL/">STL</a>&nbsp;
-          
             <a href="/tags/string/">string</a>&nbsp;
           
             <a href="/tags/regex/">regex</a>&nbsp;
+          
+            <a href="/tags/STL/">STL</a>&nbsp;
           
         
       </div>
@@ -949,11 +944,11 @@ map不</div>
           
             <a href="/tags/C/">C++</a>&nbsp;
           
+            <a href="/tags/STL/">STL</a>&nbsp;
+          
             <a href="/tags/map/">map</a>&nbsp;
           
             <a href="/tags/set/">set</a>&nbsp;
-          
-            <a href="/tags/STL/">STL</a>&nbsp;
           
         
       </div>
@@ -1399,7 +1394,7 @@ matplotlib的图像中各组件名称
         $(this).wrap(element);
       }
     );
-  </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </script>
 
 
 
@@ -1412,5 +1407,20 @@ matplotlib的图像中各组件名称
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>

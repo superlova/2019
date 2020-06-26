@@ -131,7 +131,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    19 字
+                    2.6k 字
                   </span>
                 
 
@@ -139,7 +139,7 @@
                   
                   <span class="post-meta">
                       <i class="far fa-clock"></i>
-                      1 分钟
+                      9 分钟
                   </span>
                 
 
@@ -174,10 +174,112 @@
           <div class="post-content mx-auto" id="post">
             
               <p
-                class="note note-warning">本文最后更新于：星期二, 六月 2日 2020, 2:50 下午</p>
+                class="note note-warning">本文最后更新于：星期六, 六月 27日 2020, 1:30 凌晨</p>
             
             <div class="markdown-body">
-              <p>通过模糊测试进行数据增强，数据增强新思路。<br><a id="more"></a></p>
+              <p>通过模糊测试的方法进行数据增强，数据增强新思路。新加坡国立大学作品，被ICSE’2020接收。<br><a id="more"></a></p>
+<h1 id="内容概要"><a href="#内容概要" class="headerlink" title="内容概要"></a>内容概要</h1><ul>
+<li>增强DNN的训练数据，从而增强其鲁棒性</li>
+<li>将DNN数据扩充问题视为优化问题</li>
+<li>使用遗传搜索来生成最合适的输入数据变体，用于训练DNN</li>
+<li>学习识别跳过增强来加速训练</li>
+<li>improve the robust accuracy of the DNN</li>
+<li>reduce the average DNN training time by 25%, while still improving robust accuracy</li>
+</ul>
+<h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>过拟合产生的问题：</p>
+<ol>
+<li>泛化性降低，测试集效果差；</li>
+<li>鲁棒性不足，不能抵御样本微小扰动</li>
+</ol>
+<p>鲁棒性有两种：</p>
+<ol>
+<li>对抗鲁棒性，应对的是人为构造的扰动；</li>
+<li>自然扰动鲁棒性，应对自然条件的变化。</li>
+</ol>
+<p>本文关注的是后一种鲁棒，采用数据增强手段模拟不同自然条件下的样本变化</p>
+<h2 id="数据增强：传统软件"><a href="#数据增强：传统软件" class="headerlink" title="数据增强：传统软件"></a>数据增强：传统软件</h2><p>improves the generalization of generated programs by augmenting existing test suites</p>
+<p>测试用例生成技术：随机测试，基于搜索的进化测试，符号执行，灰箱模糊测试等</p>
+<p>AFL：涵盖更多的程序路径使我们能够找到代表性的测试并涵盖更多的程序功能</p>
+<h2 id="数据增强：提升模型鲁棒性——研究现状"><a href="#数据增强：提升模型鲁棒性——研究现状" class="headerlink" title="数据增强：提升模型鲁棒性——研究现状"></a>数据增强：提升模型鲁棒性——研究现状</h2><p>基于梯度下降的鲁棒优化：</p>
+<ul>
+<li>尝试根据损失函数生成最差的变体，并将其添加到训练集中。</li>
+<li>在自然环境变化（对于视觉应用）中突出显示的空间变换的输入空间是高度非凸的</li>
+</ul>
+<p><img src="/2020/06/02/【论文阅读笔记】Fuzz-Testing-based-Data-Augmentation-to-Improve-Robustness-of-Deep-Neural-Networks/2020-06-27-01-10-37.png" srcset="/img/loading.gif" alt></p>
+<p>几乎所有用于提高鲁棒性的技术都会通过分析训练后的模型并随后生成对抗性示例在新数据上重新训练模型</p>
+<h2 id="贡献"><a href="#贡献" class="headerlink" title="贡献"></a>贡献</h2><ul>
+<li>将数据扩充形式化为优化问题，利用模糊测试（遗传算法）求解</li>
+<li>提出选择性扩充策略，仅选择部分数据点进行扩充</li>
+</ul>
+<h1 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h1><h2 id="模糊测试"><a href="#模糊测试" class="headerlink" title="模糊测试"></a>模糊测试</h2><p><img src="/2020/06/02/【论文阅读笔记】Fuzz-Testing-based-Data-Augmentation-to-Improve-Robustness-of-Deep-Neural-Networks/2020-06-27-01-11-29.png" srcset="/img/loading.gif" alt></p>
+<h2 id="Robustness-of-DNN"><a href="#Robustness-of-DNN" class="headerlink" title="Robustness of DNN"></a>Robustness of DNN</h2><p>DNN很容易遭受微小扰动的影响，产生完全不同的决策。DNN抵御输入扰动的能力被认为是鲁棒性。</p>
+<p>由于这项工作聚焦于自然生成的而不是人工合成的扰动，因此像GAN等技术不被考虑在内。</p>
+<h2 id="数据增强"><a href="#数据增强" class="headerlink" title="数据增强"></a>数据增强</h2><p>数据增强是一种扩充数据集、避免样本少导致过拟合的有效方法。增强效果受增强方法影响很大。一般认为数据增强后训练的模型鲁棒性能得到一定程度的提升。</p>
+<h1 id="SENSEI工具"><a href="#SENSEI工具" class="headerlink" title="SENSEI工具"></a>SENSEI工具</h1><h2 id="问题定义"><a href="#问题定义" class="headerlink" title="问题定义"></a>问题定义</h2><p>生成增强样本的过程，是多目标优化过程。</p>
+<p>一方面求扰动δ，使得损失函数L最大；另一方面求模型参数θ，使损失函数L最小；求得此时的δ和θ。本质是一个二元优化找鞍点的问题。</p>
+<p><img src="/2020/06/02/【论文阅读笔记】Fuzz-Testing-based-Data-Augmentation-to-Improve-Robustness-of-Deep-Neural-Networks/2020-06-27-01-20-58.png" srcset="/img/loading.gif" alt></p>
+<p><img src="/2020/06/02/【论文阅读笔记】Fuzz-Testing-based-Data-Augmentation-to-Improve-Robustness-of-Deep-Neural-Networks/2020-06-27-01-21-07.png" srcset="/img/loading.gif" alt></p>
+<h2 id="优化思路"><a href="#优化思路" class="headerlink" title="优化思路"></a>优化思路</h2><p>基于模糊测试的方法（如引导搜索）能更有效地找到要训练的数据点的最佳Mutator，从而提高鲁棒性</p>
+<p>并非训练数据集中的所有数据点都很难学习。一些数据点代表训练集中的理想示例，而另一些则令人困惑；</p>
+<p>对所有这些点进行相同的处理可能会浪费宝贵的训练时间。因此仅在具有挑战性的数据点上花费扩充工作。</p>
+<h2 id="整体算法"><a href="#整体算法" class="headerlink" title="整体算法"></a>整体算法</h2><p><img src="/2020/06/02/【论文阅读笔记】Fuzz-Testing-based-Data-Augmentation-to-Improve-Robustness-of-Deep-Neural-Networks/2020-06-27-01-21-37.png" srcset="/img/loading.gif" alt></p>
+<p><img src="/2020/06/02/【论文阅读笔记】Fuzz-Testing-based-Data-Augmentation-to-Improve-Robustness-of-Deep-Neural-Networks/2020-06-27-01-21-43.png" srcset="/img/loading.gif" alt></p>
+<p>Optimal Augmentation Module<br>选择最难的样本（L13~16）<br>Selective Augmentation Module<br>跳过突变不大的样本（L10~12,17）<br>数据增强过程是在训练时即时发生的</p>
+<h2 id="遗传算法部分"><a href="#遗传算法部分" class="headerlink" title="遗传算法部分"></a>遗传算法部分</h2><p>将染色体表示为一组操作，该操作将应用于给定输入以获得真实的变化</p>
+<p>将x旋转1度，然后将其平移一个像素，模拟相机在现实生活中的角度和移动，来得出图像（x）的真实变化（x’）</p>
+<p>种群是代表当前解决方案子集的一组染色体</p>
+<p>种群由两个遗传算子组成：突变和杂交</p>
+<p><img src="/2020/06/02/【论文阅读笔记】Fuzz-Testing-based-Data-Augmentation-to-Improve-Robustness-of-Deep-Neural-Networks/2020-06-27-01-22-47.png" srcset="/img/loading.gif" alt></p>
+<p>通过合并两个随机选择的现有染色体来完成交叉以创建新染色体</p>
+<ul>
+<li>c1 = {旋转：1，平移：2，剪切：-0.15}和</li>
+<li>c2 = {旋转：-1，平移：-3，剪切：0.1}</li>
+<li>C = {旋转：1, 平移：-3，剪切：0.1}</li>
+</ul>
+<p>杂交算子在1和染色体长度（l）之间生成随机数r，取c1的1到r部分，与c2的r+1到l部分拼合成新的染色体</p>
+<p>突变算子通过随机改变染色体中的单个操作（改变参数）来执行突变。</p>
+<p>始终将生成的转换向量（染色体）应用于原始图像（而不是应用于已转换的数据），以防止生成的数据不真实</p>
+<p>生成新种群后，将对其进行评估，并且仅将最佳集合作为当前种群传递给下一代（原算法L17）</p>
+<p>适应度函数的设计在GA中起着重要作用，以测量给定解决方案的质量<br>根据DNN的经验损失定义适应度函数</p>
+<script type="math/tex; mode=display">f_{\text {loss}}\left(x^{\prime}\right)=L\left(\theta, x^{\prime}, y\right)</script><p>在DNN的增强训练中应使用遭受DNN损失更大的变体，以使DNN更加健壮</p>
+<h2 id="选择性增强"><a href="#选择性增强" class="headerlink" title="选择性增强"></a>选择性增强</h2><p>Sensei-SA会跳过已由M鲁棒分类的数据点<br>基于分类的鲁棒性：模型正确地分类了x和所有未改变类别的Mutator（x′）<br>基于损失的鲁棒性：x的预测损失或未改变类别（x’）的任何预测损失不大于损失阈值</p>
+<p>如果种子是鲁棒的，则Sensei-SA不会对其进行数据增强；除非在随后的训练中将种子错误地分类，或预测损失小于阈值</p>
+<h2 id="图像扰动"><a href="#图像扰动" class="headerlink" title="图像扰动"></a>图像扰动</h2><p>仿射变换操作、像素操作<br>旋转（x，d）：在[-30，30]范围内将x旋转d度。<br>平移（x，d）：在图像大小的[-10％，10％]范围内水平或垂直将x按d像素平移。<br>剪切（x，d）：水平剪切x，剪切因子d在[-0.1，0.1]范围内。<br>缩放（x，d）：以[0.9,1.1]的缩放系数d放大/缩小x<br>亮度（x，d）：在[-32，32]范围内为x的每个像素统一加减一个值<br>对比度（x，d）：将x的每个像素的RGB值按[0.8，1.2]范围内的因子d缩放。</p>
+<h2 id="评估指标"><a href="#评估指标" class="headerlink" title="评估指标"></a>评估指标</h2><p>鲁棒性精度（robust accuracy）是指测试集中DNN的预测不随任何小的现实扰动而改变的图像比例</p>
+<script type="math/tex; mode=display">\text {robust accuracy}=\frac{\text {nRobustInstances}}{\text {nInstances}}</script><h1 id="Evaluation"><a href="#Evaluation" class="headerlink" title="Evaluation"></a>Evaluation</h1><h2 id="1-Sensei是否可以有效解决鞍点问题？"><a href="#1-Sensei是否可以有效解决鞍点问题？" class="headerlink" title="1.Sensei是否可以有效解决鞍点问题？"></a>1.Sensei是否可以有效解决鞍点问题？</h2><p>关键是检查Sensei是否确实有效比最先进的技术更有效地找到损耗最大的变体<br>W-10在每一步为每个图像随机生成十个扰动，并用模型表现最差的图像替换原始图像<br>结果表明，Sensei更有效地解决了内部最大化问题<br><img src="/2020/06/02/【论文阅读笔记】Fuzz-Testing-based-Data-Augmentation-to-Improve-Robustness-of-Deep-Neural-Networks/2020-06-27-01-26-16.png" srcset="/img/loading.gif" alt></p>
+<h2 id="2-Sensei是否比基于对抗样本再训练方法表现更好"><a href="#2-Sensei是否比基于对抗样本再训练方法表现更好" class="headerlink" title="2.Sensei是否比基于对抗样本再训练方法表现更好"></a>2.Sensei是否比基于对抗样本再训练方法表现更好</h2><p>对抗样本再训练方法：<br>i）使用原始训练数据训练模型；<br>ii）通过我们的转换（即使DNN蒙混的变体）生成对抗性示例；<br>iii）选择最佳对抗性示例，添加训练数据，然后重新训练5个模型</p>
+<p><img src="/2020/06/02/【论文阅读笔记】Fuzz-Testing-based-Data-Augmentation-to-Improve-Robustness-of-Deep-Neural-Networks/2020-06-27-01-26-58.png" srcset="/img/loading.gif" alt></p>
+<h2 id="3-Sensei能否提高鲁棒性同时保持精度"><a href="#3-Sensei能否提高鲁棒性同时保持精度" class="headerlink" title="3.Sensei能否提高鲁棒性同时保持精度"></a>3.Sensei能否提高鲁棒性同时保持精度</h2><p>mixup 是一种数据增强方法。mixup和Sensei都总体上改善了泛化性能。实际上，在标准泛化方面，mixup比Sensei更好；但是，在改善现实世界中自然发生的Mutator的鲁棒性方面，mixup效果不佳。<br><img src="/2020/06/02/【论文阅读笔记】Fuzz-Testing-based-Data-Augmentation-to-Improve-Robustness-of-Deep-Neural-Networks/2020-06-27-01-27-21.png" srcset="/img/loading.gif" alt></p>
+<h2 id="4-选择性数据增强（-Sensei-SA-）的效果和效率"><a href="#4-选择性数据增强（-Sensei-SA-）的效果和效率" class="headerlink" title="4.选择性数据增强（ Sensei-SA ）的效果和效率"></a>4.选择性数据增强（ Sensei-SA ）的效果和效率</h2><p>与W-10相比，Sensei-SA减少了25％的训练时间，而鲁棒性则提高了3％。<br><img src="/2020/06/02/【论文阅读笔记】Fuzz-Testing-based-Data-Augmentation-to-Improve-Robustness-of-Deep-Neural-Networks/2020-06-27-01-27-38.png" srcset="/img/loading.gif" alt></p>
+<h2 id="5-对超参数的敏感程度"><a href="#5-对超参数的敏感程度" class="headerlink" title="5.对超参数的敏感程度"></a>5.对超参数的敏感程度</h2><p>突变体集合规模最好为10~15</p>
+<p>神经元覆盖率在鲁棒性评估方面表现出与损失函数相似的性能</p>
+<p>基于神经元覆盖的适应度函数比基于损失的适应度函数将训练时间增加了50％。 原因是神经元覆盖率的计算比训练损失要昂贵<br><img src="/2020/06/02/【论文阅读笔记】Fuzz-Testing-based-Data-Augmentation-to-Improve-Robustness-of-Deep-Neural-Networks/2020-06-27-01-27-55.png" srcset="/img/loading.gif" alt><br><img src="/2020/06/02/【论文阅读笔记】Fuzz-Testing-based-Data-Augmentation-to-Improve-Robustness-of-Deep-Neural-Networks/2020-06-27-01-28-00.png" srcset="/img/loading.gif" alt></p>
+<p>在判断样本鲁棒性上，基于损失的选择均优于基于分类的选择。</p>
+<p>基于损失的选择足以跳过足够数量的数据点，从而平均减少25％的训练时间。<br><img src="/2020/06/02/【论文阅读笔记】Fuzz-Testing-based-Data-Augmentation-to-Improve-Robustness-of-Deep-Neural-Networks/2020-06-27-01-28-12.png" srcset="/img/loading.gif" alt></p>
+<p>Loss threshold越大，训练时间越短，然而鲁棒准确性也下降</p>
+<p>Cifar10数据集比其他数据集对loss threshold更为敏感<br><img src="/2020/06/02/【论文阅读笔记】Fuzz-Testing-based-Data-Augmentation-to-Improve-Robustness-of-Deep-Neural-Networks/2020-06-27-01-28-22.png" srcset="/img/loading.gif" alt></p>
+<h1 id="Threads-to-Validity"><a href="#Threads-to-Validity" class="headerlink" title="Threads to Validity"></a>Threads to Validity</h1><p>our results may not generalize to other datasets, or models, or for other applications</p>
+<h1 id="相关工作"><a href="#相关工作" class="headerlink" title="相关工作"></a>相关工作</h1><h2 id="测试充足性指标"><a href="#测试充足性指标" class="headerlink" title="测试充足性指标"></a>测试充足性指标</h2><ul>
+<li>DeepXplore，Neuron Coverage</li>
+<li>DeepGauge，k截面神经元覆盖率和神经元边界覆盖率</li>
+<li>惊奇度 surprise adequacy</li>
+<li>MODE，执行状态差分分析以识别模型的错误特征，然后在此基础上执行训练输入选择</li>
+</ul>
+<h2 id="测试用例生成"><a href="#测试用例生成" class="headerlink" title="测试用例生成"></a>测试用例生成</h2><ul>
+<li>对抗性测试，有选择地修改几个像素，将对抗性实例的生成建模为优化问题，并使用一阶优化算法解决优化问题。生成机器学习也可以用来生成对抗性输入</li>
+<li>但是对于自然产生的变化（旋转和平移等），由于其变换非凸，不利于一阶优化</li>
+<li>TensorFuzz，不适合我们的数据增强驱动的鲁棒性训练目标</li>
+<li>DeepTest和DeepRoad，通过metamorphic testing来生成暴露DNN bug的测试用例</li>
+</ul>
+<h2 id="测试合并策略，Test-incorporation-strategy"><a href="#测试合并策略，Test-incorporation-strategy" class="headerlink" title="测试合并策略，Test incorporation strategy"></a>测试合并策略，Test incorporation strategy</h2><ul>
+<li>绝大多数DNN测试用例生成技术首先使用经过训练的DNN生成测试（或对抗实例），然后使用它们重新训练DNN，以提高其准确性或健壮性。</li>
+<li>AutoAugment ，使用强化学习在搜索空间中找到最佳的扩增策略，从而使神经网络达到最高精度</li>
+<li>Mixup，是最近提出的最先进的数据增强技术，但是在良性变异中，鲁棒性不佳。</li>
+<li>Engstrom，除了没用遗传算法之外都一样</li>
+</ul>
+<h2 id="稳健性模型，Robust-models"><a href="#稳健性模型，Robust-models" class="headerlink" title="稳健性模型，Robust models"></a>稳健性模型，Robust models</h2><ul>
+<li>基于正则化的白盒方法，通过修改DNN损失函数，并在标准经验损失中加入一个不变量来正则化，提高深度神经网络模型的鲁棒性</li>
+</ul>
 
             </div>
             <hr>
@@ -532,7 +634,35 @@
         $(this).wrap(element);
       }
     );
-  </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </script>
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+          tex2jax: {
+              inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+              processEscapes: true,
+              skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+          }
+      });
+
+      MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+
+    </script>
+
+    <script  src="https://cdn.staticfile.org/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" ></script>
+
+  
 
 
 
@@ -543,7 +673,20 @@
 
 
 
-
-
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>

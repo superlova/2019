@@ -2,9 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://superlova.github.io/2020/06/02/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91Fuzz-Testing-based-Data-Augmentation-to-Improve-Robustness-of-Deep-Neural-Networks/</loc>
+    
+    <lastmod>2020-06-26T17:30:26.814Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://superlova.github.io/2020/06/20/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91Fuzzing-A-Survey/</loc>
+    
+    <lastmod>2020-06-26T17:04:36.951Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://superlova.github.io/2020/03/25/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91RNN-Test-Adversarial-Testing-Framework-for-Recurrent-Neural-Network-Systems/</loc>
     
-    <lastmod>2020-06-23T12:41:43.313Z</lastmod>
+    <lastmod>2020-06-26T14:22:45.395Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://superlova.github.io/2020/06/20/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91LSTM%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84%E7%AE%80%E4%BB%8B%E4%B8%8E%E5%AF%B9%E5%BA%94%E7%9A%84keras%E5%AE%9E%E7%8E%B0/</loc>
+    
+    <lastmod>2020-06-26T12:39:35.089Z</lastmod>
     
   </url>
   
@@ -47,20 +68,6 @@
     <loc>https://superlova.github.io/2020/06/20/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91Deep-Gauge-Multi-Granularity-Testing-Criteria-for-Deep-Learning-Systems/</loc>
     
     <lastmod>2020-06-22T15:08:04.455Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://superlova.github.io/2020/06/20/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91Fuzzing-A-Survey/</loc>
-    
-    <lastmod>2020-06-20T04:06:09.757Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://superlova.github.io/2020/06/20/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91LSTM%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84%E7%AE%80%E4%BB%8B%E4%B8%8E%E5%AF%B9%E5%BA%94%E7%9A%84keras%E5%AE%9E%E7%8E%B0/</loc>
-    
-    <lastmod>2020-06-20T03:54:08.330Z</lastmod>
     
   </url>
   
@@ -152,13 +159,6 @@
     <loc>https://superlova.github.io/2020/06/02/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91Adversarial-Attacks-on-Deep-Learning-Models-in-Natural-Language-Processing-A-Survey/</loc>
     
     <lastmod>2020-06-02T06:50:40.788Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://superlova.github.io/2020/06/02/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91Fuzz-Testing-based-Data-Augmentation-to-Improve-Robustness-of-Deep-Neural-Networks/</loc>
-    
-    <lastmod>2020-06-02T06:50:27.694Z</lastmod>
     
   </url>
   

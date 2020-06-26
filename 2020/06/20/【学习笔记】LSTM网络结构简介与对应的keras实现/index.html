@@ -131,7 +131,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    1.7k 字
+                    2.4k 字
                   </span>
                 
 
@@ -139,7 +139,7 @@
                   
                   <span class="post-meta">
                       <i class="far fa-clock"></i>
-                      7 分钟
+                      10 分钟
                   </span>
                 
 
@@ -174,11 +174,11 @@
           <div class="post-content mx-auto" id="post">
             
               <p
-                class="note note-warning">本文最后更新于：星期六, 六月 20日 2020, 11:54 中午</p>
+                class="note note-warning">本文最后更新于：星期五, 六月 26日 2020, 8:39 晚上</p>
             
             <div class="markdown-body">
               <p>从理论和代码两个层面介绍了LSTM网络。<br><a id="more"></a></p>
-<h2 id="理论来一波"><a href="#理论来一波" class="headerlink" title="理论来一波"></a>理论来一波</h2><p>循环神经网络（Recurrent Neural Network，RNN）是一类有短期记忆能力的神经网络。在循环神经网络中，神经元不但可以接受其他神经元的信息，也可以接受自身的信息，形成具有环路的网络结构。</p>
+<h2 id="一、理论来一波"><a href="#一、理论来一波" class="headerlink" title="一、理论来一波"></a>一、理论来一波</h2><p>循环神经网络（Recurrent Neural Network，RNN）是一类有短期记忆能力的神经网络。在循环神经网络中，神经元不但可以接受其他神经元的信息，也可以接受自身的信息，形成具有环路的网络结构。</p>
 <p><img src="/2020/06/20/【学习笔记】LSTM网络结构简介与对应的keras实现/2020-06-20-11-51-21.png" srcset="/img/loading.gif" alt></p>
 <p>长短期记忆网络（Long Short-Term Memory Network，LSTM）[Gers et al.,2000; Hochreiter et al., 1997] 是循环神经网络的一个变体，可以有效地解决简单循环神经网络的梯度爆炸或消失问题。</p>
 <p><img src="/2020/06/20/【学习笔记】LSTM网络结构简介与对应的keras实现/2020-06-20-11-51-13.png" srcset="/img/loading.gif" alt></p>
@@ -203,14 +203,13 @@
 \boldsymbol{f}_{t} &=\sigma\left(\boldsymbol{W}_{f} \boldsymbol{x}_{t}+\boldsymbol{U}_{f} \boldsymbol{h}_{t-1}+\boldsymbol{b}_{f}\right) \\
 \boldsymbol{o}_{t} &=\sigma\left(\boldsymbol{W}_{o} \boldsymbol{x}_{t}+\boldsymbol{U}_{o} \boldsymbol{h}_{t-1}+\boldsymbol{b}_{o}\right)
 \end{aligned}</script><p>其中$\sigma(\cdot)$ 为 Logistic 函数，其输出区间为 (0, 1)；$\boldsymbol{x}_{t}$为当前时刻的输入。</p>
-<h2 id="还是得看代码"><a href="#还是得看代码" class="headerlink" title="还是得看代码"></a>还是得看代码</h2><p>下面是我定义的一个专用于IMDb影评情感分析的二分类模型，包装在一个函数中。输入训练集、测试集及其标签，设定好参数就可以运行、训练。可以选择是否保存模型到本地。最后函数返回训练好的模型。</p>
+<h2 id="二、还是得看代码"><a href="#二、还是得看代码" class="headerlink" title="二、还是得看代码"></a>二、还是得看代码</h2><p>下面是我定义的一个专用于IMDb影评情感分析的二分类模型，包装在一个函数中。输入训练集、测试集及其标签，设定好参数就可以运行、训练。可以选择是否保存模型到本地。最后函数返回训练好的模型。</p>
 <p>这个二分类模型中，输入是长度为80的整数列表（maxlen=80），代表着80个不同的单词构成的一句话。</p>
 <p>如果有影评不够80个词，就在影评前面加足够的0，直到这条影评达到80个词为止。如果影评单词量大于80个，便截取前面的80个词。</p>
 <p>每个整数都代表一个单词表中的单词。当然单词表的大小是固定的（num_words=10000个单词），如果出现不在单词表中的单词，固定将其编码成2，表示UNKNOWN（这条设置不在下面的代码中，属于数据预处理）。</p>
 <p>第一层是Embedding层，负责将一句话中的每个单词映射成固定维度的词向量；</p>
 <p>注意，每个单词（在这里是每个整数）都会变成固定维度（embedding_dim=128）的向量，因此每条影评从Embedding层输出后，都会变成80*128的矩阵。</p>
 <p>第二层是LSTM层。如果你看了理论部分的叙述，就知道LSTM层中无论是隐状态$\boldsymbol{c}$、$\boldsymbol{h}$还是三个门$\boldsymbol{f}$、$\boldsymbol{i}$、$\boldsymbol{o}$，他们的维度都是$\boldsymbol{D}$。这个$\boldsymbol{D}$的大小就需要我们用参数<code>lstm_dim=32</code>来定义。这个参数越大，代表LSTM层的参数越多、泛化能力越强，也更难训练、更容易过拟合。</p>
-<p>数据经过LSTM层，输出的是最后一个时间步得到的output向量（即$\boldsymbol{h}_{finally}$），维度为$\boldsymbol{D}$。其实LSTM能够在每个时间步都输出output（即$\boldsymbol{h}_{t}$），只不过我们把这些没到时间的半成品output选择性忽略了。如果你想要堆叠LSTM层，也就是LSTM层下面还有LSTM，或者你需要所有时间步的$\boldsymbol{h}_{t}$，那么你可以在训练的时候把<code>return_sequences=True</code>写进LSTM参数之中。</p>
 <p>第三层是单个神经元的sigmoid层，在这里就直接转换成概率并分类了。</p>
 <pre><code class="lang-python">def train_lstm(x_train, y_train, x_test, y_test, 
                num_words=10000, 
@@ -251,6 +250,134 @@
     # model.save(&quot;lstm_imdb.h5&quot;)
     return model
 </code></pre>
+<h2 id="三、LSTM返回所有时间步的hidden-state向量"><a href="#三、LSTM返回所有时间步的hidden-state向量" class="headerlink" title="三、LSTM返回所有时间步的hidden state向量"></a>三、LSTM返回所有时间步的hidden state向量</h2><p>数据经过LSTM层，输出的是最后一个时间步得到的output向量（即$\boldsymbol{h}_{finally}$），维度为$\boldsymbol{D}$。</p>
+<p>其实LSTM能够在每个时间步都输出output（即$\boldsymbol{h}_{t}$），只不过我们把这些没到时间的半成品output选择性忽略了。</p>
+<p>如果你想要堆叠LSTM层，也就是LSTM层下面还有LSTM，或者你<strong>需要所有时间步的</strong>$\boldsymbol{h}_{t}$，那么你可以在训练的时候把<code>return_sequences=True</code>写进LSTM参数之中。</p>
+<p><img src="/2020/06/20/【学习笔记】LSTM网络结构简介与对应的keras实现/堆叠rnn.png" srcset="/img/loading.gif" alt></p>
+<p>下面让我们来比较一下<code>return_sequences</code>参数开启之后输出值的变化。</p>
+<h3 id="return-sequences-False"><a href="#return-sequences-False" class="headerlink" title="return_sequences=False"></a>return_sequences=False</h3><p>首先固定随机数种子。</p>
+<pre><code class="lang-python">np.random.seed(0)
+tf.random.set_seed(0)
+</code></pre>
+<p>然后构建输入Input向量和LSTM层，此时LSTM层使用默认参数<code>return_sequences=False</code>。</p>
+<pre><code class="lang-python">input1 = Input(shape=(3,1)) # 输入是三维向量
+lstm1 = LSTM(1)(input1) # 内部hidden和cell的维度为1
+model = Model(inputs=input1, outputs=lstm1)
+</code></pre>
+<p>构造一批输入，包括6个句子，每个句子三个单词，然后输入LSTM，查看LSTM层的输出。</p>
+<pre><code class="lang-python">data = np.array([[0.1, 0.2, 0.3],
+                    [0.3, 0.2, 0.1],
+                    [0.2, 0.6, 0.3],
+                    [0.8, 0.2, 0.3],
+                    [0.3, 0.5, 0.1],
+                    [0.2, 0.6, 0.2]])
+print(model.predict(data))
+</code></pre>
+<p>此时输出为：</p>
+<pre><code class="lang-python">[[0.00844267]
+ [0.00617958]
+ [0.01279002]
+ [0.01231858]
+ [0.009055  ]
+ [0.01108878]]
+
+Process finished with exit code 0
+</code></pre>
+<h3 id="return-sequences-True"><a href="#return-sequences-True" class="headerlink" title="return_sequences=True"></a>return_sequences=True</h3><p>然后打开<code>return_sequences</code>的开关</p>
+<pre><code class="lang-python">lstm1 = LSTM(1, return_sequences=True)(input1)
+</code></pre>
+<p>此时的输出为：</p>
+<pre><code>[[[0.00190693]
+  [0.00490441]
+  [0.00844267]] # 
+
+ [[0.0055262 ]
+  [0.00704476]
+  [0.00617958]] #
+
+ [[0.00374958]
+  [0.01259477]
+  [0.01279002]] #
+
+ [[0.01337298]
+  [0.01142679]
+  [0.01231858]] #
+
+ [[0.0055262 ]
+  [0.01206062]
+  [0.009055  ]] #
+
+ [[0.00374958]
+  [0.01259477]
+  [0.01108878]]] #
+
+Process finished with exit code 0
+</code></pre><p>此为输出所有时间步的hidden state。鉴于一共6个测试输入，每个输入有3个feature，所以时间步也就三步。LSTM的输出结果从6个hidden state变成了6*3个hidden state。</p>
+<h3 id="return-state-True"><a href="#return-state-True" class="headerlink" title="return_state=True"></a>return_state=True</h3><p>我们再来看另一个参数，这个参数能够控制LSTM输出cell state。</p>
+<pre><code class="lang-python">lstm1 = LSTM(1, return_state=True)(input1)
+</code></pre>
+<pre><code>[array([[0.00844267],
+       [0.00617958],
+       [0.01279002],
+       [0.01231858],
+       [0.009055  ],
+       [0.01108878]], dtype=float32), 
+array([[0.00844267],
+       [0.00617958],
+       [0.01279002],
+       [0.01231858],
+       [0.009055  ],
+       [0.01108878]], dtype=float32), 
+array([[0.01655067],
+       [0.01227413],
+       [0.02506882],
+       [0.02414548],
+       [0.01798305],
+       [0.02187706]], dtype=float32)]
+
+Process finished with exit code 0
+</code></pre><p>开启<code>return_state=True</code>之后，LSTM返回3个array，第一个array和第二个array一样，都是hidden state，和默认返回的一样。第三个array就是最后一个时间步的cell state。</p>
+<h3 id="return-state-True-return-sequences-True"><a href="#return-state-True-return-sequences-True" class="headerlink" title="return_state=True, return_sequences=True"></a>return_state=True, return_sequences=True</h3><p>如果两个开关都打开，则结果变成</p>
+<pre><code class="lang-python">lstm1 = LSTM(1, return_state=True, return_sequences=True)(input1)
+</code></pre>
+<pre><code>[array([[[0.00190693],
+        [0.00490441],
+        [0.00844267]],
+
+       [[0.0055262 ],
+        [0.00704476],
+        [0.00617958]],
+
+       [[0.00374958],
+        [0.01259477],
+        [0.01279002]],
+
+       [[0.01337298],
+        [0.01142679],
+        [0.01231858]],
+
+       [[0.0055262 ],
+        [0.01206062],
+        [0.009055  ]],
+
+       [[0.00374958],
+        [0.01259477],
+        [0.01108878]]], dtype=float32), 
+array([[0.00844267],
+       [0.00617958],
+       [0.01279002],
+       [0.01231858],
+       [0.009055  ],
+       [0.01108878]], dtype=float32), 
+array([[0.01655067],
+       [0.01227413],
+       [0.02506882],
+       [0.02414548],
+       [0.01798305],
+       [0.02187706]], dtype=float32)]
+
+Process finished with exit code 0
+</code></pre><p>还是返回三个array，第一个是所有时间步的hidden state，这是开启<code>return_sequences=True</code>的效果；第二个则是原本LSTM的输出hidden state；第三个是开启<code>return_state=True</code>的效果，返回最后一个时间步的cell state</p>
 
             </div>
             <hr>
@@ -603,7 +730,35 @@
         $(this).wrap(element);
       }
     );
-  </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </script>
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+          tex2jax: {
+              inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+              processEscapes: true,
+              skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+          }
+      });
+
+      MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+
+    </script>
+
+    <script  src="https://cdn.staticfile.org/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" ></script>
+
+  
 
 
 
@@ -614,7 +769,20 @@
 
 
 
-
-
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>
