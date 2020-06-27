@@ -4,6 +4,64 @@
   
   
   <entry>
+    <title>【论文阅读笔记】CAGFuzz: Coverage-Guided Adversarial Generative Fuzzing Testing of Deep Learning Systems</title>
+    <link href="/2020/06/28/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91CAGFuzz-Coverage-Guided-Adversarial-Generative-Fuzzing-Testing-of-Deep-Learning-Systems/"/>
+    <url>/2020/06/28/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91CAGFuzz-Coverage-Guided-Adversarial-Generative-Fuzzing-Testing-of-Deep-Learning-Systems/</url>
+    
+    <content type="html"><![CDATA[<p>提出了CAGFuzz，这是一种覆盖率指导的灰盒对抗性生成模糊测试方法，可以为目标DNN生成对抗性示例，以发现其潜在缺陷。<br><a id="more"></a></p><p>DeepXplore，使用多个DNN来发现并生成位于这些DNN决策边界之间的对抗性示例。</p><p>DeepHunter，使用变形突变策略来生成新的测试示例。</p><p>DeepGauge，提出了深度神经网络的新覆盖标准。</p><ol><li>为了提高泛化能力，仅从数据的角度添加较小的扰动就非常重要。</li><li>现有研究完全忽略了包含高级语义信息（例如图像对象类别和场景语义）的深度特征约束。使用L0和L∞来限制对抗性示例的像素级变化，这样的约束只能代表对抗实例和原始实例之间的视觉一致性，而不能保证对抗实例和原始实例的高级语义信息之间的一致性。</li></ol><p>具体地，</p><ol><li>双重GAN构造对抗样本生成器AEG<br>CAGFuzz的目标是最大化神经元覆盖范围，并在对目标DNN产生较小扰动的情况下尽可能多地生成对抗性测试示例。同时，生成的示例适用于不同种类的DNN。</li></ol><p>CycleGAN [19]的目标是将图像A转换为具有不同样式的图像B。</p><p>基于CycleGAN，我们的目标是将图像B转换回图像A，以获得与原始图像A类似的图像A’。</p><p>因此，我们将两个具有相反功能的CycleGAN的生成器组合为对抗示例生成器。</p><p>基于几个特定的​​数据集对AEG进行训练，并且不需要依赖任何特定的DNN模型。</p><ol><li>采用网络信息确保两样本语义一致<br>我们提取原始示例和对抗示例的深度特征，并通过相似性度量使其尽可能相似。</li></ol><p>我们使用VGG-19网络[20]提取原始示例和对抗示例的深度语义信息，并使用余弦相似度测量方法来确保对抗示例的深度语义信息与原始示例一致 越多越好。</p><ol><li>结果<br>AGFuzz可以有效地改善目标DNN模型的神经元覆盖范围。证明了由CAGFuzz生成的对抗示例可以发现目标DNN模型中的隐藏缺陷。通过AEG训练的DNN模型的准确性和鲁棒性已得到显着提高。</li></ol><h1 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h1><h2 id="覆盖率引导的灰盒模糊测试"><a href="#覆盖率引导的灰盒模糊测试" class="headerlink" title="覆盖率引导的灰盒模糊测试"></a>覆盖率引导的灰盒模糊测试</h2><p>最新的CGF方法主要包括三个部分：突变，反馈指导和模糊策略</p><h2 id="CycleGAN"><a href="#CycleGAN" class="headerlink" title="CycleGAN"></a>CycleGAN</h2><p>生成对抗性示例的想法是增加人们无法与原始示例区分开的干扰。这与GAN [27]生成示例的想法非常相似。</p><p>GAN的生成器G和鉴别器D根据噪声数据交替生成与原始示例非常相似但不完全相同的对抗示例。</p><p>考虑到不同目标DL系统（例如某些带有标签数据的DL系统和其他DL系统的数据集）的差异，我们选择CycleGAN [19]作为对抗性示例生成器的训练模型，因为CycleGAN不需要数据匹配集和标签信息。</p><p>CycleGAN的目标是学习X和Y之间的映射关系G和F。有两个对抗判别器$D_x$和$D_y$，$D_x$分辨图片$x$和转换后的图片$F(x)$。$D_y$相似。</p><p>和其他GAN一样，用损失函数优化映射函数。这里用最小二乘损失。</p><p>本示例的目的是将真实图片和梵高风格的绘画相互转化。<br><img src="/2020/06/28/【论文阅读笔记】CAGFuzz-Coverage-Guided-Adversarial-Generative-Fuzzing-Testing-of-Deep-Learning-Systems/2020-06-28-00-36-54.png" srcset="/img/loading.gif" alt></p><h2 id="VGG-19"><a href="#VGG-19" class="headerlink" title="VGG-19"></a>VGG-19</h2><p>VGG-19网络可以从图像中提取高级语义信息[29]，[30]，可用于识别图像之间的相似性。</p><p>本文将最后一个完整连接层的输出作为特征向量进行融合，以比较对抗性示例与原始示例之间的相似性，并作为过滤生成的对抗性示例的阈值。</p><h2 id="神经网络覆盖率"><a href="#神经网络覆盖率" class="headerlink" title="神经网络覆盖率"></a>神经网络覆盖率</h2><p><img src="/2020/06/28/【论文阅读笔记】CAGFuzz-Coverage-Guided-Adversarial-Generative-Fuzzing-Testing-of-Deep-Learning-Systems/2020-06-28-00-39-59.png" srcset="/img/loading.gif" alt></p><h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><img src="/2020/06/28/【论文阅读笔记】CAGFuzz-Coverage-Guided-Adversarial-Generative-Fuzzing-Testing-of-Deep-Learning-Systems/2020-06-28-00-41-11.png" srcset="/img/loading.gif" alt></p><p>第一步是数据收集和训练对抗性示例生成器</p><p>将数据集分为两个子集，并作为CycleGAN的输入来训练AEG。</p><p>在根据存储时间等设置了优先级之后，将这些示例放入处理池中，作为模糊测试的原始示例集。</p><p>第二步是对抗示例生成。</p><p>每次从处理池中选择优先的原始示例，并将其用作AEG的输入以生成对抗示例。</p><p>VGG-19处理对抗性示例和原始示例，以提取示例的特征矩阵。</p><p>计算对抗性示例与原始示例之间的特征矩阵的余弦相似度，以确保对抗性示例的深层语义与原始示例一致。</p><p>第三步是使用神经元覆盖率来指导生成过程。</p><p>第二步中生成的对抗示例将输入到被测DNN中以进行覆盖率分析。</p><p>如果发生新的覆盖，则对抗性示例将作为数据集的一部分放入处理池中。</p><p>新的覆盖范围意味着对抗示例的神经元覆盖范围高于原始示例的神经元覆盖范围。</p><p><img src="/2020/06/28/【论文阅读笔记】CAGFuzz-Coverage-Guided-Adversarial-Generative-Fuzzing-Testing-of-Deep-Learning-Systems/2020-06-28-00-44-35.png" srcset="/img/loading.gif" alt></p><p>CAGFuzz的输入包括目标数据集D，给定深度神经网络DNN，最大迭代数N，每个原始示例生成的对抗性示例N1以及top-k的参数K。</p><p>输出是生成的测试示例，可改善目标DNN的覆盖范围。</p><p>在整个模糊测试过程之前，我们需要处理数据集。</p><p>一方面，它被分为两个相等的数据字段（第1行），以训练对抗性示例生成器AEG（第2行）。</p><p>另一方面，所有示例都经过预处理（第3行），并存储在处理池中（第4行）。</p><p>在每个迭代过程中（第5行），根据时间优先级（第6、7行）从处理池中选择原始示例父对象。</p><p>然后，每个原始示例父对象都会生成多次（第8行）。</p><p>对于每一代，对抗性示例生成器AEG用于变异原始示例性父级，以生成对抗性示例数据（第9行）。</p><p>分别提取原始示例父对象和对抗示例数据的深度特征，并计算它们之间的余弦相似度（第10-11行）。</p><p>最后，将原始样本产生的所有对抗性示例按照相似性从高到低排序，并选择其中的前k个作为目标示例（第13行）。</p><p>排名前k位的对抗性示例是具有覆盖范围的反馈（第15行）。</p><p>如果对抗性示例增加了目标DNN的覆盖范围，它们将被存储在处理池中并设置时间优先级（第16-19行）。</p><h2 id="数据收集"><a href="#数据收集" class="headerlink" title="数据收集"></a>数据收集</h2><p>【未完成】</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>paper</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Robustness</tag>
+      
+      <tag>Deep Neural Networks</tag>
+      
+      <tag>Fuzzing</tag>
+      
+      <tag>Coverage</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>【论文阅读笔记】Towards Evaluating the Robustness of Neural Networks</title>
+    <link href="/2020/06/27/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91Towards-Evaluating-the-Robustness-of-Neural-Networks/"/>
+    <url>/2020/06/27/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91Towards-Evaluating-the-Robustness-of-Neural-Networks/</url>
+    
+    <content type="html"><![CDATA[<p>2017年的攻击文章，目标是当时防御性较高的<strong>防御性蒸馏</strong>模型，属于图像分类模型。结果是成功令其鲁棒性下降。文章最后的结论是，做防御的人应该用较先进的攻击手段测试自己的模型，同时应该注意防御对抗样本的迁移特性，即在其他弱模型上生成样本后在目标模型上测试的行为。<br><a id="more"></a></p><blockquote><p>警告！本文为简读，大量省略了原文内容，只留下了我关注的细节。</p></blockquote><h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>防御性模型蒸馏（Defensive distillation）是近年来抵御对抗样本攻击的最有效方法之一。防御性模型蒸馏应用于前馈神经网络，只需一次重训练，就能将攻击成功率从95%降至0.5%。</p><p>目前有两种衡量神经网络鲁棒性的方法，一是试图证明一个下界，二是攻击模型，试图展示一个上界。第一种方法显然更加难以实践，但是如果攻击算法不够好，第二种方法得到的结果也没有说服力。</p><p>本文构建一系列攻击手段，可以用于构建鲁棒性上界。</p><p>本文还建议使用高置信度（high-confidence）的对抗性示例来评估模型的鲁棒性。</p><p>对抗样本有转移性，可以使用不安全的模型找出对抗样本，这些对抗样本在采取蒸馏防御的模型上同样有效。</p><p>换句话说，有效的防御手段必须破坏转移性</p><p>总的来说，本文的贡献有以下几点：</p><ol><li>引入了攻击手段，分别以$L_0$，$L_2$，$L_{infty}$作为距离指标。</li><li>调研了优化目标对生成对抗样本的影响。</li></ol><h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>目前生成对抗样本的关键问题之一是添加distortion的程度。不同领域的distance metric肯定是不同的。</p><p>本文默认的攻击方法是白盒攻击，因为我们可以通过迁移的方法，将白盒生成的对抗样本迁移到目标样本的黑盒测试中。</p><p>神经网络的robustness定义为生成对抗样本的容易程度。</p><p>本文攻击的对象是以模型蒸馏为防御方法的模型。这种方法能够防御住迄今为止的大部分攻击手段。</p><p>本文攻击的模型皆为图像识别领域的m分类器，输出层为softmax层。这也就意味着输出向量维度为m，$y_i$即为样本分类为i的概率。</p><p>对抗攻击分为带目标的和不带目标的。本文将带目标攻击分成三种情况：</p><p>一般情况：在不是正确标签的标签中随机选择目标类别。</p><p>最佳情况：对所有不正确的类别进行攻击，并报告最难攻击的目标类别。</p><p>在所有评估中，我们执行所有三种类型的攻击：最佳情况，平均情况和最坏情况。</p><p>请注意，如果分类器在80％的时间中仅是准确的，则最佳案例攻击将需要在20％的案例中将其更改为0。</p><p>无论是L0,L2,Loo，没有距离度量是人类感知相似性的完美度量，并且我们没有准确判断哪个距离度量是最佳的。</p><p><strong>防御性蒸馏</strong>：以标准方式在训练数据上训练具有相同架构的网络。当我们在训练该网络时计算softmax时，将其替换为更平滑的softmax版本（将对数除以某个常数T）。</p><p>训练结束后，输入训练集得到模型推断的标签，收集这些标签并代替真实标签，再训练第二个网络。</p><p>这样做的理由是，提出蒸馏防御的人认为，对抗样本是模型过拟合的体现，那么避免过拟合可能会消除高维空间中的盲点。</p><p>但事实上蒸馏不会增加网络健壮性。</p><h1 id="攻击方法"><a href="#攻击方法" class="headerlink" title="攻击方法"></a>攻击方法</h1><h2 id="L-BFGS"><a href="#L-BFGS" class="headerlink" title="L-BFGS"></a>L-BFGS</h2><p>找对抗样本的过程建模为优化过程。<br><img src="/2020/06/27/【论文阅读笔记】Towards-Evaluating-the-Robustness-of-Neural-Networks/2020-06-27-23-41-04.png" srcset="/img/loading.gif" alt><br>loss函数可以取交叉熵。上式求解的是c，使用的距离是$L_2$</p><h2 id="FGSM"><a href="#FGSM" class="headerlink" title="FGSM"></a>FGSM</h2><p>用的是$L_{\infty}$</p><h2 id="JSMA"><a href="#JSMA" class="headerlink" title="JSMA"></a>JSMA</h2><p>Jacobian-based Saliency Map Attack</p><p>JSMA使用的不是softmax的输出，而是softmax的输入，换句话说就是前一层的输出。$L_0$</p><h2 id="DeepFool"><a href="#DeepFool" class="headerlink" title="DeepFool"></a>DeepFool</h2><p>$L_2$</p><h1 id="实验设计"><a href="#实验设计" class="headerlink" title="实验设计"></a>实验设计</h1><p><img src="/2020/06/27/【论文阅读笔记】Towards-Evaluating-the-Robustness-of-Neural-Networks/2020-06-27-23-54-11.png" srcset="/img/loading.gif" alt></p><p><img src="/2020/06/27/【论文阅读笔记】Towards-Evaluating-the-Robustness-of-Neural-Networks/2020-06-27-23-54-31.png" srcset="/img/loading.gif" alt></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>paper</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Robustness</tag>
+      
+      <tag>Deep Neural Networks</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>【论文阅读笔记】Fuzzing: A Survey</title>
     <link href="/2020/06/20/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91Fuzzing-A-Survey/"/>
     <url>/2020/06/20/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91Fuzzing-A-Survey/</url>
@@ -20,9 +78,9 @@
     
     <tags>
       
-      <tag>Software Testing</tag>
-      
       <tag>Fuzzing</tag>
+      
+      <tag>Software Testing</tag>
       
       <tag>Survey</tag>
       
@@ -254,13 +312,13 @@
       
       <tag>NLP</tag>
       
+      <tag>Adversarial Attacks</tag>
+      
       <tag>Robustness</tag>
       
       <tag>Deep Neural Networks</tag>
       
       <tag>survey</tag>
-      
-      <tag>Adversarial Attacks</tag>
       
     </tags>
     
@@ -382,9 +440,9 @@
       
       <tag>Python</tag>
       
-      <tag>numpy</tag>
-      
       <tag>array</tag>
+      
+      <tag>numpy</tag>
       
       <tag>concatenate</tag>
       
@@ -871,11 +929,11 @@
       
       <tag>C++</tag>
       
+      <tag>STL</tag>
+      
       <tag>string</tag>
       
       <tag>regex</tag>
-      
-      <tag>STL</tag>
       
     </tags>
     
@@ -902,11 +960,11 @@
       
       <tag>C++</tag>
       
-      <tag>STL</tag>
-      
       <tag>map</tag>
       
       <tag>set</tag>
+      
+      <tag>STL</tag>
       
     </tags>
     

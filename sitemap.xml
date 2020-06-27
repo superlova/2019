@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://superlova.github.io/2020/06/28/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91CAGFuzz-Coverage-Guided-Adversarial-Generative-Fuzzing-Testing-of-Deep-Learning-Systems/</loc>
+    
+    <lastmod>2020-06-27T18:27:21.157Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://superlova.github.io/2020/06/27/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91Towards-Evaluating-the-Robustness-of-Neural-Networks/</loc>
+    
+    <lastmod>2020-06-27T16:01:41.571Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://superlova.github.io/2020/06/02/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91Fuzz-Testing-based-Data-Augmentation-to-Improve-Robustness-of-Deep-Neural-Networks/</loc>
     
     <lastmod>2020-06-26T17:30:26.814Z</lastmod>

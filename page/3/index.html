@@ -147,6 +147,100 @@
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2019/06/27/机器学习——集成方法/">
+        <p class="h4 index-header">机器学习——集成方法</p>
+      </a>
+
+      <a href="/2019/06/27/机器学习——集成方法/">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">1. 投票分类器三个臭皮匠顶一个诸葛亮。即便是很多预测准确率仅强于随机的个体学习器的组合，经过一定的安排，也可以发挥令人惊讶的效果。在机器学习中，这种看起来没什么含金量的学习策略称之为集成学习。
+集成学习首先需要一系列的个体学习器。之后采用某些策略结合它们的判断。
+集成学习的要求：
+
+构成集成学习器的个体学习器，其性能不能太差，至少要为强于随机的弱学习器。
+
+当然强学习器更好。在最后的结果汇总阶段，也会更多听取强学习器的意见。
+
+个体学习器要具有一定的多样性。
+
+广泛吸收各种不同学习器的意见，做出的决策才有代表性。在机器学习中，体现出的要求就是模型之间的差别要尽可能的大。一方面可以通过划分不同</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-06-27&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/notes/">notes</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/machine-learning/">machine learning</a>&nbsp;
+          
+            <a href="/tags/boosting/">boosting</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2019/06/24/NLP学习笔记2/">
+        <p class="h4 index-header">NLP学习笔记2</p>
+      </a>
+
+      <a href="/2019/06/24/NLP学习笔记2/">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">1. 分词的概念和实现细节NLP的底层任务可分为词法分析、句法分析和语义分析，分词是词法分析中最基本的任务。中文分词是在一个中文序列的词与此之间加上空格或者其他边界标志进行分割，从而方便接下来步骤的处理。
+分词算法可分为两种，一种是基于词典的分词算法，另一种是基于字的分词算法。
+1.1 基于词典的分词算法：最大匹配分词算法，有正向和反向两种。主要思路是将词典构造成一颗Trie树，也成为词典树。以“他说的确实在理”这句话为例，构造Trie树如图所示：
+
+Trie树由词的公共前缀构成节点，降低了存储空间的同时提升查找效率。最大（正向）匹配分词将句子与Trie树进行匹配，在匹配到根结点时由下一个字重</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-06-24&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/notes/">notes</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/NLP/">NLP</a>&nbsp;
+          
+            <a href="/tags/deep-learning/">deep learning</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
       <a href="/2019/06/21/NLP学习笔记1/">
         <p class="h4 index-header">NLP学习笔记1</p>
       </a>
@@ -960,95 +1054,6 @@ g(z)=\left\</div>
           <i class="iconfont icon-tag"></i>
           
             <a href="/tags/machine-learning/">machine learning</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2019/04/25/hexo图片加载失败解决方案/">
-        <p class="h4 index-header">hexo图片加载失败解决方案</p>
-      </a>
-
-      <a href="/2019/04/25/hexo图片加载失败解决方案/">
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">问题描述：我平时写blog使用的编辑器是Typora，采用hexo部署。某篇文章编辑的时候需要插入图片，在Typora上面，插入图片的语法是
-![图片标题](图片地址)比如![](C:\Folder\picture.png)
-其中图片地址是绝对路径，即盘符开头的那个路径。但是如果要上传到GitHub Pages上面，路径毫无疑问会发生变化，所以这里只能用相对路径。假设你的图片和当前的博客文件在同一目录下，则直接这样：
-![](picture.png)![](.\picture.png)![](./picture.png)
-用过unix文件系统的人都知道，其实那个.的作用就是指明“当前文件夹下”</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-04-25&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/record/">record</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/github-pages/">github pages</a>&nbsp;
-          
-            <a href="/tags/hexo/">hexo</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2019/04/25/写在某次期末课程作业之后/">
-        <p class="h4 index-header">写在某次期末课程作业之后</p>
-      </a>
-
-      <a href="/2019/04/25/写在某次期末课程作业之后/">
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">写在某次期末课程作业之后当任课老师在群里说：“Superlova，请尽快将你的作业发给我，电子版和纸质版。”的时候，我还在看“POP子与PIPI美”的第二遍。
-还好我的不看微信的习惯此时并没有让我继续坠入深渊，不过当我阅读完整段消息，一股过电的感觉从心口开始向四肢扩散。我的心脏仿佛停止了跳动，我想大叫、砸东西，我脑子里反复出现以下字眼：
-
-你在干什么呢小S，都什么时候了你还在看动漫？我的天啊就剩我一个人没交了，本来不是说好了三天之前就做完吗？我真是个废物……我该怎么用一个小时不到的时间把所有的工作做完？？？……
-
-1个小时候，我把论文写完，放弃和妥协了一些没能完成的目标，发到老师的邮箱中，并打</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-04-25&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/record/">record</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/procrastination/">procrastination</a>&nbsp;
-          
-            <a href="/tags/study-method/">study method</a>&nbsp;
           
         
       </div>

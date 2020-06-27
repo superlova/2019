@@ -16,7 +16,7 @@
   <meta name="description" content>
   <meta name="author" content="Superlova">
   <meta name="keywords" content>
-  <title>numpy拼合数组方法大全 - Superlova</title>
+  <title>【论文阅读笔记】CAGFuzz: Coverage-Guided Adversarial Generative Fuzzing Testing of Deep Learning Systems - Superlova</title>
   <meta name="google-site-verification" content="CPvPw8mUZw65A1ALJ8uRzsYECq4mXgE4_eCq40VIhPM">
   <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
@@ -122,7 +122,7 @@
               
                 <p class="mt-3 post-meta">
                   <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                  星期一, 六月 1日 2020, 4:39 下午
+                  星期日, 六月 28日 2020, 12:02 凌晨
                 </p>
               
 
@@ -131,7 +131,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    1.4k 字
+                    1.7k 字
                   </span>
                 
 
@@ -139,7 +139,7 @@
                   
                   <span class="post-meta">
                       <i class="far fa-clock"></i>
-                      6 分钟
+                      5 分钟
                   </span>
                 
 
@@ -174,200 +174,68 @@
           <div class="post-content mx-auto" id="post">
             
               <p
-                class="note note-warning">本文最后更新于：星期二, 六月 2日 2020, 12:23 中午</p>
+                class="note note-warning">本文最后更新于：星期日, 六月 28日 2020, 2:27 凌晨</p>
             
             <div class="markdown-body">
-              <p>numpy的一大特色就是其内部的矩阵向量运算。矩阵之间的拼接方法，你掌握多少？<br><a id="more"></a></p>
-<h2 id="1-append拼接"><a href="#1-append拼接" class="headerlink" title="1. append拼接"></a>1. append拼接</h2><p>我们都知道对于Python原生列表list来说，append是最方便的添加元素的方法，一句list.append(elem)就能在列表最后添加一个元素。</p>
-<p>在numpy中，append也是一个直观且好用的方法，np.append(A,B)能够直接拼合两个ndarray数组。</p>
-<p>首先我们新建两个三维数组，一个全为零，一个全为一。</p>
-<pre><code class="lang-python">C = np.zeros((2,2,2))
-D = np.ones((2,2,2))
-print(&quot;C: &quot;, C, C.shape)
-print(&quot;D: &quot;, D, D.shape)
-
-C:  [[[0. 0.]
-  [0. 0.]]
-
- [[0. 0.]
-  [0. 0.]]] 
-shape=(2, 2, 2)
-
-D:  [[[1. 1.]
-  [1. 1.]]
-
- [[1. 1.]
-  [1. 1.]]] 
-shape=(2, 2, 2)
-</code></pre>
-<p>然后我们采用不同的方法将其拼合在一起。</p>
-<p>首先是append(C,D)这种直观的方法，可以看到C和D都被展开成了一维。</p>
-<pre><code class="lang-python">np.append(C,D)
-
-array([0., 0., 0., 0., 0., 0., 0., 0., 1., 1., 1., 1., 1., 1., 1., 1.])
-</code></pre>
-<p>在很多时候我们希望数组拼接时能够保持原有的维度，按照行拼接/列拼接/其他维度拼接。此时只需要改动append的参数axis即可。</p>
-<pre><code class="lang-python">np.append(C,D,axis=0)
-array([[[0., 0.],
-        [0., 0.]],
-
-       [[0., 0.],
-        [0., 0.]],
-
-       [[1., 1.],
-        [1., 1.]],
-
-       [[1., 1.],
-        [1., 1.]]])
-
-np.append(C,D,axis=1)
-array([[[0., 0.],
-        [0., 0.],
-        [1., 1.],
-        [1., 1.]],
-
-       [[0., 0.],
-        [0., 0.],
-        [1., 1.],
-        [1., 1.]]])
-
-np.append(C,D,axis=2)
-array([[[0., 0., 1., 1.],
-        [0., 0., 1., 1.]],
-
-       [[0., 0., 1., 1.],
-        [0., 0., 1., 1.]]])
-</code></pre>
-<p>对于三维数组，axis=0为层，axis=1为行，axis=2为列。这不难理解，因为确定单位数组中元素位置的坐标就是(层，行，列)</p>
-<h2 id="2-concatenate拼接"><a href="#2-concatenate拼接" class="headerlink" title="2. concatenate拼接"></a>2. concatenate拼接</h2><p>concatenate从字面意义上就让人明白这个函数专门负责数组拼接。不仅仅是两个，还可以负责多个数组一起拼接。理论上来说concatenate的速度和内存消耗都比append要小，但我并没有实际做实验验证。</p>
-<pre><code class="lang-python">np.concatenate((C,D)) # default axis=0
-array([[[0., 0.],
-        [0., 0.]],
-
-       [[0., 0.],
-        [0., 0.]],
-
-       [[1., 1.],
-        [1., 1.]],
-
-       [[1., 1.],
-        [1., 1.]]])
-
-np.concatenate((C,D), axis=1) # =np.append(C,D,axis=1)
-array([[[0., 0.],
-        [0., 0.],
-        [1., 1.],
-        [1., 1.]],
-
-       [[0., 0.],
-        [0., 0.],
-        [1., 1.],
-        [1., 1.]]])
-</code></pre>
-<h2 id="3-stack系列"><a href="#3-stack系列" class="headerlink" title="3. stack系列"></a>3. stack系列</h2><p>stack系列函数包括np.stack/hstack/vstack/dstack/column_stack/row_stack，顾名思义，hstack是按照横向拼接，vstack竖着拼接，dstack则是层叠数组。其实我最烦这种抽象描述了，因为二维数组和三维数组/高维数组的抽象描述根本不一致，还是axis好。不明白axis的同学可以看<a href="https://superlova.github.io/2020/05/19/numpy%E4%B8%ADaxis%E7%9A%84%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3/">这篇文章</a>。</p>
-<pre><code class="lang-python">np.hstack((C,D)) # = np.append(C,D,axis=1) = np.column_stack()
-array([[[0., 0.],
-        [0., 0.],
-        [1., 1.],
-        [1., 1.]],
-
-       [[0., 0.],
-        [0., 0.],
-        [1., 1.],
-        [1., 1.]]])
-
-np.vstack((C,D)) # =np.append(C,D,axis=0) = np.row_stack()
-array([[[0., 0.],
-        [0., 0.]],
-
-       [[0., 0.],
-        [0., 0.]],
-
-       [[1., 1.],
-        [1., 1.]],
-
-       [[1., 1.],
-        [1., 1.]]])
-
-np.dstack((C,D)) # =np.append(C,D,aixs=2)
-array([[[0., 0., 1., 1.],
-        [0., 0., 1., 1.]],
-
-       [[0., 0., 1., 1.],
-        [0., 0., 1., 1.]]])
-</code></pre>
-<h2 id="4-np-r"><a href="#4-np-r" class="headerlink" title="4. np.r_[]"></a>4. np.r_[]</h2><p>神奇的numpy总能给出神奇的解法。np.r_是构建数组/拼合数组的最简便写法，但不一定是好理解的。这种写法和之前写的append没什么不同，但是更加简洁。你也可以使用np.r_做出更加复杂的功能。</p>
-<p>一言以蔽之，np.r_[]表达式能够快速使得多个在中括号里面的array/array切片，按照axis=0拼接起来。</p>
-<p>np.r_[]存在两种使用情况：</p>
+              <p>提出了CAGFuzz，这是一种覆盖率指导的灰盒对抗性生成模糊测试方法，可以为目标DNN生成对抗性示例，以发现其潜在缺陷。<br><a id="more"></a></p>
+<p>DeepXplore，使用多个DNN来发现并生成位于这些DNN决策边界之间的对抗性示例。</p>
+<p>DeepHunter，使用变形突变策略来生成新的测试示例。</p>
+<p>DeepGauge，提出了深度神经网络的新覆盖标准。</p>
 <ol>
-<li>如果中括号内部是由若干逗号(comma,)分隔的array，就将他们按照axis=0拼接起来。</li>
-<li>如果中括号内部包括矩阵切片(slices)或者标量(scalars)，就将他们全部变成一维数组首尾相接。</li>
+<li>为了提高泛化能力，仅从数据的角度添加较小的扰动就非常重要。</li>
+<li>现有研究完全忽略了包含高级语义信息（例如图像对象类别和场景语义）的深度特征约束。使用L0和L∞来限制对抗性示例的像素级变化，这样的约束只能代表对抗实例和原始实例之间的视觉一致性，而不能保证对抗实例和原始实例的高级语义信息之间的一致性。</li>
 </ol>
-<p><strong>注意：</strong></p>
-<ul>
-<li>中括号<code>[3:6:1]</code>内部代表的切片，其含义相当于<code>np.arange(3,6,1)</code>，即在<code>[3,6)</code>范围内，从3开始走一步取一个元素，也就是<code>[3,4,5]</code>。</li>
-<li>中括号<code>[0:5:3j]</code>在最后加了字母<code>j</code>，相当于<code>np.linspace(0,5,3,endpoint=True)</code>，在<code>[0,5]</code>范围内，均匀地取三个元素。</li>
-</ul>
-<pre><code class="lang-python">np.r_[C,D] # =np.append(C,D,axis=0)
-array([[[0., 0.],
-        [0., 0.]],
-
-       [[0., 0.],
-        [0., 0.]],
-
-       [[1., 1.],
-        [1., 1.]],
-
-       [[1., 1.],
-        [1., 1.]]])
-
-np.r_[0:10:3, 0:5:4j]
-array([0.        , 3.        , 6.        , 9.        , 0.        ,
-       1.66666667, 3.33333333, 5.        ])
-</code></pre>
-<p>在中括号内，如果最开始是一个<strong>特定的字符串</strong>，np.r_会试图根据字符串的含义，改变其输出格式。</p>
-<ul>
-<li><code>np.r_[&#39;r&#39;, index_expression]</code>和<code>np.r_[&#39;c&#39;, index_expression]</code>将输出从array类型转变成matrix类型。<code>np.r_[&#39;c&#39;, index_expression]</code>会把一维index_expression组装成N*1的列向量。</li>
-</ul>
-<pre><code class="lang-python">np.r_[&quot;r&quot;, 0:10:3, 0:5:4j]
-matrix([[0.        , 3.        , 6.        , 9.        , 0.        ,
-         1.66666667, 3.33333333, 5.        ]])
-
-np.r_[&quot;c&quot;, 0:10:3, 0:5:4j]
-matrix([[0.        ],
-        [3.        ],
-        [6.        ],
-        [9.        ],
-        [0.        ],
-        [1.66666667],
-        [3.33333333],
-        [5.        ]])
-</code></pre>
-<ul>
-<li><code>np.r_[&quot;n&quot;, index_expression]</code>前面字符串是整数，则拼接时将会按照axis=n进行拼接。</li>
-</ul>
-<pre><code class="lang-python">np.r_[&quot;-1&quot;,C,D]
-array([[[0., 0., 1., 1.],
-        [0., 0., 1., 1.]],
-
-       [[0., 0., 1., 1.],
-        [0., 0., 1., 1.]]])
-</code></pre>
-<h2 id="5-np-c"><a href="#5-np-c" class="headerlink" title="5. np.c_"></a>5. np.c_</h2><p>在日常使用时，我们经常需要按照最后一个维度拼合两个数组，也就是np.r_[‘-1’,index_expression]。此时我们可以直接使用<code>np.c_[]</code></p>
-<pre><code class="lang-python">np.c_[C,D] # =np.append(C,D,axis=2)
-array([[[0., 0., 1., 1.],
-        [0., 0., 1., 1.]],
-
-       [[0., 0., 1., 1.],
-        [0., 0., 1., 1.]]])
-
-np.c_[0:10:3, 0:5:4j]
-array([[0.        , 0.        ],
-       [3.        , 1.66666667],
-       [6.        , 3.33333333],
-       [9.        , 5.        ]])
-</code></pre>
-<p>关于numpy中的<code>np.c_</code>和<code>np.r_</code>相关知识，可以参考<a href="https://numpy.org/devdocs/reference/generated/numpy.r_.html#numpy.r_" target="_blank" rel="noopener">官方文档</a>，里面有关于中括号前参数的详细解释。</p>
+<p>具体地，</p>
+<ol>
+<li>双重GAN构造对抗样本生成器AEG<br>CAGFuzz的目标是最大化神经元覆盖范围，并在对目标DNN产生较小扰动的情况下尽可能多地生成对抗性测试示例。同时，生成的示例适用于不同种类的DNN。</li>
+</ol>
+<p>CycleGAN [19]的目标是将图像A转换为具有不同样式的图像B。</p>
+<p>基于CycleGAN，我们的目标是将图像B转换回图像A，以获得与原始图像A类似的图像A’。</p>
+<p>因此，我们将两个具有相反功能的CycleGAN的生成器组合为对抗示例生成器。</p>
+<p>基于几个特定的​​数据集对AEG进行训练，并且不需要依赖任何特定的DNN模型。</p>
+<ol>
+<li>采用网络信息确保两样本语义一致<br>我们提取原始示例和对抗示例的深度特征，并通过相似性度量使其尽可能相似。</li>
+</ol>
+<p>我们使用VGG-19网络[20]提取原始示例和对抗示例的深度语义信息，并使用余弦相似度测量方法来确保对抗示例的深度语义信息与原始示例一致 越多越好。</p>
+<ol>
+<li>结果<br>AGFuzz可以有效地改善目标DNN模型的神经元覆盖范围。证明了由CAGFuzz生成的对抗示例可以发现目标DNN模型中的隐藏缺陷。通过AEG训练的DNN模型的准确性和鲁棒性已得到显着提高。</li>
+</ol>
+<h1 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h1><h2 id="覆盖率引导的灰盒模糊测试"><a href="#覆盖率引导的灰盒模糊测试" class="headerlink" title="覆盖率引导的灰盒模糊测试"></a>覆盖率引导的灰盒模糊测试</h2><p>最新的CGF方法主要包括三个部分：突变，反馈指导和模糊策略</p>
+<h2 id="CycleGAN"><a href="#CycleGAN" class="headerlink" title="CycleGAN"></a>CycleGAN</h2><p>生成对抗性示例的想法是增加人们无法与原始示例区分开的干扰。这与GAN [27]生成示例的想法非常相似。</p>
+<p>GAN的生成器G和鉴别器D根据噪声数据交替生成与原始示例非常相似但不完全相同的对抗示例。</p>
+<p>考虑到不同目标DL系统（例如某些带有标签数据的DL系统和其他DL系统的数据集）的差异，我们选择CycleGAN [19]作为对抗性示例生成器的训练模型，因为CycleGAN不需要数据匹配集和标签信息。</p>
+<p>CycleGAN的目标是学习X和Y之间的映射关系G和F。有两个对抗判别器$D_x$和$D_y$，$D_x$分辨图片$x$和转换后的图片$F(x)$。$D_y$相似。</p>
+<p>和其他GAN一样，用损失函数优化映射函数。这里用最小二乘损失。</p>
+<p>本示例的目的是将真实图片和梵高风格的绘画相互转化。<br><img src="/2020/06/28/【论文阅读笔记】CAGFuzz-Coverage-Guided-Adversarial-Generative-Fuzzing-Testing-of-Deep-Learning-Systems/2020-06-28-00-36-54.png" srcset="/img/loading.gif" alt></p>
+<h2 id="VGG-19"><a href="#VGG-19" class="headerlink" title="VGG-19"></a>VGG-19</h2><p>VGG-19网络可以从图像中提取高级语义信息[29]，[30]，可用于识别图像之间的相似性。</p>
+<p>本文将最后一个完整连接层的输出作为特征向量进行融合，以比较对抗性示例与原始示例之间的相似性，并作为过滤生成的对抗性示例的阈值。</p>
+<h2 id="神经网络覆盖率"><a href="#神经网络覆盖率" class="headerlink" title="神经网络覆盖率"></a>神经网络覆盖率</h2><p><img src="/2020/06/28/【论文阅读笔记】CAGFuzz-Coverage-Guided-Adversarial-Generative-Fuzzing-Testing-of-Deep-Learning-Systems/2020-06-28-00-39-59.png" srcset="/img/loading.gif" alt></p>
+<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><img src="/2020/06/28/【论文阅读笔记】CAGFuzz-Coverage-Guided-Adversarial-Generative-Fuzzing-Testing-of-Deep-Learning-Systems/2020-06-28-00-41-11.png" srcset="/img/loading.gif" alt></p>
+<p>第一步是数据收集和训练对抗性示例生成器</p>
+<p>将数据集分为两个子集，并作为CycleGAN的输入来训练AEG。</p>
+<p>在根据存储时间等设置了优先级之后，将这些示例放入处理池中，作为模糊测试的原始示例集。</p>
+<p>第二步是对抗示例生成。</p>
+<p>每次从处理池中选择优先的原始示例，并将其用作AEG的输入以生成对抗示例。</p>
+<p>VGG-19处理对抗性示例和原始示例，以提取示例的特征矩阵。</p>
+<p>计算对抗性示例与原始示例之间的特征矩阵的余弦相似度，以确保对抗性示例的深层语义与原始示例一致。</p>
+<p>第三步是使用神经元覆盖率来指导生成过程。</p>
+<p>第二步中生成的对抗示例将输入到被测DNN中以进行覆盖率分析。</p>
+<p>如果发生新的覆盖，则对抗性示例将作为数据集的一部分放入处理池中。</p>
+<p>新的覆盖范围意味着对抗示例的神经元覆盖范围高于原始示例的神经元覆盖范围。</p>
+<p><img src="/2020/06/28/【论文阅读笔记】CAGFuzz-Coverage-Guided-Adversarial-Generative-Fuzzing-Testing-of-Deep-Learning-Systems/2020-06-28-00-44-35.png" srcset="/img/loading.gif" alt></p>
+<p>CAGFuzz的输入包括目标数据集D，给定深度神经网络DNN，最大迭代数N，每个原始示例生成的对抗性示例N1以及top-k的参数K。</p>
+<p>输出是生成的测试示例，可改善目标DNN的覆盖范围。</p>
+<p>在整个模糊测试过程之前，我们需要处理数据集。</p>
+<p>一方面，它被分为两个相等的数据字段（第1行），以训练对抗性示例生成器AEG（第2行）。</p>
+<p>另一方面，所有示例都经过预处理（第3行），并存储在处理池中（第4行）。</p>
+<p>在每个迭代过程中（第5行），根据时间优先级（第6、7行）从处理池中选择原始示例父对象。</p>
+<p>然后，每个原始示例父对象都会生成多次（第8行）。</p>
+<p>对于每一代，对抗性示例生成器AEG用于变异原始示例性父级，以生成对抗性示例数据（第9行）。</p>
+<p>分别提取原始示例父对象和对抗示例数据的深度特征，并计算它们之间的余弦相似度（第10-11行）。</p>
+<p>最后，将原始样本产生的所有对抗性示例按照相似性从高到低排序，并选择其中的前k个作为目标示例（第13行）。</p>
+<p>排名前k位的对抗性示例是具有覆盖范围的反馈（第15行）。</p>
+<p>如果对抗性示例增加了目标DNN的覆盖范围，它们将被存储在处理池中并设置时间优先级（第16-19行）。</p>
+<h2 id="数据收集"><a href="#数据收集" class="headerlink" title="数据收集"></a>数据收集</h2><p>【未完成】</p>
 
             </div>
             <hr>
@@ -377,7 +245,7 @@ array([[0.        , 0.        ],
                   <span>
                 <i class="iconfont icon-inbox"></i>
                     
-                      <a class="hover-with-bg" href="/categories/notes/">notes</a>
+                      <a class="hover-with-bg" href="/categories/paper/">paper</a>
                       &nbsp;
                     
                   </span>&nbsp;&nbsp;
@@ -386,13 +254,13 @@ array([[0.        , 0.        ],
                   <span>
                 <i class="iconfont icon-tag"></i>
                     
-                      <a class="hover-with-bg" href="/tags/Python/">Python</a>
+                      <a class="hover-with-bg" href="/tags/Robustness/">Robustness</a>
                     
-                      <a class="hover-with-bg" href="/tags/array/">array</a>
+                      <a class="hover-with-bg" href="/tags/Deep-Neural-Networks/">Deep Neural Networks</a>
                     
-                      <a class="hover-with-bg" href="/tags/numpy/">numpy</a>
+                      <a class="hover-with-bg" href="/tags/Fuzzing/">Fuzzing</a>
                     
-                      <a class="hover-with-bg" href="/tags/concatenate/">concatenate</a>
+                      <a class="hover-with-bg" href="/tags/Coverage/">Coverage</a>
                     
                   </span>
                 
@@ -668,7 +536,7 @@ array([[0.        , 0.        ],
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "numpy拼合数组方法大全&nbsp;",
+        "【论文阅读笔记】CAGFuzz: Coverage-Guided Adversarial Generative Fuzzing Testing of Deep Learning Systems&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 90,
@@ -725,6 +593,32 @@ array([[0.        , 0.        ],
   </script>
 
 
+
+  
+
+  
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+          tex2jax: {
+              inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+              processEscapes: true,
+              skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+          }
+      });
+
+      MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+
+    </script>
+
+    <script  src="https://cdn.staticfile.org/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" ></script>
+
+  
 
 
 
