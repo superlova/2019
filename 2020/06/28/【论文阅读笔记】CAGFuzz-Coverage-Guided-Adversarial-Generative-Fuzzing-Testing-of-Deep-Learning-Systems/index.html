@@ -131,7 +131,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    1.7k 字
+                    2.2k 字
                   </span>
                 
 
@@ -139,7 +139,7 @@
                   
                   <span class="post-meta">
                       <i class="far fa-clock"></i>
-                      5 分钟
+                      7 分钟
                   </span>
                 
 
@@ -174,7 +174,7 @@
           <div class="post-content mx-auto" id="post">
             
               <p
-                class="note note-warning">本文最后更新于：星期日, 六月 28日 2020, 2:27 凌晨</p>
+                class="note note-warning">本文最后更新于：星期一, 七月 20日 2020, 4:51 下午</p>
             
             <div class="markdown-body">
               <p>提出了CAGFuzz，这是一种覆盖率指导的灰盒对抗性生成模糊测试方法，可以为目标DNN生成对抗性示例，以发现其潜在缺陷。<br><a id="more"></a></p>
@@ -235,7 +235,16 @@
 <p>最后，将原始样本产生的所有对抗性示例按照相似性从高到低排序，并选择其中的前k个作为目标示例（第13行）。</p>
 <p>排名前k位的对抗性示例是具有覆盖范围的反馈（第15行）。</p>
 <p>如果对抗性示例增加了目标DNN的覆盖范围，它们将被存储在处理池中并设置时间优先级（第16-19行）。</p>
-<h2 id="数据收集"><a href="#数据收集" class="headerlink" title="数据收集"></a>数据收集</h2><p>【未完成】</p>
+<h2 id="数据收集"><a href="#数据收集" class="headerlink" title="数据收集"></a>数据收集</h2><p>首先对数据集进行排序，将排好序的数据集储存在队列中。然后将队列分成两部分，训练cycleGAN使用。</p>
+<h2 id="训练对抗样本生成器"><a href="#训练对抗样本生成器" class="headerlink" title="训练对抗样本生成器"></a>训练对抗样本生成器</h2><p>如何把握突变程度degree是关键。本文提出了一个新的对抗样本生成方法，能够保证深层次semantic信息的不变性，且扰动对人类是不可察觉的。</p>
+<p>这个新的方法就是引用了cyclegan，依赖adversarial loss函数添加对抗扰动，且通过cyclic consistency loss控制扰动在人类不可察觉的范围内。</p>
+<p>CycleGAN是怎么做的呢？首先将数据集均匀分成两部分X、Y，模型试图学习两个映射，分别是从X到Y的映射P，以及从Y到X的映射Q。对应地，有两个对抗判别器$D_x$和$D_y$，分别负责判断当前的$x$是来自X的样本还是来自Q生成的样本，以及负责判断当前的$y$是来自Y的样本还是来自P生成的样本。</p>
+<p>对于映射函数P和对应的对抗样本判别器$D_y$，对抗损失函数为：</p>
+<script type="math/tex; mode=display">\begin{aligned}
+\min _{P} \max _{D} Y V\left(P, D_{Y}, X, Y\right)=E_{y \sim P_{\text {data}}(y)}\left[\log D_{Y}(y)\right] &+\\
+E_{x \sim P_{\text {data}}(x)}\left[\log \left(1-D_{Y}(P(x))\right)\right] &]
+\end{aligned}</script><p>最小化映射函数P，最大化对抗判别器$D_y$。</p>
+<p>P映射的目的是生成对抗样本$y’=P(x)$，让$y’$看起来像是从Y中来的一样。这个过程可以理解成，把大量的来自于Y的特性给添加到来自于X的$x$中。同时训练一个辨别器$D_y$，辨别真正的$y$与P生成出来的$y’$。</p>
 
             </div>
             <hr>
@@ -616,7 +625,7 @@
 
     </script>
 
-    <script  src="https://cdn.staticfile.org/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" ></script>
+    <script  src="https://cdn.staticfile.org/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" ></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
   
 
@@ -629,20 +638,5 @@
 
 
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>
