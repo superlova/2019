@@ -16,7 +16,7 @@
   <meta name="description" content>
   <meta name="author" content="Superlova">
   <meta name="keywords" content>
-  <title>【学习笔记】机器学习中处理文本数据的常用方法 - Superlova</title>
+  <title>【竞赛打卡】零基础入门NLP之新闻文本分类之赛题理解 - Superlova</title>
   <meta name="google-site-verification" content="CPvPw8mUZw65A1ALJ8uRzsYECq4mXgE4_eCq40VIhPM">
   <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
@@ -122,7 +122,7 @@
               
                 <p class="mt-3 post-meta">
                   <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                  星期二, 六月 9日 2020, 10:52 晚上
+                  星期二, 七月 21日 2020, 11:51 晚上
                 </p>
               
 
@@ -131,7 +131,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    1.4k 字
+                    2.7k 字
                   </span>
                 
 
@@ -139,7 +139,7 @@
                   
                   <span class="post-meta">
                       <i class="far fa-clock"></i>
-                      6 分钟
+                      10 分钟
                   </span>
                 
 
@@ -174,11 +174,31 @@
           <div class="post-content mx-auto" id="post">
             
               <p
-                class="note note-warning">本文最后更新于：星期二, 七月 21日 2020, 10:29 晚上</p>
+                class="note note-warning">本文最后更新于：星期二, 七月 21日 2020, 11:54 晚上</p>
             
             <div class="markdown-body">
-              <p>总结词袋模型、Tf-idf等文本特征提取方法<br><a id="more"></a></p>
-<h2 id="一、词袋模型"><a href="#一、词袋模型" class="headerlink" title="一、词袋模型"></a>一、词袋模型</h2><p>文本数据通常被表示为由字符组成的字符串。我们需要先处理数据，然后才能对其应用机器学习算法。</p>
+              <p>这项任务不好做呀，稍不小心就占用了task2的内容。<br><a id="more"></a></p>
+<h1 id="零基础入门NLP之新闻文本分类之赛题理解"><a href="#零基础入门NLP之新闻文本分类之赛题理解" class="headerlink" title="零基础入门NLP之新闻文本分类之赛题理解"></a>零基础入门NLP之新闻文本分类之赛题理解</h1><h2 id="一、现在公开的情报"><a href="#一、现在公开的情报" class="headerlink" title="一、现在公开的情报"></a>一、现在公开的情报</h2><h3 id="1-比赛内容"><a href="#1-比赛内容" class="headerlink" title="1. 比赛内容"></a>1. 比赛内容</h3><p>本次比赛的任务为文本的分类任务。虽然简单，但是想要取得高分还是不容易。</p>
+<p>待分类文本为新闻文本。新闻文本根据来源，分为财经、彩票、房产、股票、家居、教育、科技、社会、时尚、时政、体育、星座、游戏、娱乐，共14类。</p>
+<h3 id="2-数据内容"><a href="#2-数据内容" class="headerlink" title="2. 数据内容"></a>2. 数据内容</h3><p>训练集和测试集在<a href="https://tianchi.aliyun.com/competition/entrance/531810/introduction" target="_blank" rel="noopener">官网</a>下载。</p>
+<p>其中训练集是带正确标签的，测试集不带标签，是真正的题目。我们的任务是训练模型，正确分类测试集中每一条新闻的标签。</p>
+<p>训练集由20万条新闻构成，测试集五万条数据。</p>
+<p>每条新闻都被编码为整数序列。每个单词对应一个整数。</p>
+<p>数据集中标签的对应的关系如下：</p>
+<p><code>{&#39;科技&#39;: 0, &#39;股票&#39;: 1, &#39;体育&#39;: 2, &#39;娱乐&#39;: 3, &#39;时政&#39;: 4, &#39;社会&#39;: 5, &#39;教育&#39;: 6, &#39;财经&#39;: 7, &#39;家居&#39;: 8, &#39;游戏&#39;: 9, &#39;房产&#39;: 10, &#39;时尚&#39;: 11, &#39;彩票&#39;: 12, &#39;星座&#39;: 13}</code></p>
+<h3 id="3-赛制"><a href="#3-赛制" class="headerlink" title="3. 赛制"></a>3. 赛制</h3><ul>
+<li>第一阶段（7月15日-9月7日），每天两次提交自己答案的机会，系统根据成绩自动排名，排行榜每小时更新。该排行与最终成绩无关。</li>
+<li>第二阶段（9月7日～9月8日）清空排行榜，7日11：00放出新测试数据。同样每天只能提交两次，每小时更新榜单，9月8日晚上20点的排行即为最终成绩。</li>
+<li>排行前13名选手在9月11日12:00前提交代码，获得奖励。</li>
+</ul>
+<h3 id="4-结果提交"><a href="#4-结果提交" class="headerlink" title="4. 结果提交"></a>4. 结果提交</h3><p>将测试集的label保存成csv格式，上传到<a href="https://tianchi.aliyun.com/competition/entrance/531810/submission/" target="_blank" rel="noopener">这里</a>。</p>
+<p>注意第一行是标题label，从第二行开始写入标签。</p>
+<h3 id="5-评分标准"><a href="#5-评分标准" class="headerlink" title="5. 评分标准"></a>5. 评分标准</h3><p>F1评价指标</p>
+<h3 id="6-其他"><a href="#6-其他" class="headerlink" title="6. 其他"></a>6. 其他</h3><p>可以充分发挥自己的特长来完成各种特征工程，不限制使用任何外部数据和模型。</p>
+<h2 id="二、赛题理解"><a href="#二、赛题理解" class="headerlink" title="二、赛题理解"></a>二、赛题理解</h2><h3 id="1-数据编码"><a href="#1-数据编码" class="headerlink" title="1. 数据编码"></a>1. 数据编码</h3><p>赛题使用的数据为新闻，但是数据已经编码成了整数序列。分词我们不必操心了，但是这种编码方式我们有必要熟悉一下。</p>
+<p>文本数据的编码方式通常有：</p>
+<h4 id="1-1-根据单词表编码"><a href="#1-1-根据单词表编码" class="headerlink" title="1.1 根据单词表编码"></a>1.1 根据单词表编码</h4><p>本题就是根据单词表编码的，每个单词被编码为在单词表中的位置。比如整数40就是单词表中第40个单词。</p>
+<h4 id="1-2-词袋模型"><a href="#1-2-词袋模型" class="headerlink" title="1.2 词袋模型"></a>1.2 词袋模型</h4><p>文本数据通常被表示为由字符组成的字符串。我们需要先处理数据，然后才能对其应用机器学习算法。</p>
 <p>在文本分析的语境中，数据集通常被称为语料库（corpus），每个由单个文本表示的数据点被称为文档（document）。</p>
 <p>最简单的处理方法，是<strong>只计算语料库中每个单词在每个文本中的出现频次</strong>。这种文本处理模型称之为<strong>词袋模型</strong>。</p>
 <p>不考虑词语出现的顺序，每个出现过的词汇单独作为一列特征，这些不重复的特征词汇集合为词表。</p>
@@ -218,11 +238,10 @@ Dense representation of bag_of_words:
 [1 1 0 1 0 1 0 1 1 1 0 1 1]]
 </code></pre>
 <p>删除没有信息量的单词，除了使用<code>min_df</code>参数设定词例至少需要在多少个文档中出现过之外，还可以通过添加停用词的方法。</p>
-<h2 id="二、用tf-idf缩放数据"><a href="#二、用tf-idf缩放数据" class="headerlink" title="二、用tf-idf缩放数据"></a>二、用tf-idf缩放数据</h2><p>词频 - 逆向文档频率（term frequency–inverse document frequency，tf-idf）方法，对在某个特定文档中经常出现的术语给予很高的权重，但对在语料库的许多文档中都经常出现的术语给予的权重却不高。</p>
+<h4 id="1-3-用tf-idf编码数据"><a href="#1-3-用tf-idf编码数据" class="headerlink" title="1.3 用tf-idf编码数据"></a>1.3 用tf-idf编码数据</h4><p>词频 - 逆向文档频率（term frequency–inverse document frequency，tf-idf）方法，对在某个特定文档中经常出现的术语给予很高的权重，但对在语料库的许多文档中都经常出现的术语给予的权重却不高。</p>
 <p>scikit-learn 在两个类中实现了 tf-idf 方法：TfidfTransformer 和 TfidfVectorizer，前者接受 CountVectorizer 生成的稀疏矩阵并将其变换，后者接受文本数据并完成词袋特征提取与 tf-idf 变换。</p>
 <p>单词w在文档d中的tf-idf分数为：</p>
-<p><img src="/2020/06/09/【学习笔记】机器学习中处理文本数据的常用方法/2020-06-09-23-20-54.png" srcset="/img/loading.gif" alt></p>
-<p>式中，tf为词频，Term Frequency, 表示一个词在一个文档中的出现频率。该频率最后要除以该文档的长度，用以归一化。</p>
+<script type="math/tex; mode=display">\operatorname{tfidf}(w, d)=\operatorname{tf} \log \left(\frac{N+1}{N_{w}+1}\right)+1</script><p>式中，tf为词频，Term Frequency, 表示一个词在一个文档中的出现频率。该频率最后要除以该文档的长度，用以归一化。</p>
 <p>式中，$N$为总文档数，$N_w$为带有单词$w$的文档数。由于分子比分母大，所以该 $\log$ 值必不可能小于零。</p>
 <pre><code class="lang-python">from sklearn.feature_extraction.text import TfidfVectorizer
 corpus=[&quot;I come to China to travel&quot;,
@@ -288,8 +307,32 @@ print(vector.toarray())
   0. 0.35657982 0. 0.28113163 0. 0.35657982
   0.35657982]]
 </code></pre>
-<h2 id="三、多元词袋"><a href="#三、多元词袋" class="headerlink" title="三、多元词袋"></a>三、多元词袋</h2><p>词袋模型将一段文档拆分成单词后，忽略了单词的上下文可能对文档的含义造成影响。</p>
-<h2 id="四、英语的词干提取与词形还原"><a href="#四、英语的词干提取与词形还原" class="headerlink" title="四、英语的词干提取与词形还原"></a>四、英语的词干提取与词形还原</h2><h2 id="五、中文的分词"><a href="#五、中文的分词" class="headerlink" title="五、中文的分词"></a>五、中文的分词</h2><h2 id="六、主题建模与文档聚类"><a href="#六、主题建模与文档聚类" class="headerlink" title="六、主题建模与文档聚类"></a>六、主题建模与文档聚类</h2>
+<h4 id="1-4-Hash编码"><a href="#1-4-Hash编码" class="headerlink" title="1.4 Hash编码"></a>1.4 Hash编码</h4><p>无论采用什么编码，只要令每个特征能够独一无二地表示即可。可采用Hash思想。</p>
+<p>对于类别数量很多的分类变量，利用哈希函数将一个数据点转换成一个向量。相比较One-Hot模型，哈希编码维度下降了很多。</p>
+<p>若采用哈希函数</p>
+<pre><code>h(the) mod 5 = 0
+h(quick) mod 5 = 1
+h(brown) mod 5 = 1
+h(fox) mod 5 = 3
+</code></pre><p>则对于某句话：<br><code>the quick brown fox</code><br>来说，其使用哈希特转换的向量就是：<br><code>(1,2,0,1,0)</code><br>对比one-hot编码向量（在单词表里就这四个单词的情况下）：<br><code>(0001,0010,0100,1000)</code></p>
+<p>在实践中，哈希编码通过调用sklearn的HashingVectorizer实现。</p>
+<p>关于数据的编码及其他特征工程，请看<a href="https://superlova.github.io/2020/07/20/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/#%E4%B8%80%E3%80%81%E7%B1%BB%E5%88%AB%E7%89%B9%E5%BE%81">这里</a>。</p>
+<h3 id="2-评分标准"><a href="#2-评分标准" class="headerlink" title="2. 评分标准"></a>2. 评分标准</h3><p>分类模型的评分标准非常丰富，通用评价指标有精度和错误率</p>
+<script type="math/tex; mode=display">\operatorname{accuracy}=\frac{T P+T N}{N}, \text { Error Rate }=\frac{F P+F N}{N}</script><p>其中N是样本总数，TP、FP、TN、FN的含义如下表</p>
+<p><img src="/2020/07/21/【竞赛打卡】零基础入门NLP之新闻文本分类之赛题理解/table.png" srcset="/img/loading.gif" alt></p>
+<p>除此之外，准确率、召回率、F1值也是常用的评价指标。</p>
+<p><img src="/2020/07/21/【竞赛打卡】零基础入门NLP之新闻文本分类之赛题理解/metrics.png" srcset="/img/loading.gif" alt></p>
+<p>P-R曲线即召回率R为横轴、精确率P为纵轴画的曲线。分类器的P-R曲线下面积越大，表明分类性能越好。</p>
+<p>ROC曲线分析的是二元分类模型，也就是输出结果只有两种类别的模型。ROC以伪阳性率（FPR）为 X 轴，以真阳性率（TPR）为 Y 轴绘制曲线。AUC（Area Under Curve）被定义为ROC曲线下与坐标轴围成的面积，完美分类器的AUC=1。</p>
+<p><img src="/2020/07/21/【竞赛打卡】零基础入门NLP之新闻文本分类之赛题理解/metrics2.png" srcset="/img/loading.gif" alt></p>
+<h3 id="3-实验环境"><a href="#3-实验环境" class="headerlink" title="3. 实验环境"></a>3. 实验环境</h3><p>你还不知道Colab吗？我不允许有人不知道这么好的东西！Colab是一款在线Python编程工具。使用Colab，让你再也不用下载和安装Anaconda，再也不用纠结显卡驱动！有了它就可以白嫖Google的GPU服务器啦！(<a href="https://colab.research.google.com/" target="_blank" rel="noopener">https://colab.research.google.com/</a>)</p>
+<p>Colab深度学习乞丐炼丹师的最爱！但是想说爱你不容易，各种掉线、内存不足，心酸……有钱还是买带显卡的服务器吧！</p>
+<p>关于如何使用Colab，可以参考知乎的<a href="https://zhuanlan.zhihu.com/p/35063343" target="_blank" rel="noopener">这篇文章</a>。</p>
+<p>（其实使用Colab最大的障碍是，你得有个稳定的VPN……）</p>
+<h3 id="4-解题思路"><a href="#4-解题思路" class="headerlink" title="4. 解题思路"></a>4. 解题思路</h3><p>文本分类问题嘛，相比大家都用LSTM分类过IMDb影评，相当于Hello World之于程序员了。用LSTM分类IMDb影评的笔记我都写好了：<a href="https://superlova.github.io/2020/06/03/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E4%BD%BF%E7%94%A8LSTM%E8%AE%AD%E7%BB%83imdb%E6%83%85%E6%84%9F%E5%88%86%E7%B1%BB%E6%A8%A1%E5%9E%8B/">这里</a>。<a href="https://www.tensorflow.org/tutorials/text/text_classification_rnn?hl=zh-cn" target="_blank" rel="noopener">Tensorflow的官方教程</a>也有用LSTM分类IMDb影评的Notebook。</p>
+<p>因此使用LSTM的方法可以作为Baseline。</p>
+<h3 id="5-小试牛刀"><a href="#5-小试牛刀" class="headerlink" title="5. 小试牛刀"></a>5. 小试牛刀</h3><p><img src="/2020/07/21/【竞赛打卡】零基础入门NLP之新闻文本分类之赛题理解/score.png" srcset="/img/loading.gif" alt></p>
+
             </div>
             <hr>
             <div>
@@ -307,11 +350,11 @@ print(vector.toarray())
                   <span>
                 <i class="iconfont icon-tag"></i>
                     
-                      <a class="hover-with-bg" href="/tags/Python/">Python</a>
+                      <a class="hover-with-bg" href="/tags/Feature-Engineering/">Feature Engineering</a>
                     
-                      <a class="hover-with-bg" href="/tags/Machine-Learning/">Machine Learning</a>
+                      <a class="hover-with-bg" href="/tags/Data-Science/">Data Science</a>
                     
-                      <a class="hover-with-bg" href="/tags/IMDb/">IMDb</a>
+                      <a class="hover-with-bg" href="/tags/Datawhale/">Datawhale</a>
                     
                   </span>
                 
@@ -587,7 +630,7 @@ print(vector.toarray())
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "【学习笔记】机器学习中处理文本数据的常用方法&nbsp;",
+        "【竞赛打卡】零基础入门NLP之新闻文本分类之赛题理解&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 90,
@@ -644,6 +687,32 @@ print(vector.toarray())
   </script>
 
 
+
+  
+
+  
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+          tex2jax: {
+              inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+              processEscapes: true,
+              skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+          }
+      });
+
+      MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+
+    </script>
+
+    <script  src="https://cdn.staticfile.org/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" ></script>
+
+  
 
 
 
