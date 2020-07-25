@@ -131,7 +131,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    3.1k 字
+                    3.5k 字
                   </span>
                 
 
@@ -139,7 +139,7 @@
                   
                   <span class="post-meta">
                       <i class="far fa-clock"></i>
-                      13 分钟
+                      15 分钟
                   </span>
                 
 
@@ -174,7 +174,7 @@
           <div class="post-content mx-auto" id="post">
             
               <p
-                class="note note-warning">本文最后更新于：星期六, 七月 25日 2020, 10:46 上午</p>
+                class="note note-warning">本文最后更新于：星期六, 七月 25日 2020, 11:20 上午</p>
             
             <div class="markdown-body">
               <p>不要对我有任何期待哦！<br><a id="more"></a></p>
@@ -357,26 +357,46 @@ for i in range(5):
 </code></pre>
 <p>3750 occurs 197997 times, 98.9985%<br>900 occurs 197653 times, 98.8265%<br>648 occurs 191975 times, 95.9875%<br>2465 occurs 177310 times, 88.655%<br>6122 occurs 176543 times, 88.2715%</p>
 <h2 id="习题"><a href="#习题" class="headerlink" title="习题"></a>习题</h2><p><strong>假设字符3750，字符900和字符648是句子的标点符号，请分析赛题每篇新闻平均由多少个句子构成？</strong></p>
-<p>思路：计算每篇新闻所含标点符号的个数，该新闻的句子数为个数</p>
+<p>如果这是英文文章，那么3750应该是空格吧？如果3750是逗号怎么办？先要判断哪个是句号。</p>
+<p>思路：该新闻的句子数为该个数。每条新闻最后的字符往往是句号，先看看每条新闻最后一个字符是什么：</p>
+<pre><code class="lang-python">last_char = np.vectorize(lambda x:int(x.split()[-1]))(df_train[&#39;text&#39;])
+last_char_count = Counter(last_char)
+last_char_count = sorted(last_char_count.items(), key=lambda d:d[1], reverse=True)
+# 打印出现次数最多的前十个
+for i in range(10):
+    print(&quot;{}在新闻末尾出现了{}次&quot;.format(last_char_count[i][0], last_char_count[i][1]))
+900在新闻末尾出现了85040次
+2662在新闻末尾出现了39273次
+885在新闻末尾出现了14473次
+1635在新闻末尾出现了7379次
+2465在新闻末尾出现了7076次
+57在新闻末尾出现了3284次
+3231在新闻末尾出现了2758次
+1633在新闻末尾出现了2706次
+3568在新闻末尾出现了1504次
+2265在新闻末尾出现了1389次
+</code></pre>
+<p>因此我们有理由认为900是句号。值域3750应该是逗号吧？猜的，我也不知道，因为3750不太容易在新闻末尾出现。但是除了句号之外，感叹号和问号照样能划分句子，我们试着将2662当作感叹号，将885当作问号。</p>
+<p>下面开始计算每篇新闻所含标点符号（900、2662、885）的个数，</p>
 <pre><code class="lang-python">def sum_of_sep(row):
     counter = Counter(row.split())
-    return counter.get(&#39;3750&#39;, 0)+counter.get(&#39;900&#39;, 0)+counter.get(&#39;648&#39;, 0)
+    return counter.get(&#39;900&#39;, 0)+counter.get(&#39;2662&#39;, 0)+counter.get(&#39;885&#39;, 0)
 sum_sep = np.vectorize(sum_of_sep)(df_train[&#39;text&#39;])
 print(&quot;平均每条新闻的句子个数约为：&quot;, np.round(np.mean(sum_sep)))
 pd.Series(sum_sep).describe()
 
-平均每条新闻的句子个数约为： 78.0
+平均每条新闻的句子个数约为： 19.0
 count    200000.000000
-mean         78.348290
-std          85.519746
+mean         19.070155
+std          21.463798
 min           0.000000
-25%          27.000000
-50%          55.000000
-75%         101.000000
-max        3417.000000
+25%           7.000000
+50%          14.000000
+75%          24.000000
+max        1392.000000
 dtype: float64
 </code></pre>
-<p>平均长度为78，其实这是把那些股票文章也算上了，拉高了平均值。75%的新闻长度都在100个句子以下。</p>
+<p>平均长度为19，其实这是把那些股票文章也算上了，拉高了平均值。75%的新闻长度都在24个句子以下。</p>
 <p>看看分布：</p>
 <pre><code class="lang-python">plt.figure()
 plt.hist(sum_sep, bins=100)
@@ -417,6 +437,8 @@ for label in range(14):
 </li>
 <li><p>训练集中总共包括6869个字，最大数字为7549，最小数字为0，其中编号3750的字出现的次数最多，编号3133的字出现的次数最少，仅出现一次，其中字符3750、字符900和字符648在20w新闻的覆盖率接近99%，很有可能是标点符号。</p>
 </li>
+<li><p>900很有可能是句号，2662和885则很有可能为感叹号和问号，3750出现频率很高但是基本不在新闻最后出现，因此初步判断为逗号。按照这种划分，训练集中每条新闻平均句子个数约为19。</p>
+</li>
 </ol>
 
             </div>
@@ -436,11 +458,11 @@ for label in range(14):
                   <span>
                 <i class="iconfont icon-tag"></i>
                     
-                      <a class="hover-with-bg" href="/tags/Datawhale/">Datawhale</a>
-                    
                       <a class="hover-with-bg" href="/tags/Feature-Engineering/">Feature Engineering</a>
                     
                       <a class="hover-with-bg" href="/tags/Data-Science/">Data Science</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Datawhale/">Datawhale</a>
                     
                   </span>
                 
