@@ -131,7 +131,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    4.4k 字
+                    4.5k 字
                   </span>
                 
 
@@ -174,7 +174,7 @@
           <div class="post-content mx-auto" id="post">
             
               <p
-                class="note note-warning">本文最后更新于：星期一, 七月 27日 2020, 9:53 晚上</p>
+                class="note note-warning">本文最后更新于：星期一, 七月 27日 2020, 10:18 晚上</p>
             
             <div class="markdown-body">
               <p>今我睹子之难穷也，吾非至于子之门则殆矣。<br><a id="more"></a></p>
@@ -453,7 +453,10 @@ print(&quot;Best params:\n{}\n&quot;.format(grid.best_params_))
 print(&quot;Best cross-validation score: {:.2f}&quot;.format(grid.best_score_))
 print(&quot;Test-set score: {:.2f}&quot;.format(grid.score(X_test, y_test)))
 
-0.88386
+Best params:
+{&#39;logisticregression__C&#39;: 10}
+Best cross-validation score: 0.91
+Test-set score: 0.92
 </code></pre>
 <h2 id="SVC-tfidf"><a href="#SVC-tfidf" class="headerlink" title="SVC+tfidf"></a>SVC+tfidf</h2><p>这次我们使用非线性模型中大名鼎鼎的SVM模型，并采用交叉验证的方法划分数据集，不浪费任何一部分数据。</p>
 <pre><code class="lang-python">X_train, y_train = df_train[&#39;text&#39;][:10000], df_train[&#39;label&#39;][:10000]
@@ -489,9 +492,9 @@ print(scores.mean())
                   <span>
                 <i class="iconfont icon-tag"></i>
                     
-                      <a class="hover-with-bg" href="/tags/Datawhale/">Datawhale</a>
-                    
                       <a class="hover-with-bg" href="/tags/Machine-Learning/">Machine Learning</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Datawhale/">Datawhale</a>
                     
                       <a class="hover-with-bg" href="/tags/Classification/">Classification</a>
                     
@@ -849,7 +852,7 @@ print(scores.mean())
 
     </script>
 
-    <script  src="https://cdn.staticfile.org/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" ></script>
+    <script  src="https://cdn.staticfile.org/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" ></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
   
 
@@ -862,20 +865,5 @@ print(scores.mean())
 
 
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>

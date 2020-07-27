@@ -147,6 +147,52 @@
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2019/05/15/矩阵求导总结/">
+        <p class="h4 index-header">矩阵求导总结</p>
+      </a>
+
+      <a href="/2019/05/15/矩阵求导总结/">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">我实在是不会把hexo中的latex开关打开了，大家如果想看公式，可以使用markdown编辑器，复制本文后在本地查看。本文是由本人汇编自网上的资料整理而成，为的是记忆和分享。
+然后来建立运算法则。回想遇到较复杂的一元函数如$f = \log(2+\sin x)e^{\sqrt{x}}$，我们是如何求导的呢？通常不是从定义开始求极限，而是先建立了初等函数求导和四则运算、复合等法则，再来运用这些法则。故而，我们来创立常用的矩阵微分的运算法则：
+加减法：$d(X\pm Y) = dX \pm dY$；矩阵乘法：$d(XY) = (dX)Y + X dY $；转置：$d(X^T) = (dX)^T$</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-05-15&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/notes/">notes</a>&nbsp;
+          
+            <a href="/categories/notes/转载/">转载</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/deep-learning/">deep learning</a>&nbsp;
+          
+            <a href="/tags/math/">math</a>&nbsp;
+          
+            <a href="/tags/matrix-analysis/">matrix analysis</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
       <a href="/2019/05/06/CS229-note-4-生成学习算法/">
         <p class="h4 index-header">CS229-note-4-生成学习算法</p>
       </a>
@@ -819,7 +865,7 @@ $ gcc -c pwd.i -o pwd.o
         $(this).wrap(element);
       }
     );
-  </script>
+  </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
 
 
@@ -832,20 +878,5 @@ $ gcc -c pwd.i -o pwd.o
 
 
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>
