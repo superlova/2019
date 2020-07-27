@@ -131,7 +131,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    247 字
+                    4.4k 字
                   </span>
                 
 
@@ -139,7 +139,7 @@
                   
                   <span class="post-meta">
                       <i class="far fa-clock"></i>
-                      1 分钟
+                      21 分钟
                   </span>
                 
 
@@ -174,35 +174,303 @@
           <div class="post-content mx-auto" id="post">
             
               <p
-                class="note note-warning">本文最后更新于：星期六, 七月 25日 2020, 11:20 上午</p>
+                class="note note-warning">本文最后更新于：星期一, 七月 27日 2020, 9:53 晚上</p>
             
             <div class="markdown-body">
               <p>今我睹子之难穷也，吾非至于子之门则殆矣。<br><a id="more"></a></p>
-<h1 id="文本表示方法实践"><a href="#文本表示方法实践" class="headerlink" title="文本表示方法实践"></a>文本表示方法实践</h1><ul>
-<li>Label</li>
-<li>One-hot</li>
-<li>Bag of Words: CountVectorizer</li>
-<li>Hash编码实践<br><a href="https://chenk.tech/posts/eb79fc5f.html" target="_blank" rel="noopener">https://chenk.tech/posts/eb79fc5f.html</a></li>
-<li>多个单词的词袋：N-gram《》</li>
-<li>TF-IDF</li>
-</ul>
-<h1 id="数据预处理"><a href="#数据预处理" class="headerlink" title="数据预处理"></a>数据预处理</h1><ul>
-<li>输入长度截断（参数确定）</li>
+<h1 id="文本表示方法实践"><a href="#文本表示方法实践" class="headerlink" title="文本表示方法实践"></a>文本表示方法实践</h1><p>自然语言总需要转换成数值等表示才能被线性模型等处理。下面利用task1&amp;2提到的编码方式进行实践。</p>
+<h2 id="Label"><a href="#Label" class="headerlink" title="Label"></a>Label</h2><p>这种编码方式是把自然语言首先分词成基本语素单元，然后把不同的单元赋予唯一的整数编码。比如本次比赛提供的数据集就是该编码方式。每条数据都是整数序列，最大整数为7549，最小整数为0。</p>
+<p>这样做的好处是相对节约内存，且实现简单；坏处是破坏了自然语言中部分语义，无法进一步进行诸如删除停用词、词根提取等操作。另外，编码的大小可能会让算法误以为词和词之间有大小关系。</p>
+<p>因为原来的数据集就是此编码方法，故不再赘述。</p>
+<h2 id="Bag-of-Words-CountVectorizer"><a href="#Bag-of-Words-CountVectorizer" class="headerlink" title="Bag of Words: CountVectorizer"></a>Bag of Words: CountVectorizer</h2><p>用于机器学习的文本表示有一种最简单的方法，也是最有效且最常用的方法，就是使用词袋（bag-of-words）表示。使用这种表示方式时，我们舍弃了输入文本中的大部分结构，如章节、段落、句子和格式，<strong>只计算语料库中每个单词在每个文本中的出现频次</strong>。舍弃结构并仅计算单词出现次数，这会让脑海中出现将文本表示为“袋”的画面。</p>
+<pre><code class="lang-python">from sklearn.feature_extraction.text import CountVectorizer
+bagvect = CountVectorizer(max_df=.15)
+bagvect.fit(corpus)
+feature_names = bagvect.get_feature_names()
+print(&quot;Number of features: {}&quot;.format(len(feature_names)))
+print(&quot;First 20 features:\n{}&quot;.format(feature_names[:20]))
+Number of features: 4740
+First 20 features:
+[&#39;10&#39;, &#39;100&#39;, &#39;1000&#39;, &#39;1001&#39;, &#39;1002&#39;, &#39;1004&#39;, &#39;1005&#39;, &#39;1006&#39;, &#39;1007&#39;, &#39;1008&#39;, &#39;1009&#39;, &#39;101&#39;, &#39;1010&#39;, &#39;1012&#39;, &#39;1013&#39;, &#39;1014&#39;, &#39;102&#39;, &#39;1020&#39;, &#39;1022&#39;, &#39;1023&#39;]
+
+
+bag_of_words = bagvect.transform(corpus)
+print(&quot;bag_of_words: {}&quot;.format(repr(bag_of_words)))
+print(bag_of_words[0].toarray())
+bag_of_words: &lt;10000x4740 sparse matrix of type &#39;&lt;class &#39;numpy.int64&#39;&gt;&#39;
+    with 813365 stored elements in Compressed Sparse Row format&gt;
+[[0 0 0 ... 0 0 0]]
+</code></pre>
+<p>词袋表示保存在一个 SciPy 稀疏矩阵中，这种数据格式只保存非零元素</p>
+<p>矩阵的形状为 10000x4740，每行对应于两个数据点之一，每个特征对应于词表中的一个单词。当然，我们在这里选了10000个样本，如果把所有数据集都给转化成词袋向量，那么矩阵形状将会是 200000×6859。</p>
+<h2 id="Hash编码实践"><a href="#Hash编码实践" class="headerlink" title="Hash编码实践"></a>Hash编码实践</h2><p><a href="https://chenk.tech/posts/eb79fc5f.html" target="_blank" rel="noopener">https://chenk.tech/posts/eb79fc5f.html</a></p>
+<pre><code class="lang-python">from sklearn.feature_extraction.text import HashingVectorizer
+hvec = HashingVectorizer(n_features=10000)
+hvec.fit(corpus)
+h_words = hvec.transform(corpus)
+print(&quot;h_words: {}&quot;.format(repr(h_words)))
+
+h_words: &lt;10000x10000 sparse matrix of type &#39;&lt;class &#39;numpy.float64&#39;&gt;&#39;
+    with 2739957 stored elements in Compressed Sparse Row format&gt;
+</code></pre>
+<p>我选取了10000个样本，将其映射到10000个特征的Hash向量中。</p>
+<pre><code class="lang-python">print(h_words[0])
+ (0, 0)    -0.009886463280261834
+  (0, 6)    -0.04943231640130917
+  (0, 9)    0.03954585312104734
+  (0, 26)    -0.04943231640130917
+  (0, 42)    0.01977292656052367
+  (0, 70)    0.01977292656052367
+  (0, 74)    -0.12852402264340385
+  (0, 94)    0.009886463280261834
+  (0, 99)    0.01977292656052367
+  (0, 109)    -0.009886463280261834
+  :    :
+  (0, 9642)    -0.009886463280261834
+  (0, 9650)    0.01977292656052367
+  (0, 9653)    0.009886463280261834
+  (0, 9659)    -0.04943231640130917
+  (0, 9715)    -0.009886463280261834
+  (0, 9721)    0.009886463280261834
+  (0, 9729)    -0.009886463280261834
+  (0, 9741)    0.009886463280261834
+  (0, 9765)    -0.01977292656052367
+  (0, 9781)    0.01977292656052367
+  (0, 9821)    -0.009886463280261834
+  (0, 9862)    0.009886463280261834
+  (0, 9887)    -0.009886463280261834
+  (0, 9932)    0.009886463280261834
+</code></pre>
+<p>输出的含义，前面的元组代表了该特征在词袋中的位置，后面的数值代表了对应的Hash值。</p>
+<h2 id="TF-IDF"><a href="#TF-IDF" class="headerlink" title="TF-IDF"></a>TF-IDF</h2><p>TF-IDF（Term Frequency-inverse Document Frequency）是一种针对关键词的统计分析方法，用于评估一个词对一个文件集或者一个语料库的重要程度。</p>
+<pre><code class="lang-python">from sklearn.feature_extraction.text import TfidfVectorizer
+tvec = TfidfVectorizer()
+tvec.fit(corpus)
+feature_names = tvec.get_feature_names()
+print(&quot;Number of features: {}&quot;.format(len(feature_names)))
+print(&quot;First 20 features:\n{}&quot;.format(feature_names[:20]))
+
+Number of features: 5333
+First 20 features:
+[&#39;10&#39;, &#39;100&#39;, &#39;1000&#39;, &#39;1001&#39;, &#39;1002&#39;, &#39;1004&#39;, &#39;1005&#39;, &#39;1006&#39;, &#39;1007&#39;, &#39;1008&#39;, &#39;1009&#39;, &#39;101&#39;, &#39;1010&#39;, &#39;1012&#39;, &#39;1013&#39;, &#39;1014&#39;, &#39;1018&#39;, &#39;102&#39;, &#39;1020&#39;, &#39;1022&#39;]
+
+t_words = tvec.transform(corpus)
+print(&quot;t_words: {}&quot;.format(repr(t_words)))
+print(t_words[0].toarray())
+
+t_words: &lt;10000x5333 sparse matrix of type &#39;&lt;class &#39;numpy.float64&#39;&gt;&#39;
+    with 2797304 stored elements in Compressed Sparse Row format&gt;
+[[0. 0. 0. ... 0. 0. 0.]]
+
+# 找到数据集中每个特征的最大值
+max_value = t_words.max(axis=0).toarray().ravel()
+sorted_by_tfidf = max_value.argsort()
+# 获取特征名称
+feature_names = np.array(tvec.get_feature_names())
+print(&quot;Features with lowest tfidf:\n{}&quot;.format(feature_names[sorted_by_tfidf[:20]]))
+print(&quot;Features with highest tfidf: \n{}&quot;.format(feature_names[sorted_by_tfidf[-20:]]))
+sorted_by_idf = np.argsort(tvec.idf_)
+print(&quot;Features with lowest idf:\n{}&quot;.format(feature_names[sorted_by_idf[:100]]))
+
+Features with lowest tfidf:
+[&#39;6844&#39; &#39;6806&#39; &#39;7201&#39; &#39;5609&#39; &#39;5585&#39; &#39;5485&#39; &#39;3453&#39; &#39;7390&#39; &#39;2322&#39; &#39;2083&#39;
+ &#39;1222&#39; &#39;2360&#39; &#39;319&#39; &#39;2520&#39; &#39;6268&#39; &#39;3105&#39; &#39;6049&#39; &#39;4888&#39; &#39;2390&#39; &#39;2849&#39;]
+Features with highest tfidf: 
+[&#39;3198&#39; &#39;2346&#39; &#39;5480&#39; &#39;4375&#39; &#39;6296&#39; &#39;1710&#39; &#39;682&#39; &#39;354&#39; &#39;4381&#39; &#39;482&#39; &#39;5990&#39;
+ &#39;2798&#39; &#39;5907&#39; &#39;3992&#39; &#39;418&#39; &#39;513&#39; &#39;4759&#39; &#39;6250&#39; &#39;6220&#39; &#39;1633&#39;]
+Features with lowest idf:
+[&#39;3750&#39; &#39;900&#39; &#39;648&#39; &#39;6122&#39; &#39;7399&#39; &#39;2465&#39; &#39;4811&#39; &#39;4464&#39; &#39;1699&#39; &#39;299&#39; &#39;2400&#39;
+ &#39;3659&#39; &#39;3370&#39; &#39;2109&#39; &#39;4939&#39; &#39;669&#39; &#39;5598&#39; &#39;5445&#39; &#39;4853&#39; &#39;5948&#39; &#39;2376&#39;
+ &#39;7495&#39; &#39;4893&#39; &#39;5410&#39; &#39;340&#39; &#39;619&#39; &#39;4659&#39; &#39;1460&#39; &#39;6065&#39; &#39;1903&#39; &#39;5560&#39;
+ &#39;6017&#39; &#39;2252&#39; &#39;4516&#39; &#39;1519&#39; &#39;2073&#39; &#39;5998&#39; &#39;5491&#39; &#39;2662&#39; &#39;5977&#39; &#39;6093&#39;
+ &#39;1324&#39; &#39;5780&#39; &#39;3915&#39; &#39;3800&#39; &#39;5393&#39; &#39;2210&#39; &#39;5915&#39; &#39;3223&#39; &#39;4490&#39; &#39;2490&#39;
+ &#39;1375&#39; &#39;803&#39; &#39;1635&#39; &#39;7539&#39; &#39;4411&#39; &#39;4128&#39; &#39;7543&#39; &#39;5602&#39; &#39;1866&#39; &#39;5176&#39;
+ &#39;2799&#39; &#39;4646&#39; &#39;3700&#39; &#39;5858&#39; &#39;307&#39; &#39;913&#39; &#39;25&#39; &#39;6045&#39; &#39;1702&#39; &#39;4822&#39; &#39;3099&#39;
+ &#39;5330&#39; &#39;1920&#39; &#39;1567&#39; &#39;2614&#39; &#39;4190&#39; &#39;1080&#39; &#39;5510&#39; &#39;4149&#39; &#39;3166&#39; &#39;3530&#39;
+ &#39;192&#39; &#39;5659&#39; &#39;3618&#39; &#39;4525&#39; &#39;3686&#39; &#39;6038&#39; &#39;1767&#39; &#39;5589&#39; &#39;5736&#39; &#39;6831&#39;
+ &#39;7377&#39; &#39;4969&#39; &#39;1394&#39; &#39;6104&#39; &#39;7010&#39; &#39;6407&#39; &#39;5430&#39; &#39;23&#39;]
+</code></pre>
+<h2 id="多个单词的词袋：N-gram《》"><a href="#多个单词的词袋：N-gram《》" class="headerlink" title="多个单词的词袋：N-gram《》"></a>多个单词的词袋：N-gram《》</h2><p>使用词袋表示的主要缺点之一是完全舍弃了单词顺序。因此，“it’s bad, not good at all”（电影很差，一点也不好）和“it’s good, not bad at all”（电影很好，还不错）这两个字符串的词袋表示完全相同，尽管它们的含义相反。将“not”（不）放在单词前面，这只是上下文很重要的一个例子（可能是一个极端的例子）。幸运的是，使用词袋表示时有一种获取上下文的方法，就是不仅考虑单一词例的计数，而且还考虑相邻的两个或三个词例的计数。两个词例被称为二元分词（bigram），三个词例被称为三元分词（trigram），更一般的词例序列被称为 n 元分词（n-gram）。我们可以通过改变 CountVectorizer 或 TfidfVectorizer 的 ngram_range 参数来改变作为特征的词例范围。ngram_range 参数是一个元组，包含要考虑的词例序列的最小长度和最大长度。</p>
+<p>在大多数情况下，添加二元分词会有所帮助。添加更长的序列（一直到五元分词）也可能有所帮助，但这会导致特征数量的大大增加，也可能会导致过拟合，因为其中包含许多非常具体的特征。原则上来说，二元分词的数量是一元分词数量的平方，三元分词的数量是一元分词数量的三次方，从而导致非常大的特征空间。在实践中，更高的 n 元分词在数据中的出现次数实际上更少，原因在于（英语）语言的结构，不过这个数字仍然很大。</p>
+<pre><code class="lang-python">from sklearn.feature_extraction.text import TfidfVectorizer
+tvec = TfidfVectorizer(ngram_range=(1,3), min_df=5)
+tvec.fit(corpus)
+# 找到数据集中每个特征的最大值
+max_value = t_words.max(axis=0).toarray().ravel()
+sorted_by_tfidf = max_value.argsort()
+# 获取特征名称
+feature_names = np.array(tvec.get_feature_names())
+print(&quot;Features with lowest tfidf:\n{}&quot;.format(feature_names[sorted_by_tfidf[:20]]))
+print(&quot;Features with highest tfidf: \n{}&quot;.format(feature_names[sorted_by_tfidf[-20:]]))
+sorted_by_idf = np.argsort(tvec.idf_)
+print(&quot;Features with lowest idf:\n{}&quot;.format(feature_names[sorted_by_idf[:100]]))
+
+
+Features with lowest tfidf:
+[&#39;1008 5612&#39; &#39;100 5560&#39; &#39;1018 4089 5491&#39; &#39;101 648 900&#39; &#39;1006 3750 826&#39;
+ &#39;1018 1066 3231&#39; &#39;101 5560 3568&#39; &#39;100 5589&#39; &#39;1018 2119 281&#39;
+ &#39;101 5560 3659&#39; &#39;1018 1066 3166&#39; &#39;100 5598 1465&#39; &#39;1000 5011&#39;
+ &#39;101 2662 4939&#39; &#39;100 5602&#39; &#39;101 873 648&#39; &#39;1006 2265 648&#39; &#39;1008 5640&#39;
+ &#39;1008 5689&#39; &#39;101 856 531&#39;]
+Features with highest tfidf: 
+[&#39;101 2087&#39; &#39;1018 1066 281&#39; &#39;101 648 3440&#39; &#39;1006 5640 3641&#39; &#39;101 760 4233&#39;
+ &#39;1006 6017&#39; &#39;1018 1066 6983&#39; &#39;1014 3750 3659&#39; &#39;100 5430 2147&#39;
+ &#39;100 5510 2471&#39; &#39;1018 1141&#39; &#39;1006 1866 5977&#39; &#39;1018 2119 3560&#39;
+ &#39;1018 2662 3068&#39; &#39;101 1844 4486&#39; &#39;101 2304 3659&#39; &#39;1006 3750 5330&#39;
+ &#39;101 5589&#39; &#39;1008 900 3618&#39; &#39;100 6122 2489&#39;]
+Features with lowest idf:
+[&#39;3750&#39; &#39;900&#39; &#39;648&#39; &#39;2465&#39; &#39;6122&#39; &#39;7399&#39; &#39;4811&#39; &#39;4464&#39; &#39;1699&#39; &#39;3659&#39;
+ &#39;2400&#39; &#39;299&#39; &#39;3370&#39; &#39;2109&#39; &#39;4939&#39; &#39;5598&#39; &#39;669&#39; &#39;5445&#39; &#39;4853&#39; &#39;2376&#39;
+ &#39;5948&#39; &#39;7495&#39; &#39;4893&#39; &#39;5410&#39; &#39;340&#39; &#39;619&#39; &#39;4659&#39; &#39;1460&#39; &#39;6065&#39; &#39;4516&#39;
+ &#39;1903&#39; &#39;5560&#39; &#39;6017&#39; &#39;2252&#39; &#39;2073&#39; &#39;1519&#39; &#39;5491&#39; &#39;5998&#39; &#39;2662&#39; &#39;5977&#39;
+ &#39;1324&#39; &#39;5780&#39; &#39;6093&#39; &#39;3915&#39; &#39;5393&#39; &#39;2210&#39; &#39;3800&#39; &#39;3223&#39; &#39;5915&#39; &#39;4490&#39;
+ &#39;2490&#39; &#39;803&#39; &#39;1635&#39; &#39;4128&#39; &#39;1375&#39; &#39;7539&#39; &#39;4411&#39; &#39;7543&#39; &#39;5602&#39; &#39;2799&#39;
+ &#39;1866&#39; &#39;5176&#39; &#39;5858&#39; &#39;4646&#39; &#39;3700&#39; &#39;307&#39; &#39;6045&#39; &#39;1702&#39; &#39;25&#39; &#39;913&#39; &#39;5330&#39;
+ &#39;4822&#39; &#39;2614&#39; &#39;3099&#39; &#39;1920&#39; &#39;1567&#39; &#39;4190&#39; &#39;4149&#39; &#39;5510&#39; &#39;1080&#39; &#39;3166&#39;
+ &#39;3659 3370&#39; &#39;3530&#39; &#39;192&#39; &#39;3618&#39; &#39;4525&#39; &#39;5659&#39; &#39;3686&#39; &#39;6038&#39; &#39;1767&#39; &#39;5736&#39;
+ &#39;7377&#39; &#39;5589&#39; &#39;6831&#39; &#39;3370 3370&#39; &#39;1394&#39; &#39;4969&#39; &#39;5430&#39; &#39;7010&#39; &#39;6104&#39;]
+</code></pre>
+<h1 id="无监督探索"><a href="#无监督探索" class="headerlink" title="无监督探索"></a>无监督探索</h1><h2 id="PCA可视化"><a href="#PCA可视化" class="headerlink" title="PCA可视化"></a>PCA可视化</h2><pre><code class="lang-python">from sklearn.decomposition import PCA
+pca = PCA(n_components=2)
+pca_vec = pca.fit_transform(t_words.toarray())
+pca_vec.shape, pca.explained_variance_ratio_
+((10000, 2), array([0.03817303, 0.02684457]))
+</code></pre>
+<p>我们成功将tfidf转化后的词向量压缩成2维向量，这样就能够在二维平面可视化了。</p>
+<p>后面的<code>explained_variance_ratio_</code>代表着经过PCA算法压缩后，保留的信息量。这个数值还是偏低，因此这种PCA压缩方法仅适用于实验。</p>
+<pre><code class="lang-python">plt.figure(figsize=(12,10))
+plt.scatter(pca_vec[:,0], pca_vec[:,1], c=labels)
+</code></pre>
+<p><img src="/2020/07/23/【竞赛打卡】新闻文本分类之机器学习文本分类/1.png" srcset="/img/loading.gif" alt></p>
+<h2 id="主题建模"><a href="#主题建模" class="headerlink" title="主题建模"></a>主题建模</h2><p>常用于文本数据的一种特殊技术是主题建模（topic modeling），这是描述将每个文档分配给一个或多个主题的任务（通常是无监督的）的概括性术语。这方面一个很好的例子是新闻数据，它们可以被分为“政治”“体育”“金融”等主题。如果为每个文档分配一个主题，那么这是一个文档聚类任务。我们学到的每个成分对应于一个主题，文档表示中的成分系数告诉我们这个文档与该主题的相关性强弱。通常来说，人们在谈论主题建模时，他们指的是一种叫作隐含狄利克雷分布（Latent Dirichlet Allocation，LDA）的特定分解方法。</p>
+<p>我们将 LDA 应用于新闻数据集，来看一下它在实践中的效果。对于无监督的文本文档模型，通常最好删除非常常见的单词，否则它们可能会支配分析过程。我们将删除至少在15% 的文档中出现过的单词，并在删除前 15% 之后，将词袋模型限定为最常见的 10 000 个单词：</p>
+<pre><code class="lang-python">vect = CountVectorizer(max_features=10000, max_df=.15)
+X = vect.fit_transform(corpus)
+from sklearn.decomposition import LatentDirichletAllocation
+lda = LatentDirichletAllocation(n_components=14, learning_method=&quot;batch&quot;, max_iter=25, random_state=0)
+# 我们在一个步骤中构建模型并变换数据
+# 计算变换需要花点时间，二者同时进行可以节省时间
+document_topics = lda.fit_transform(bag_of_words)
+# 对于每个主题（components_的一行），将特征排序（升序）
+# 用[:, ::-1]将行反转，使排序变为降序
+sorting = np.argsort(lda.components_, axis=1)[:, ::-1]
+# 从向量器中获取特征名称
+feature_names = np.array(bagvect.get_feature_names())
+plt.figure()
+plt.bar(x=range(14), height=document_topics[0])
+plt.xticks(list(range(14)))
+</code></pre>
+<p><img src="/2020/07/23/【竞赛打卡】新闻文本分类之机器学习文本分类/2.png" srcset="/img/loading.gif" alt></p>
+<p>由LDA确定的主题词如下：</p>
+<pre><code class="lang-python">topic 0       topic 1       topic 2       topic 3       topic 4       
+--------      --------      --------      --------      --------      
+6654          1970          7349          3464          4412          
+4173          2716          7354          7436          7363          
+1219          4553          1684          5562          6689          
+6861          7042          5744          3289          4986          
+5006          5822          6569          5105          2506          
+7400          5099          1999          5810          3056          
+3508          3654          1351          3134          6220          
+6223          3021          56            3648          5117          
+6227          4967          4036          6308          6319          
+7257          3396          4223          1706          2695          
+
+
+topic 5       topic 6       topic 7       topic 8       topic 9       
+--------      --------      --------      --------      --------      
+4967          1334          1934          4114          7328          
+7528          5166          1146          3198          5547          
+3644          6143          532           517           4768          
+1899          2695          4802          812           3231          
+6678          1616          419           3090          5492          
+5744          7532          4089          4163          4080          
+6047          368           3725          5305          4120          
+1252          2918          2851          177           2331          
+5814          2968          6227          7251          3019          
+1170          3032          6639          2835          6613          
+
+
+topic 10      topic 11      topic 12      topic 13      
+--------      --------      --------      --------      
+3523          4902          5178          5122          
+3342          1258          6014          6920          
+6722          343           5920          5519          
+6352          4089          4603          7154          
+3186          5226          3648          4381          
+5179          810           4042          4760          
+4369          6284          1724          4412          
+3501          3477          4450          4595          
+2334          7127          657           3377          
+2722          7077          5803          7006
+</code></pre>
+<h2 id="t-SNE可视化"><a href="#t-SNE可视化" class="headerlink" title="t-SNE可视化"></a>t-SNE可视化</h2><p>t-SNE是当前最流行的数据可视化方法。将TF-IDF转化后的向量可视化如下：</p>
+<pre><code class="lang-python">from sklearn.manifold import TSNE
+words_emb = TSNE(n_components=2).fit_transform(t_words)
+plt.figure(figsize=(12,10))
+plt.scatter(words_emb[:,0], words_emb[:,1], c=labels)
+</code></pre>
+<p><img src="/2020/07/23/【竞赛打卡】新闻文本分类之机器学习文本分类/3.png" srcset="/img/loading.gif" alt></p>
+<p>将HashingVectorizer转化后的向量经过t-SNE算法可视化结果分享如下：</p>
+<pre><code class="lang-python">hash_words_emb = TSNE(n_components=2).fit_transform(h_words)
+plt.figure(figsize=(12,10))
+plt.scatter(hash_words_emb[:,0], hash_words_emb[:,1], c=labels)
+</code></pre>
+<p><img src="/2020/07/23/【竞赛打卡】新闻文本分类之机器学习文本分类/4.png" srcset="/img/loading.gif" alt></p>
+<h1 id="机器学习"><a href="#机器学习" class="headerlink" title="机器学习"></a>机器学习</h1><p>首先导入相关库</p>
+<pre><code class="lang-python">from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+from sklearn.pipeline import make_pipeline
+from sklearn.linear_model import LogisticRegression, RidgeClassifier
+from sklearn.model_selection import GridSearchCV, train_test_split, cross_val_score
+from sklearn.multiclass import OneVsRestClassifier
+from sklearn.svm import SVC
+from sklearn.metrics import f1_score
+</code></pre>
+<p><a href="https://scikit-learn.org/stable/modules/classes.html#module-sklearn.linear_model" target="_blank" rel="noopener">https://scikit-learn.org/stable/modules/classes.html#module-sklearn.linear_model</a></p>
+<h2 id="RidgeClassifier-CountVectorizer"><a href="#RidgeClassifier-CountVectorizer" class="headerlink" title="RidgeClassifier+CountVectorizer"></a>RidgeClassifier+CountVectorizer</h2><p>首先我们使用教程中的范例</p>
+<pre><code class="lang-python">X, y = df_train[&#39;text&#39;][:10000], df_train[&#39;label&#39;][:10000]
+vectorizer = CountVectorizer(max_features=3000)
+X = vectorizer.fit_transform(X)
+
+clf = RidgeClassifier()
+clf.fit(X[:5000], y[:5000]) # 使用前5000个样本进行训练
+
+val_pred = clf.predict(X[5000:]) # 使用后5000个样本进行预测
+print(f1_score(y[5000:], val_pred, average=&#39;macro&#39;))
+
+0.6322204326986258
+</code></pre>
+<p>我们把10000个样本中，前5000个用于训练，后5000个用于测试，最终结果以F1指标展示，结果为0.63，不太令人满意。</p>
+<h2 id="LogisticRegression-TFIDF"><a href="#LogisticRegression-TFIDF" class="headerlink" title="LogisticRegression+TFIDF"></a>LogisticRegression+TFIDF</h2><p>最常见的线性分类算法是 Logistic 回归。虽然 LogisticRegression 的名字中含有回归（regression），但它是一种分类算法，并不是回归算法，不应与 LinearRegression 混淆。<br>我们可以将 LogisticRegression 和 LinearSVC 模型应用到经过tfidf处理的新闻文本数据集上。</p>
+<p>我们使用了sklearn中的划分数据集的方法<code>train_test_split</code>，将数据集划分成训练集和测试集两部分。但是这样一来，数据集中的测试集部分将不能被训练，未免有点可惜。</p>
+<p>我们在训练时，采用了pipeline方式，Pipeline 类可以将多个处理步骤合并（glue）为单个 scikit-learn 估计器。Pipeline 类本身具有 fit、predict 和 score 方法，其行为与 scikit-learn 中的其 他模型相同。Pipeline 类最常见的用例是将预处理步骤（比如数据缩放）与一个监督模型 （比如分类器）链接在一起。</p>
+<pre><code class="lang-python">%%time
+X_train, X_test, y_train, y_test = train_test_split(df_train[&#39;text&#39;][:10000], df_train[&#39;label&#39;][:10000], random_state=0)
+pipe_logis = make_pipeline(TfidfVectorizer(min_df=5, ngram_range=(1,3)), LogisticRegression())
+param_grid = {&#39;logisticregression__C&#39;: [0.001, 0.01, 0.1, 1, 10]}
+grid = GridSearchCV(pipe_logis, param_grid, cv=5)
+grid.fit(X_train, y_train)
+print(&quot;Best params:\n{}\n&quot;.format(grid.best_params_))
+print(&quot;Best cross-validation score: {:.2f}&quot;.format(grid.best_score_))
+print(&quot;Test-set score: {:.2f}&quot;.format(grid.score(X_test, y_test)))
+
+0.88386
+</code></pre>
+<h2 id="SVC-tfidf"><a href="#SVC-tfidf" class="headerlink" title="SVC+tfidf"></a>SVC+tfidf</h2><p>这次我们使用非线性模型中大名鼎鼎的SVM模型，并采用交叉验证的方法划分数据集，不浪费任何一部分数据。</p>
+<pre><code class="lang-python">X_train, y_train = df_train[&#39;text&#39;][:10000], df_train[&#39;label&#39;][:10000]
+pipe_svc = make_pipeline(TfidfVectorizer(min_df=5), SVC()) # decision_function_shape=&#39;ovr&#39;
+scores = cross_val_score(pipe_svc, X_train, y_train, cv=5, n_jobs=-1)
+print(scores.mean())
+
+0.8924
+</code></pre>
+<h1 id="模型评价"><a href="#模型评价" class="headerlink" title="模型评价"></a>模型评价</h1><p>TR，FN，precision，recall等的进一步解释，请参考以下链接：<br><a href="https://www.zhihu.com/question/30643044" target="_blank" rel="noopener">https://www.zhihu.com/question/30643044</a></p>
+<h1 id="进一步优化"><a href="#进一步优化" class="headerlink" title="进一步优化"></a>进一步优化</h1><p>使用机器学习模型+巧妙的特征工程，我们可以达到90%以上的精度，这在14分类问题中已经很惊人了。然而我们的工作并没有结束，还有许许多多的问题等着我们去探索。比如</p>
+<ul>
 <li>删除停用词、罕见词、其他常见词和不能反映特征的词</li>
-<li>类别不平衡<br><a href="https://zhuanlan.zhihu.com/p/84322912" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/84322912</a><br><a href="https://zhuanlan.zhihu.com/p/36381828" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/36381828</a></li>
+<li>类别不平衡问题</li>
 </ul>
-<h1 id="无监督探索"><a href="#无监督探索" class="headerlink" title="无监督探索"></a>无监督探索</h1><ul>
-<li>聚类看看？t-SNE？</li>
-<li>主题建模，隐含狄利克雷分布</li>
-</ul>
-<h1 id="机器学习"><a href="#机器学习" class="headerlink" title="机器学习"></a>机器学习</h1><h2 id="线性模型"><a href="#线性模型" class="headerlink" title="线性模型"></a>线性模型</h2><p><a href="https://scikit-learn.org/stable/modules/classes.html#module-sklearn.linear_model" target="_blank" rel="noopener">https://scikit-learn.org/stable/modules/classes.html#module-sklearn.linear_model</a></p>
-<h3 id="LogisticRegression-TFIDF"><a href="#LogisticRegression-TFIDF" class="headerlink" title="LogisticRegression+TFIDF"></a>LogisticRegression+TFIDF</h3><ul>
-<li>介绍LogisticRegression</li>
-<li>研究模型系数：看一下 Logistic 回归模型从数据中实际学到的内容</li>
-<li>尝试改变TF-IDF的参数，并验证精度: TfidfVectorizer(ngram_range=(1,3), max_features=3000)：热图可视化《》<h3 id="RidgeClassifier"><a href="#RidgeClassifier" class="headerlink" title="RidgeClassifier"></a>RidgeClassifier</h3></li>
-</ul>
-<h2 id="非线性模型"><a href="#非线性模型" class="headerlink" title="非线性模型"></a>非线性模型</h2><h3 id="Naive-Bayes"><a href="#Naive-Bayes" class="headerlink" title="Naive Bayes"></a>Naive Bayes</h3><h3 id="Decision-Trees"><a href="#Decision-Trees" class="headerlink" title="Decision Trees"></a>Decision Trees</h3><h1 id="模型评价"><a href="#模型评价" class="headerlink" title="模型评价"></a>模型评价</h1><p>TR，FN，precision，recall等的进一步解释<br><a href="https://www.zhihu.com/question/30643044" target="_blank" rel="noopener">https://www.zhihu.com/question/30643044</a></p>
-<p>留出法<br>交叉验证的K-fold训练<br>自助法</p>
+<p>周志华《机器学习》中介绍到，分类学习方法都有一个共同的基本假设，即不同类别的训练样例数目相当。如果不同类别的训练样例数目稍有差别，对学习结果的影响通常也不大，但若样本类别数目差别很大，属于极端不均衡，则会对学习过程（模型训练）造成困扰。这些学习算法的设计背后隐含的优化目标是数据集上的分类准确度，而这会导致学习算法在不平衡数据上更偏向于含更多样本的多数类。多数不平衡学习（imbalance learning）算法就是为了解决这种“对多数类的偏好”而提出的。如果正负类样本类别不平衡比例超过4:1，那么其分类器会大大地因为数据不平衡性而无法满足分类要求</p>
+<p>关于如何解决类别不平衡的问题，可以参考以下链接：<br><a href="https://zhuanlan.zhihu.com/p/84322912" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/84322912</a><br><a href="https://zhuanlan.zhihu.com/p/36381828" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/36381828</a></p>
 
             </div>
             <hr>
@@ -221,9 +489,9 @@
                   <span>
                 <i class="iconfont icon-tag"></i>
                     
-                      <a class="hover-with-bg" href="/tags/Machine-Learning/">Machine Learning</a>
-                    
                       <a class="hover-with-bg" href="/tags/Datawhale/">Datawhale</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Machine-Learning/">Machine Learning</a>
                     
                       <a class="hover-with-bg" href="/tags/Classification/">Classification</a>
                     
