@@ -146,6 +146,12 @@
       
       <p class="h5">2020</p>
     
+    <a href="/2020/06/01/numpy拼合数组/" class="list-group-item list-group-item-action">
+      <span class="archive-post-title">numpy拼合数组方法大全</span>
+      <span style="float: right;">06-01</span>
+    </a>
+  
+    
     <a href="/2020/05/31/np-delete的使用方法/" class="list-group-item list-group-item-action">
       <span class="archive-post-title">numpy中delete的使用方法</span>
       <span style="float: right;">05-31</span>
@@ -197,12 +203,6 @@
     <a href="/2020/05/19/闭包的迷思/" class="list-group-item list-group-item-action">
       <span class="archive-post-title">闭包的迷思</span>
       <span style="float: right;">05-19</span>
-    </a>
-  
-    
-    <a href="/2020/05/18/Python装饰器为什么这么难以理解/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">Python装饰器为什么这么难以理解</span>
-      <span style="float: right;">05-18</span>
     </a>
   
 </div>
@@ -456,7 +456,7 @@
         $(this).wrap(element);
       }
     );
-  </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </script>
 
 
 
@@ -469,5 +469,20 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>

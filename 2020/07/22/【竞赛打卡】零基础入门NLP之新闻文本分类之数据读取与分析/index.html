@@ -512,11 +512,11 @@ for label in range(14):
                   <span>
                 <i class="iconfont icon-tag"></i>
                     
+                      <a class="hover-with-bg" href="/tags/Datawhale/">Datawhale</a>
+                    
                       <a class="hover-with-bg" href="/tags/Feature-Engineering/">Feature Engineering</a>
                     
                       <a class="hover-with-bg" href="/tags/Data-Science/">Data Science</a>
-                    
-                      <a class="hover-with-bg" href="/tags/Datawhale/">Datawhale</a>
                     
                   </span>
                 
@@ -872,7 +872,7 @@ for label in range(14):
 
     </script>
 
-    <script  src="https://cdn.staticfile.org/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" ></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+    <script  src="https://cdn.staticfile.org/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" ></script>
 
   
 
@@ -885,5 +885,20 @@ for label in range(14):
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>
