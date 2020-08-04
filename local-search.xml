@@ -4,6 +4,37 @@
   
   
   <entry>
+    <title>【竞赛打卡】新闻文本分类之注意力机制与预训练模型</title>
+    <link href="/2020/08/04/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91%E6%96%B0%E9%97%BB%E6%96%87%E6%9C%AC%E5%88%86%E7%B1%BB%E4%B9%8B%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6%E4%B8%8E%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B/"/>
+    <url>/2020/08/04/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91%E6%96%B0%E9%97%BB%E6%96%87%E6%9C%AC%E5%88%86%E7%B1%BB%E4%B9%8B%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6%E4%B8%8E%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B/</url>
+    
+    <content type="html"><![CDATA[<p>见多了优秀的文章，再写博客的时候就会感叹自己的学识浅薄。<br><a id="more"></a></p><p>本章介绍了Bert的原理和使用，具体包括pretrain和finetune两部分。</p><h2 id="基于深度学习的文本分类"><a href="#基于深度学习的文本分类" class="headerlink" title="基于深度学习的文本分类"></a>基于深度学习的文本分类</h2><h4 id="Transformer原理"><a href="#Transformer原理" class="headerlink" title="Transformer原理"></a>Transformer原理</h4><p>当用神经网络来处理大量的输入信息时，可以借鉴人脑的注意力机制，只选择一些关键的信息输入进行处理，来提高神经网络的效率。注意力机制可以单独使用，但更多地用作神经网络中的一个组件。基于循环神经网络的序列到序列模型的一个缺点是无法并行计算，为了提高并行计算效率以及捕捉长距离的依赖关系，我们可以使用自注意力模型（Self-Attention Model）来建立一个全连接的网络结构。</p><p>Transformer模型是一个基于多头自注意力的序列到序列模型，包含编码器和解码器两部分。</p><p><img src="https://img-blog.csdnimg.cn/20200714211046668.png" srcset="/img/loading.gif" alt></p><h3 id="基于Bert的文本分类"><a href="#基于Bert的文本分类" class="headerlink" title="基于Bert的文本分类"></a>基于Bert的文本分类</h3><p>分成Pretrain和Fine-Tune两部分。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>notes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Datawhale</tag>
+      
+      <tag>Deep Learning</tag>
+      
+      <tag>Classification</tag>
+      
+      <tag>attention</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>【竞赛打卡】新闻文本分类之深度学习Word2Vec</title>
     <link href="/2020/07/31/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91%E6%96%B0%E9%97%BB%E6%96%87%E6%9C%AC%E5%88%86%E7%B1%BB%E4%B9%8B%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0Word2Vec/"/>
     <url>/2020/07/31/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91%E6%96%B0%E9%97%BB%E6%96%87%E6%9C%AC%E5%88%86%E7%B1%BB%E4%B9%8B%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0Word2Vec/</url>
@@ -82,11 +113,11 @@
     
     <tags>
       
-      <tag>Machine Learning</tag>
-      
       <tag>Datawhale</tag>
       
       <tag>Classification</tag>
+      
+      <tag>Machine Learning</tag>
       
     </tags>
     
@@ -624,9 +655,9 @@
       
       <tag>numpy</tag>
       
-      <tag>array</tag>
-      
       <tag>concatenate</tag>
+      
+      <tag>array</tag>
       
     </tags>
     
@@ -1080,11 +1111,11 @@
     
     <tags>
       
+      <tag>array</tag>
+      
       <tag>algorithm</tag>
       
       <tag>lintcode</tag>
-      
-      <tag>array</tag>
       
     </tags>
     
@@ -1111,11 +1142,11 @@
       
       <tag>C++</tag>
       
-      <tag>STL</tag>
-      
       <tag>string</tag>
       
       <tag>regex</tag>
+      
+      <tag>STL</tag>
       
     </tags>
     
@@ -1142,11 +1173,11 @@
       
       <tag>C++</tag>
       
+      <tag>STL</tag>
+      
       <tag>map</tag>
       
       <tag>set</tag>
-      
-      <tag>STL</tag>
       
     </tags>
     
