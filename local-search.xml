@@ -4,6 +4,222 @@
   
   
   <entry>
+    <title>【学习笔记】使用tf.data对预处理过程优化</title>
+    <link href="/2020/08/15/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E4%BD%BF%E7%94%A8tf-data%E5%AF%B9%E9%A2%84%E5%A4%84%E7%90%86%E8%BF%87%E7%A8%8B%E4%BC%98%E5%8C%96/"/>
+    <url>/2020/08/15/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E4%BD%BF%E7%94%A8tf-data%E5%AF%B9%E9%A2%84%E5%A4%84%E7%90%86%E8%BF%87%E7%A8%8B%E4%BC%98%E5%8C%96/</url>
+    
+    <content type="html"><![CDATA[<p>本文是关于 <code>tf.data</code> 介绍的第二篇，主要介绍一些数据预处理方面的优化方法，诸如并行化预处理映射函数、使用缓存等。<br><a id="more"></a></p><p>构建一个机器学习模型时，由于数据预处理过程不能使用GPU进行加速，因此格外耗时。背后的原因可能是CPU、网络或者缓存等复杂的因素。因此要研究如何提升数据预处理的效率，首先需要控制实验的变量。想实现这一点，构造一个虚假的数据集比较可行。</p><p>通过构建一个虚假的数据集，从<code>tf.data.Dataset</code>继承的类，称为<code>ArtificialDataset</code>。该数据集模拟三件事：</p><ol><li>生成<code>num_samples</code>样本（默认为3）</li><li>在第一个模拟打开文件的项目之前睡眠一段时间</li><li>在产生每个项目以模拟从文件读取数据之前先休眠一段时间</li></ol><pre><code class="lang-py">class ArtificialDataset(tf.data.Dataset):    def _generator(num_samples):        # Opening the file        time.sleep(0.03)        for sample_idx in range(num_samples):            # Reading data (line, record) from the file            time.sleep(0.015)            yield (sample_idx,)    def __new__(cls, num_samples=3):        return tf.data.Dataset.from_generator(            cls._generator,            output_types=tf.dtypes.int64,            output_shapes=(1,),            args=(num_samples,)        )</code></pre><p>构建 <code>benchmark</code> ，通过模拟训练的方式，计算该数据预处理模式的耗时：</p><pre><code class="lang-py">def benchmark(dataset, num_epochs=2):    start_time = time.perf_counter()    for epoch_num in range(num_epochs):        for sample in dataset:            # Performing a training step            time.sleep(0.01)    tf.print(&quot;Execution time:&quot;, time.perf_counter() - start_time)</code></pre><p>我们先来不加任何优化地运行一次benchmark：</p><pre><code class="lang-py">benchmark(ArtificialDataset())Execution time: 0.33306735700000445</code></pre><p>此时模型的执行时间图如图所示：<br><img src="https://www.tensorflow.org/guide/images/data_performance/naive.svg" srcset="/img/loading.gif" alt="Naive"></p><p>时间消耗是这样的：先是打开文件，然后从文件中获取数据项，然后使用数据进行训练。这种执行方式，当数据进行预处理，模型就空闲；当模型开始训练，管道又空闲下来了。预处理和训练这两部分明显可以重叠。</p><p><code>tf.data</code> API提供了<code>tf.data.Dataset.prefetch</code>转换。它可以用于将数据生成时间与数据消耗时间分开。转换使用后台线程和内部缓冲区预取元素。要预取的元素数量应等于（或可能大于）单个训练步骤消耗的批次数量。将预取的元素数量设置为<code>tf.data.experimental.AUTOTUNE</code> ，这将提示<code>tf.data</code>运行时在运行时动态调整值。</p><pre><code class="lang-py">benchmark(    ArtificialDataset()    .prefetch(tf.data.experimental.AUTOTUNE))Execution time: 0.20504431599999862</code></pre><p><img src="https://www.tensorflow.org/guide/images/data_performance/prefetched.svg" srcset="/img/loading.gif" alt="Prefetched"></p><p>时间有了明显优化，因为数据的生产和消费有了些许重叠。</p><p>在实际工作中，输入数据可以远程存储在其他计算机上。在本地和远程存储之间存在以下差异：</p><ol><li>到达第一个字节的时间：从远程存储读取文件的第一个字节所花费的时间要比从本地存储中读取文件的时间长几个数量级。</li><li>读取吞吐量：虽然远程存储通常提供较大的聚合带宽，但是读取单个文件可能只能使用此带宽的一小部分。</li></ol><p>此外，一旦将原始字节加载到内存中，可能还需要对数据进行反序列化和/或解密，这需要进行额外的计算。不管数据是本地存储还是远程存储，都存在这种开销，但是<strong>如果数据没有有效地预取，则在远程情况下会更糟</strong>。</p><p>可以使用<code>tf.data.Dataset.interleave</code>转换来<strong>并行化数据加载步骤</strong>， <code>cycle_length</code> 表明可以一起处理的数据集数量， <code>num_parallel_calls</code> 则是并行度。</p><pre><code class="lang-py">benchmark(    tf.data.Dataset.range(2)    .interleave(        ArtificialDataset,        num_parallel_calls=tf.data.experimental.AUTOTUNE    )Execution time: 0.18243273299958673</code></pre><p><img src="https://www.tensorflow.org/guide/images/data_performance/parallel_interleave.svg" srcset="/img/loading.gif" alt="Parallel interleave"></p><p>该图可以显示<code>interleave</code>变换的行为，从两个可用的数据集中获取样本。这次，两个数据集的读取并行进行，从而减少了全局数据处理时间</p><h2 id="并行预处理操作"><a href="#并行预处理操作" class="headerlink" title="并行预处理操作"></a>并行预处理操作</h2><p>在准备数据时，可能需要对输入元素进行预处理。可以使用<code>tf.data.Dataset.map(f)</code>转换，其含义为将某个转换<code>f</code>作用于数据集<code>Dataset</code>中的每个元素。这里有个很重要的前提条件，由于输入元素彼此独立，因此预处理可以跨多个CPU内核并行化。因此<code>map</code>转换也提供<code>num_parallel_calls</code>参数来指定并行度。关于并行度的选择上，<code>map</code>转换支持<code>tf.data.experimental.AUTOTUNE</code>，而不必人工定义。</p><p>首先定义伪操作：</p><pre><code class="lang-py">def mapped_function(s):    # Do some hard pre-processing    tf.py_function(lambda: time.sleep(0.03), [], ())    return s</code></pre><p>我们来测试伪操作，此时没有任何并行优化：</p><pre><code class="lang-py">benchmark(    ArtificialDataset()    .map(mapped_function))Execution time: 0.4592052289999913</code></pre><p><img src="https://www.tensorflow.org/guide/images/data_performance/sequential_map.svg" srcset="/img/loading.gif" alt="Sequential mapping"></p><p>现在，使用相同的预处理功能，但将其并行应用于多个样本。</p><pre><code class="lang-py">benchmark(    ArtificialDataset()    .map(        mapped_function,        num_parallel_calls=tf.data.experimental.AUTOTUNE    ))Execution time: 0.3045882669994171</code></pre><p><img src="https://www.tensorflow.org/guide/images/data_performance/parallel_map.svg" srcset="/img/loading.gif" alt="Parallel mapping"></p><p>可以在图上看到预处理步骤重叠，从而减少了单次迭代的总时间。</p><p><code>tf.data.Dataset.cache</code>转换可以在内存中或本地存储上缓存数据集。这样可以避免在每个epoch执行某些重复性操作（例如打开文件和读取数据）。</p><pre><code class="lang-py">benchmark(    ArtificialDataset()    .map(  # Apply time consuming operations before cache        mapped_function    ).cache(    ),    5)Execution time: 0.3795637040002475</code></pre><p><img src="https://www.tensorflow.org/guide/images/data_performance/cached_dataset.svg" srcset="/img/loading.gif" alt="Cached dataset"></p><p>第一个epoch执行一次cache之前的转换（例如文件打开和数据读取）。下一个epoch将重用cache转换所缓存的数据。</p><p>这里涉及到一个<code>map</code>和<code>cache</code>操作谁先谁后的问题。有一个原则，如果<code>map</code>操作很复杂、昂贵，那么先<code>map</code>再<code>cache</code>，下次不用<code>map</code>了。如果<code>cache</code>过大而无法放入缓冲区，则先<code>cache</code>后<code>map</code>，或者试图采用一些数据预处理方法以减少资源使用。</p><h2 id="向量化数据预处理操作"><a href="#向量化数据预处理操作" class="headerlink" title="向量化数据预处理操作"></a>向量化数据预处理操作</h2><p>所谓向量化，即使得<code>mapping</code>操作能够一次处理一<code>batch</code>数据。这样做肯定可以加速，因为避免了繁杂的数据读取时间。对用户定义的函数进行向量化处理，并且对数据集应用<code>batch</code>转换再进入<code>mapping</code>。在某种情况下，这个做法非常有用。</p><p>首先定义一个数据集操作<code>increment</code>，负责把每个元素的值+1。另外之前的例子里面使用了毫秒级别的<code>sleep</code>操作，这会掩盖我们优化的结果。这次我们把它拿掉。</p><p>下面是未经向量化优化的<code>increment</code>操作耗时：</p><pre><code class="lang-py">fast_dataset = tf.data.Dataset.range(10000)def fast_benchmark(dataset, num_epochs=2):    start_time = time.perf_counter()    for _ in tf.data.Dataset.range(num_epochs):        for _ in dataset:            pass    tf.print(&quot;Execution time:&quot;, time.perf_counter() - start_time)def increment(x):    return x+1fast_benchmark(    fast_dataset    # Apply function one item at a time    .map(increment)    # Batch    .batch(256))Execution time: 0.7625284370005829</code></pre><p><img src="https://www.tensorflow.org/guide/images/data_performance/scalar_map.svg" srcset="/img/loading.gif" alt="Scalar map"></p><p>与之对比，经过向量化后，耗时明显减少：</p><pre><code class="lang-py">fast_benchmark(    fast_dataset    .batch(256)    # Apply function on a batch of items    # The tf.Tensor.__add__ method already handle batches    .map(increment))Execution time: 0.04735958700075571</code></pre><p><img src="https://www.tensorflow.org/guide/images/data_performance/vectorized_map.svg" srcset="/img/loading.gif" alt="Vectorized map"></p><h2 id="减少内存占用"><a href="#减少内存占用" class="headerlink" title="减少内存占用"></a>减少内存占用</h2><p>许多转换（包括interleave ， prefetch和shuffle ）各自维护内部缓冲区。如果传递给map转换的用户定义函数更改了元素的大小，则映射转换的顺序以及缓冲元素的转换会影响内存使用。</p><p>通常，我们建议选择导致内存占用减少的顺序，除非需要不同的顺序才能提高性能。</p><p>对于缓存，我们建议除非转换后的数据难以保存到缓冲区，否则一律先<code>map</code>再<code>cache</code>。如果你有两个<code>map</code>，其中一个比较耗时<code>time_consuming_mapping</code>，另一个比较耗内存<code>memory_consuming_mapping</code>，那么其实你可以将其拆分成两部分；</p><pre><code class="lang-py">dataset.map(time_consuming_mapping).cache().map(memory_consuming_mapping)</code></pre><p>这样，耗时部分仅在第一个epoch执行，并且避免了使用过多的缓存空间。</p><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>使用<code>tf.data</code>，并采用合理的优化手段，就能让你的数据预处理过程节约很多时间。这些手段有：</p><ul><li>使用<code>prefetch</code>转换可以使生产者和消费者的工作重叠。</li><li>使用<code>interleave</code>变换并行化数据读取变换。</li><li>通过设置<code>num_parallel_calls</code>参数来并行化<code>map</code>转换 。</li><li>在第一个epoch使用<code>cache</code>转换将数据缓存在内存中</li><li>向量化传递给<code>map</code>转换的用户定义函数</li><li>应用<code>interleave</code> ， <code>prefetch</code>和<code>shuffle</code>转换时， 逐渐减少内存使用 。</li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>notes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Tensorflow</tag>
+      
+      <tag>preprocessing</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>【学习笔记】tf.data基本使用</title>
+    <link href="/2020/08/15/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91tf-data%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/"/>
+    <url>/2020/08/15/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91tf-data%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/</url>
+    
+    <content type="html"><![CDATA[<p>使用 <code>tf.data</code> API 可以轻松处理大量数据，支持多样化的数据格式，还可以方便执行复杂的转换。本文介绍了不同类别源数据转化为 <code>tf.data.Dataset</code> 的方法，以及 <code>Dataset</code> 常见的预处理方法。<br><a id="more"></a></p><h2 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h2><p>最近几年我们在机器学习的加速计算领域取得了一些突破。虽然我们进行指标运算和矩阵运算所需的时间大大减少了，但是提供数据加速的CPU却没能跟上相应的步伐，这就成为了预处理中的瓶颈。我们本以为可以通过构建更复杂的模型来减少对硬件的需求，但是CPU的效率还是取决于他们拥有多少RAM。</p><p><img src="/2020/08/15/【学习笔记】tf-data基本使用/2020-08-15-22-34-14.png" srcset="/img/loading.gif" alt></p><p>对于一些数据集很大的问题，解决问题的方法除了提升CPU的性能之外，还有对数据集进行分批次处理，但是分批预处理需要不断进行训练和合并操作，这对预处理增加了难度。<code>tf.data</code> 可以帮助解决数据集过大造成的预处理瓶颈问题。</p><p><code>tf.data</code> 是tensorflow的数据预处理框架。它速度快、灵活且易于使用。</p><p>假设你的数据以TFRecord格式存在磁盘，需要将这些数据读取、处理并训练模型，可以先通过<code>TFRecordDataset</code> 开始处理这些数据：</p><pre><code class="lang-py">dataset = tf.data.TFRecordDataset(&#39;.../*.tfrecord&#39;)</code></pre><p>然后执行一些数据预处理操作，这个过程可能很消耗资源：</p><pre><code class="lang-py">dataset = dataset.map(expensive_preprocess)</code></pre><p>随后你需要打乱数据，以降低模型训练过程中过拟合的可能性：</p><pre><code class="lang-py">dataset = dataset.shuffle(buffer_size=1024)</code></pre><p>然后我们需要分批次，以令模型加速计算</p><pre><code class="lang-py">dataset = dataset.batch(batch_size=32)</code></pre><p>最终要完成pipeline搭建，这样可以保证模型在运行一个batch的数据时，另一批数据进行预处理以提升效率。</p><pre><code class="lang-py">dataset = dataset.prefetch()</code></pre><p>将数据输入到模型，我们可以开始训练了。</p><pre><code class="lang-py">model = tf.keras.Model(...)model.fit(dataset)</code></pre><p>上面就是数据从读取到处理到训练的全部流程，称之为管道（pipeline）。</p><p>处理大量原始数据，要经过多次函数变换，这些函数变换都是可重用的。使用<code>tf.data</code>将这些变换整理成管道，一方面可以简化复杂输入的预处理过程，另一方面，由于<code>Dataset</code> 对象可迭代，可以执行分批处理。使用<code>tf.data.Dataset</code>可以方便地整合操作、构造数据集。</p><p>有两种方法构造可供训练使用的<code>Dataset</code>数据集：</p><ol><li>从文件、内存中直接构建<code>Dataset</code></li><li>从其他<code>Dataset</code>中转化</li></ol><p>如果打算从内存中读取数据构建 <code>Dataset</code> ，有 <code>tf.data.Dataset.from_tensors()</code> 和 <code>tf.data.Dataset.from_tensor_slices()</code> 可供选择；如果打算从 <code>TFRecord</code> 格式的文件中读取数据，可以调用 <code>tf.data.TFRecordDataset()</code> 。</p><p>当 <code>Dataset</code> 对象构建好了之后，通过使用 <code>Dataset.map()</code> 为其中每个元素施加变换、使用 <code>Dataset.batch()</code> 为整批元素添加变换等等对数据进行预处理。</p><h2 id="从内存或文件中构造Dataset"><a href="#从内存或文件中构造Dataset" class="headerlink" title="从内存或文件中构造Dataset"></a>从内存或文件中构造<code>Dataset</code></h2><h3 id="从内存中的array构造Dataset"><a href="#从内存中的array构造Dataset" class="headerlink" title="从内存中的array构造Dataset"></a>从内存中的array构造<code>Dataset</code></h3><p>如果你的所有数据都在内存中，那么最简单构造 <code>Dataset</code> 的方式就是，先将其利用 <code>tf.Tensor</code> 转成tensor，后使用<code>Dataset.from_tensor_slices()</code>。</p><pre><code class="lang-python">train, test = tf.keras.datasets.fashion_mnist.load_data()images, labels = trainimages = images/255dataset = tf.data.Dataset.from_tensor_slices((images, labels))dataset</code></pre><h3 id="从生成器构造Dataset"><a href="#从生成器构造Dataset" class="headerlink" title="从生成器构造Dataset"></a>从生成器构造<code>Dataset</code></h3><p>你也可以利用 <code>Dataset.from_generator</code> 从Python的生成器来构造 <code>Dataset</code> ，比如从 <code>preprocessing.image.ImageDataGenerator</code> 构造 <code>Dataset</code>。但这种方法受制于Python的GIL，因此效率不会太高。</p><p>首先下载花朵图片数据集，一共3670张花朵图片，分成五个类别。</p><pre><code class="lang-python">flowers = tf.keras.utils.get_file(    &#39;flower_photos&#39;,    &#39;https://storage.googleapis.com/download.tensorflow.org/example_images/flower_photos.tgz&#39;,    untar=True)</code></pre><p>利用 <code>preprocessing.image.ImageDataGenerator</code> 定义数据增强操作，然后将其套用到花朵数据集上。</p><pre><code class="lang-python">img_gen = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1./255, rotation_range=20)images, labels = next(img_gen.flow_from_directory(flowers))</code></pre><p>最后构造 <code>Dataset</code> 。</p><pre><code class="lang-python">ds = tf.data.Dataset.from_generator(    img_gen.flow_from_directory, args=[flowers],     output_types=(tf.float32, tf.float32),     output_shapes=([32,256,256,3], [32,5]))ds&lt;FlatMapDataset shapes: ((32, 256, 256, 3), (32, 5)), types: (tf.float32, tf.float32)&gt;</code></pre><h3 id="从TFRecord格式文件构造Dataset"><a href="#从TFRecord格式文件构造Dataset" class="headerlink" title="从TFRecord格式文件构造Dataset"></a>从<code>TFRecord</code>格式文件构造<code>Dataset</code></h3><p>有些时候数据不在内存中，而是以特定格式存在磁盘上，比如 <code>TFRecord</code> 格式。这种情况我们可以使用 <code>tf.data.TFRecordDataset</code> 作为数据管道的一部分。</p><pre><code class="lang-python"># Creates a dataset that reads all of the examples from two files.fsns_test_file = tf.keras.utils.get_file(&quot;fsns.tfrec&quot;, &quot;https://storage.googleapis.com/download.tensorflow.org/data/fsns-20160927/testdata/fsns-00000-of-00001&quot;)dataset = tf.data.TFRecordDataset(filenames = [fsns_test_file])</code></pre><p><code>tf.data.TFRecordDataset</code> API中，<code>filenames</code> 的输入很灵活，既可以是字符串，表明一个文件；也可以是字符串列表，表明多个文件。</p><h3 id="从-txt格式文件构造Dataset"><a href="#从-txt格式文件构造Dataset" class="headerlink" title="从.txt格式文件构造Dataset"></a>从<code>.txt</code>格式文件构造<code>Dataset</code></h3><p>如果是 <code>.txt</code> 格式，那么采用 <code>tf.data.TextLineDataset</code> 也可转成 <code>Dataset</code>。</p><pre><code class="lang-python">directory_url = &#39;https://storage.googleapis.com/download.tensorflow.org/data/illiad/&#39;file_names = [&#39;cowper.txt&#39;, &#39;derby.txt&#39;, &#39;butler.txt&#39;]file_paths = [    &#39;cowper.txt&#39;,&#39;derby.txt&#39;,&#39;butler.txt&#39;]dataset = tf.data.TextLineDataset(file_paths)</code></pre><p>看一下第一个文件的前5行：</p><pre><code class="lang-python">for line in dataset.take(5):  print(line.numpy())b&quot;\xef\xbb\xbfAchilles sing, O Goddess! Peleus&#39; son;&quot;b&#39;His wrath pernicious, who ten thousand woes&#39;b&quot;Caused to Achaia&#39;s host, sent many a soul&quot;b&#39;Illustrious into Ades premature,&#39;b&#39;And Heroes gave (so stood the will of Jove)&#39;</code></pre><p>前五行都是 <code>cowper.txt</code> 中的。如果我们希望生成的 <code>Dataset</code> 能够轮流选取三个文件中的元素，可以在构造之初，使用 <code>Dataset.interleave</code> ，并设置 <code>cycle_length</code>：</p><pre><code class="lang-python">files_ds = tf.data.Dataset.from_tensor_slices(file_paths)lines_ds = files_ds.interleave(tf.data.TextLineDataset, cycle_length=3)for i, line in enumerate(lines_ds.take(9)):  if i % 3 == 0:    print()  print(i, line.numpy())0 b&quot;\xef\xbb\xbfAchilles sing, O Goddess! Peleus&#39; son;&quot;1 b&quot;\xef\xbb\xbfOf Peleus&#39; son, Achilles, sing, O Muse,&quot;2 b&#39;\xef\xbb\xbfSing, O goddess, the anger of Achilles son of Peleus, that brought&#39;3 b&#39;His wrath pernicious, who ten thousand woes&#39;4 b&#39;The vengeance, deep and deadly; whence to Greece&#39;5 b&#39;countless ills upon the Achaeans. Many a brave soul did it send&#39;6 b&quot;Caused to Achaia&#39;s host, sent many a soul&quot;7 b&#39;Unnumbered ills arose; which many a soul&#39;8 b&#39;hurrying down to Hades, and many a hero did it yield a prey to dogs and&#39;</code></pre><p>有的时候我们不希望录入文件的第一行，或者只要文件中满足要求的特定行，可以分别使用 <code>Dataset.skip()</code> 和 <code>Dataset.filter()</code> 。比如下面的泰坦尼克数据集，去掉第一行后，筛选生存下来的人。</p><pre><code class="lang-python">titanic_file = tf.keras.utils.get_file(&quot;train.csv&quot;, &quot;https://storage.googleapis.com/tf-datasets/titanic/train.csv&quot;)titanic_lines = tf.data.TextLineDataset(titanic_file)for line in titanic_lines.take(10):  print(line.numpy())b&#39;survived,sex,age,n_siblings_spouses,parch,fare,class,deck,embark_town,alone&#39;b&#39;0,male,22.0,1,0,7.25,Third,unknown,Southampton,n&#39;b&#39;1,female,38.0,1,0,71.2833,First,C,Cherbourg,n&#39;b&#39;1,female,26.0,0,0,7.925,Third,unknown,Southampton,y&#39;b&#39;1,female,35.0,1,0,53.1,First,C,Southampton,n&#39;b&#39;0,male,28.0,0,0,8.4583,Third,unknown,Queenstown,y&#39;b&#39;0,male,2.0,3,1,21.075,Third,unknown,Southampton,n&#39;b&#39;1,female,27.0,0,2,11.1333,Third,unknown,Southampton,n&#39;b&#39;1,female,14.0,1,0,30.0708,Second,unknown,Cherbourg,n&#39;b&#39;1,female,4.0,1,1,16.7,Third,G,Southampton,n&#39;def survived(line):  return tf.not_equal(tf.strings.substr(line, 0, 1), &quot;0&quot;)survivors = titanic_lines.skip(1).filter(survived)for line in survivors.take(10):  print(line.numpy())b&#39;1,female,38.0,1,0,71.2833,First,C,Cherbourg,n&#39;b&#39;1,female,26.0,0,0,7.925,Third,unknown,Southampton,y&#39;b&#39;1,female,35.0,1,0,53.1,First,C,Southampton,n&#39;b&#39;1,female,27.0,0,2,11.1333,Third,unknown,Southampton,n&#39;b&#39;1,female,14.0,1,0,30.0708,Second,unknown,Cherbourg,n&#39;b&#39;1,female,4.0,1,1,16.7,Third,G,Southampton,n&#39;b&#39;1,male,28.0,0,0,13.0,Second,unknown,Southampton,y&#39;b&#39;1,female,28.0,0,0,7.225,Third,unknown,Cherbourg,y&#39;b&#39;1,male,28.0,0,0,35.5,First,A,Southampton,y&#39;b&#39;1,female,38.0,1,5,31.3875,Third,unknown,Southampton,n&#39;</code></pre><h3 id="从csv格式构造Dataset"><a href="#从csv格式构造Dataset" class="headerlink" title="从csv格式构造Dataset"></a>从<code>csv</code>格式构造<code>Dataset</code></h3><p>除了<code>TFRecord</code>和<code>txt</code>格式，还有<code>csv</code>格式也很流行。<code>csv</code>格式能够以纯文本保存表格数据。<code>pandas</code>的<code>to_csv</code>是将<code>csv</code>搬运到内存的良好工具。</p><pre><code class="lang-python">titanic_file = tf.keras.utils.get_file(&quot;train.csv&quot;, &quot;https://storage.googleapis.com/tf-datasets/titanic/train.csv&quot;)df = pd.read_csv(titanic_file, index_col=None)df.head()titanic_slices = tf.data.Dataset.from_tensor_slices(dict(df))for feature_batch in titanic_slices.take(1):  for key, value in feature_batch.items():    print(&quot;  {!r:20s}: {}&quot;.format(key, value))</code></pre><p>当然<code>tf.data</code>强大之处在于可以处理<code>pandas</code>处理不了的文件大小。<code>experimental.make_csv_dataset</code>函数是用于读取csv文件集的高层接口，它可以自动推导每个<code>column</code>的文件类型。</p><pre><code class="lang-python">titanic_batches = tf.data.experimental.make_csv_dataset(    titanic_file, batch_size=4,    label_name=&quot;survived&quot;)</code></pre><p>查看第一个<code>batch</code>的内容。</p><pre><code class="lang-python">for feature_batch, label_batch in titanic_batches.take(1):  print(&quot;&#39;survived&#39;: {}&quot;.format(label_batch))  print(&quot;features:&quot;)  for key, value in feature_batch.items():    print(&quot;  {!r:20s}: {}&quot;.format(key, value))</code></pre><p>如果只需要<code>csv</code>的某一列，那么可以使用<code>select_columns</code>参数。</p><pre><code class="lang-python">titanic_batches = tf.data.experimental.make_csv_dataset(    titanic_file, batch_size=4,    label_name=&quot;survived&quot;, select_columns=[&#39;class&#39;, &#39;fare&#39;, &#39;survived&#39;])for feature_batch, label_batch in titanic_batches.take(1):  print(&quot;&#39;survived&#39;: {}&quot;.format(label_batch))  for key, value in feature_batch.items():    print(&quot;  {!r:20s}: {}&quot;.format(key, value))&#39;survived&#39;: [1 1 1 0]features:  &#39;sex&#39;               : [b&#39;female&#39; b&#39;female&#39; b&#39;male&#39; b&#39;female&#39;]  &#39;age&#39;               : [35. 31. 45. 28.]  &#39;n_siblings_spouses&#39;: [0 1 0 8]  &#39;parch&#39;             : [0 1 0 2]  &#39;fare&#39;              : [512.3292  20.525    8.05    69.55  ]  &#39;class&#39;             : [b&#39;First&#39; b&#39;Third&#39; b&#39;Third&#39; b&#39;Third&#39;]  &#39;deck&#39;              : [b&#39;unknown&#39; b&#39;unknown&#39; b&#39;unknown&#39; b&#39;unknown&#39;]  &#39;embark_town&#39;       : [b&#39;Cherbourg&#39; b&#39;Southampton&#39; b&#39;Southampton&#39; b&#39;Southampton&#39;]  &#39;alone&#39;             : [b&#39;y&#39; b&#39;n&#39; b&#39;y&#39; b&#39;n&#39;]</code></pre><p>还有一个底层的<code>experimental.CsvDataset</code>类，它可以更精细的控制读取<code>csv</code>的过程。不支持列类型推断。</p><pre><code class="lang-python">titanic_types  = [tf.int32, tf.string, tf.float32, tf.int32, tf.int32, tf.float32, tf.string, tf.string, tf.string, tf.string] dataset = tf.data.experimental.CsvDataset(titanic_file, titanic_types , header=True)for line in dataset.take(10):  print([item.numpy() for item in line])[0, b&#39;male&#39;, 22.0, 1, 0, 7.25, b&#39;Third&#39;, b&#39;unknown&#39;, b&#39;Southampton&#39;, b&#39;n&#39;][1, b&#39;female&#39;, 38.0, 1, 0, 71.2833, b&#39;First&#39;, b&#39;C&#39;, b&#39;Cherbourg&#39;, b&#39;n&#39;][1, b&#39;female&#39;, 26.0, 0, 0, 7.925, b&#39;Third&#39;, b&#39;unknown&#39;, b&#39;Southampton&#39;, b&#39;y&#39;][1, b&#39;female&#39;, 35.0, 1, 0, 53.1, b&#39;First&#39;, b&#39;C&#39;, b&#39;Southampton&#39;, b&#39;n&#39;][0, b&#39;male&#39;, 28.0, 0, 0, 8.4583, b&#39;Third&#39;, b&#39;unknown&#39;, b&#39;Queenstown&#39;, b&#39;y&#39;][0, b&#39;male&#39;, 2.0, 3, 1, 21.075, b&#39;Third&#39;, b&#39;unknown&#39;, b&#39;Southampton&#39;, b&#39;n&#39;][1, b&#39;female&#39;, 27.0, 0, 2, 11.1333, b&#39;Third&#39;, b&#39;unknown&#39;, b&#39;Southampton&#39;, b&#39;n&#39;][1, b&#39;female&#39;, 14.0, 1, 0, 30.0708, b&#39;Second&#39;, b&#39;unknown&#39;, b&#39;Cherbourg&#39;, b&#39;n&#39;][1, b&#39;female&#39;, 4.0, 1, 1, 16.7, b&#39;Third&#39;, b&#39;G&#39;, b&#39;Southampton&#39;, b&#39;n&#39;][0, b&#39;male&#39;, 20.0, 0, 0, 8.05, b&#39;Third&#39;, b&#39;unknown&#39;, b&#39;Southampton&#39;, b&#39;y&#39;]</code></pre><p><code>CsvDataset</code>还可以指定每列的默认值，供元素为空时填充。</p><p>在Colab中，直接书写<code>csv</code>文件：</p><pre><code class="lang-bash">%%writefile missing.csv1,2,3,4,2,3,41,,3,41,2,,41,2,3,,,,</code></pre><p>设置每列默认值：</p><pre><code class="lang-python"># Creates a dataset that reads all of the records from two CSV files, each with# four float columns which may have missing values.record_defaults = [999,999,999,999]dataset = tf.data.experimental.CsvDataset(&quot;missing.csv&quot;, record_defaults)dataset = dataset.map(lambda *items: tf.stack(items))for line in dataset:  print(line.numpy())[1 2 3 4][999   2   3   4][  1 999   3   4][  1   2 999   4][  1   2   3 999][999 999 999 999]</code></pre><p>你也可以选择删除<code>header</code>，或者指定某列输出</p><pre><code class="lang-python"># Creates a dataset that reads all of the records from two CSV files with# headers, extracting float data from columns 2 and 4.record_defaults = [999, 999] # Only provide defaults for the selected columnsdataset = tf.data.experimental.CsvDataset(&quot;missing.csv&quot;, record_defaults, select_cols=[1, 3])dataset = dataset.map(lambda *items: tf.stack(items))for line in dataset:  print(line.numpy())[2 4][2 4][999   4][2 4][  2 999][999 999]</code></pre><h3 id="从文件夹中的每个文件构造Dataset"><a href="#从文件夹中的每个文件构造Dataset" class="headerlink" title="从文件夹中的每个文件构造Dataset"></a>从文件夹中的每个文件构造<code>Dataset</code></h3><p>如果每个单独的文件都是一个数据项（比如图片数据集），这样的数据集如何整理？</p><pre><code class="lang-python">flowers_root = tf.keras.utils.get_file(    &#39;flower_photos&#39;,    &#39;https://storage.googleapis.com/download.tensorflow.org/example_images/flower_photos.tgz&#39;,    untar=True)flowers_root = pathlib.Path(flowers_root)list_ds = tf.data.Dataset.list_files(str(flowers_root/&#39;*/*&#39;))for f in list_ds.take(5):  print(f.numpy())b&#39;/root/.keras/datasets/flower_photos/dandelion/8720503800_cab5c62a34.jpg&#39;b&#39;/root/.keras/datasets/flower_photos/dandelion/16510864164_3afa8ac37f.jpg&#39;b&#39;/root/.keras/datasets/flower_photos/tulips/7136973281_b2a935ce20.jpg&#39;b&#39;/root/.keras/datasets/flower_photos/sunflowers/14623719696_1bb7970208_n.jpg&#39;b&#39;/root/.keras/datasets/flower_photos/dandelion/4560663938_3557a1f831.jpg&#39;</code></pre><p>通过使用<code>tf.io.read_file</code>读取数据，并从路径中提取<code>label</code>，返回<code>(image, label)</code>数据对。</p><pre><code class="lang-python">def process_path(file_path):  label = tf.strings.split(file_path, os.sep)[-2]  return tf.io.read_file(file_path), labellabeled_ds = list_ds.map(process_path)for image_raw, label_text in labeled_ds.take(1):  print(repr(image_raw.numpy()[:100]))  print()  print(label_text.numpy())b&#39;\xff\xd8\xff\xe0\x00\x10JFIF\x00\x01\x01\x01\x03|\x03|\x00\x00\xff\xe2\x0cXICC_PROFILE\x00\x01\x01\x00\x00\x0cHLino\x02\x10\x00\x00mntrRGB XYZ \x07\xce\x00\x02\x00\t\x00\x06\x001\x00\x00acspMSFT\x00\x00\x00\x00IEC sRGB\x00\x00\x00\x00\x00\x00&#39;b&#39;sunflowers&#39;</code></pre><h2 id="批处理数据集元素"><a href="#批处理数据集元素" class="headerlink" title="批处理数据集元素"></a>批处理数据集元素</h2><p>批处理的最简单形式是将数据集的<code>n</code>个连续元素堆叠为单个元素。</p><p>batched_dataset = dataset.batch(4)</p><batchdataset shapes: ((none,), (none,)), types: (tf.int64, tf.int64)><p>最后一个批次可能未满，使用<code>drop_remainder</code>参数忽略最后一批，使得<code>shape</code>完整：</p><p>batched_dataset = dataset.batch(7, drop_remainder=True)<br>batched_dataset</p><batchdataset shapes: ((7,), (7,)), types: (tf.int64, tf.int64)><p>许多模型（例如序列模型）都可以使用大小可变（例如长度不同的序列）的输入数据。通过<code>Dataset.padded_batch</code>可以将不同长度的<code>tensor</code>转换成一个<code>batch</code>。</p><p>在多个<code>epochs</code>的情况下，需要重复迭代数据集，最简单的方法是将数据集重复<code>epochs</code>遍。可以使用 <code>Dataset.repeat()</code>完成。</p><p>原有的<code>titanic_lines</code>数据集中的数据数量为 628</p><pre><code class="lang-python">count = 0for data in titanic_lines:    count += 1    # print(data.numpy())print(count)</code></pre><p>titanic_lines数据集经过<code>repeat</code>之后数目变为原来的两倍，1256</p><pre><code class="lang-python">count = 0for data in titanic_lines.repeat(2):    count += 1    # print(data.numpy())print(count)</code></pre><p>将数据集打散的方法 <code>Dataset.shuffle()</code> 通过维护一个固定大小的缓冲区来实现。</p><pre><code class="lang-py">dataset = tf.data.Dataset.zip((counter, lines))dataset = dataset.shuffle(buffer_size=100)dataset = dataset.batch(20)</code></pre><p>由于<code>buffer_size</code>为100，而批大小为20，因此第一批不包含索引大于120的元素。</p><p>在实际使用中，<code>repeat</code>操作、<code>batch</code>操作和<code>shuffle</code>操作经常一起混用，但是一定要注意操作的先后顺序。</p><h2 id="预处理数据"><a href="#预处理数据" class="headerlink" title="预处理数据"></a>预处理数据</h2><p><code>Dataset.map(f)</code> 通过函数 <code>f</code> 对数据集执行变换，<code>f</code> 必须以单个Tensor为输入，单个Tensor为输出（这里指的单个tensor，其意思是由原始数据和标签组成的数据对）。</p><p>假设我们定义了单个图像变换函数 <code>parse_image</code> ，只需 <code>images_ds = list_ds.map(parse_image)</code> 即可对 <code>image_ds</code> 数据集中的所有图片执行变换了。</p><p>假设我们需要将照片随机旋转，可以定义函数，然后使用map将其应用于数据集的所有图片上。</p><pre><code class="lang-py">import scipy.ndimage as ndimagedef random_rotate_image(image):  image = ndimage.rotate(image, np.random.uniform(-30, 30), reshape=False)  return imageimage, label = next(iter(images_ds))image = random_rotate_image(image)show(image, label)</code></pre><p><img src="https://www.tensorflow.org/guide/data_files/output__wEyL7bS9S6t_1.png" srcset="/img/loading.gif" alt></p><p>这里使用的是 <code>scipy</code> 中的旋转函数，需套用 <code>tf.py_function()</code> 才能在Tensorflow的eager_mode里面使用。</p><p>接下来使用 <code>Dataset.map</code> ：</p><pre><code class="lang-py">def tf_random_rotate_image(image, label):  im_shape = image.shape  [image,] = tf.py_function(random_rotate_image, [image], [tf.float32])  image.set_shape(im_shape)  return image, label</code></pre><p>在函数内部不但要注意输入和返回值是<code>(image, label)</code>，而且需要描述数据的<code>shape</code>和<code>type</code>，方便调试。</p><h2 id="时间序列数据窗口化"><a href="#时间序列数据窗口化" class="headerlink" title="时间序列数据窗口化"></a>时间序列数据窗口化</h2><p>时间序列数据的标签有所不同，一般以下一时刻的输入数据为标签，对未来进行一步一步的密集预测。比如：</p><pre><code class="lang-py">range_ds = tf.data.Dataset.range(100000)batches = range_ds.batch(10, drop_remainder=True)def dense_1_step(batch):  # Shift features and labels one step relative to each other.  return batch[:-1], batch[1:]predict_dense_1_step = batches.map(dense_1_step)for features, label in predict_dense_1_step.take(3):  print(features.numpy(), &quot; =&gt; &quot;, label.numpy())[0 1 2 3 4 5 6 7 8]  =&gt;  [1 2 3 4 5 6 7 8 9][10 11 12 13 14 15 16 17 18]  =&gt;  [11 12 13 14 15 16 17 18 19][20 21 22 23 24 25 26 27 28]  =&gt;  [21 22 23 24 25 26 27 28 29]</code></pre><p>如果要预测整个时间窗口而不是固定的偏移量，比如</p><pre><code class="lang-py">batches = range_ds.batch(15, drop_remainder=True)def label_next_5_steps(batch):  return (batch[:-5],   # Take the first 5 steps          batch[-5:])   # take the remainderpredict_5_steps = batches.map(label_next_5_steps)for features, label in predict_5_steps.take(3):  print(features.numpy(), &quot; =&gt; &quot;, label.numpy())[0 1 2 3 4 5 6 7 8 9]  =&gt;  [10 11 12 13 14][15 16 17 18 19 20 21 22 23 24]  =&gt;  [25 26 27 28 29][30 31 32 33 34 35 36 37 38 39]  =&gt;  [40 41 42 43 44]</code></pre><p>或者一个批次的标签和下个批次的输入有重叠：</p><pre><code class="lang-py">feature_length = 10label_length = 5features = range_ds.batch(feature_length, drop_remainder=True)labels = range_ds.batch(feature_length).skip(1).map(lambda labels: labels[:-5])predict_5_steps = tf.data.Dataset.zip((features, labels))for features, label in predict_5_steps.take(3):  print(features.numpy(), &quot; =&gt; &quot;, label.numpy())[0 1 2 3 4 5 6 7 8 9]  =&gt;  [10 11 12 13 14][10 11 12 13 14 15 16 17 18 19]  =&gt;  [20 21 22 23 24][20 21 22 23 24 25 26 27 28 29]  =&gt;  [30 31 32 33 34]</code></pre><p>有更方便的方法，那就是使用<code>Dataset.window</code>方法</p><pre><code class="lang-py">def make_window_dataset(ds, window_size, shift, stride):  windows = ds.window(window_size, shift=shift, stride=stride)  def sub_to_batch(sub):    return sub.batch(window_size, drop_remainder=True)  windows = windows.flat_map(sub_to_batch)  return windows</code></pre><p><code>Dataset.window(window_size, shift=shift, stride=stride)</code> 中的window_size代表窗口大小，即每个batch的元素个数；shift代表每次窗口移动的距离；stride代表选择元素的间隔</p><pre><code class="lang-py">ds = make_window_dataset(range_ds, window_size=10, shift = 5, stride=3)for example in ds.take(10):  print(example.numpy())[ 0  3  6  9 12 15 18 21 24 27][ 5  8 11 14 17 20 23 26 29 32][10 13 16 19 22 25 28 31 34 37][15 18 21 24 27 30 33 36 39 42][20 23 26 29 32 35 38 41 44 47][25 28 31 34 37 40 43 46 49 52][30 33 36 39 42 45 48 51 54 57][35 38 41 44 47 50 53 56 59 62][40 43 46 49 52 55 58 61 64 67][45 48 51 54 57 60 63 66 69 72]</code></pre><p>提取这些数据的标签方法：</p><pre><code class="lang-py">dense_labels_ds = ds.map(dense_1_step)for inputs,labels in dense_labels_ds.take(3):  print(inputs.numpy(), &quot;=&gt;&quot;, labels.numpy())[ 0  3  6  9 12 15 18 21 24] =&gt; [ 3  6  9 12 15 18 21 24 27][ 5  8 11 14 17 20 23 26 29] =&gt; [ 8 11 14 17 20 23 26 29 32][10 13 16 19 22 25 28 31 34] =&gt; [13 16 19 22 25 28 31 34 37]</code></pre><h2 id="重采样"><a href="#重采样" class="headerlink" title="重采样"></a>重采样</h2><p>有一些数据集，不同类别的数据分布不均匀。这个时候需要对那些不足的类别进行重采样。</p><p>给定信用卡欺诈（二分类）数据集，下面首先检查数据集中不同类别的占比</p><pre><code class="lang-py">def count(counts, batch):  features, labels = batch  class_1 = labels == 1  class_1 = tf.cast(class_1, tf.int32)  class_0 = labels == 0  class_0 = tf.cast(class_0, tf.int32)  counts[&#39;class_0&#39;] += tf.reduce_sum(class_0)  counts[&#39;class_1&#39;] += tf.reduce_sum(class_1)  return countscounts = creditcard_ds.take(10).reduce(    initial_state={&#39;class_0&#39;: 0, &#39;class_1&#39;: 0},    reduce_func = count)counts = np.array([counts[&#39;class_0&#39;].numpy(),                   counts[&#39;class_1&#39;].numpy()]).astype(np.float32)fractions = counts/counts.sum()print(fractions)[0.9953 0.0047]</code></pre><p>偏差很大，这样训练的二分类器只需全预测为正类，即可达到99.53%的正确率。</p><p>重采样数据集的一种方法是使用<code>sample_from_datasets</code> 。当每个类都有单独的<code>data.Dataset</code>时，此方法更适用。</p><p>正类和反类分别构建 <code>Dataset</code></p><pre><code class="lang-py">negative_ds = (  creditcard_ds    .unbatch()    .filter(lambda features, label: label==0)    .repeat())positive_ds = (  creditcard_ds    .unbatch()    .filter(lambda features, label: label==1)    .repeat())</code></pre><p>要使用<code>tf.data.experimental.sample_from_datasets</code>传递数据集以及每个数据集的权重</p><pre><code class="lang-py">balanced_ds = tf.data.experimental.sample_from_datasets(    [negative_ds, positive_ds], [0.5, 0.5]).batch(10)for features, labels in balanced_ds.take(10):  print(labels.numpy())[0 1 1 0 0 1 0 1 0 0][0 1 0 1 1 0 0 1 1 0][1 1 1 0 0 1 1 0 1 1][0 0 0 0 1 1 0 0 1 0][0 1 1 0 0 0 1 0 0 0][1 1 0 0 0 0 0 0 0 0][0 1 0 1 1 0 0 1 1 1][0 0 1 0 1 0 1 0 1 1][1 0 1 1 0 1 0 0 1 0][0 0 0 1 1 1 1 0 1 1]</code></pre><p>现在数据集就平衡了。</p><p>上述<code>experimental.sample_from_datasets</code>方法的一个问题是，每个类需要一个单独的<code>tf.data.Dataset</code>。</p><p>可以将<code>data.experimental.rejection_resample</code>函数应用于数据集，它仅加载一次，通过将多余元素将从数据集中删除以实现平衡。</p><p><code>data.experimental.rejection_resample</code>采用<code>class_func</code>参数，用于标记每个数据集元素所属的类别。</p><p>由于<code>Dataset</code>已经是<code>(features, label)</code>标记好的状态，因此只需</p><pre><code class="lang-py">def class_func(features, label):  return label</code></pre><p>重采样器输入的数据不能为batch后的Dataset，必须经过unbatch。重采样器还需要目标分布，以及可选的初始分布估计。最后经过map中的函数，直接删除掉extra_label即可。</p><pre><code class="lang-py">resampler = tf.data.experimental.rejection_resample(    class_func, target_dist=[0.5, 0.5], initial_dist=fractions)resample_ds = creditcard_ds.unbatch().apply(resampler).batch(10)balanced_ds = resample_ds.map(lambda extra_label, features_and_label: features_and_label)</code></pre><h2 id="数据集迭代器的checkpoint"><a href="#数据集迭代器的checkpoint" class="headerlink" title="数据集迭代器的checkpoint"></a>数据集迭代器的checkpoint</h2><p>没想到吧？不只是模型能使用checkpoint，Dataset的处理过程也可以使用checkpoint。如果您有一个很大的数据集，并且不想在每次重新启动时都从头开始，则这可能很有用。但是请注意，迭代器检查点可能很大，因为诸如shuffle和prefetch需要迭代器中的缓冲元素。</p><p>下面是示例：</p><pre><code class="lang-py">range_ds = tf.data.Dataset.range(20)iterator = iter(range_ds)ckpt = tf.train.Checkpoint(step=tf.Variable(0), iterator=iterator)manager = tf.train.CheckpointManager(ckpt, &#39;/tmp/my_ckpt&#39;, max_to_keep=3)print([next(iterator).numpy() for _ in range(5)])[0, 1, 2, 3, 4]save_path = manager.save()print([next(iterator).numpy() for _ in range(5)])[5, 6, 7, 8, 9]ckpt.restore(manager.latest_checkpoint)print([next(iterator).numpy() for _ in range(5)])[5, 6, 7, 8, 9]</code></pre><h2 id="在Keras中使用tf-data"><a href="#在Keras中使用tf-data" class="headerlink" title="在Keras中使用tf.data"></a>在Keras中使用<code>tf.data</code></h2><p>数据集的处理：</p><pre><code class="lang-py">train, test = tf.keras.datasets.fashion_mnist.load_data()images, labels = trainimages = images/255.0labels = labels.astype(np.int32)fmnist_train_ds = tf.data.Dataset.from_tensor_slices((images, labels))fmnist_train_ds = fmnist_train_ds.shuffle(5000).batch(32)</code></pre><p>模型构建：</p><pre><code class="lang-py">model = tf.keras.Sequential([  tf.keras.layers.Flatten(),  tf.keras.layers.Dense(10)])model.compile(optimizer=&#39;adam&#39;,              loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),               metrics=[&#39;accuracy&#39;])</code></pre><p>模型训练：</p><pre><code class="lang-py">model.fit(fmnist_train_ds, epochs=2)</code></pre><p>如果在fit过程中你要对Dataset进行repeat，只需指定每个epochs使用的数据个数，然后不给repeat指定参数，数据集就会变成无限个，一定会满足epochs的要求。</p><pre><code class="lang-py">model.fit(fmnist_train_ds.repeat(), epochs=2, steps_per_epoch=20)</code></pre><p>同理，evaluate时也是一样的</p><pre><code class="lang-py">loss, accuracy = model.evaluate(fmnist_train_ds.repeat(), steps=10)print(&quot;Loss :&quot;, loss)print(&quot;Accuracy :&quot;, accuracy)Loss : 0.3501795828342438Accuracy : 0.8968750238418579</code></pre><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>如果在使用机器学习算法解决问题过程中，数据预处理是主要问题的话，采用合适的数据组织手段可以帮助解决问题。 <code>tf.data</code> 能够快速处理大量数据，并将各个来源的数据归一化成合适的 <code>Dataset</code> 格式。</p><p>你可以对构建好的 <code>tf.data.Dataset</code> 做预处理操作，比如随机打乱、分批次、规划时间窗口、重采样等等。</p><p>经过处理后的 <code>Dataset</code> 对象可以直接输入到keras进行训练。</p></batchdataset></batchdataset>]]></content>
+    
+    
+    <categories>
+      
+      <category>notes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Tensorflow</tag>
+      
+      <tag>preprocessing</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>【学习笔记】使用TensorBoard分析模型性能</title>
+    <link href="/2020/08/14/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E4%BD%BF%E7%94%A8TensorBoard%E5%88%86%E6%9E%90%E6%A8%A1%E5%9E%8B%E6%80%A7%E8%83%BD/"/>
+    <url>/2020/08/14/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E4%BD%BF%E7%94%A8TensorBoard%E5%88%86%E6%9E%90%E6%A8%A1%E5%9E%8B%E6%80%A7%E8%83%BD/</url>
+    
+    <content type="html"><![CDATA[<p>这是TensorBoard笔记的第六篇，讲述的是如何使用TensorBoard分析模型的性能，优化模型的资源消耗。<br><a id="more"></a></p><p>TensorBoard可以监控模型的各个组分运行过程中的时间消耗和资源消耗，并根据这些数据对模型下一步优化提出建议。</p><p>首先我们安装性能分析的插件</p><pre><code class="lang-bash">!pip install -U tensorboard_plugin_profile</code></pre><p>定义TensorBoard的回调函数（数据预处理和模型定义略去不表），注意这里新的参数<code>profile_batch</code>只监控第500到520之间的20个Batch，避免监控过多导致模型运行效率过低。</p><pre><code class="lang-python"># Create a TensorBoard callbacklogs = &quot;logs/&quot; + datetime.now().strftime(&quot;%Y%m%d-%H%M%S&quot;)tboard_callback = tf.keras.callbacks.TensorBoard(log_dir=logs,                        histogram_freq=1,                        profile_batch=&#39;500,520&#39;)model.fit(ds_train,    epochs=2,    validation_data=ds_test,    callbacks=[tboard_callback])</code></pre><p>打开TensorBoard：</p><pre><code class="lang-bash"># Load the TensorBoard notebook extension.%load_ext tensorboard# Launch TensorBoard and navigate to the Profile tab to view performance profile%tensorboard --logdir=logs</code></pre><p><img src="/2020/08/14/【学习笔记】使用TensorBoard分析模型性能/2020-08-14-16-47-10.png" srcset="/img/loading.gif" alt></p><p>有非常多有用的信息，比如每个batch消耗的时间都花在哪里了：</p><p><img src="/2020/08/14/【学习笔记】使用TensorBoard分析模型性能/2020-08-14-17-09-32.png" srcset="/img/loading.gif" alt></p><p>还有针对耗时的改进意见：</p><p><img src="/2020/08/14/【学习笔记】使用TensorBoard分析模型性能/2020-08-14-17-09-56.png" srcset="/img/loading.gif" alt></p><p>有耗时最长的10大操作：</p><p><img src="/2020/08/14/【学习笔记】使用TensorBoard分析模型性能/2020-08-14-17-10-27.png" srcset="/img/loading.gif" alt></p><p>有性能监控选项，查看CPU活动和GPU活动。根据一般经验，始终保持设备（GPU / TPU）处于活动状态是我们的优化目标。</p><p><img src="https://raw.githubusercontent.com/tensorflow/tensorboard/master/docs/images/profiler_trace_viewer_bad_ip.png" srcset="/img/loading.gif" alt></p><p>查看事件跟踪，可以看到<code>tf_data_iterator_get_next</code> 操作在CPU上运行时GPU不活动。该操作负责处理输入数据并将其发送到GPU进行训练。因此我们的优化方法可以是使用tf.data API优化输入管道，缓存训练数据集并预取数据，以确保始终有可供GPU处理的数据。</p><pre><code class="lang-python"> (ds_train, ds_test), ds_info = tfds.load(    &#39;mnist&#39;,    split=[&#39;train&#39;, &#39;test&#39;],    shuffle_files=True,    as_supervised=True,    with_info=True,)ds_train = ds_train.map(normalize_img)ds_train = ds_train.batch(128)ds_train = ds_train.cache()ds_train = ds_train.prefetch(tf.data.experimental.AUTOTUNE)ds_test = ds_test.map(normalize_img)ds_test = ds_test.batch(128)ds_test = ds_test.cache()ds_test = ds_test.prefetch(tf.data.experimental.AUTOTUNE)model.fit(ds_train,        epochs=2,        validation_data=ds_test,        callbacks = [tboard_callback])%tensorboard --logdir=logs</code></pre><p>跟踪查看器显示<code>tf_data_iterator_get_next</code>操作执行得更快。因此，GPU获得了稳定的数据流以进行训练，并通过模型训练获得了更好的利用率。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>notes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Tensorflow</tag>
+      
+      <tag>TensorBoard</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>【学习笔记】通过TensorBoard可视化词嵌入空间</title>
+    <link href="/2020/08/14/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E9%80%9A%E8%BF%87TensorBoard%E5%8F%AF%E8%A7%86%E5%8C%96%E8%AF%8D%E5%B5%8C%E5%85%A5%E7%A9%BA%E9%97%B4/"/>
+    <url>/2020/08/14/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E9%80%9A%E8%BF%87TensorBoard%E5%8F%AF%E8%A7%86%E5%8C%96%E8%AF%8D%E5%B5%8C%E5%85%A5%E7%A9%BA%E9%97%B4/</url>
+    
+    <content type="html"><![CDATA[<p>这是TensorBoard笔记的第五篇，讲述的是如何使用TensorBoard对词嵌入空间可视化。<br><a id="more"></a></p><p>TensorBoard可以将词嵌入空间二维化，方便我们理解词嵌入空间的含义。</p><pre><code class="lang-python">from tensorboard.plugins import projector</code></pre><p>引入IMDb数据集。tensorflow_datasets是tensorflow的官方数据集库。</p><pre><code class="lang-python">import tensorflow_datasets as tfds(train_data, test_data), info = tfds.load(    &quot;imdb_reviews/subwords8k&quot;,    split=(tfds.Split.TRAIN, tfds.Split.TEST),    with_info=True,    as_supervised=True,)encoder = info.features[&quot;text&quot;].encoder# shuffle and pad the data.train_batches = train_data.shuffle(1000).padded_batch(    10, padded_shapes=((None,), ()))test_batches = test_data.shuffle(1000).padded_batch(    10, padded_shapes=((None,), ()))train_batch, train_labels = next(iter(train_batches))</code></pre><p>训练词嵌入模型</p><pre><code class="lang-python"># Create an embedding layerembedding_dim = 16embedding = tf.keras.layers.Embedding(encoder.vocab_size, embedding_dim)# Train this embedding as part of a keras modelmodel = tf.keras.Sequential(    [        embedding, # The embedding layer should be the first layer in a model.        tf.keras.layers.GlobalAveragePooling1D(),        tf.keras.layers.Dense(16, activation=&quot;relu&quot;),        tf.keras.layers.Dense(1),    ])# Compile modelmodel.compile(    optimizer=&quot;adam&quot;,    loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),    metrics=[&quot;accuracy&quot;],)# Train modelhistory = model.fit(    train_batches, epochs=1, validation_data=test_batches, validation_steps=20)</code></pre><p>将数据保存成方便TensorBoard读取的形式</p><pre><code class="lang-python"># Set up a logs directory, so Tensorboard knows where to look for fileslog_dir=&#39;/logs/imdb-example/&#39;if not os.path.exists(log_dir):    os.makedirs(log_dir)# Save Labels separately on a line-by-line manner.with open(os.path.join(log_dir, &#39;metadata.tsv&#39;), &quot;w&quot;) as f:  for subwords in encoder.subwords:    f.write(&quot;{}\n&quot;.format(subwords))  # Fill in the rest of the labels with &quot;unknown&quot;  for unknown in range(1, encoder.vocab_size - len(encoder.subwords)):    f.write(&quot;unknown #{}\n&quot;.format(unknown))# Save the weights we want to analyse as a variable. Note that the first# value represents any unknown word, which is not in the metadata, so# we will remove that value.weights = tf.Variable(model.layers[0].get_weights()[0][1:])# Create a checkpoint from embedding, the filename and key are# name of the tensor.checkpoint = tf.train.Checkpoint(embedding=weights)checkpoint.save(os.path.join(log_dir, &quot;embedding.ckpt&quot;))# Set up configconfig = projector.ProjectorConfig()embedding = config.embeddings.add()# The name of the tensor will be suffixed by `/.ATTRIBUTES/VARIABLE_VALUE`embedding.tensor_name = &quot;embedding/.ATTRIBUTES/VARIABLE_VALUE&quot;embedding.metadata_path = &#39;metadata.tsv&#39;projector.visualize_embeddings(log_dir, config)</code></pre><pre><code class="lang-python">%tensorboard --logdir /logs/imdb-example/</code></pre><p>你可以看到2维、3维空间中的Embedding，搜索某个单词在词嵌入空间中的位置，甚至可以采取不同的可视化方法：<br><img src="/2020/08/14/【学习笔记】通过TensorBoard可视化词嵌入空间/2020-08-13-19-45-25.png" srcset="/img/loading.gif" alt></p><p>打开该工具的时候我的电脑很卡。。。希望大家注意。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>notes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Tensorflow</tag>
+      
+      <tag>TensorBoard</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>【学习笔记】通过TensorBoard调整超参数</title>
+    <link href="/2020/08/14/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E9%80%9A%E8%BF%87TensorBoard%E8%B0%83%E6%95%B4%E8%B6%85%E5%8F%82%E6%95%B0/"/>
+    <url>/2020/08/14/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E9%80%9A%E8%BF%87TensorBoard%E8%B0%83%E6%95%B4%E8%B6%85%E5%8F%82%E6%95%B0/</url>
+    
+    <content type="html"><![CDATA[<p>这是TensorBoard笔记的第四篇，讲述的是如何借助TensorBoard调整模型的超参数。<br><a id="more"></a></p><p>TensorBoard中的HParams仪表板是比较新颖的工具包，提供了多种调节超参数的工具，并且该工具还在不断更新中。</p><pre><code class="lang-python">from tensorboard.plugins.hparams import api as hp</code></pre><p>用过sklearn进行机器学习模型调参的同学应该体验过交叉验证调参的方法。通过提供许多不同的超参数选项，<code>GridSearchCV</code>将训练多个模型，并取性能最优的模型超参数。</p><pre><code class="lang-python">from sklearn.model_selection import GridSearchCVfrom sklearn.pipeline import make_pipelineX_train, X_test, y_train, y_test = train_test_split(df_train[&#39;text&#39;][:10000], df_train[&#39;label&#39;][:10000], random_state=0)pipe_logis = make_pipeline(TfidfVectorizer(min_df=5, ngram_range=(1,3)), LogisticRegression())param_grid = {&#39;logisticregression__C&#39;: [0.001, 0.01, 0.1, 1, 10]}grid = GridSearchCV(pipe_logis, param_grid, cv=5)grid.fit(X_train, y_train)print(&quot;Best params:\n{}\n&quot;.format(grid.best_params_))print(&quot;Best cross-validation score: {:.2f}&quot;.format(grid.best_score_))print(&quot;Test-set score: {:.2f}&quot;.format(grid.score(X_test, y_test)))</code></pre><p>在上面的程序中，grid中包含一个需要调节的超参数，即逻辑回归的C值。候选C值有5个，因此grid在fit过程中会训练五个模型，每个模型执行5次交叉验证（因为fit中cv参数为5）。</p><p>HParams也是采用类似的方法找超参数。首先我们定义候选超参数的变化范围。我们选择三个参数进行网格搜索，分别是Dense层的Unit数目、dropout的比例和优化器，每个超参数都有两种选择，因此一共需要训练八个模型。</p><p>最终模型的评价标准以Accuracy为准。具体代码如下所示：</p><pre><code class="lang-python">HP_NUM_UNITS = hp.HParam(&#39;num_units&#39;, hp.Discrete([16, 32]))HP_DROPOUT = hp.HParam(&#39;dropout&#39;, hp.RealInterval(0.1, 0.2))HP_OPTIMIZER = hp.HParam(&#39;optimizer&#39;, hp.Discrete([&#39;adam&#39;, &#39;sgd&#39;]))METRIC_ACCURACY = &#39;accuracy&#39;</code></pre><p>设置write句柄，这已经是传统艺能了。</p><pre><code class="lang-python">with tf.summary.create_file_writer(&#39;logs/hparam_tuning&#39;).as_default():  hp.hparams_config(    hparams=[HP_NUM_UNITS, HP_DROPOUT, HP_OPTIMIZER],    metrics=[hp.Metric(METRIC_ACCURACY, display_name=&#39;Accuracy&#39;)],  )</code></pre><p>接下来我们定义待训练模型。模型本身非常简单，而且只训练一个epoch，这是考虑到要消耗平时八倍的时间而采取的tradeoff。</p><pre><code class="lang-python">def train_test_model(hparams):  model = tf.keras.models.Sequential([    tf.keras.layers.Flatten(),    tf.keras.layers.Dense(hparams[HP_NUM_UNITS], activation=tf.nn.relu),    tf.keras.layers.Dropout(hparams[HP_DROPOUT]),    tf.keras.layers.Dense(10, activation=tf.nn.softmax),  ])  model.compile(      optimizer=hparams[HP_OPTIMIZER],      loss=&#39;sparse_categorical_crossentropy&#39;,      metrics=[&#39;accuracy&#39;],  )  model.fit(x_train, y_train, epochs=1) # Run with 1 epoch to speed things up for demo purposes  _, accuracy = model.evaluate(x_test, y_test)  return accuracy</code></pre><p>进行训练并记录模型输出；</p><pre><code class="lang-python">def run(run_dir, hparams):  with tf.summary.create_file_writer(run_dir).as_default():    hp.hparams(hparams)  # record the values used in this trial    accuracy = train_test_model(hparams)    tf.summary.scalar(METRIC_ACCURACY, accuracy, step=1)</code></pre><p>之后我们进行网格搜索（其实就是遍历每种可能。搜索方法完全是自己定义的，你也可以使用随机搜索方法）：</p><pre><code class="lang-python">session_num = 0for num_units in HP_NUM_UNITS.domain.values:  for dropout_rate in (HP_DROPOUT.domain.min_value, HP_DROPOUT.domain.max_value):    for optimizer in HP_OPTIMIZER.domain.values:      hparams = {          HP_NUM_UNITS: num_units,          HP_DROPOUT: dropout_rate,          HP_OPTIMIZER: optimizer,      }      run_name = &quot;run-%d&quot; % session_num      print(&#39;--- Starting trial: %s&#39; % run_name)      print({h.name: hparams[h] for h in hparams})      run(&#39;logs/hparam_tuning/&#39; + run_name, hparams)      session_num += 1</code></pre><p>最后使用TensorBoard进行可视化：</p><pre><code class="lang-bash">%tensorboard --logdir logs/hparam_tuning</code></pre><p><img src="https://www.tensorflow.org/tensorboard/images/hparams_table.png?raw=1" srcset="/img/loading.gif" alt></p><p>我们可以通过TensorBoard发现很多有趣的现象：比如在本模型中，adam优化器比sgd要好等等。</p><p><img src="/2020/08/14/【学习笔记】通过TensorBoard调整超参数/2020-08-13-19-19-41.png" srcset="/img/loading.gif" alt></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>notes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Tensorflow</tag>
+      
+      <tag>TensorBoard</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>【学习笔记】用TensorBoard生成模型图</title>
+    <link href="/2020/08/14/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E7%94%A8TensorBoard%E7%94%9F%E6%88%90%E6%A8%A1%E5%9E%8B%E5%9B%BE/"/>
+    <url>/2020/08/14/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E7%94%A8TensorBoard%E7%94%9F%E6%88%90%E6%A8%A1%E5%9E%8B%E5%9B%BE/</url>
+    
+    <content type="html"><![CDATA[<p>这是TensorBoard笔记的第三篇，讲述的是如何令TensorBoard生成模型架构图。<br><a id="more"></a></p><p>TensorBoard不但可以展示存在的图片和张量，还可以生成图片，诸如模型图等。通过TensorBoard的GRAPHS选项卡，可以快速查看模型结构的预览图，并确保其符合设计预期。</p><p>比如我们定义模型如下：</p><pre><code class="lang-python">model = keras.models.Sequential([    keras.layers.Flatten(input_shape=(28, 28)),    keras.layers.Dense(32, activation=&#39;relu&#39;),    keras.layers.Dropout(0.2),    keras.layers.Dense(10, activation=&#39;softmax&#39;)])model.compile(    optimizer=&#39;adam&#39;,    loss=&#39;sparse_categorical_crossentropy&#39;,    metrics=[&#39;accuracy&#39;])</code></pre><p><img src="/2020/08/14/【学习笔记】用TensorBoard生成模型图/2020-08-13-13-31-51.png" srcset="/img/loading.gif" alt></p><p>通过TensorBoard中的GRAPHS选项卡，我们看到执行图。图是倒置的，数据从下到上流动，因此与代码相比是上下颠倒的。</p><p>可以更改Tag，选择Keras，选择左边的Conceptual Graph查看概念图，双击Sequential，得到概念图。概念图更像是代码。</p><p><img src="/2020/08/14/【学习笔记】用TensorBoard生成模型图/2020-08-13-13-35-03.png" srcset="/img/loading.gif" alt></p><p>有的时候我们希望得到计算图，研究数据经过了何种计算。比如下面这个函数：</p><pre><code class="lang-python"># Sample data for your function.x = tf.random.uniform((3, 3))y = tf.random.uniform((3, 3))# The function to be traced.@tf.functiondef my_func(x, y):  # A simple hand-rolled layer.  return tf.nn.relu(tf.matmul(x, y))# z = my_func(x, y)</code></pre><p>我们希望得到它的计算图。首先需要使用<code>@tf.function</code>修饰被监控的函数，然后使用<code>tf.summary.trace_on()</code>在<code>z = my_func(x, y)</code>函数运行之前开始记录。</p><p><img src="https://as2.bitinn.net/uploads/legacy/og/cistioqrt008t8q5nh9gtx9og.1200.jpg" srcset="/img/loading.gif" alt="Trace On"></p><pre><code class="lang-python">tf.summary.trace_on(graph=True, profiler=True)z = my_func(x, y)</code></pre><p>定义日志目录名称和文件写入句柄，这些都是刻在DNA里的操作：</p><pre><code class="lang-python"># Set up logging.stamp = datetime.now().strftime(&quot;%Y%m%d-%H%M%S&quot;)logdir = &#39;logs/func/%s&#39; % stampwriter = tf.summary.create_file_writer(logdir)</code></pre><p>最后执行记录：</p><pre><code class="lang-python"># Call only one tf.function when tracing.with writer.as_default():  tf.summary.trace_export(      name=&quot;my_func_trace&quot;,      step=0,      profiler_outdir=logdir)</code></pre><pre><code class="lang-bash">%tensorboard --logdir logs/func</code></pre><p><img src="/2020/08/14/【学习笔记】用TensorBoard生成模型图/2020-08-13-13-47-57.png" srcset="/img/loading.gif" alt></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>notes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Tensorflow</tag>
+      
+      <tag>TensorBoard</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>【学习笔记】用TensorBoard展示图片</title>
+    <link href="/2020/08/14/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E7%94%A8TensorBoard%E5%B1%95%E7%A4%BA%E5%9B%BE%E7%89%87/"/>
+    <url>/2020/08/14/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E7%94%A8TensorBoard%E5%B1%95%E7%A4%BA%E5%9B%BE%E7%89%87/</url>
+    
+    <content type="html"><![CDATA[<p>这是TensorBoard笔记的第二篇，讲述的是如何令TensorBoard展示外界已有的图片和Tensor。<br><a id="more"></a></p><p>我们可以利用TensorBoard展示图片类数据，或者通过tf.summary将张量类数据转化成图片。下面是对Fashion-MNIST数据集中部分图片的可视化：</p><h3 id="可视化单个图片"><a href="#可视化单个图片" class="headerlink" title="可视化单个图片"></a>可视化单个图片</h3><pre><code class="lang-python">import tensorflow as tffrom tensorflow import kerasfashion_mnist = keras.datasets.fashion_mnist(train_images, train_labels), (test_images, test_labels) = \    fashion_mnist.load_data()</code></pre><p>数据集中每个图像的形状都是2阶张量形状（28、28），分别表示高度和宽度</p><p>但是， tf.summary.image()期望包含(batch_size, height, width, channels)的4级张量。因此，张量需要重塑。</p><pre><code class="lang-python">img = np.reshape(train_images[0], (-1, 28, 28, 1))</code></pre><p>使用<code>tf.summary.image</code>将其转化为tensor，并利用TensorBoard可视化：</p><pre><code class="lang-python"> # Clear out any prior log data.!rm -rf logs# Sets up a timestamped log directory.logdir = &quot;logs/train_data/&quot; + datetime.now().strftime(&quot;%Y%m%d-%H%M%S&quot;)# Creates a file writer for the log directory.file_writer = tf.summary.create_file_writer(logdir)# Using the file writer, log the reshaped image.with file_writer.as_default():  tf.summary.image(&quot;Training data&quot;, img, step=0)</code></pre><p>转化后的图片被<code>tf.summary.create_file_writer</code>输出到logdir里面了。使用TensorBoard看看：</p><pre><code class="lang-bash">%tensorboard --logdir logs/train_data</code></pre><p><img src="https://raw.githubusercontent.com/tensorflow/tensorboard/master/docs/images/images_single.png" srcset="/img/loading.gif" alt></p><p>加载的过程可能有点慢，注意留足够的内存以免标签页崩溃。</p><p>你也可以使用左边的滑动条调节亮度、对比度和大小。</p><h3 id="可视化多张图片"><a href="#可视化多张图片" class="headerlink" title="可视化多张图片"></a>可视化多张图片</h3><p>调整<code>tf.summary.image</code>里面的参数<code>max_outputs</code>：</p><pre><code class="lang-python"> with file_writer.as_default():    # Don&#39;t forget to reshape.    images = np.reshape(train_images[0:25], (-1, 28, 28, 1))    tf.summary.image(&quot;25 training data examples&quot;, images, max_outputs=25, step=0)</code></pre><pre><code class="lang-bash">%tensorboard --logdir logs/train_data</code></pre><p><img src="https://raw.githubusercontent.com/tensorflow/tensorboard/master/docs/images/images_multiple.png" srcset="/img/loading.gif" alt></p><h3 id="可视化其他格式的图片"><a href="#可视化其他格式的图片" class="headerlink" title="可视化其他格式的图片"></a>可视化其他格式的图片</h3><p>有些图片不是tensor或者numpy.array，而是由诸如opencv、matplotlib生成的png图像，我们需要将其转化为tensor。</p><p>由于matplotlib适合生成复杂的数据图，因此先利用其他库生成图片，随后利用<code>tf.summary.image</code>将其转化为一个tensor再可视化，是一个比较方便的选择。</p><p>matplotlib生成数据集可视化：</p><pre><code class="lang-python"> # Clear out prior logging data.!rm -rf logs/plotslogdir = &quot;logs/plots/&quot; + datetime.now().strftime(&quot;%Y%m%d-%H%M%S&quot;)file_writer = tf.summary.create_file_writer(logdir)def plot_to_image(figure):  &quot;&quot;&quot;Converts the matplotlib plot specified by &#39;figure&#39; to a PNG image and  returns it. The supplied figure is closed and inaccessible after this call.&quot;&quot;&quot;  # Save the plot to a PNG in memory.  buf = io.BytesIO()  plt.savefig(buf, format=&#39;png&#39;)  # Closing the figure prevents it from being displayed directly inside  # the notebook.  plt.close(figure)  buf.seek(0)  # Convert PNG buffer to TF image  image = tf.image.decode_png(buf.getvalue(), channels=4)  # Add the batch dimension  image = tf.expand_dims(image, 0)  return imagedef image_grid():  &quot;&quot;&quot;Return a 5x5 grid of the MNIST images as a matplotlib figure.&quot;&quot;&quot;  # Create a figure to contain the plot.  figure = plt.figure(figsize=(10,10))  for i in range(25):    # Start next subplot.    plt.subplot(5, 5, i + 1, title=class_names[train_labels[i]])    plt.xticks([])    plt.yticks([])    plt.grid(False)    plt.imshow(train_images[i], cmap=plt.cm.binary)  return figure</code></pre><p>尔后，利用<code>tf.summary.image</code>转化：</p><pre><code class="lang-python"># Prepare the plotfigure = image_grid()# Convert to image and logwith file_writer.as_default():  tf.summary.image(&quot;Training data&quot;, plot_to_image(figure), step=0)</code></pre><p>最后，利用TensorBoard可视化：</p><pre><code class="lang-bash">%tensorboard --logdir logs/plots</code></pre><p><img src="https://raw.githubusercontent.com/tensorflow/tensorboard/master/docs/images/images_arbitrary.png" srcset="/img/loading.gif" alt></p><h3 id="在图片分类器中使用TensorBoard"><a href="#在图片分类器中使用TensorBoard" class="headerlink" title="在图片分类器中使用TensorBoard"></a>在图片分类器中使用TensorBoard</h3><p>之前我们通过TensorBoard了解了Fashion-MNIST数据集的概要，但是TensorBoard的功能不止于此。</p><p>首先构建分类模型：</p><pre><code class="lang-python">model = keras.models.Sequential([    keras.layers.Flatten(input_shape=(28, 28)),    keras.layers.Dense(32, activation=&#39;relu&#39;),    keras.layers.Dense(10, activation=&#39;softmax&#39;)])model.compile(    optimizer=&#39;adam&#39;,     loss=&#39;sparse_categorical_crossentropy&#39;,    metrics=[&#39;accuracy&#39;])</code></pre><p>我们想使用<a href="https://en.wikipedia.org/wiki/Confusion_matrix" target="_blank" rel="noopener">混淆矩阵</a>详细了解分类器对测试数据的性能。因此接下来定义一个函数，专门计算混淆矩阵。具体来说，</p><ol><li>使用model.predict预测该epoch的所有测试用例的标签，得到<code>test_pred</code></li><li>调用<code>sklearn.metrics.confusion_matrix</code>直接计算混淆矩阵</li><li>使用<code>matplotlib</code>将混淆矩阵可视化</li><li>将<code>matplotlib</code>生成的图片转为tensor，最后变成log储存</li></ol><p>下面是前两步所需的操作：</p><pre><code class="lang-python">def log_confusion_matrix(epoch, logs):    # Use the model to predict the values from the validation dataset.    test_pred_raw = model.predict(test_images)    test_pred = np.argmax(test_pred_raw, axis=1)    # Calculate the confusion matrix.    cm = sklearn.metrics.confusion_matrix(test_labels, test_pred)    # Log the confusion matrix as an image summary.    figure = plot_confusion_matrix(cm, class_names=class_names)    cm_image = plot_to_image(figure)    # Log the confusion matrix as an image summary.    with file_writer_cm.as_default():    tf.summary.image(&quot;Confusion Matrix&quot;, cm_image, step=epoch)</code></pre><p>下面是第三步所需的可视化函数：</p><pre><code class="lang-python">def plot_confusion_matrix(cm, class_names):    &quot;&quot;&quot;    Returns a matplotlib figure containing the plotted confusion matrix.    Args:    cm (array, shape = [n, n]): a confusion matrix of integer classes    class_names (array, shape = [n]): String names of the integer classes    &quot;&quot;&quot;    figure = plt.figure(figsize=(8, 8))    plt.imshow(cm, interpolation=&#39;nearest&#39;, cmap=plt.cm.Blues)    plt.title(&quot;Confusion matrix&quot;)    plt.colorbar()    tick_marks = np.arange(len(class_names))    plt.xticks(tick_marks, class_names, rotation=45)    plt.yticks(tick_marks, class_names)    # Normalize the confusion matrix.    cm = np.around(cm.astype(&#39;float&#39;) / cm.sum(axis=1)[:, np.newaxis], decimals=2)    # Use white text if squares are dark; otherwise black.    threshold = cm.max() / 2.    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):    color = &quot;white&quot; if cm[i, j] &gt; threshold else &quot;black&quot;    plt.text(j, i, cm[i, j], horizontalalignment=&quot;center&quot;, color=color)    plt.tight_layout()    plt.ylabel(&#39;True label&#39;)    plt.xlabel(&#39;Predicted label&#39;)    return figure</code></pre><p>下面是第四步所需的tensor转化和储存函数以及其他回调函数：</p><pre><code class="lang-bash"># Clear out prior logging data.!rm -rf logs/image</code></pre><pre><code class="lang-python">logdir = &quot;logs/image/&quot; + datetime.now().strftime(&quot;%Y%m%d-%H%M%S&quot;)# Define the basic TensorBoard callback.tensorboard_callback = keras.callbacks.TensorBoard(log_dir=logdir)file_writer_cm = tf.summary.create_file_writer(logdir + &#39;/cm&#39;)</code></pre><p>让我们开始训练：</p><pre><code class="lang-bash"># Start TensorBoard.%tensorboard --logdir logs/image</code></pre><pre><code class="lang-python"># Train the classifier.model.fit(    train_images,    train_labels,    epochs=5,    verbose=0, # Suppress chatty output    callbacks=[tensorboard_callback, cm_callback],    validation_data=(test_images, test_labels),)</code></pre><p>请注意，此时我先调用的TensorBoard，然后开始的训练，并且我设置了verbose=0，意味着信息完全通过TensorBoard动态展示。训练过程中你就可以看到参数的变化。</p><p><img src="https://raw.githubusercontent.com/tensorflow/tensorboard/master/docs/images/images_accuracy.png" srcset="/img/loading.gif" alt></p><p><img src="https://raw.githubusercontent.com/tensorflow/tensorboard/master/docs/images/images_cm.png" srcset="/img/loading.gif" alt></p><p>你还可以看到，随着训练的进行，矩阵是如何发生变化的：沿着对角线的正方形会逐渐变暗，而矩阵的其余部分趋向于0和白色。这意味着分类器正在不断改进。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>notes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Tensorflow</tag>
+      
+      <tag>TensorBoard</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>【学习笔记】TensorBoard简介</title>
+    <link href="/2020/08/14/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91TensorBoard%E7%AE%80%E4%BB%8B/"/>
+    <url>/2020/08/14/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91TensorBoard%E7%AE%80%E4%BB%8B/</url>
+    
+    <content type="html"><![CDATA[<p>简单介绍了TensorBoard的用途和使用方法。<br><a id="more"></a></p><h2 id="TensorBoard简介"><a href="#TensorBoard简介" class="headerlink" title="TensorBoard简介"></a>TensorBoard简介</h2><p>TensorBoard是Google开发的模型内部参数跟踪和可视化的调试工具。在Tensorflow中，用TensorBoard可以监控模型的各种指标的变化（如acc、loss的动态变化），可以将模型结构可视化，可以可视化词嵌入空间，可以分析模型性能，可以分析数据集的公平性等等，是一个非常强大且非常简单的工具。</p><p>TensorBoard核心就是回调函数和可视化操作面板。通过编写回调函数获取模型信息，通过命令行启动TensorBoard图形化界面。</p><p>TensorBoard的回调函数API为：</p><pre><code class="lang-python">tf.keras.callbacks.TensorBoard(    log_dir=&#39;logs&#39;, histogram_freq=0, write_graph=True, write_images=False,    update_freq=&#39;epoch&#39;, profile_batch=2, embeddings_freq=0,    embeddings_metadata=None, **kwargs)</code></pre><div class="table-container"><table><thead><tr><th>参数</th><th>含义</th></tr></thead><tbody><tr><td>log_dir</td><td>模型的信息保存目录</td></tr><tr><td>histogram_freq</td><td>模型激活和参数信息记录的频率，每隔几个epochs记录一次</td></tr><tr><td>write_graph</td><td>是否保存模型图文件</td></tr><tr><td>write_images</td><td>是否保存模型参数可视化图</td></tr><tr><td>update_freq</td><td>模型loss和其他metrics的记录频率，每隔几个batch更新一次</td></tr><tr><td>profile_batch</td><td>指定性能分析时使用的批次</td></tr><tr><td>embeddings_freq</td><td>embedding 层更新的频率</td></tr></tbody></table></div><p>在Colab中使用TensorBoard需输入：</p><pre><code class="lang-bash">%load_ext tensorboard</code></pre><p>为了跟踪模型训练过程，需要在模型的<code>fit</code>过程中添加回调函数</p><pre><code class="lang-python">tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)</code></pre><p>其中<code>log_dir</code>为你想储存log的目录，在教程中，<code>log_dir=&quot;logs/fit/&quot; + datetime.datetime.now().strftime(&quot;%Y%m%d-%H%M%S&quot;)</code>。</p><pre><code class="lang-python">model.fit(x=x_train,           y=y_train,           epochs=5,           validation_data=(x_test, y_test),           callbacks=[tensorboard_callback])</code></pre><p>在<code>log_dir</code>中生成了一系列的日志文件：</p><p><img src="/2020/08/14/【学习笔记】TensorBoard简介/2020-08-13-12-39-02.png" srcset="/img/loading.gif" alt></p><p>这些日志文件可以通过TensorBoard解析：</p><pre><code class="lang-shell">%tensorboard --logdir logs/fit</code></pre><p>在命令行中， 运行不带“％”的相同命令。结果如下：</p><p><img src="https://raw.githubusercontent.com/tensorflow/tensorboard/master/docs/images/quickstart_model_fit.png" srcset="/img/loading.gif" alt></p><p>在TensorBoard面板上，有四个选项卡：</p><ul><li><strong>Scalars</strong> 显示损失和指标在每个时期如何变化</li><li><strong>Graphs</strong> 可帮助您可视化模型</li><li><strong>Distributions</strong> 和 <strong>Histograms</strong> 显示张量随时间的分布</li></ul><p>如果使用tensorflow原生API训练模型，也可以利用<code>tf.summary</code>记录log，然后利用TensorBoard可视化。具体流程如下：</p><ol><li>使用 <code>tf.summary.create_file_writer()</code> 创建文件编写器；</li><li>使用 <code>tf.summary.scalar()</code> 记录感兴趣的指标</li><li>将 <code>LearningRateScheduler</code> 回调传递给 <code>Model.fit()</code></li><li>使用命令行<code>tensorboard --logdir logs/fit</code>打开可视化界面</li></ol>]]></content>
+    
+    
+    <categories>
+      
+      <category>notes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Tensorflow</tag>
+      
+      <tag>TensorBoard</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>【竞赛打卡】新闻文本分类之注意力机制与预训练模型</title>
     <link href="/2020/08/04/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91%E6%96%B0%E9%97%BB%E6%96%87%E6%9C%AC%E5%88%86%E7%B1%BB%E4%B9%8B%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6%E4%B8%8E%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B/"/>
     <url>/2020/08/04/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91%E6%96%B0%E9%97%BB%E6%96%87%E6%9C%AC%E5%88%86%E7%B1%BB%E4%B9%8B%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6%E4%B8%8E%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B/</url>
@@ -22,9 +238,9 @@
       
       <tag>Datawhale</tag>
       
-      <tag>Deep Learning</tag>
-      
       <tag>Classification</tag>
+      
+      <tag>Deep Learning</tag>
       
       <tag>attention</tag>
       
@@ -53,9 +269,9 @@
       
       <tag>Datawhale</tag>
       
-      <tag>Deep Learning</tag>
-      
       <tag>Classification</tag>
+      
+      <tag>Deep Learning</tag>
       
       <tag>word2vec</tag>
       
@@ -84,9 +300,9 @@
       
       <tag>Datawhale</tag>
       
-      <tag>Deep Learning</tag>
-      
       <tag>Classification</tag>
+      
+      <tag>Deep Learning</tag>
       
       <tag>FastText</tag>
       
@@ -113,11 +329,11 @@
     
     <tags>
       
+      <tag>Machine Learning</tag>
+      
       <tag>Datawhale</tag>
       
       <tag>Classification</tag>
-      
-      <tag>Machine Learning</tag>
       
     </tags>
     
@@ -142,11 +358,11 @@
     
     <tags>
       
-      <tag>Datawhale</tag>
-      
       <tag>Feature Engineering</tag>
       
       <tag>Data Science</tag>
+      
+      <tag>Datawhale</tag>
       
     </tags>
     
@@ -171,11 +387,11 @@
     
     <tags>
       
-      <tag>Datawhale</tag>
-      
       <tag>Feature Engineering</tag>
       
       <tag>Data Science</tag>
+      
+      <tag>Datawhale</tag>
       
     </tags>
     
@@ -351,9 +567,9 @@
       
       <tag>NLP</tag>
       
-      <tag>DNN</tag>
-      
       <tag>testing</tag>
+      
+      <tag>DNN</tag>
       
     </tags>
     
@@ -409,9 +625,9 @@
       
       <tag>Python</tag>
       
-      <tag>IMDb</tag>
-      
       <tag>preprocessing</tag>
+      
+      <tag>IMDb</tag>
       
     </tags>
     
@@ -653,11 +869,11 @@
       
       <tag>Python</tag>
       
+      <tag>array</tag>
+      
       <tag>numpy</tag>
       
       <tag>concatenate</tag>
-      
-      <tag>array</tag>
       
     </tags>
     
@@ -1111,11 +1327,11 @@
     
     <tags>
       
-      <tag>array</tag>
-      
       <tag>algorithm</tag>
       
       <tag>lintcode</tag>
+      
+      <tag>array</tag>
       
     </tags>
     
@@ -1142,11 +1358,11 @@
       
       <tag>C++</tag>
       
+      <tag>STL</tag>
+      
       <tag>string</tag>
       
       <tag>regex</tag>
-      
-      <tag>STL</tag>
       
     </tags>
     
@@ -1173,11 +1389,11 @@
       
       <tag>C++</tag>
       
-      <tag>STL</tag>
-      
       <tag>map</tag>
       
       <tag>set</tag>
+      
+      <tag>STL</tag>
       
     </tags>
     

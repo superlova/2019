@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content>
+  <meta name="author" content="Superlova">
+  <meta name="keywords" content>
+  <title>【学习笔记】用TensorBoard展示图片 - Superlova</title>
+  <meta name="google-site-verification" content="CPvPw8mUZw65A1ALJ8uRzsYECq4mXgE4_eCq40VIhPM">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<link rel="alternate" href="/atom.xml" title="Superlova" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Superlova</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/cover_2.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期五, 八月 14日 2020, 4:28 下午
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    1.4k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                      6 分钟
+                  </span>
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  <span id="busuanzi_container_page_pv" class="post-meta" style="display: none">
+                    <i class="far fa-eye" aria-hidden="true"></i>
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5 z-depth-3" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+              <p
+                class="note note-warning">本文最后更新于：星期五, 八月 14日 2020, 4:31 下午</p>
+            
+            <div class="markdown-body">
+              <p>这是TensorBoard笔记的第二篇，讲述的是如何令TensorBoard展示外界已有的图片和Tensor。<br><a id="more"></a></p>
+<p>我们可以利用TensorBoard展示图片类数据，或者通过tf.summary将张量类数据转化成图片。下面是对Fashion-MNIST数据集中部分图片的可视化：</p>
+<h3 id="可视化单个图片"><a href="#可视化单个图片" class="headerlink" title="可视化单个图片"></a>可视化单个图片</h3><pre><code class="lang-python">import tensorflow as tf
+from tensorflow import keras
+
+fashion_mnist = keras.datasets.fashion_mnist
+(train_images, train_labels), (test_images, test_labels) = \
+    fashion_mnist.load_data()
+</code></pre>
+<p>数据集中每个图像的形状都是2阶张量形状（28、28），分别表示高度和宽度</p>
+<p>但是， tf.summary.image()期望包含(batch_size, height, width, channels)的4级张量。因此，张量需要重塑。</p>
+<pre><code class="lang-python">img = np.reshape(train_images[0], (-1, 28, 28, 1))
+</code></pre>
+<p>使用<code>tf.summary.image</code>将其转化为tensor，并利用TensorBoard可视化：</p>
+<pre><code class="lang-python"> # Clear out any prior log data.
+!rm -rf logs
+
+# Sets up a timestamped log directory.
+logdir = &quot;logs/train_data/&quot; + datetime.now().strftime(&quot;%Y%m%d-%H%M%S&quot;)
+# Creates a file writer for the log directory.
+file_writer = tf.summary.create_file_writer(logdir)
+
+# Using the file writer, log the reshaped image.
+with file_writer.as_default():
+  tf.summary.image(&quot;Training data&quot;, img, step=0)
+</code></pre>
+<p>转化后的图片被<code>tf.summary.create_file_writer</code>输出到logdir里面了。使用TensorBoard看看：</p>
+<pre><code class="lang-bash">%tensorboard --logdir logs/train_data
+</code></pre>
+<p><img src="https://raw.githubusercontent.com/tensorflow/tensorboard/master/docs/images/images_single.png" srcset="/img/loading.gif" alt></p>
+<p>加载的过程可能有点慢，注意留足够的内存以免标签页崩溃。</p>
+<p>你也可以使用左边的滑动条调节亮度、对比度和大小。</p>
+<h3 id="可视化多张图片"><a href="#可视化多张图片" class="headerlink" title="可视化多张图片"></a>可视化多张图片</h3><p>调整<code>tf.summary.image</code>里面的参数<code>max_outputs</code>：</p>
+<pre><code class="lang-python"> with file_writer.as_default():
+    # Don&#39;t forget to reshape.
+    images = np.reshape(train_images[0:25], (-1, 28, 28, 1))
+    tf.summary.image(&quot;25 training data examples&quot;, images, max_outputs=25, step=0)
+</code></pre>
+<pre><code class="lang-bash">%tensorboard --logdir logs/train_data
+</code></pre>
+<p><img src="https://raw.githubusercontent.com/tensorflow/tensorboard/master/docs/images/images_multiple.png" srcset="/img/loading.gif" alt></p>
+<h3 id="可视化其他格式的图片"><a href="#可视化其他格式的图片" class="headerlink" title="可视化其他格式的图片"></a>可视化其他格式的图片</h3><p>有些图片不是tensor或者numpy.array，而是由诸如opencv、matplotlib生成的png图像，我们需要将其转化为tensor。</p>
+<p>由于matplotlib适合生成复杂的数据图，因此先利用其他库生成图片，随后利用<code>tf.summary.image</code>将其转化为一个tensor再可视化，是一个比较方便的选择。</p>
+<p>matplotlib生成数据集可视化：</p>
+<pre><code class="lang-python"> # Clear out prior logging data.
+!rm -rf logs/plots
+
+logdir = &quot;logs/plots/&quot; + datetime.now().strftime(&quot;%Y%m%d-%H%M%S&quot;)
+file_writer = tf.summary.create_file_writer(logdir)
+
+def plot_to_image(figure):
+  &quot;&quot;&quot;Converts the matplotlib plot specified by &#39;figure&#39; to a PNG image and
+  returns it. The supplied figure is closed and inaccessible after this call.&quot;&quot;&quot;
+  # Save the plot to a PNG in memory.
+  buf = io.BytesIO()
+  plt.savefig(buf, format=&#39;png&#39;)
+  # Closing the figure prevents it from being displayed directly inside
+  # the notebook.
+  plt.close(figure)
+  buf.seek(0)
+  # Convert PNG buffer to TF image
+  image = tf.image.decode_png(buf.getvalue(), channels=4)
+  # Add the batch dimension
+  image = tf.expand_dims(image, 0)
+  return image
+
+def image_grid():
+  &quot;&quot;&quot;Return a 5x5 grid of the MNIST images as a matplotlib figure.&quot;&quot;&quot;
+  # Create a figure to contain the plot.
+  figure = plt.figure(figsize=(10,10))
+  for i in range(25):
+    # Start next subplot.
+    plt.subplot(5, 5, i + 1, title=class_names[train_labels[i]])
+    plt.xticks([])
+    plt.yticks([])
+    plt.grid(False)
+    plt.imshow(train_images[i], cmap=plt.cm.binary)
+
+  return figure
+</code></pre>
+<p>尔后，利用<code>tf.summary.image</code>转化：</p>
+<pre><code class="lang-python"># Prepare the plot
+figure = image_grid()
+# Convert to image and log
+with file_writer.as_default():
+  tf.summary.image(&quot;Training data&quot;, plot_to_image(figure), step=0)
+</code></pre>
+<p>最后，利用TensorBoard可视化：</p>
+<pre><code class="lang-bash">%tensorboard --logdir logs/plots
+</code></pre>
+<p><img src="https://raw.githubusercontent.com/tensorflow/tensorboard/master/docs/images/images_arbitrary.png" srcset="/img/loading.gif" alt></p>
+<h3 id="在图片分类器中使用TensorBoard"><a href="#在图片分类器中使用TensorBoard" class="headerlink" title="在图片分类器中使用TensorBoard"></a>在图片分类器中使用TensorBoard</h3><p>之前我们通过TensorBoard了解了Fashion-MNIST数据集的概要，但是TensorBoard的功能不止于此。</p>
+<p>首先构建分类模型：</p>
+<pre><code class="lang-python">model = keras.models.Sequential([
+    keras.layers.Flatten(input_shape=(28, 28)),
+    keras.layers.Dense(32, activation=&#39;relu&#39;),
+    keras.layers.Dense(10, activation=&#39;softmax&#39;)
+])
+
+model.compile(
+    optimizer=&#39;adam&#39;, 
+    loss=&#39;sparse_categorical_crossentropy&#39;,
+    metrics=[&#39;accuracy&#39;]
+)
+</code></pre>
+<p>我们想使用<a href="https://en.wikipedia.org/wiki/Confusion_matrix" target="_blank" rel="noopener">混淆矩阵</a>详细了解分类器对测试数据的性能。因此接下来定义一个函数，专门计算混淆矩阵。具体来说，</p>
+<ol>
+<li>使用model.predict预测该epoch的所有测试用例的标签，得到<code>test_pred</code></li>
+<li>调用<code>sklearn.metrics.confusion_matrix</code>直接计算混淆矩阵</li>
+<li>使用<code>matplotlib</code>将混淆矩阵可视化</li>
+<li>将<code>matplotlib</code>生成的图片转为tensor，最后变成log储存</li>
+</ol>
+<p>下面是前两步所需的操作：</p>
+<pre><code class="lang-python">def log_confusion_matrix(epoch, logs):
+    # Use the model to predict the values from the validation dataset.
+    test_pred_raw = model.predict(test_images)
+    test_pred = np.argmax(test_pred_raw, axis=1)
+
+    # Calculate the confusion matrix.
+    cm = sklearn.metrics.confusion_matrix(test_labels, test_pred)
+    # Log the confusion matrix as an image summary.
+    figure = plot_confusion_matrix(cm, class_names=class_names)
+    cm_image = plot_to_image(figure)
+
+    # Log the confusion matrix as an image summary.
+    with file_writer_cm.as_default():
+    tf.summary.image(&quot;Confusion Matrix&quot;, cm_image, step=epoch)
+</code></pre>
+<p>下面是第三步所需的可视化函数：</p>
+<pre><code class="lang-python">def plot_confusion_matrix(cm, class_names):
+    &quot;&quot;&quot;
+    Returns a matplotlib figure containing the plotted confusion matrix.
+
+    Args:
+    cm (array, shape = [n, n]): a confusion matrix of integer classes
+    class_names (array, shape = [n]): String names of the integer classes
+    &quot;&quot;&quot;
+    figure = plt.figure(figsize=(8, 8))
+    plt.imshow(cm, interpolation=&#39;nearest&#39;, cmap=plt.cm.Blues)
+    plt.title(&quot;Confusion matrix&quot;)
+    plt.colorbar()
+    tick_marks = np.arange(len(class_names))
+    plt.xticks(tick_marks, class_names, rotation=45)
+    plt.yticks(tick_marks, class_names)
+
+    # Normalize the confusion matrix.
+    cm = np.around(cm.astype(&#39;float&#39;) / cm.sum(axis=1)[:, np.newaxis], decimals=2)
+
+    # Use white text if squares are dark; otherwise black.
+    threshold = cm.max() / 2.
+    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
+    color = &quot;white&quot; if cm[i, j] &gt; threshold else &quot;black&quot;
+    plt.text(j, i, cm[i, j], horizontalalignment=&quot;center&quot;, color=color)
+
+    plt.tight_layout()
+    plt.ylabel(&#39;True label&#39;)
+    plt.xlabel(&#39;Predicted label&#39;)
+    return figure
+</code></pre>
+<p>下面是第四步所需的tensor转化和储存函数以及其他回调函数：</p>
+<pre><code class="lang-bash"># Clear out prior logging data.
+!rm -rf logs/image
+</code></pre>
+<pre><code class="lang-python">logdir = &quot;logs/image/&quot; + datetime.now().strftime(&quot;%Y%m%d-%H%M%S&quot;)
+# Define the basic TensorBoard callback.
+tensorboard_callback = keras.callbacks.TensorBoard(log_dir=logdir)
+file_writer_cm = tf.summary.create_file_writer(logdir + &#39;/cm&#39;)
+</code></pre>
+<p>让我们开始训练：</p>
+<pre><code class="lang-bash"># Start TensorBoard.
+%tensorboard --logdir logs/image
+</code></pre>
+<pre><code class="lang-python"># Train the classifier.
+model.fit(
+    train_images,
+    train_labels,
+    epochs=5,
+    verbose=0, # Suppress chatty output
+    callbacks=[tensorboard_callback, cm_callback],
+    validation_data=(test_images, test_labels),
+)
+</code></pre>
+<p>请注意，此时我先调用的TensorBoard，然后开始的训练，并且我设置了verbose=0，意味着信息完全通过TensorBoard动态展示。训练过程中你就可以看到参数的变化。</p>
+<p><img src="https://raw.githubusercontent.com/tensorflow/tensorboard/master/docs/images/images_accuracy.png" srcset="/img/loading.gif" alt></p>
+<p><img src="https://raw.githubusercontent.com/tensorflow/tensorboard/master/docs/images/images_cm.png" srcset="/img/loading.gif" alt></p>
+<p>你还可以看到，随着训练的进行，矩阵是如何发生变化的：沿着对角线的正方形会逐渐变暗，而矩阵的其余部分趋向于0和白色。这意味着分类器正在不断改进。</p>
+
+            </div>
+            <hr>
+            <div>
+              <p>
+                
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/notes/">notes</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Tensorflow/">Tensorflow</a>
+                    
+                      <a class="hover-with-bg" href="/tags/TensorBoard/">TensorBoard</a>
+                    
+                  </span>
+                
+              </p>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <div class="comments" id="comments">
+                
+                
+  <script defer src="https://utteranc.es/client.js"
+          repo="superlova / superlova.github.io"
+          issue-term="pathname"
+  
+          label="utterances"
+    
+          theme="github-light"
+          crossorigin="anonymous"
+  >
+  </script>
+
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc-start"></div>
+<div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+<div>
+  <span id="timeDate">载入天数...</span>
+  <span id="times">载入时分秒...</span>
+  <script>
+  var now = new Date();
+  function createtime(){
+      var grt= new Date("02/14/2017 00:00:00");//此处修改你的建站时间或者网站上线时间
+      now.setTime(now.getTime()+250);
+      days = (now - grt ) / 1000 / 60 / 60 / 24;
+      dnum = Math.floor(days);
+      hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum);
+      hnum = Math.floor(hours);
+      if(String(hnum).length ==1 ){
+          hnum = "0" + hnum;
+      }
+      minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+      mnum = Math.floor(minutes);
+      if(String(mnum).length ==1 ){
+                mnum = "0" + mnum;
+      }
+      seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+      snum = Math.round(seconds);
+      if(String(snum).length ==1 ){
+                snum = "0" + snum;
+      }
+      document.getElementById("timeDate").innerHTML = "本站安全运行&nbsp"+dnum+"&nbsp天";
+      document.getElementById("times").innerHTML = hnum + "&nbsp小时&nbsp" + mnum + "&nbsp分&nbsp" + snum + "&nbsp秒";
+  }
+  setInterval("createtime()",250);
+  </script>
+</div>
+
+<p id="hitokoto">:D 获取中...</p>
+<script>
+  fetch('https://v1.hitokoto.cn')
+    .then(response => response.json())
+    .then(data => {
+      const hitokoto = document.getElementById('hitokoto')
+      hitokoto.innerText = data.hitokoto
+      })
+      .catch(console.error)
+</script>
+
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    </div>
+    
+  <div>
+    
+      <!-- 不蒜子统计PV -->
+      
+      <span id="busuanzi_container_site_pv" style="display: none">
+      总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    </span>
+    
+    
+      <!-- 不蒜子统计UV -->
+      
+      <span id="busuanzi_container_site_uv" style="display: none">
+      总访客数 <span id="busuanzi_value_site_uv"></span> 人
+    </span>
+    
+  </div>
+
+
+    
+
+    
+  </div>
+</footer>
+
+
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var post = $('#post');
+      var toc = $('#toc');
+      var tocLimMax = post.offset().top + post.height() - navHeight;
+
+      $(window).scroll(function () {
+        var tocLimMin = $('#toc-start').offset().top - navHeight;
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': navHeight,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+      var offset = $('#board-ctn').css('margin-right')
+      $('#toc-ctn').css({
+        'right': offset
+      })
+    });
+  </script>
+
+
+
+
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+<!-- Plugins -->
+
+
+  
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?1040bcc5d25d5f4a9cb5e9855eb2c6db";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "【学习笔记】用TensorBoard展示图片&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 90,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>
