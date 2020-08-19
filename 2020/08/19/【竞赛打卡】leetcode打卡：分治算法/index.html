@@ -174,7 +174,7 @@
           <div class="post-content mx-auto" id="post">
             
               <p
-                class="note note-warning">本文最后更新于：星期三, 八月 19日 2020, 6:23 晚上</p>
+                class="note note-warning">本文最后更新于：星期四, 八月 20日 2020, 12:06 凌晨</p>
             
             <div class="markdown-body">
               <p>见多了优秀的文章，再写博客的时候就会感叹自己的学识浅薄。<br><a id="more"></a></p>
@@ -208,6 +208,9 @@ public:
 };
 </code></pre>
 <p>上面的代码在循环的过程中将二进制位为 1 时对应的幂累乘到答案中。</p>
+<blockquote>
+<p><a href="https://oi-wiki.org/" target="_blank" rel="noopener">https://oi-wiki.org/</a></p>
+</blockquote>
 <h2 id="leetcode-53-最大子序和"><a href="#leetcode-53-最大子序和" class="headerlink" title="leetcode 53 最大子序和"></a>leetcode 53 最大子序和</h2><p><strong>题目描述</strong></p>
 <p>给定一个整数数组 nums ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。</p>
 <p><strong>算法描述</strong>：</p>
@@ -247,6 +250,9 @@ public:
 <p>在代码中，<code>left_max</code>为[start,mid)区间内的最大连续子数组和，<code>right_max</code>为(mid,end]区间内的最大连续子数组和。</p>
 <p>而跨越中心mid的计算方法，则是通过两个for循环，从mid开始一个往前遍历得到最大值<code>ml</code>，一个往后遍历得到<code>mr</code>，最后得到<code>ml + mr + nums[mid]</code>即可。</p>
 <p>结果为三者的最大值。</p>
+<blockquote>
+<p><a href="https://www.bilibili.com/video/BV19t411k7jR" target="_blank" rel="noopener">https://www.bilibili.com/video/BV19t411k7jR</a></p>
+</blockquote>
 <h2 id="leetcode-169-多数元素"><a href="#leetcode-169-多数元素" class="headerlink" title="leetcode 169 多数元素"></a>leetcode 169 多数元素</h2><p><strong>题目描述</strong></p>
 <p>给定一个大小为 n 的数组，找到其中的多数元素。多数元素是指在数组中出现次数大于 ⌊ n/2 ⌋ 的元素。</p>
 <p>你可以假设数组是非空的，并且给定的数组总是存在多数元素。</p>
@@ -300,6 +306,9 @@ private:
     }
 };
 </code></pre>
+<blockquote>
+<p><a href="https://leetcode-cn.com/problems/majority-element/solution/duo-shu-yuan-su-by-leetcode-solution/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/majority-element/solution/duo-shu-yuan-su-by-leetcode-solution/</a></p>
+</blockquote>
 
             </div>
             <hr>
@@ -680,7 +689,7 @@ private:
 
     </script>
 
-    <script  src="https://cdn.staticfile.org/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" ></script>
+    <script  src="https://cdn.staticfile.org/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" ></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
   
 
@@ -693,20 +702,5 @@ private:
 
 
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>

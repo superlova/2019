@@ -147,6 +147,148 @@
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2019/06/24/NLP学习笔记2/">
+        <p class="h4 index-header">NLP学习笔记2</p>
+      </a>
+
+      <a href="/2019/06/24/NLP学习笔记2/">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">1. 分词的概念和实现细节NLP的底层任务可分为词法分析、句法分析和语义分析，分词是词法分析中最基本的任务。中文分词是在一个中文序列的词与此之间加上空格或者其他边界标志进行分割，从而方便接下来步骤的处理。
+分词算法可分为两种，一种是基于词典的分词算法，另一种是基于字的分词算法。
+1.1 基于词典的分词算法：最大匹配分词算法，有正向和反向两种。主要思路是将词典构造成一颗Trie树，也成为词典树。以“他说的确实在理”这句话为例，构造Trie树如图所示：
+
+Trie树由词的公共前缀构成节点，降低了存储空间的同时提升查找效率。最大（正向）匹配分词将句子与Trie树进行匹配，在匹配到根结点时由下一个字重</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-06-24&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/notes/">notes</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/NLP/">NLP</a>&nbsp;
+          
+            <a href="/tags/deep-learning/">deep learning</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2019/06/21/NLP学习笔记1/">
+        <p class="h4 index-header">NLP学习笔记1</p>
+      </a>
+
+      <a href="/2019/06/21/NLP学习笔记1/">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">IMDB数据集探索实验是在Google Colab上面做的，机器也是用的谷歌云。
+# keras.datasets.imdb is broken in 1.13 and 1.14, by np 1.16.3
+!pip install tf_nightly
+
+安装tensorflow
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+import tensorflow as tf
+from tensorflow import keras
+
+import numpy as np
+
+</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-06-21&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/notes/">notes</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/NLP/">NLP</a>&nbsp;
+          
+            <a href="/tags/deep-learning/">deep learning</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2019/06/21/模型评估与选择——周志华《机器学习》CH2/">
+        <p class="h4 index-header">模型评估与选择——周志华《机器学习》CH2</p>
+      </a>
+
+      <a href="/2019/06/21/模型评估与选择——周志华《机器学习》CH2/">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">模型如何评估，选择标准是什么？先让我们了解一下常见的衡量标准
+错误率+精度=1
+误差：训练误差/经验误差 training/empirical error泛化误差 generalization error
+训练误差低，泛化误差不一定低。这其中牵扯到过拟合和欠拟合的问题。
+过拟合：过分学习，将训练样本中不属于规律的的噪声也一并学习的现象。防止过拟合，一般采用将数据集分成训练集和测试集，利用训练集训练模型，利用测试集拟合泛化误差的办法。
+测试误差 testing error
+划分数据集的方法样本划分之留出法 hold-out将样本分成互斥的两部分S,T用S训练，用T测试。分割比例自己确定。需要注意</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-06-21&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/notes/">notes</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/machine-learning/">machine learning</a>&nbsp;
+          
+            <a href="/tags/model-evaluation/">model evaluation</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
       <a href="/2019/06/16/三星笔记本升级硬盘实录/">
         <p class="h4 index-header">三星笔记本升级硬盘实录</p>
       </a>
@@ -912,152 +1054,6 @@ g(z)=\left\</div>
     </div>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2019/04/25/写在某次期末课程作业之后/">
-        <p class="h4 index-header">写在某次期末课程作业之后</p>
-      </a>
-
-      <a href="/2019/04/25/写在某次期末课程作业之后/">
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">写在某次期末课程作业之后当任课老师在群里说：“Superlova，请尽快将你的作业发给我，电子版和纸质版。”的时候，我还在看“POP子与PIPI美”的第二遍。
-还好我的不看微信的习惯此时并没有让我继续坠入深渊，不过当我阅读完整段消息，一股过电的感觉从心口开始向四肢扩散。我的心脏仿佛停止了跳动，我想大叫、砸东西，我脑子里反复出现以下字眼：
-
-你在干什么呢小S，都什么时候了你还在看动漫？我的天啊就剩我一个人没交了，本来不是说好了三天之前就做完吗？我真是个废物……我该怎么用一个小时不到的时间把所有的工作做完？？？……
-
-1个小时候，我把论文写完，放弃和妥协了一些没能完成的目标，发到老师的邮箱中，并打</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-04-25&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/record/">record</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/procrastination/">procrastination</a>&nbsp;
-          
-            <a href="/tags/study-method/">study method</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2019/04/14/Coreutils重新编译方法/">
-        <p class="h4 index-header">Coreutils重新编译方法</p>
-      </a>
-
-      <a href="/2019/04/14/Coreutils重新编译方法/">
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">Coreutils重新编译方法
-下载coreutils，在Linux系统下解压
-
-
-
-运行指令 ./configure
-
-
-
-运行 make
-
-进入src文件夹，挑选您要修改的文件，我以pwd.c为例，将其复制到我的个人文件夹
-
-修改pwd.c，将其内部所有带“VERSION”的行全部注释掉
-
-运行指令1
-$ gcc -E -I ~/MyCode/coreutils-8.30/lib/ -I ~/MyCode/coreutils-8.30/ -I ~/MyCode/coreutils-8.30/src pwd.c -o pwd.i
-
-运行指令2
-$ gcc -c pwd.i -o pwd.o
-</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-04-14&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/record/">record</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/compiler/">compiler</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2019/04/14/配置hexo+GitHub Pages纪实/">
-        <p class="h4 index-header">配置hexo+GitHub Pages纪实</p>
-      </a>
-
-      <a href="/2019/04/14/配置hexo+GitHub Pages纪实/">
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">配置hexo+GitHub Pages纪实想发博客不容易，折腾了大半天总算打通了一条路。
-我一直有将自己匮乏的知识付诸于纸面的冲动。首先我在与FTK同学交流的过程中了解到同性交友网站GitHub可以搭建个人博客，于是今天试着探索了一下子。怎么说呢，没想到坑这么多？？？
-本文旨在记录我从零开始建立个人博客的过程，还是有一定门槛的，如果对大家能有一点点帮助那就太好了。
-获得个人网站域名方法注册github即可，官网www.github.com，之后新建repository，名字为“你的用户名.github.io”。所以说用户名很重要，你要起个qq号做github名字那我估计没人能记住你的博客名，毕</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-04-14&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/record/">record</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/github-pages/">github pages</a>&nbsp;
-          
-            <a href="/tags/hexo/">hexo</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
 
 
   <nav aria-label="index posts navigation">
@@ -1309,7 +1305,7 @@ $ gcc -c pwd.i -o pwd.o
         $(this).wrap(element);
       }
     );
-  </script>
+  </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
 
 
@@ -1322,20 +1318,5 @@ $ gcc -c pwd.i -o pwd.o
 
 
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>

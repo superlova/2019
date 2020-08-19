@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content>
+  <meta name="author" content="Superlova">
+  <meta name="keywords" content>
+  <title>【学习笔记】Fuzzing学习笔记2——基于变异的Fuzzing - Superlova</title>
+  <meta name="google-site-verification" content="CPvPw8mUZw65A1ALJ8uRzsYECq4mXgE4_eCq40VIhPM">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<link rel="alternate" href="/atom.xml" title="Superlova" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Superlova</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/cover_2.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期三, 八月 19日 2020, 11:48 晚上
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    1.6k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                      7 分钟
+                  </span>
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  <span id="busuanzi_container_page_pv" class="post-meta" style="display: none">
+                    <i class="far fa-eye" aria-hidden="true"></i>
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5 z-depth-3" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+              <p
+                class="note note-warning">本文最后更新于：星期三, 八月 19日 2020, 11:50 晚上</p>
+            
+            <div class="markdown-body">
+              <p>基于变异的模糊测试。<br><a id="more"></a></p>
+<p><a href="https://www.fuzzingbook.org/html/MutationFuzzer.html" target="_blank" rel="noopener">https://www.fuzzingbook.org/html/MutationFuzzer.html</a></p>
+<p>大多数随机生成的输入在语法上都是无效的，程序很快就会检测并拒绝这些输入，这样便达不到深入测试Runner内部的目的。因此我们必须试图生成有效的输入。</p>
+<p>本节我们介绍Mutation Fuzzing，这种基于变异的方法对现有输入进行小的更改，这些更改可能仍使输入保持有效，但仍会表现出新的行为。 </p>
+<p>要对字符串形式的输入进行变异（Mutate），具体来说，就是执行随机插入字符、删除字符、修改字符等操作。Mutational fuzzing的特点是基于一个有效的原始输入，与之前凭空捏造出来一个input的generational fuzzing不同。</p>
+<p>随机删除</p>
+<pre><code class="lang-py">def delete_random_character(s):
+    &quot;&quot;&quot;Returns s with a random character deleted&quot;&quot;&quot;
+    if s == &quot;&quot;:
+        return s
+
+    pos = random.randint(0, len(s) - 1)
+    # print(&quot;Deleting&quot;, repr(s[pos]), &quot;at&quot;, pos)
+    return s[:pos] + s[pos + 1:]
+
+seed_input = &quot;A quick brown fox&quot;
+for i in range(10):
+    x = delete_random_character(seed_input)
+    print(repr(x))
+
+&#39;A uick brown fox&#39;
+&#39;A quic brown fox&#39;
+&#39;A quick brown fo&#39;
+&#39;A quic brown fox&#39;
+&#39;A quick bown fox&#39;
+&#39;A quick bown fox&#39;
+&#39;A quick brown fx&#39;
+&#39;A quick brown ox&#39;
+&#39;A quick brow fox&#39;
+&#39;A quic brown fox&#39;
+</code></pre>
+<p>随机插入</p>
+<pre><code class="lang-py">def insert_random_character(s):
+    &quot;&quot;&quot;Returns s with a random character inserted&quot;&quot;&quot;
+    pos = random.randint(0, len(s))
+    random_character = chr(random.randrange(32, 127))
+    # print(&quot;Inserting&quot;, repr(random_character), &quot;at&quot;, pos)
+    return s[:pos] + random_character + s[pos:]
+
+for i in range(10):
+    print(repr(insert_random_character(seed_input)))
+
+&#39;A quick brvown fox&#39;
+&#39;A quwick brown fox&#39;
+&#39;A qBuick brown fox&#39;
+&#39;A quick broSwn fox&#39;
+&#39;A quick brown fvox&#39;
+&#39;A quick brown 3fox&#39;
+&#39;A quick brNown fox&#39;
+&#39;A quick brow4n fox&#39;
+&#39;A quick brown fox8&#39;
+&#39;A equick brown fox&#39;
+</code></pre>
+<p>随机替换</p>
+<pre><code class="lang-py">def flip_random_character(s):
+    &quot;&quot;&quot;Returns s with a random bit flipped in a random position&quot;&quot;&quot;
+    if s == &quot;&quot;:
+        return s
+
+    pos = random.randint(0, len(s) - 1)
+    c = s[pos]
+    bit = 1 &lt;&lt; random.randint(0, 6)
+    new_c = chr(ord(c) ^ bit)
+    # print(&quot;Flipping&quot;, bit, &quot;in&quot;, repr(c) + &quot;, giving&quot;, repr(new_c))
+    return s[:pos] + new_c + s[pos + 1:]
+
+for i in range(10):
+    print(repr(flip_random_character(seed_input)))
+
+&#39;A quick bRown fox&#39;
+&#39;A quici brown fox&#39;
+&#39;A&quot;quick brown fox&#39;
+&#39;A quick brown$fox&#39;
+&#39;A quick bpown fox&#39;
+&#39;A quick brown!fox&#39;
+&#39;A 1uick brown fox&#39;
+&#39;@ quick brown fox&#39;
+&#39;A quic+ brown fox&#39;
+&#39;A quick bsown fox&#39;
+</code></pre>
+<p>只要我们有一些原始输入，这些输入是有效的，那么我们基于原始输入的变异也应该是有效的。</p>
+<p>多重变异</p>
+<p>假设我们这里有个方法mutate()，能对字符串执行变异操作。那么连续变异50次，输入会变成什么样子？</p>
+<pre><code class="lang-py">seed_input = &quot;http://www.google.com/search?q=fuzzing&quot;
+mutations = 50
+
+inp = seed_input
+for i in range(mutations):
+    if i % 5 == 0:
+        print(i, &quot;mutations:&quot;, repr(inp))
+    inp = mutate(inp)
+
+0 mutations: &#39;http://www.google.com/search?q=fuzzing&#39;
+5 mutations: &#39;http:/L/www.googlej.com/seaRchq=fuz:ing&#39;
+10 mutations: &#39;http:/L/www.ggoWglej.com/seaRchqfu:in&#39;
+15 mutations: &#39;http:/L/wwggoWglej.com/seaR3hqf,u:in&#39;
+20 mutations: &#39;htt://wwggoVgle&quot;j.som/seaR3hqf,u:in&#39;
+25 mutations: &#39;htt://fwggoVgle&quot;j.som/eaRd3hqf,u^:in&#39;
+30 mutations: &#39;htv://&gt;fwggoVgle&quot;j.qom/ea0Rd3hqf,u^:i&#39;
+35 mutations: &#39;htv://&gt;fwggozVle&quot;Bj.qom/eapRd[3hqf,u^:i&#39;
+40 mutations: &#39;htv://&gt;fwgeo6zTle&quot;Bj.\&#39;qom/eapRd[3hqf,tu^:i&#39;
+45 mutations: &#39;htv://&gt;fwgeo]6zTle&quot;BjM.\&#39;qom/eaR[3hqf,tu^:i&#39;
+</code></pre>
+<p>可以看到变异体已经几乎无法识别了。我们通过多次变异，获得了更加多样的输入。</p>
+<p>MutationFuzzer的实现</p>
+<pre><code class="lang-py">class MutationFuzzer(Fuzzer):
+    def __init__(self, seed, min_mutations=2, max_mutations=10):
+        self.seed = seed
+        self.min_mutations = min_mutations
+        self.max_mutations = max_mutations
+        self.reset()
+
+    def reset(self):
+        self.population = self.seed
+        self.seed_index = 0
+
+    def mutate(self, inp):
+        return mutate(inp)
+
+    def create_candidate(self):
+        candidate = random.choice(self.population)
+        trials = random.randint(self.min_mutations, self.max_mutations)
+        for i in range(trials):
+            candidate = self.mutate(candidate)
+        return candidate
+
+    def fuzz(self):
+        if self.seed_index &lt; len(self.seed):
+            # Still seeding
+            self.inp = self.seed[self.seed_index]
+            self.seed_index += 1
+        else:
+            # Mutating
+            self.inp = self.create_candidate()
+        return self.inp
+</code></pre>
+<p><code>create_candidate()</code>随机选取种子<code>candidate</code>，然后将这个种子随机突变<code>trials</code>次，返回经过多次突变的<code>candidate</code>。</p>
+<p><code>fuzz()</code>方法一开始返回的是未经突变的种子样本，当种子挑选完毕后，返回突变样本。这样可以确保每次调用fuzz()，得到的输出是不一样的。</p>
+<p>Mutational Fuzzing成功的关键在于引导这些突变的方法—即保留那些特别有价值的样本。</p>
+<p>覆盖率引导</p>
+<p>我们可以利用被测程序来引导测试用例生成。以前我们只是收集程序执行成功或者失败的信息，现在我们可以收集多点信息，比如运行时代码覆盖率。</p>
+<p>利用覆盖率引导变异的Fuzzing，最成功的实践是<a href="http://lcamtuf.coredump.cx/afl/" target="_blank" rel="noopener">American fuzzy loop</a>，即AFL。</p>
+<p>AFL会生成“成功”的测试用例。AFL认为，所谓“成功”是指找到了一条新的程序执行路径。AFL不断地突变新路径的输入，如果产生了新的路径，输入会保留下来。</p>
+<p>为了获得程序运行时的覆盖率信息，我们需要重新定义Runner。FunctionRunner类负责包装一个被测函数。</p>
+<pre><code class="lang-py">class FunctionRunner(Runner):
+    def __init__(self, function):
+        &quot;&quot;&quot;Initialize.  `function` is a function to be executed&quot;&quot;&quot;
+        self.function = function
+
+    def run_function(self, inp):
+        return self.function(inp)
+
+    def run(self, inp):
+        try:
+            result = self.run_function(inp)
+            outcome = self.PASS
+        except Exception:
+            result = None
+            outcome = self.FAIL
+
+        return result, outcome
+</code></pre>
+<p>而FunctionCoverageRunner在此基础上增加了覆盖率计算模块<code>Coverage</code>。</p>
+<pre><code class="lang-py">class FunctionCoverageRunner(FunctionRunner):
+    def run_function(self, inp):
+        with Coverage() as cov:
+            try:
+                result = super().run_function(inp)
+            except Exception as exc:
+                self._coverage = cov.coverage()
+                raise exc
+
+        self._coverage = cov.coverage()
+        return result
+
+    def coverage(self):
+        return self._coverage
+</code></pre>
+<p>下面改写Fuzzer类。</p>
+<pre><code class="lang-py">class MutationCoverageFuzzer(MutationFuzzer):
+    def reset(self):
+        super().reset()
+        self.coverages_seen = set()
+        # Now empty; we fill this with seed in the first fuzz runs
+        self.population = []
+
+    def run(self, runner):
+        &quot;&quot;&quot;Run function(inp) while tracking coverage.
+           If we reach new coverage,
+           add inp to population and its coverage to population_coverage
+        &quot;&quot;&quot;
+        result, outcome = super().run(runner)
+        new_coverage = frozenset(runner.coverage())
+        if outcome == Runner.PASS and new_coverage not in self.coverages_seen:
+            # We have new coverage
+            self.population.append(self.inp)
+            self.coverages_seen.add(new_coverage)
+
+        return result
+</code></pre>
+<p><code>MutationCoverageFuzzer</code>内部保存测试用例队列<code>population</code>和覆盖率队列<code>coverages_seen</code>。如果fuzz的input产生了新的coverage，则将该input添加到population中，并将该coverage添加到coverage_seen中。</p>
+<p>由此，我们得到的population中的每个input都能够使得程序产生不同的coverage，这背后可能是程序的不同执行路径，也就增加了inputs的多样性。</p>
+
+            </div>
+            <hr>
+            <div>
+              <p>
+                
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/notes/">notes</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Fuzzing/">Fuzzing</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Testing/">Testing</a>
+                    
+                  </span>
+                
+              </p>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <div class="comments" id="comments">
+                
+                
+  <script defer src="https://utteranc.es/client.js"
+          repo="superlova / superlova.github.io"
+          issue-term="pathname"
+  
+          label="utterances"
+    
+          theme="github-light"
+          crossorigin="anonymous"
+  >
+  </script>
+
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc-start"></div>
+<div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+<div>
+  <span id="timeDate">载入天数...</span>
+  <span id="times">载入时分秒...</span>
+  <script>
+  var now = new Date();
+  function createtime(){
+      var grt= new Date("02/14/2017 00:00:00");//此处修改你的建站时间或者网站上线时间
+      now.setTime(now.getTime()+250);
+      days = (now - grt ) / 1000 / 60 / 60 / 24;
+      dnum = Math.floor(days);
+      hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum);
+      hnum = Math.floor(hours);
+      if(String(hnum).length ==1 ){
+          hnum = "0" + hnum;
+      }
+      minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+      mnum = Math.floor(minutes);
+      if(String(mnum).length ==1 ){
+                mnum = "0" + mnum;
+      }
+      seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+      snum = Math.round(seconds);
+      if(String(snum).length ==1 ){
+                snum = "0" + snum;
+      }
+      document.getElementById("timeDate").innerHTML = "本站安全运行&nbsp"+dnum+"&nbsp天";
+      document.getElementById("times").innerHTML = hnum + "&nbsp小时&nbsp" + mnum + "&nbsp分&nbsp" + snum + "&nbsp秒";
+  }
+  setInterval("createtime()",250);
+  </script>
+</div>
+
+<p id="hitokoto">:D 获取中...</p>
+<script>
+  fetch('https://v1.hitokoto.cn')
+    .then(response => response.json())
+    .then(data => {
+      const hitokoto = document.getElementById('hitokoto')
+      hitokoto.innerText = data.hitokoto
+      })
+      .catch(console.error)
+</script>
+
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    </div>
+    
+  <div>
+    
+      <!-- 不蒜子统计PV -->
+      
+      <span id="busuanzi_container_site_pv" style="display: none">
+      总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    </span>
+    
+    
+      <!-- 不蒜子统计UV -->
+      
+      <span id="busuanzi_container_site_uv" style="display: none">
+      总访客数 <span id="busuanzi_value_site_uv"></span> 人
+    </span>
+    
+  </div>
+
+
+    
+
+    
+  </div>
+</footer>
+
+
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var post = $('#post');
+      var toc = $('#toc');
+      var tocLimMax = post.offset().top + post.height() - navHeight;
+
+      $(window).scroll(function () {
+        var tocLimMin = $('#toc-start').offset().top - navHeight;
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': navHeight,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+      var offset = $('#board-ctn').css('margin-right')
+      $('#toc-ctn').css({
+        'right': offset
+      })
+    });
+  </script>
+
+
+
+
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+<!-- Plugins -->
+
+
+  
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?1040bcc5d25d5f4a9cb5e9855eb2c6db";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "【学习笔记】Fuzzing学习笔记2——基于变异的Fuzzing&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 90,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

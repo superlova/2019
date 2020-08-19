@@ -139,12 +139,30 @@
                 
 
 <div class="list-group">
-  <p class="h4">共计 81 篇文章</p>
+  <p class="h4">共计 84 篇文章</p>
   <hr>
   
     
       
       <p class="h5">2020</p>
+    
+    <a href="/2020/08/20/【学习笔记】Fuzzing学习笔记3——灰盒Fuzzing/" class="list-group-item list-group-item-action">
+      <span class="archive-post-title">【学习笔记】Fuzzing学习笔记3——灰盒Fuzzing</span>
+      <span style="float: right;">08-20</span>
+    </a>
+  
+    
+    <a href="/2020/08/19/【学习笔记】Fuzzing学习笔记2——基于变异的Fuzzing/" class="list-group-item list-group-item-action">
+      <span class="archive-post-title">【学习笔记】Fuzzing学习笔记2——基于变异的Fuzzing</span>
+      <span style="float: right;">08-19</span>
+    </a>
+  
+    
+    <a href="/2020/08/19/【学习笔记】Fuzzing学习笔记1——认识Fuzzing的基本单元/" class="list-group-item list-group-item-action">
+      <span class="archive-post-title">【学习笔记】Fuzzing学习笔记1——认识Fuzzing的基本单元</span>
+      <span style="float: right;">08-19</span>
+    </a>
+  
     
     <a href="/2020/08/19/【竞赛打卡】leetcode打卡：分治算法/" class="list-group-item list-group-item-action">
       <span class="archive-post-title">【竞赛打卡】leetcode打卡：分治算法</span>
@@ -187,25 +205,19 @@
       <span style="float: right;">08-14</span>
     </a>
   
-    
-    <a href="/2020/08/14/【学习笔记】用TensorBoard展示图片/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">【学习笔记】用TensorBoard展示图片</span>
-      <span style="float: right;">08-14</span>
-    </a>
-  
-    
-    <a href="/2020/08/14/【学习笔记】TensorBoard简介/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">【学习笔记】TensorBoard简介</span>
-      <span style="float: right;">08-14</span>
-    </a>
-  
-    
-    <a href="/2020/08/04/【竞赛打卡】新闻文本分类之注意力机制与预训练模型/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">【竞赛打卡】新闻文本分类之注意力机制与预训练模型</span>
-      <span style="float: right;">08-04</span>
-    </a>
-  
 </div>
+
+  <nav aria-label="index posts navigation">
+    <span class="pagination pg-blue justify-content-center mt-5" id="pagination">
+      <span class="page-number current">1</span><a class="page-number" href="/archives/2020/08/page/2/">2</a><a class="extend next" rel="next" href="/archives/2020/08/page/2/"><i class="fas fa-angle-double-right"></i></a>
+    </span>
+  </nav>
+  
+  <script>
+    for (ele of document.getElementById("pagination").getElementsByClassName("page-number")) {
+      ele.href += '#board';
+    }
+  </script>
 
 
 
@@ -444,7 +456,7 @@
         $(this).wrap(element);
       }
     );
-  </script>
+  </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
 
 
@@ -457,20 +469,5 @@
 
 
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>

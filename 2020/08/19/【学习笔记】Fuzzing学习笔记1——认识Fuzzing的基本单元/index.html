@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content>
+  <meta name="author" content="Superlova">
+  <meta name="keywords" content>
+  <title>【学习笔记】Fuzzing学习笔记1——认识Fuzzing的基本单元 - Superlova</title>
+  <meta name="google-site-verification" content="CPvPw8mUZw65A1ALJ8uRzsYECq4mXgE4_eCq40VIhPM">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<link rel="alternate" href="/atom.xml" title="Superlova" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Superlova</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/cover_2.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期三, 八月 19日 2020, 8:10 晚上
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    1.3k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                      6 分钟
+                  </span>
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  <span id="busuanzi_container_page_pv" class="post-meta" style="display: none">
+                    <i class="far fa-eye" aria-hidden="true"></i>
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5 z-depth-3" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+              <p
+                class="note note-warning">本文最后更新于：星期三, 八月 19日 2020, 11:50 晚上</p>
+            
+            <div class="markdown-body">
+              <p>Fuzzing又称模糊测试。<br><a id="more"></a></p>
+<p><a href="https://www.fuzzingbook.org/html/Fuzzer.html" target="_blank" rel="noopener">https://www.fuzzingbook.org/html/Fuzzer.html</a></p>
+<h2 id="Fuzzing测试是什么？"><a href="#Fuzzing测试是什么？" class="headerlink" title="Fuzzing测试是什么？"></a>Fuzzing测试是什么？</h2><blockquote>
+<p>Create random inputs, and see if they break things.</p>
+</blockquote>
+<p>说得简单、纯粹点，Fuzzing是一种软件测试方法，通过不断生成不同的输入，使被测程序崩溃、出错，以此改进程序本身的软件测试方法。由于Fuzzing的核心在于生成软件测试用例，因此这种方法又被称为<strong>生成软件测试</strong>。</p>
+<h2 id="构建第一个fuzzer"><a href="#构建第一个fuzzer" class="headerlink" title="构建第一个fuzzer"></a>构建第一个fuzzer</h2><pre><code class="lang-py">import random
+
+def fuzzer(max_length=100, char_start=32, char_range=32):
+    &quot;&quot;&quot;A string of up to `max_length` characters
+       in the range [`char_start`, `char_start` + `char_range`]&quot;&quot;&quot;
+    string_length = random.randrange(0, max_length + 1)
+    out = &quot;&quot;
+    for i in range(0, string_length):
+        out += chr(random.randrange(char_start, char_start + char_range))
+    return out
+
+fuzzer()
+4$)&gt;(,-&amp;!$25;&gt;6=27= 5)9?300(.466&amp;(&#39;$*,,1:8&#39; ,$/99&gt;&#39;*=(
+</code></pre>
+<p>此fuzzer的作用是生成一堆随机字符。要想只生成26个字母，那么</p>
+<pre><code class="lang-py">fuzzer(100, ord(&#39;a&#39;), 26)
+ueffzgwltwmspvmowihhtjmgsixofnvntnqmr
+</code></pre>
+<h2 id="Fuzzing关键的两个部件："><a href="#Fuzzing关键的两个部件：" class="headerlink" title="Fuzzing关键的两个部件："></a>Fuzzing关键的两个部件：</h2><h3 id="Fuzzer类"><a href="#Fuzzer类" class="headerlink" title="Fuzzer类"></a>Fuzzer类</h3><p><code>Fuzzer</code>，是所有<code>fuzzer</code>的基类，<code>RandomFuzzer</code> 是其简单实现。<code>Fuzzer</code> 的<code>fuzz()</code>接口返回一个字符串，字符串内容是根据不同实现逻辑而构造出来的。</p>
+<p>比如Fuzzer的实现RandomFuzzer，其<code>fuzz()</code>就是随机生成的字符串。</p>
+<pre><code class="lang-py">&gt;&gt;&gt; random_fuzzer = RandomFuzzer(min_length=10, max_length=20, char_start=65, char_range=26)
+&gt;&gt;&gt; random_fuzzer.fuzz()
+&#39;XGZVDDPZOOW&#39;
+</code></pre>
+<p>Fuzzer的run()接口负责运行一个Runner对象。</p>
+<p>下面是Fuzzer的代码架构：</p>
+<pre><code class="lang-py">class Fuzzer(object):
+    def __init__(self):
+        pass
+
+    def fuzz(self):
+        &quot;&quot;&quot;Return fuzz input&quot;&quot;&quot;
+        return &quot;&quot;
+
+    def run(self, runner=Runner()):
+        &quot;&quot;&quot;Run `runner` with fuzz input&quot;&quot;&quot;
+        return runner.run(self.fuzz())
+
+    def runs(self, runner=PrintRunner(), trials=10):
+        &quot;&quot;&quot;Run `runner` with fuzz input, `trials` times&quot;&quot;&quot;
+        # Note: the list comprehension below does not invoke self.run() for subclasses
+        # return [self.run(runner) for i in range(trials)]
+        outcomes = []
+        for i in range(trials):
+            outcomes.append(self.run(runner))
+        return outcomes
+</code></pre>
+<p>此时Fuzzer基类的fuzz()接口还没有功能。派生类RandomFuzzer则实现了fuzz()：</p>
+<pre><code class="lang-py">class RandomFuzzer(Fuzzer):
+    def __init__(self, min_length=10, max_length=100,
+                 char_start=32, char_range=32):
+        &quot;&quot;&quot;Produce strings of `min_length` to `max_length` characters
+           in the range [`char_start`, `char_start` + `char_range`]&quot;&quot;&quot;
+        self.min_length = min_length
+        self.max_length = max_length
+        self.char_start = char_start
+        self.char_range = char_range
+
+    def fuzz(self):
+        string_length = random.randrange(self.min_length, self.max_length + 1)
+        out = &quot;&quot;
+        for i in range(0, string_length):
+            out += chr(random.randrange(self.char_start,
+                                        self.char_start + self.char_range))
+        return out
+</code></pre>
+<p>有了RandomFuzzer，我们可以生成一些随机的字符串了。</p>
+<pre><code class="lang-py">random_fuzzer = RandomFuzzer(min_length=20, max_length=20)
+for i in range(10):
+    print(random_fuzzer.fuzz())
+&#39;&gt;23&gt;33)(&amp;&quot;09.377.*3
+*+:5 ? (?1$4&lt;&gt;!?3&gt;.&#39;
+4+3/(3 (0%!&gt;!(+9%,#$
+/51$2964&gt;;)2417&lt;9&quot;2&amp;
+907.. !7:&amp;--&quot;=$7&#39;,7*
+(5=5&#39;.!*+&amp;&gt;&quot;)6%9)=,/
+?:&amp;5) &quot;;.0!=6&gt;3+&gt;)=,
+6&amp;,?:!#2))- ?:)=63&#39;-
+,)9#839%)?&amp;(0&lt;6(&quot;*;)
+4?!(49+8=-&#39;&amp;499%?&lt; &#39;
+</code></pre>
+<h3 id="Runner类"><a href="#Runner类" class="headerlink" title="Runner类"></a>Runner类</h3><p><code>Runner</code>，是所有待测程序的基类。一个Fuzzer 与一个Runner搭配。</p>
+<p>Runner类含有run(input)接口，负责接收input并执行，返回 (result, outcome)，result是Runner在运行时的信息和细节，而outcom代表着这次运行的结果。</p>
+<p>运行结果为枚举对象 outcome，含义为程序运行结果，有(PASS, FAIL, or UNRESOLVED)三种可能。</p>
+<ul>
+<li>Runner.PASS：测试通过，run()输出正确。</li>
+<li>Runner.FAIL：测试失败，结果错误。</li>
+<li>Runner.UNRESOLVED：没有输出，这一般代表runner无法应对输入而崩溃。</li>
+</ul>
+<p>Runner的大体架构如下：</p>
+<pre><code class="lang-py">class Runner(object):
+    # Test outcomes
+    PASS = &quot;PASS&quot;
+    FAIL = &quot;FAIL&quot;
+    UNRESOLVED = &quot;UNRESOLVED&quot;
+
+    def __init__(self):
+        &quot;&quot;&quot;Initialize&quot;&quot;&quot;
+        pass
+
+    def run(self, inp):
+        &quot;&quot;&quot;Run the runner with the given input&quot;&quot;&quot;
+        return (inp, Runner.UNRESOLVED)
+</code></pre>
+<p>想要实现其他Runner，只需继承Runner即可。</p>
+<pre><code class="lang-py">class PrintRunner(Runner):
+    def run(self, inp):
+        &quot;&quot;&quot;Print the given input&quot;&quot;&quot;
+        print(inp)
+        return (inp, Runner.UNRESOLVED)
+</code></pre>
+<pre><code>p = PrintRunner()
+(result, outcome) = p.run(&quot;Some input&quot;)
+Some input
+</code></pre><p>对于PrintRunner，我们无法验证其结果，因此通通返回UNRESOLVED。</p>
+<p>下面是一个Runner的派生类ProgramRunner的代码，此架构代表了大多数程序。</p>
+<pre><code class="lang-py">class ProgramRunner(Runner):
+    def __init__(self, program):
+        &quot;&quot;&quot;Initialize.  `program` is a program spec as passed to `subprocess.run()`&quot;&quot;&quot;
+        self.program = program
+
+    def run_process(self, inp=&quot;&quot;):
+        &quot;&quot;&quot;Run the program with `inp` as input.  Return result of `subprocess.run()`.&quot;&quot;&quot;
+        return subprocess.run(self.program,
+                              input=inp,
+                              stdout=subprocess.PIPE,
+                              stderr=subprocess.PIPE,
+                              universal_newlines=True)
+
+    def run(self, inp=&quot;&quot;):
+        &quot;&quot;&quot;Run the program with `inp` as input.  Return test outcome based on result of `subprocess.run()`.&quot;&quot;&quot;
+        result = self.run_process(inp)
+
+        if result.returncode == 0:
+            outcome = self.PASS
+        elif result.returncode &lt; 0:
+            outcome = self.FAIL
+        else:
+            outcome = self.UNRESOLVED
+
+        return (result, outcome)
+</code></pre>
+<h2 id="Fuzzing-实例"><a href="#Fuzzing-实例" class="headerlink" title="Fuzzing 实例"></a>Fuzzing 实例</h2><pre><code class="lang-py">cat = ProgramRunner(program=&quot;cat&quot;)
+cat.run(&quot;hello&quot;)
+
+random_fuzzer = RandomFuzzer(min_length=20, max_length=20)
+
+random_fuzzer.runs(cat, 10)
+
+[(CompletedProcess(args=&#39;cat&#39;, returncode=0, stdout=&#39;3976%%&amp;+%6=(1)3&amp;3:&lt;9&#39;, stderr=&#39;&#39;),
+  &#39;PASS&#39;),
+ (CompletedProcess(args=&#39;cat&#39;, returncode=0, stdout=&#39;33$#42$ 11=*%$20=&lt;.-&#39;, stderr=&#39;&#39;),
+  &#39;PASS&#39;),
+ (CompletedProcess(args=&#39;cat&#39;, returncode=0, stdout=&#39;&quot;?&lt;\&#39;#8 &lt;/:*%9.--\&#39;97!&#39;, stderr=&#39;&#39;),
+  &#39;PASS&#39;),
+ (CompletedProcess(args=&#39;cat&#39;, returncode=0, stdout=&quot;/0-#(03/!#60&#39;+6&gt;&amp;&amp;72&quot;, stderr=&#39;&#39;),
+  &#39;PASS&#39;),
+ (CompletedProcess(args=&#39;cat&#39;, returncode=0, stdout=&quot;=,+:,6&#39;5:950+&gt;&lt;3(*()&quot;, stderr=&#39;&#39;),
+  &#39;PASS&#39;),
+ (CompletedProcess(args=&#39;cat&#39;, returncode=0, stdout=&quot; 379+0?&#39;%3137=2:4605&quot;, stderr=&#39;&#39;),
+  &#39;PASS&#39;),
+ (CompletedProcess(args=&#39;cat&#39;, returncode=0, stdout=&quot;02&gt;!$&lt;/&#39;*81.#&lt;/22&gt;+:&quot;, stderr=&#39;&#39;),
+  &#39;PASS&#39;),
+ (CompletedProcess(args=&#39;cat&#39;, returncode=0, stdout=&quot;=-&lt;&#39;3-#88*%&amp;*9&lt; +1&amp;&amp;&quot;, stderr=&#39;&#39;),
+  &#39;PASS&#39;),
+ (CompletedProcess(args=&#39;cat&#39;, returncode=0, stdout=&#39;2;;0=3&amp;6=8&amp;30&amp;&lt;-;?*;&#39;, stderr=&#39;&#39;),
+  &#39;PASS&#39;),
+ (CompletedProcess(args=&#39;cat&#39;, returncode=0, stdout=&#39;/#05=*3($&gt;::#7!0=12+&#39;, stderr=&#39;&#39;),
+  &#39;PASS&#39;)]
+</code></pre>
+
+            </div>
+            <hr>
+            <div>
+              <p>
+                
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/notes/">notes</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Fuzzing/">Fuzzing</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Testing/">Testing</a>
+                    
+                  </span>
+                
+              </p>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <div class="comments" id="comments">
+                
+                
+  <script defer src="https://utteranc.es/client.js"
+          repo="superlova / superlova.github.io"
+          issue-term="pathname"
+  
+          label="utterances"
+    
+          theme="github-light"
+          crossorigin="anonymous"
+  >
+  </script>
+
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc-start"></div>
+<div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+<div>
+  <span id="timeDate">载入天数...</span>
+  <span id="times">载入时分秒...</span>
+  <script>
+  var now = new Date();
+  function createtime(){
+      var grt= new Date("02/14/2017 00:00:00");//此处修改你的建站时间或者网站上线时间
+      now.setTime(now.getTime()+250);
+      days = (now - grt ) / 1000 / 60 / 60 / 24;
+      dnum = Math.floor(days);
+      hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum);
+      hnum = Math.floor(hours);
+      if(String(hnum).length ==1 ){
+          hnum = "0" + hnum;
+      }
+      minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+      mnum = Math.floor(minutes);
+      if(String(mnum).length ==1 ){
+                mnum = "0" + mnum;
+      }
+      seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+      snum = Math.round(seconds);
+      if(String(snum).length ==1 ){
+                snum = "0" + snum;
+      }
+      document.getElementById("timeDate").innerHTML = "本站安全运行&nbsp"+dnum+"&nbsp天";
+      document.getElementById("times").innerHTML = hnum + "&nbsp小时&nbsp" + mnum + "&nbsp分&nbsp" + snum + "&nbsp秒";
+  }
+  setInterval("createtime()",250);
+  </script>
+</div>
+
+<p id="hitokoto">:D 获取中...</p>
+<script>
+  fetch('https://v1.hitokoto.cn')
+    .then(response => response.json())
+    .then(data => {
+      const hitokoto = document.getElementById('hitokoto')
+      hitokoto.innerText = data.hitokoto
+      })
+      .catch(console.error)
+</script>
+
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    </div>
+    
+  <div>
+    
+      <!-- 不蒜子统计PV -->
+      
+      <span id="busuanzi_container_site_pv" style="display: none">
+      总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    </span>
+    
+    
+      <!-- 不蒜子统计UV -->
+      
+      <span id="busuanzi_container_site_uv" style="display: none">
+      总访客数 <span id="busuanzi_value_site_uv"></span> 人
+    </span>
+    
+  </div>
+
+
+    
+
+    
+  </div>
+</footer>
+
+
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var post = $('#post');
+      var toc = $('#toc');
+      var tocLimMax = post.offset().top + post.height() - navHeight;
+
+      $(window).scroll(function () {
+        var tocLimMin = $('#toc-start').offset().top - navHeight;
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': navHeight,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+      var offset = $('#board-ctn').css('margin-right')
+      $('#toc-ctn').css({
+        'right': offset
+      })
+    });
+  </script>
+
+
+
+
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+<!-- Plugins -->
+
+
+  
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?1040bcc5d25d5f4a9cb5e9855eb2c6db";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "【学习笔记】Fuzzing学习笔记1——认识Fuzzing的基本单元&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 90,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content>
+  <meta name="author" content="Superlova">
+  <meta name="keywords" content>
+  <title>【学习笔记】Fuzzing学习笔记3——灰盒Fuzzing - Superlova</title>
+  <meta name="google-site-verification" content="CPvPw8mUZw65A1ALJ8uRzsYECq4mXgE4_eCq40VIhPM">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<link rel="alternate" href="/atom.xml" title="Superlova" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Superlova</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/cover_2.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期四, 八月 20日 2020, 1:01 凌晨
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    1.9k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                      8 分钟
+                  </span>
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  <span id="busuanzi_container_page_pv" class="post-meta" style="display: none">
+                    <i class="far fa-eye" aria-hidden="true"></i>
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5 z-depth-3" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+              <p
+                class="note note-warning">本文最后更新于：星期四, 八月 20日 2020, 1:04 凌晨</p>
+            
+            <div class="markdown-body">
+              <p>灰盒变异的模糊测试。<br><a id="more"></a></p>
+<p>普通fuzzing：从0开始构造测试用例<br>突变fuzzing：从seed开始构造测试用例<br>灰盒fuzzing：有引导的突变fuzzing</p>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>上回书说到，AFL是突变fuzzer，通过把种子字符串进行些微修改，得到变异体；此外AFL还会将一个种子的前半部分与另一个种子的后半部分连接，形成变异体。</p>
+<p>AFL也是个灰盒fuzzer，这是由于AFL需要使用程序内部信息（即覆盖率）。AFL不是白盒，因为AFL没有对程序进行约束求解、程序分析之类的，只是简单获取了一个覆盖率。如果生成的样本能够提升覆盖率，那么就将这个样本添加进种子队列以供下次突变使用（这就意味着突变体有重复突变的可能）。</p>
+<p>AFL计算覆盖率的方法，是通过在每个分支的跳转指令后执行一段标记代码。这样就可以做到，监控每个输入导致的激活分支，以及每个分支被激活的大概频率。注入代码这个环节通常在编译时完成。对于Python，可以在未经处理的情况下执行覆盖率信息收集。</p>
+<h2 id="突变算法和种子"><a href="#突变算法和种子" class="headerlink" title="突变算法和种子"></a>突变算法和种子</h2><p>引入Mutator类。Mutator类是个过程类，包装了对输入inp的突变方法。</p>
+<pre><code class="lang-py">class Mutator(object):
+    def __init__(self):
+        self.mutators = [
+            self.delete_random_character,
+            self.insert_random_character,
+            self.flip_random_character
+
+    def insert_random_character(self,s):
+        &quot;&quot;&quot;Returns s with a random character inserted&quot;&quot;&quot;
+        pos = random.randint(0, len(s))
+        random_character = chr(random.randrange(32, 127))
+        return s[:pos] + random_character + s[pos:]
+
+    def delete_random_character(self,s):
+        &quot;&quot;&quot;Returns s with a random character deleted&quot;&quot;&quot;
+        if s == &quot;&quot;:
+            return self.insert_random_character(s)
+
+        pos = random.randint(0, len(s) - 1)
+        return s[:pos] + s[pos + 1:]
+
+    def flip_random_character(self,s):
+        &quot;&quot;&quot;Returns s with a random bit flipped in a random position&quot;&quot;&quot;
+        if s == &quot;&quot;:
+            return self.insert_random_character(s)
+
+        pos = random.randint(0, len(s) - 1)
+        c = s[pos]
+        bit = 1 &lt;&lt; random.randint(0, 6)
+        new_c = chr(ord(c) ^ bit)
+        return s[:pos] + new_c + s[pos + 1:]
+
+    def mutate(self, inp):
+        &quot;&quot;&quot;Return s with a random mutation applied&quot;&quot;&quot;
+        mutator = random.choice(self.mutators)
+        return mutator(inp)
+</code></pre>
+<p>使用Mutator是只需实例化Mutator，然后调用mutate()方法即可。</p>
+<pre><code class="lang-py">Mutator().mutate(&quot;good&quot;)
+&#39;cood&#39;
+</code></pre>
+<h2 id="精力分配（Power-Schedule）"><a href="#精力分配（Power-Schedule）" class="headerlink" title="精力分配（Power Schedule）"></a>精力分配（Power Schedule）</h2><p>模糊测试是一种执行很慢的测试方法。既然并不是每个测试用例种子都值得分配同样的精力，那么试图发现那些更令人感兴趣的种子就是理所当然的选择了。</p>
+<p>我们把一个种子从种群中被选中的可能性称为种子的能量（energy）。我们希望优先突变和执行那些更有希望发现待测程序错误的种子，不希望在无进步的种子身上浪费精力。</p>
+<p>决定种子能量分配的算法称为“功率表”（Power Schedule）。AFL的功率表会将更多的能量分配给那些长度较短、执行速度较快、覆盖率增加较多的种子。</p>
+<p>由此，每个种子需要额外维护其能量。构建Seed类如下：</p>
+<pre><code class="lang-py">class Seed(object):    
+    def __init__(self, data):
+        &quot;&quot;&quot;Set seed data&quot;&quot;&quot;
+        self.data = data
+
+    def __str__(self):
+        &quot;&quot;&quot;Returns data as string representation of the seed&quot;&quot;&quot;
+        return self.data
+    __repr__ = __str__
+</code></pre>
+<p>下面是功率表PowerSchedule类的定义：</p>
+<pre><code class="lang-py">class PowerSchedule(object):    
+    def assignEnergy(self, population):
+        &quot;&quot;&quot;Assigns each seed the same energy&quot;&quot;&quot;
+        for seed in population:
+            seed.energy = 1
+
+    def normalizedEnergy(self, population):
+        &quot;&quot;&quot;Normalize energy&quot;&quot;&quot;
+        energy = list(map(lambda seed: seed.energy, population))
+        sum_energy = sum(energy)  # Add up all values in energy
+        norm_energy = list(map(lambda nrg: nrg/sum_energy, energy))
+        return norm_energy
+
+    def choose(self, population):
+        &quot;&quot;&quot;Choose weighted by normalized energy.&quot;&quot;&quot;
+        import numpy as np
+
+        self.assignEnergy(population)
+        norm_energy = self.normalizedEnergy(population)
+        seed = np.random.choice(population, p=norm_energy)
+        return seed
+</code></pre>
+<h2 id="灰盒fuzzing与黑盒fuzzing的比较"><a href="#灰盒fuzzing与黑盒fuzzing的比较" class="headerlink" title="灰盒fuzzing与黑盒fuzzing的比较"></a>灰盒fuzzing与黑盒fuzzing的比较</h2><p>首先定义不使用coverage的黑盒fuzzer，MutationFuzzer 类：</p>
+<pre><code class="lang-py">class MutationFuzzer(Fuzzer):
+
+    def __init__(self, seeds, mutator, schedule):
+        self.seeds = seeds
+        self.mutator = mutator
+        self.schedule = schedule
+        self.inputs = []
+        self.reset()
+
+    def reset(self):
+        &quot;&quot;&quot;Reset the initial population and seed index&quot;&quot;&quot;
+        self.population = list(map(lambda x: Seed(x), self.seeds))
+        self.seed_index = 0
+
+    def create_candidate(self):
+        &quot;&quot;&quot;Returns an input generated by fuzzing a seed in the population&quot;&quot;&quot;
+        seed = self.schedule.choose(self.population)
+
+        # Stacking: Apply multiple mutations to generate the candidate
+        candidate = seed.data
+        trials = min(len(candidate), 1 &lt;&lt; random.randint(1,5))
+        for i in range(trials):
+            candidate = self.mutator.mutate(candidate)
+        return candidate
+
+    def fuzz(self):
+        &quot;&quot;&quot;Returns first each seed once and then generates new inputs&quot;&quot;&quot;
+        if self.seed_index &lt; len(self.seeds):
+            # Still seeding
+            self.inp = self.seeds[self.seed_index]
+            self.seed_index += 1
+        else:
+            # Mutating
+            self.inp = self.create_candidate()
+
+        self.inputs.append(self.inp)
+        return self.inp
+</code></pre>
+<p>MutationFuzzer 是由一组初始种子、一个突变器和一个功率表构成的。在整个模糊化过程中，它维护着一个名为population的种子语料库。create_candidate对某个种子执行多次突变，fuzz先试图返回正常种子，随后返回突变种子。</p>
+<p>population_coverage 是预先定义好的覆盖率计算库，返回（all_coverage，cumulative_coverage）。其中all_coverage是所有输入所覆盖的语句集，cumulative_coverage是随着执行输入数量的增加而覆盖的语句数量。</p>
+<p>下面是GrayBox fuzzing的实现：</p>
+<pre><code class="lang-py">class GreyboxFuzzer(MutationFuzzer):    
+    def reset(self):
+        &quot;&quot;&quot;Reset the initial population, seed index, coverage information&quot;&quot;&quot;
+        super().reset()
+        self.coverages_seen = set()
+        self.population = [] # population is filled during greybox fuzzing
+
+    def run(self, runner):
+        &quot;&quot;&quot;Run function(inp) while tracking coverage.
+           If we reach new coverage,
+           add inp to population and its coverage to population_coverage
+        &quot;&quot;&quot;
+        result, outcome = super().run(runner)
+        new_coverage = frozenset(runner.coverage())
+        if new_coverage not in self.coverages_seen:
+            # We have new coverage
+            seed = Seed(self.inp)
+            seed.coverage = runner.coverage()
+            self.coverages_seen.add(new_coverage)
+            self.population.append(seed)
+
+        return (result, outcome)
+</code></pre>
+<p>经过计算，分别得到覆盖率变化趋势blackbox_coverage和greybox_coverage，可视化如下：</p>
+<p><img src="/2020/08/20/【学习笔记】Fuzzing学习笔记3——灰盒Fuzzing/2020-08-20-00-42-27.png" srcset="/img/loading.gif" alt></p>
+<p>可以看到，灰盒fuzzing的覆盖率增长明显比黑盒要好。</p>
+<h2 id="增强后的灰盒fuzzer"><a href="#增强后的灰盒fuzzer" class="headerlink" title="增强后的灰盒fuzzer"></a>增强后的灰盒fuzzer</h2><p>通过修改功率表PowerSchedule，使那些能激活不寻常的path的input具有更高的energy。不寻常的path指的是激活次数比较小。</p>
+<p>有多种方法计算一个种子的能量。上述的要求形式化为具体定义即为</p>
+<script type="math/tex; mode=display">e(s)=\frac{1}{f(p(s))^a}</script><p>其中$s$是种子<br>$p(s)$为$s$激活的path<br>$f(p)$返回path激活的次数<br>$a$是给定的超参数<br>$e(s)$是种子$s$被分配的能量</p>
+<p>下面是按照此思想设置的PowerSchedule：</p>
+<pre><code class="lang-py">class AFLFastSchedule(PowerSchedule): 
+    def __init__(self, exponent):
+        self.exponent = exponent
+
+    def assignEnergy(self, population):
+        &quot;&quot;&quot;Assign exponential energy inversely proportional to path frequency&quot;&quot;&quot;
+        for seed in population:
+            seed.energy = 1 / (self.path_frequency[getPathID(seed.coverage)] ** self.exponent)
+</code></pre>
+<p>改进的灰盒Fuzzer：</p>
+<pre><code class="lang-py">class CountingGreyboxFuzzer(GreyboxFuzzer):
+    def reset(self):
+        &quot;&quot;&quot;Reset path frequency&quot;&quot;&quot;
+        super().reset()
+        self.schedule.path_frequency = {}
+
+    def run(self, runner):
+        &quot;&quot;&quot;Inform scheduler about path frequency&quot;&quot;&quot;
+        result, outcome = super().run(runner)
+
+        path_id = getPathID(runner.coverage())
+        if not path_id in self.schedule.path_frequency:
+            self.schedule.path_frequency[path_id] = 1
+        else:
+            self.schedule.path_frequency[path_id] += 1
+
+        return(result, outcome)
+</code></pre>
+<p>覆盖率变化如图所示</p>
+<p><img src="/2020/08/20/【学习笔记】Fuzzing学习笔记3——灰盒Fuzzing/2020-08-20-00-52-08.png" srcset="/img/loading.gif" alt></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>三篇Fuzzing文章到此为止。</p>
+<p>Fuzzing 的方法是通过大量生成input，来找出被测程序的错误的方法。</p>
+<p>Fuzzing的关键点之一在于input生成方法，其二在于input的排序方法，其三在于软件内部信息的获取和应用。</p>
+<p>如果input完全是自己构建的，那么这种方法称之为generational fuzzing</p>
+<p>如果input是通过原始种子略微修改后得到的，那么这种fuzzing为Mutational fuzzing。</p>
+<p>如果Mutator可以经过一定的程序信息的引导，那么这叫做GrayBox Fuzzing，比如覆盖率引导的模糊测试</p>
+<p>如果Seed经过Power Schedule的精力分配，随后Mutator根据Seed的精力大小排序，那么这种方法称之为Boosted GrayBox Fuzzing</p>
+<p>使用到的类：</p>
+<p>Runner：待测程序的基类</p>
+<p>Fuzzer：模糊测试器的基类</p>
+<p>Seed：测试用例种子的基类</p>
+<p>PowerSchedule：功率表的基类</p>
+
+            </div>
+            <hr>
+            <div>
+              <p>
+                
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/notes/">notes</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Fuzzing/">Fuzzing</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Testing/">Testing</a>
+                    
+                  </span>
+                
+              </p>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <div class="comments" id="comments">
+                
+                
+  <script defer src="https://utteranc.es/client.js"
+          repo="superlova / superlova.github.io"
+          issue-term="pathname"
+  
+          label="utterances"
+    
+          theme="github-light"
+          crossorigin="anonymous"
+  >
+  </script>
+
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc-start"></div>
+<div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+<div>
+  <span id="timeDate">载入天数...</span>
+  <span id="times">载入时分秒...</span>
+  <script>
+  var now = new Date();
+  function createtime(){
+      var grt= new Date("02/14/2017 00:00:00");//此处修改你的建站时间或者网站上线时间
+      now.setTime(now.getTime()+250);
+      days = (now - grt ) / 1000 / 60 / 60 / 24;
+      dnum = Math.floor(days);
+      hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum);
+      hnum = Math.floor(hours);
+      if(String(hnum).length ==1 ){
+          hnum = "0" + hnum;
+      }
+      minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+      mnum = Math.floor(minutes);
+      if(String(mnum).length ==1 ){
+                mnum = "0" + mnum;
+      }
+      seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+      snum = Math.round(seconds);
+      if(String(snum).length ==1 ){
+                snum = "0" + snum;
+      }
+      document.getElementById("timeDate").innerHTML = "本站安全运行&nbsp"+dnum+"&nbsp天";
+      document.getElementById("times").innerHTML = hnum + "&nbsp小时&nbsp" + mnum + "&nbsp分&nbsp" + snum + "&nbsp秒";
+  }
+  setInterval("createtime()",250);
+  </script>
+</div>
+
+<p id="hitokoto">:D 获取中...</p>
+<script>
+  fetch('https://v1.hitokoto.cn')
+    .then(response => response.json())
+    .then(data => {
+      const hitokoto = document.getElementById('hitokoto')
+      hitokoto.innerText = data.hitokoto
+      })
+      .catch(console.error)
+</script>
+
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    </div>
+    
+  <div>
+    
+      <!-- 不蒜子统计PV -->
+      
+      <span id="busuanzi_container_site_pv" style="display: none">
+      总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    </span>
+    
+    
+      <!-- 不蒜子统计UV -->
+      
+      <span id="busuanzi_container_site_uv" style="display: none">
+      总访客数 <span id="busuanzi_value_site_uv"></span> 人
+    </span>
+    
+  </div>
+
+
+    
+
+    
+  </div>
+</footer>
+
+
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var post = $('#post');
+      var toc = $('#toc');
+      var tocLimMax = post.offset().top + post.height() - navHeight;
+
+      $(window).scroll(function () {
+        var tocLimMin = $('#toc-start').offset().top - navHeight;
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': navHeight,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+      var offset = $('#board-ctn').css('margin-right')
+      $('#toc-ctn').css({
+        'right': offset
+      })
+    });
+  </script>
+
+
+
+
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+<!-- Plugins -->
+
+
+  
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?1040bcc5d25d5f4a9cb5e9855eb2c6db";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "【学习笔记】Fuzzing学习笔记3——灰盒Fuzzing&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 90,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+          tex2jax: {
+              inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+              processEscapes: true,
+              skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+          }
+      });
+
+      MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+
+    </script>
+
+    <script  src="https://cdn.staticfile.org/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" ></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+  
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
