@@ -139,12 +139,18 @@
                 
 
 <div class="list-group">
-  <p class="h4">共计 84 篇文章</p>
+  <p class="h4">共计 85 篇文章</p>
   <hr>
   
     
       
       <p class="h5">2019</p>
+    
+    <a href="/2019/04/25/hexo图片加载失败解决方案/" class="list-group-item list-group-item-action">
+      <span class="archive-post-title">hexo图片加载失败解决方案</span>
+      <span style="float: right;">04-25</span>
+    </a>
+  
     
     <a href="/2019/04/25/写在某次期末课程作业之后/" class="list-group-item list-group-item-action">
       <span class="archive-post-title">写在某次期末课程作业之后</span>
@@ -420,7 +426,7 @@
         $(this).wrap(element);
       }
     );
-  </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </script>
 
 
 
@@ -433,5 +439,20 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>

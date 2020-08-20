@@ -146,6 +146,49 @@
   <div class="row mx-auto index-card">
     
     
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2020/05/20/如何评价推荐系统以及其他智能系统/">
+        <p class="h4 index-header">如何评价推荐系统以及其他智能系统</p>
+      </a>
+
+      <a href="/2020/05/20/如何评价推荐系统以及其他智能系统/">
+        
+        
+          
+          
+        
+        <div class="index-excerpt" style="max-height: none;">
+          <div class="index-text mb-1">看到一篇介绍推荐系统的评价方法与指标的文章，刚好本课题组也有个同学在做推荐系统相关的课题，并且该文章的评价指标部分对我目前的课题有启发作用，因此转载。...</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-05-20&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/notes/">notes</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/testing/">testing</a>&nbsp;
+          
+            <a href="/tags/Recommendation-System/">Recommendation System</a>&nbsp;
+          
+            <a href="/tags/Metrics/">Metrics</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
       <div class="col-12 col-md-4 m-auto">
         <a href="/2020/05/20/Datawhale——SVHN——Task01：赛题理解/" target="_self">
           <img src="/img/datawhale.jpg" srcset="/img/loading.gif" alt="Datawhale——SVHN——Task01：赛题理解"
@@ -1083,56 +1126,6 @@ GPU参数GPU的性能主要由下面三个主要参数构成：
     </div>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2019/06/27/机器学习——集成方法/">
-        <p class="h4 index-header">机器学习——集成方法</p>
-      </a>
-
-      <a href="/2019/06/27/机器学习——集成方法/">
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">1. 投票分类器三个臭皮匠顶一个诸葛亮。即便是很多预测准确率仅强于随机的个体学习器的组合，经过一定的安排，也可以发挥令人惊讶的效果。在机器学习中，这种看起来没什么含金量的学习策略称之为集成学习。
-集成学习首先需要一系列的个体学习器。之后采用某些策略结合它们的判断。
-集成学习的要求：
-
-构成集成学习器的个体学习器，其性能不能太差，至少要为强于随机的弱学习器。
-
-当然强学习器更好。在最后的结果汇总阶段，也会更多听取强学习器的意见。
-
-个体学习器要具有一定的多样性。
-
-广泛吸收各种不同学习器的意见，做出的决策才有代表性。在机器学习中，体现出的要求就是模型之间的差别要尽可能的大。一方面可以通过划分不同</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-06-27&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/notes/">notes</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/machine-learning/">machine learning</a>&nbsp;
-          
-            <a href="/tags/boosting/">boosting</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
 
 
   <nav aria-label="index posts navigation">
@@ -1384,7 +1377,7 @@ GPU参数GPU的性能主要由下面三个主要参数构成：
         $(this).wrap(element);
       }
     );
-  </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </script>
 
 
 
@@ -1397,5 +1390,20 @@ GPU参数GPU的性能主要由下面三个主要参数构成：
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>

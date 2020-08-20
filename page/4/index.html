@@ -147,6 +147,56 @@
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2019/06/27/机器学习——集成方法/">
+        <p class="h4 index-header">机器学习——集成方法</p>
+      </a>
+
+      <a href="/2019/06/27/机器学习——集成方法/">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">1. 投票分类器三个臭皮匠顶一个诸葛亮。即便是很多预测准确率仅强于随机的个体学习器的组合，经过一定的安排，也可以发挥令人惊讶的效果。在机器学习中，这种看起来没什么含金量的学习策略称之为集成学习。
+集成学习首先需要一系列的个体学习器。之后采用某些策略结合它们的判断。
+集成学习的要求：
+
+构成集成学习器的个体学习器，其性能不能太差，至少要为强于随机的弱学习器。
+
+当然强学习器更好。在最后的结果汇总阶段，也会更多听取强学习器的意见。
+
+个体学习器要具有一定的多样性。
+
+广泛吸收各种不同学习器的意见，做出的决策才有代表性。在机器学习中，体现出的要求就是模型之间的差别要尽可能的大。一方面可以通过划分不同</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-06-27&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/notes/">notes</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/machine-learning/">machine learning</a>&nbsp;
+          
+            <a href="/tags/boosting/">boosting</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
       <a href="/2019/06/24/NLP学习笔记2/">
         <p class="h4 index-header">NLP学习笔记2</p>
       </a>
@@ -1010,50 +1060,6 @@ g(z)=\left\</div>
     </div>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2019/04/25/hexo图片加载失败解决方案/">
-        <p class="h4 index-header">hexo图片加载失败解决方案</p>
-      </a>
-
-      <a href="/2019/04/25/hexo图片加载失败解决方案/">
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">问题描述：我平时写blog使用的编辑器是Typora，采用hexo部署。某篇文章编辑的时候需要插入图片，在Typora上面，插入图片的语法是
-![图片标题](图片地址)比如![](C:\Folder\picture.png)
-其中图片地址是绝对路径，即盘符开头的那个路径。但是如果要上传到GitHub Pages上面，路径毫无疑问会发生变化，所以这里只能用相对路径。假设你的图片和当前的博客文件在同一目录下，则直接这样：
-![](picture.png)![](.\picture.png)![](./picture.png)
-用过unix文件系统的人都知道，其实那个.的作用就是指明“当前文件夹下”</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-04-25&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/record/">record</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/github-pages/">github pages</a>&nbsp;
-          
-            <a href="/tags/hexo/">hexo</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
 
 
   <nav aria-label="index posts navigation">
@@ -1305,7 +1311,7 @@ g(z)=\left\</div>
         $(this).wrap(element);
       }
     );
-  </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </script>
 
 
 
@@ -1318,5 +1324,20 @@ g(z)=\left\</div>
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>

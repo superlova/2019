@@ -147,6 +147,50 @@
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2019/04/25/hexo图片加载失败解决方案/">
+        <p class="h4 index-header">hexo图片加载失败解决方案</p>
+      </a>
+
+      <a href="/2019/04/25/hexo图片加载失败解决方案/">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">问题描述：我平时写blog使用的编辑器是Typora，采用hexo部署。某篇文章编辑的时候需要插入图片，在Typora上面，插入图片的语法是
+![图片标题](图片地址)比如![](C:\Folder\picture.png)
+其中图片地址是绝对路径，即盘符开头的那个路径。但是如果要上传到GitHub Pages上面，路径毫无疑问会发生变化，所以这里只能用相对路径。假设你的图片和当前的博客文件在同一目录下，则直接这样：
+![](picture.png)![](.\picture.png)![](./picture.png)
+用过unix文件系统的人都知道，其实那个.的作用就是指明“当前文件夹下”</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-04-25&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/record/">record</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/github-pages/">github pages</a>&nbsp;
+          
+            <a href="/tags/hexo/">hexo</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
       <a href="/2019/04/25/写在某次期末课程作业之后/">
         <p class="h4 index-header">写在某次期末课程作业之后</p>
       </a>
@@ -586,7 +630,7 @@ $ gcc -c pwd.i -o pwd.o
         $(this).wrap(element);
       }
     );
-  </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </script>
 
 
 
@@ -599,5 +643,20 @@ $ gcc -c pwd.i -o pwd.o
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>
