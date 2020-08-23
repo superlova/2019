@@ -131,7 +131,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    0 字
+                    1.2k 字
                   </span>
                 
 
@@ -139,7 +139,7 @@
                   
                   <span class="post-meta">
                       <i class="far fa-clock"></i>
-                      1 分钟
+                      6 分钟
                   </span>
                 
 
@@ -174,15 +174,204 @@
           <div class="post-content mx-auto" id="post">
             
               <p
-                class="note note-warning">本文最后更新于：星期日, 八月 23日 2020, 7:52 早上</p>
+                class="note note-warning">本文最后更新于：星期日, 八月 23日 2020, 3:56 下午</p>
             
             <div class="markdown-body">
-              
+              <p>见多了优秀的文章，再写博客的时候就会感叹自己的学识浅薄。<br><a id="more"></a></p>
+<h2 id="leetcode-198-打家劫舍"><a href="#leetcode-198-打家劫舍" class="headerlink" title="leetcode 198 打家劫舍"></a>leetcode 198 打家劫舍</h2><p>动态规划</p>
+<p>设置<code>dp[i]</code>为前i个元素中打劫所得最高金额</p>
+<p>构建状态转移方程：</p>
+<pre><code class="lang-cpp">dp[i] = max(dp[i-1], dp[i-2]+nums[i]);
+</code></pre>
+<p>边界条件：</p>
+<pre><code class="lang-cpp">dp[0] = nums[0];
+dp[1] = max(nums[0], nums[1]);
+</code></pre>
+<p>代码：</p>
+<pre><code class="lang-cpp">class Solution {
+public:
+    int rob(vector&lt;int&gt;&amp; nums) {
+        if (nums.empty()) return 0;
+        if (nums.size() == 1) return nums[0];
+        vector&lt;int&gt; dp(nums.size(), 0);
+        dp[0] = nums[0];
+        dp[1] = max(nums[0], nums[1]);
+
+        for (int i = 2; i &lt; nums.size(); ++i) {
+            dp[i] = max(dp[i-1], dp[i-2]+nums[i]);
+        }
+
+        return dp[nums.size()-1];
+    }
+};
+</code></pre>
+<h2 id="leetcode-674-最长连续递增子序列"><a href="#leetcode-674-最长连续递增子序列" class="headerlink" title="leetcode 674 最长连续递增子序列"></a>leetcode 674 最长连续递增子序列</h2><p>不必使用动态规划，直接一遍遍历，碰到<code>nums[i] &lt; nums[i+1]</code>就递增计数器，保留计数器最大值即可：</p>
+<pre><code class="lang-cpp">class Solution {
+public:
+    int findLengthOfLCIS(vector&lt;int&gt;&amp; nums) {
+        if (nums.empty()) return 0;
+        int count = 1;
+        int maxCount = 1;
+        for (int i = 0; i &lt; nums.size() - 1; ++i) {
+            if (nums[i] &lt; nums[i+1]) {
+                ++count;
+                maxCount = max(count, maxCount);
+            } else {
+                count = 1;
+            }
+        }
+        return maxCount;
+    }
+};
+</code></pre>
+<p>后来我悟了，这就是动态规划，只不过我利用<code>maxCount</code>来代替了dp数组。我真是个天才（误）！</p>
+<h2 id="leetcode-5-最长回文子串"><a href="#leetcode-5-最长回文子串" class="headerlink" title="leetcode 5 最长回文子串"></a>leetcode 5 最长回文子串</h2><p>本来是想定义dp[i][j]，表达字符串从i到j的子串中的最长回文子串的。后来想想这样定义不合适，不如把dp定义为一个bool数组，用来标记从i到j子串是否为回文串即可。</p>
+<p>状态转移关系：dp[i][j] = dp[i+1][j-1] &amp;&amp; (s[i] == s[j])</p>
+<p>即s[i:j]为回文串的条件为s[i+1][j-1]为回文串，且s[i] == s[j]</p>
+<p>边界条件：<br>dp[i][j] = true if i == j<br>dp[i][j] = false if i &gt; j<br>dp[i][i+1] = (s[i] == s[i+1])</p>
+<p>最后遍历所有dp[i][j]=true的项，返回最长的子串即可</p>
+<p>需要注意的一点：我们在遍历双层循环的时候，应该j在外，i在内。想想为什么？如果循环结构是这样的：</p>
+<pre><code class="lang-cpp">for (int i = 0; i &lt; s.size(); ++i) {
+    for (int j = i+1; j &lt; s.size(); ++j) {
+        // TODO
+    }
+}
+</code></pre>
+<p>那 i、j的变化为：<br>0,0<br>0,1<br>0,2<br>0,3-&gt;这里就不对了，因为dp[0][3]需要用到dp[1][2]的值。而i=1时的所有dp都还没求呢。</p>
+<p>代码：</p>
+<pre><code class="lang-cpp">class Solution {
+public:
+    string longestPalindrome(string s) {
+        if (s.empty()) return &quot;&quot;;
+        int size = s.size();
+        vector&lt;vector&lt;bool&gt;&gt; dp(size, vector&lt;bool&gt;(size, false));
+        string ans = &quot;&quot;;
+        for (int j = 0; j &lt; size; ++j) {
+            for (int i = 0; i &lt;= j; ++i) {
+                if (j == i) dp[i][j] = true;
+                else if (j == i+1) dp[i][j] = (s[i] == s[j]);
+                else dp[i][j] = (dp[i+1][j-1]) &amp;&amp; (s[i] == s[j]);
+
+                if (dp[i][j] &amp;&amp; ans.size() &lt; j-i+1) ans = s.substr(i, j-i+1);
+            }
+        }
+        return ans;
+    }
+};
+</code></pre>
+<h2 id="leetcode-213-打家劫舍2"><a href="#leetcode-213-打家劫舍2" class="headerlink" title="leetcode 213 打家劫舍2"></a>leetcode 213 打家劫舍2</h2><p>打家劫舍升级版，贼不能同时打劫头尾。</p>
+<p>也好办，拆分成两个动态规划，一个规定不能打劫nums[0]，另一个规定不能打劫nums[size-1]，最后返回更大的那个即可。</p>
+<p>代码：</p>
+<pre><code class="lang-cpp">class Solution {
+public:
+    int rob(vector&lt;int&gt;&amp; nums) {
+        if (nums.empty()) return 0;
+        int size = nums.size();
+        if (size == 1) return nums[0];
+        if (size == 2) return max(nums[0], nums[1]);
+
+        vector&lt;int&gt; dp_robfirst(size, 0);
+        vector&lt;int&gt; dp_roblast(size, 0);
+
+        dp_robfirst[0] = nums[0];
+        dp_robfirst[1] = max(nums[0], nums[1]);
+        for (int i = 2; i &lt; size-1; ++i) {
+            dp_robfirst[i] = max(dp_robfirst[i-1], dp_robfirst[i-2] + nums[i]);
+        }
+
+        dp_roblast[0] = 0;
+        dp_roblast[1] = nums[1];
+        for (int i = 2; i &lt; size; ++i) {
+            dp_roblast[i] = max(dp_roblast[i-1], dp_roblast[i-2] + nums[i]);
+        }
+
+        return max(dp_robfirst[size-2], dp_roblast[size-1]);
+    }
+};
+</code></pre>
+<h2 id="leetcode-516-最长回文子序列"><a href="#leetcode-516-最长回文子序列" class="headerlink" title="leetcode 516 最长回文子序列"></a>leetcode 516 最长回文子序列</h2><p>这次的dp含义为从i到j子串中最长的回文序列长度。</p>
+<p>转移方程：</p>
+<p>dp[i][j] = dp[i+1][j-1] if s[i] == s[j]<br>dp[i][j] = max(dp[i+1][j], dp[i][j-1]) if s[i] != s[j]</p>
+<p>注意，i从大遍历到小，j从小遍历到大。最后返回dp[0][size-1]</p>
+<p>边界条件：dp[i][j] = 1 if i == j</p>
+<p>代码：</p>
+<pre><code class="lang-cpp">class Solution {
+public:
+    int longestPalindromeSubseq(string s) {
+        if (s.empty()) return 0;
+        int size = s.size();
+        vector&lt;vector&lt;int&gt;&gt; dp(size, vector&lt;int&gt;(size, 0));
+
+        for (int i = size-1; i &gt;= 0; --i) {
+            for (int j = i; j &lt; size; ++j) {
+                if (i == j) dp[i][j] = 1;
+                else if (s[i] == s[j]) dp[i][j] = dp[i+1][j-1] + 2;
+                else dp[i][j] = max(dp[i+1][j], dp[i][j-1]);
+            }
+        }
+
+        return dp[0][size-1];
+    }
+};
+</code></pre>
+<h2 id="leetcode-72-编辑距离"><a href="#leetcode-72-编辑距离" class="headerlink" title="leetcode 72 编辑距离"></a>leetcode 72 编辑距离</h2><p>代码：</p>
+<pre><code class="lang-cpp">class Solution {
+public:
+    int minDistance(string word1, string word2) {
+        int M = word1.size();
+        int N = word2.size();
+        // if (word1.empty() || word2.empty()) return abs(M-N);
+        vector&lt;vector&lt;int&gt;&gt; dp(M+1, vector&lt;int&gt;(N+1, 0));
+        //initial
+        for (int i = 0; i &lt;= M; ++i) {
+            dp[i][0] = i;
+        }
+        for (int i = 0; i &lt;= N; ++i) {
+            dp[0][i] = i;
+        }
+        //dp
+        for (int i = 1; i &lt;= M; ++i) {
+            for (int j = 1; j &lt;= N; ++j) {
+                if (word1[i-1] == word2[j-1]) {
+                    dp[i][j] = min(dp[i - 1][j - 1], 1 + dp[i - 1][j]);
+                    dp[i][j] = min(dp[i][j], 1 + dp[i][j - 1]);
+                } else {
+                    dp[i][j] = min(dp[i - 1][j - 1], dp[i - 1][j]);
+                    dp[i][j] = 1 + min(dp[i][j], dp[i][j - 1]);
+                }
+            }
+        }
+        return dp[M][N];
+    }
+};
+</code></pre>
+
             </div>
             <hr>
             <div>
               <p>
                 
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/notes/">notes</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/algorithm/">algorithm</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Datawhale/">Datawhale</a>
+                    
+                      <a class="hover-with-bg" href="/tags/leetcode/">leetcode</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Dynamic-Programming/">Dynamic Programming</a>
+                    
+                  </span>
                 
               </p>
               
@@ -510,7 +699,35 @@
         $(this).wrap(element);
       }
     );
-  </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </script>
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+          tex2jax: {
+              inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+              processEscapes: true,
+              skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+          }
+      });
+
+      MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+
+    </script>
+
+    <script  src="https://cdn.staticfile.org/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" ></script>
+
+  
 
 
 
@@ -521,7 +738,20 @@
 
 
 
-
-
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>

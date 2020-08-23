@@ -146,6 +146,12 @@
       
       <p class="h5">2020</p>
     
+    <a href="/2020/08/23/【竞赛打卡】leetcode打卡：动态规划/" class="list-group-item list-group-item-action">
+      <span class="archive-post-title">【竞赛打卡】leetcode打卡：动态规划</span>
+      <span style="float: right;">08-23</span>
+    </a>
+  
+    
     <a href="/2020/08/22/【竞赛打卡】数据挖掘实践——时间序列模型/" class="list-group-item list-group-item-action">
       <span class="archive-post-title">【竞赛打卡】数据挖掘实践——时间序列模型</span>
       <span style="float: right;">08-22</span>
@@ -199,13 +205,19 @@
       <span style="float: right;">07-22</span>
     </a>
   
-    
-    <a href="/2020/07/21/【竞赛打卡】零基础入门NLP之新闻文本分类之赛题理解/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">【竞赛打卡】零基础入门NLP之新闻文本分类之赛题理解</span>
-      <span style="float: right;">07-21</span>
-    </a>
-  
 </div>
+
+  <nav aria-label="index posts navigation">
+    <span class="pagination pg-blue justify-content-center mt-5" id="pagination">
+      <span class="page-number current">1</span><a class="page-number" href="/tags/Datawhale/page/2/">2</a><a class="extend next" rel="next" href="/tags/Datawhale/page/2/"><i class="fas fa-angle-double-right"></i></a>
+    </span>
+  </nav>
+  
+  <script>
+    for (ele of document.getElementById("pagination").getElementsByClassName("page-number")) {
+      ele.href += '#board';
+    }
+  </script>
 
 
 
@@ -444,7 +456,7 @@
         $(this).wrap(element);
       }
     );
-  </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </script>
 
 
 
@@ -457,5 +469,20 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>
