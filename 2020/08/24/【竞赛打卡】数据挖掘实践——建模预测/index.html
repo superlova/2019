@@ -16,7 +16,7 @@
   <meta name="description" content>
   <meta name="author" content="Superlova">
   <meta name="keywords" content>
-  <title>numpy拼合数组方法大全 - Superlova</title>
+  <title>【竞赛打卡】数据挖掘实践——建模预测 - Superlova</title>
   <meta name="google-site-verification" content="CPvPw8mUZw65A1ALJ8uRzsYECq4mXgE4_eCq40VIhPM">
   <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
@@ -122,7 +122,7 @@
               
                 <p class="mt-3 post-meta">
                   <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                  星期一, 六月 1日 2020, 4:39 下午
+                  星期一, 八月 24日 2020, 11:05 晚上
                 </p>
               
 
@@ -131,7 +131,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    1.4k 字
+                    860 字
                   </span>
                 
 
@@ -139,7 +139,7 @@
                   
                   <span class="post-meta">
                       <i class="far fa-clock"></i>
-                      6 分钟
+                      5 分钟
                   </span>
                 
 
@@ -174,200 +174,139 @@
           <div class="post-content mx-auto" id="post">
             
               <p
-                class="note note-warning">本文最后更新于：星期二, 六月 2日 2020, 12:23 中午</p>
+                class="note note-warning">本文最后更新于：星期一, 八月 24日 2020, 11:41 晚上</p>
             
             <div class="markdown-body">
-              <p>numpy的一大特色就是其内部的矩阵向量运算。矩阵之间的拼接方法，你掌握多少？<br><a id="more"></a></p>
-<h2 id="1-append拼接"><a href="#1-append拼接" class="headerlink" title="1. append拼接"></a>1. append拼接</h2><p>我们都知道对于Python原生列表list来说，append是最方便的添加元素的方法，一句list.append(elem)就能在列表最后添加一个元素。</p>
-<p>在numpy中，append也是一个直观且好用的方法，np.append(A,B)能够直接拼合两个ndarray数组。</p>
-<p>首先我们新建两个三维数组，一个全为零，一个全为一。</p>
-<pre><code class="lang-python">C = np.zeros((2,2,2))
-D = np.ones((2,2,2))
-print(&quot;C: &quot;, C, C.shape)
-print(&quot;D: &quot;, D, D.shape)
+              <p>我也是加把劲骑士！<br><a id="more"></a></p>
+<pre><code class="lang-py">import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
+from tensorflow.keras.layers import Input, Conv1D, MaxPooling1D, Dense, Add, Dropout, Flatten, TimeDistributed
+from tensorflow.keras.models import Model, Sequential
+from tensorflow.keras import activations, optimizers, regularizers
+from tensorflow.keras.callbacks import EarlyStopping
+import tensorflow.keras.backend as kb
+from tensorflow import keras
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.metrics import mean_squared_error, mean_absolute_error
+from time import *
+user_balance = pd.read_csv(&#39;Purchase Redemption Data/user_balance_table.csv&#39;)
 
-C:  [[[0. 0.]
-  [0. 0.]]
+df_tmp = user_balance.groupby([&#39;report_date&#39;])[&#39;total_purchase_amt&#39;, &#39;total_redeem_amt&#39;].sum()
+df_tmp.index = pd.to_datetime(df_tmp.index, format=&#39;%Y%m%d&#39;)
 
- [[0. 0.]
-  [0. 0.]]] 
-shape=(2, 2, 2)
+holidays = (&#39;20130813&#39;, &#39;20130902&#39;, &#39;20131001&#39;, &#39;20131111&#39;, &#39;20130919&#39;, &#39;20131225&#39;, &#39;20140101&#39;, &#39;20140130&#39;, &#39;20140131&#39;,
+           &#39;20140214&#39;, &#39;20140405&#39;, &#39;20140501&#39;, &#39;20140602&#39;, &#39;20140802&#39;, &#39;20140901&#39;, &#39;20140908&#39;)
+def create_features(timeindex):
+    n = len(timeindex)
+    features = np.zeros((n, 4))
+    features[:, 0] = timeindex.day.values/31
+    features[:, 1] = timeindex.month.values/12
+    features[:, 2] = timeindex.weekday.values/6
+    for i in range(n):
+        if timeindex[i].strftime(&#39;%Y%m%d&#39;) in holidays:
+            features[i, 3] = 1
+    return features
 
-D:  [[[1. 1.]
-  [1. 1.]]
+features = create_features(df_tmp.index)
+september = pd.to_datetime([&#39;201409%02d&#39; % i for i in range(1, 31)])
+features_sep = create_features(september)
 
- [[1. 1.]
-  [1. 1.]]] 
-shape=(2, 2, 2)
+scaler_pur = MinMaxScaler()
+scaler_red = MinMaxScaler()
+data_pur = scaler_pur.fit_transform(df_tmp.values[:, 0:1])
+data_red = scaler_red.fit_transform(df_tmp.values[:, 1:2])
+
+def create_dataset(data, back, forward=30):
+    n_samples = len(data) - back - forward + 1
+    X, Y = np.zeros((n_samples, back, data.shape[-1])), np.zeros((n_samples, forward, data.shape[-1]))
+    for i in range(n_samples):
+        X[i, ...] = data[i:i+back, :]
+        Y[i, ...] = data[i+back:i+back+forward, :]
+    return X, Y
+
+def build_cnn(X_trn, lr, n_outputs, dropout_rate):
+    inputs = Input(X_trn.shape[1:])
+    z = Conv1D(64, 14, padding=&#39;valid&#39;, activation=&#39;relu&#39;, kernel_initializer=&#39;he_uniform&#39;)(inputs)
+#     z = MaxPooling1D(2)(z)
+    z = Conv1D(128, 7, padding=&#39;valid&#39;, activation=&#39;relu&#39;, kernel_initializer=&#39;he_uniform&#39;)(z)
+    z = MaxPooling1D(2)(z)
+    z = Conv1D(256, 3, padding=&#39;valid&#39;, activation=&#39;relu&#39;, kernel_initializer=&#39;he_uniform&#39;)(z)
+    z = Conv1D(256, 3, padding=&#39;valid&#39;, activation=&#39;relu&#39;, kernel_initializer=&#39;he_uniform&#39;)(z)
+    z = MaxPooling1D(2)(z)
+    z = Flatten()(z)
+    z = Dropout(dropout_rate)(z)
+    z = Dense(128, activation=&#39;relu&#39;, kernel_initializer=&#39;he_uniform&#39;)(z)
+    z = Dropout(dropout_rate)(z)
+    z = Dense(84, activation=&#39;relu&#39;, kernel_initializer=&#39;he_uniform&#39;)(z)
+    outputs = Dense(n_outputs)(z)
+    model = Model(inputs=inputs, outputs=outputs)
+    adam = optimizers.Adam(lr=lr)
+    model.compile(loss=&#39;mse&#39;, optimizer=adam, metrics=[&#39;mae&#39;])
+    model.summary()
+    return model
+
+back = 60
+forward = 30
+X_pur_data, Y_pur_data = create_dataset(data_pur, back, forward)
+X_red_data, Y_red_data = create_dataset(data_red, back, forward)
+X_features, Y_features = create_dataset(features, back, forward)
+Y_features = np.concatenate((Y_features, np.zeros((Y_features.shape[0], back-forward, Y_features.shape[-1]))), axis=1)
+# X_pur, X_red = np.concatenate((X_pur_data, X_features, Y_features), axis=-1), np.concatenate((X_red_data, X_features, Y_features), axis=-1)
+# X_pur_trn, X_pur_val, X_red_trn, X_red_val = X_pur[:-forward, ...], X_pur[-1:, ...], X_red[:-forward, ...], X_red[-1:, ...]
+# Y_pur_trn, Y_pur_val, Y_red_trn, Y_red_val = Y_pur_data[:-forward, ...], Y_pur_data[-1:, ...], Y_red_data[:-forward, ...], Y_red_data[-1:, ...]
+Y_fea_sep = np.concatenate((features_sep, np.zeros((back-forward, features_sep.shape[-1]))), axis=0)
+# X_pur_tst = np.concatenate((data_pur[-back:, :], features[-back:, :], Y_fea_sep), axis=-1)[None, ...]
+# X_red_tst = np.concatenate((data_red[-back:, :], features[-back:, :], Y_fea_sep), axis=-1)[None, ...]
+X = np.concatenate((X_pur_data, X_red_data, X_features, Y_features), axis=-1)
+Y = np.concatenate((Y_pur_data, Y_red_data), axis=1)
+X_trn, X_val, Y_trn, Y_val = X[:-forward, ...], X[-1:, ...], Y[:-forward, ...], Y[-1:, ...]
+X_tst = np.concatenate((data_pur[-back:, :], data_red[-back:, :], features[-back:, :], Y_fea_sep), axis=-1)[None, ...]
+
+cnn_pur = build_cnn(X_trn, lr=0.0008, n_outputs=2*forward, dropout_rate=0.5)
+history = cnn_pur.fit(X_trn, Y_trn, batch_size=32, epochs=1000, verbose=2, 
+                      validation_data=(X_val, Y_val),
+                     callbacks=[EarlyStopping(monitor=&#39;val_mae&#39;, patience=200, restore_best_weights=True)])
+
+plt.figure(figsize=(8, 5))
+plt.plot(history.history[&#39;mae&#39;], label=&#39;train mae&#39;)
+plt.plot(history.history[&#39;val_mae&#39;], label=&#39;validation mae&#39;)
+plt.ylim([0, 0.2])
+plt.legend()
+plt.show()
+
+def plot_prediction(y_pred, y_true):
+    plt.figure(figsize=(16,4))
+    plt.plot(np.squeeze(y_pred), label=&#39;prediction&#39;)
+    plt.plot(np.squeeze(y_true), label=&#39;true&#39;)
+    plt.legend()
+    plt.show()
+    print(&#39;MAE: %.3f&#39; % mean_absolute_error(np.squeeze(y_pred), np.squeeze(y_true)))
+
+pred = cnn.predict(X_val)
+plot_prediction(pred, Y_val)
+
+history = cnn.fit(X, Y, batch_size=32, epochs=500, verbose=2,
+                     callbacks=[EarlyStopping(monitor=&#39;mae&#39;, patience=30, restore_best_weights=True)])
+
+plt.figure(figsize=(8, 5))
+plt.plot(history.history[&#39;mae&#39;], label=&#39;train mae&#39;)
+plt.legend()
+plt.show()
+print(cnn.evaluate(X, Y, verbose=2))
+
+pred_tst = cnn.predict(X_tst)
+pur_sep = scaler_pur.inverse_transform(pred_tst[:, :forward].transpose())
+red_sep = scaler_red.inverse_transform(pred_tst[:, forward:].transpose())
+
+test_user = pd.DataFrame({&#39;report_date&#39;: [20140900 + i for i in range(1, 31)]})
+test_user[&#39;pur&#39;] = pur_sep.astype(&#39;int&#39;)
+test_user[&#39;red&#39;] = red_sep.astype(&#39;int&#39;)
+test_user.to_csv(&#39;submission.csv&#39;, encoding=&#39;utf-8&#39;, index=None, header=None)
+
+from google.colab import files
+files.download(&quot;submission.csv&quot;)
 </code></pre>
-<p>然后我们采用不同的方法将其拼合在一起。</p>
-<p>首先是append(C,D)这种直观的方法，可以看到C和D都被展开成了一维。</p>
-<pre><code class="lang-python">np.append(C,D)
-
-array([0., 0., 0., 0., 0., 0., 0., 0., 1., 1., 1., 1., 1., 1., 1., 1.])
-</code></pre>
-<p>在很多时候我们希望数组拼接时能够保持原有的维度，按照行拼接/列拼接/其他维度拼接。此时只需要改动append的参数axis即可。</p>
-<pre><code class="lang-python">np.append(C,D,axis=0)
-array([[[0., 0.],
-        [0., 0.]],
-
-       [[0., 0.],
-        [0., 0.]],
-
-       [[1., 1.],
-        [1., 1.]],
-
-       [[1., 1.],
-        [1., 1.]]])
-
-np.append(C,D,axis=1)
-array([[[0., 0.],
-        [0., 0.],
-        [1., 1.],
-        [1., 1.]],
-
-       [[0., 0.],
-        [0., 0.],
-        [1., 1.],
-        [1., 1.]]])
-
-np.append(C,D,axis=2)
-array([[[0., 0., 1., 1.],
-        [0., 0., 1., 1.]],
-
-       [[0., 0., 1., 1.],
-        [0., 0., 1., 1.]]])
-</code></pre>
-<p>对于三维数组，axis=0为层，axis=1为行，axis=2为列。这不难理解，因为确定单位数组中元素位置的坐标就是(层，行，列)</p>
-<h2 id="2-concatenate拼接"><a href="#2-concatenate拼接" class="headerlink" title="2. concatenate拼接"></a>2. concatenate拼接</h2><p>concatenate从字面意义上就让人明白这个函数专门负责数组拼接。不仅仅是两个，还可以负责多个数组一起拼接。理论上来说concatenate的速度和内存消耗都比append要小，但我并没有实际做实验验证。</p>
-<pre><code class="lang-python">np.concatenate((C,D)) # default axis=0
-array([[[0., 0.],
-        [0., 0.]],
-
-       [[0., 0.],
-        [0., 0.]],
-
-       [[1., 1.],
-        [1., 1.]],
-
-       [[1., 1.],
-        [1., 1.]]])
-
-np.concatenate((C,D), axis=1) # =np.append(C,D,axis=1)
-array([[[0., 0.],
-        [0., 0.],
-        [1., 1.],
-        [1., 1.]],
-
-       [[0., 0.],
-        [0., 0.],
-        [1., 1.],
-        [1., 1.]]])
-</code></pre>
-<h2 id="3-stack系列"><a href="#3-stack系列" class="headerlink" title="3. stack系列"></a>3. stack系列</h2><p>stack系列函数包括np.stack/hstack/vstack/dstack/column_stack/row_stack，顾名思义，hstack是按照横向拼接，vstack竖着拼接，dstack则是层叠数组。其实我最烦这种抽象描述了，因为二维数组和三维数组/高维数组的抽象描述根本不一致，还是axis好。不明白axis的同学可以看<a href="https://superlova.github.io/2020/05/19/numpy%E4%B8%ADaxis%E7%9A%84%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3/">这篇文章</a>。</p>
-<pre><code class="lang-python">np.hstack((C,D)) # = np.append(C,D,axis=1) = np.column_stack()
-array([[[0., 0.],
-        [0., 0.],
-        [1., 1.],
-        [1., 1.]],
-
-       [[0., 0.],
-        [0., 0.],
-        [1., 1.],
-        [1., 1.]]])
-
-np.vstack((C,D)) # =np.append(C,D,axis=0) = np.row_stack()
-array([[[0., 0.],
-        [0., 0.]],
-
-       [[0., 0.],
-        [0., 0.]],
-
-       [[1., 1.],
-        [1., 1.]],
-
-       [[1., 1.],
-        [1., 1.]]])
-
-np.dstack((C,D)) # =np.append(C,D,aixs=2)
-array([[[0., 0., 1., 1.],
-        [0., 0., 1., 1.]],
-
-       [[0., 0., 1., 1.],
-        [0., 0., 1., 1.]]])
-</code></pre>
-<h2 id="4-np-r"><a href="#4-np-r" class="headerlink" title="4. np.r_[]"></a>4. np.r_[]</h2><p>神奇的numpy总能给出神奇的解法。np.r_是构建数组/拼合数组的最简便写法，但不一定是好理解的。这种写法和之前写的append没什么不同，但是更加简洁。你也可以使用np.r_做出更加复杂的功能。</p>
-<p>一言以蔽之，np.r_[]表达式能够快速使得多个在中括号里面的array/array切片，按照axis=0拼接起来。</p>
-<p>np.r_[]存在两种使用情况：</p>
-<ol>
-<li>如果中括号内部是由若干逗号(comma,)分隔的array，就将他们按照axis=0拼接起来。</li>
-<li>如果中括号内部包括矩阵切片(slices)或者标量(scalars)，就将他们全部变成一维数组首尾相接。</li>
-</ol>
-<p><strong>注意：</strong></p>
-<ul>
-<li>中括号<code>[3:6:1]</code>内部代表的切片，其含义相当于<code>np.arange(3,6,1)</code>，即在<code>[3,6)</code>范围内，从3开始走一步取一个元素，也就是<code>[3,4,5]</code>。</li>
-<li>中括号<code>[0:5:3j]</code>在最后加了字母<code>j</code>，相当于<code>np.linspace(0,5,3,endpoint=True)</code>，在<code>[0,5]</code>范围内，均匀地取三个元素。</li>
-</ul>
-<pre><code class="lang-python">np.r_[C,D] # =np.append(C,D,axis=0)
-array([[[0., 0.],
-        [0., 0.]],
-
-       [[0., 0.],
-        [0., 0.]],
-
-       [[1., 1.],
-        [1., 1.]],
-
-       [[1., 1.],
-        [1., 1.]]])
-
-np.r_[0:10:3, 0:5:4j]
-array([0.        , 3.        , 6.        , 9.        , 0.        ,
-       1.66666667, 3.33333333, 5.        ])
-</code></pre>
-<p>在中括号内，如果最开始是一个<strong>特定的字符串</strong>，np.r_会试图根据字符串的含义，改变其输出格式。</p>
-<ul>
-<li><code>np.r_[&#39;r&#39;, index_expression]</code>和<code>np.r_[&#39;c&#39;, index_expression]</code>将输出从array类型转变成matrix类型。<code>np.r_[&#39;c&#39;, index_expression]</code>会把一维index_expression组装成N*1的列向量。</li>
-</ul>
-<pre><code class="lang-python">np.r_[&quot;r&quot;, 0:10:3, 0:5:4j]
-matrix([[0.        , 3.        , 6.        , 9.        , 0.        ,
-         1.66666667, 3.33333333, 5.        ]])
-
-np.r_[&quot;c&quot;, 0:10:3, 0:5:4j]
-matrix([[0.        ],
-        [3.        ],
-        [6.        ],
-        [9.        ],
-        [0.        ],
-        [1.66666667],
-        [3.33333333],
-        [5.        ]])
-</code></pre>
-<ul>
-<li><code>np.r_[&quot;n&quot;, index_expression]</code>前面字符串是整数，则拼接时将会按照axis=n进行拼接。</li>
-</ul>
-<pre><code class="lang-python">np.r_[&quot;-1&quot;,C,D]
-array([[[0., 0., 1., 1.],
-        [0., 0., 1., 1.]],
-
-       [[0., 0., 1., 1.],
-        [0., 0., 1., 1.]]])
-</code></pre>
-<h2 id="5-np-c"><a href="#5-np-c" class="headerlink" title="5. np.c_"></a>5. np.c_</h2><p>在日常使用时，我们经常需要按照最后一个维度拼合两个数组，也就是np.r_[‘-1’,index_expression]。此时我们可以直接使用<code>np.c_[]</code></p>
-<pre><code class="lang-python">np.c_[C,D] # =np.append(C,D,axis=2)
-array([[[0., 0., 1., 1.],
-        [0., 0., 1., 1.]],
-
-       [[0., 0., 1., 1.],
-        [0., 0., 1., 1.]]])
-
-np.c_[0:10:3, 0:5:4j]
-array([[0.        , 0.        ],
-       [3.        , 1.66666667],
-       [6.        , 3.33333333],
-       [9.        , 5.        ]])
-</code></pre>
-<p>关于numpy中的<code>np.c_</code>和<code>np.r_</code>相关知识，可以参考<a href="https://numpy.org/devdocs/reference/generated/numpy.r_.html#numpy.r_" target="_blank" rel="noopener">官方文档</a>，里面有关于中括号前参数的详细解释。</p>
 
             </div>
             <hr>
@@ -386,13 +325,11 @@ array([[0.        , 0.        ],
                   <span>
                 <i class="iconfont icon-tag"></i>
                     
-                      <a class="hover-with-bg" href="/tags/Python/">Python</a>
+                      <a class="hover-with-bg" href="/tags/Datawhale/">Datawhale</a>
                     
-                      <a class="hover-with-bg" href="/tags/array/">array</a>
+                      <a class="hover-with-bg" href="/tags/Data-Mining/">Data Mining</a>
                     
-                      <a class="hover-with-bg" href="/tags/numpy/">numpy</a>
-                    
-                      <a class="hover-with-bg" href="/tags/concatenate/">concatenate</a>
+                      <a class="hover-with-bg" href="/tags/Time-Series-Analysis/">Time Series Analysis</a>
                     
                   </span>
                 
@@ -668,7 +605,7 @@ array([[0.        , 0.        ],
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "numpy拼合数组方法大全&nbsp;",
+        "【竞赛打卡】数据挖掘实践——建模预测&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 90,
@@ -725,6 +662,32 @@ array([[0.        , 0.        ],
   </script>
 
 
+
+  
+
+  
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+          tex2jax: {
+              inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+              processEscapes: true,
+              skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+          }
+      });
+
+      MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+
+    </script>
+
+    <script  src="https://cdn.staticfile.org/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" ></script>
+
+  
 
 
 

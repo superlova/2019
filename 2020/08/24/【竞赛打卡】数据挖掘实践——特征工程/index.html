@@ -16,7 +16,7 @@
   <meta name="description" content>
   <meta name="author" content="Superlova">
   <meta name="keywords" content>
-  <title>numpy拼合数组方法大全 - Superlova</title>
+  <title>【竞赛打卡】数据挖掘实践——特征工程 - Superlova</title>
   <meta name="google-site-verification" content="CPvPw8mUZw65A1ALJ8uRzsYECq4mXgE4_eCq40VIhPM">
   <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
@@ -122,7 +122,7 @@
               
                 <p class="mt-3 post-meta">
                   <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                  星期一, 六月 1日 2020, 4:39 下午
+                  星期一, 八月 24日 2020, 11:04 晚上
                 </p>
               
 
@@ -131,7 +131,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    1.4k 字
+                    464 字
                   </span>
                 
 
@@ -139,7 +139,7 @@
                   
                   <span class="post-meta">
                       <i class="far fa-clock"></i>
-                      6 分钟
+                      1 分钟
                   </span>
                 
 
@@ -174,200 +174,19 @@
           <div class="post-content mx-auto" id="post">
             
               <p
-                class="note note-warning">本文最后更新于：星期二, 六月 2日 2020, 12:23 中午</p>
+                class="note note-warning">本文最后更新于：星期一, 八月 24日 2020, 11:40 晚上</p>
             
             <div class="markdown-body">
-              <p>numpy的一大特色就是其内部的矩阵向量运算。矩阵之间的拼接方法，你掌握多少？<br><a id="more"></a></p>
-<h2 id="1-append拼接"><a href="#1-append拼接" class="headerlink" title="1. append拼接"></a>1. append拼接</h2><p>我们都知道对于Python原生列表list来说，append是最方便的添加元素的方法，一句list.append(elem)就能在列表最后添加一个元素。</p>
-<p>在numpy中，append也是一个直观且好用的方法，np.append(A,B)能够直接拼合两个ndarray数组。</p>
-<p>首先我们新建两个三维数组，一个全为零，一个全为一。</p>
-<pre><code class="lang-python">C = np.zeros((2,2,2))
-D = np.ones((2,2,2))
-print(&quot;C: &quot;, C, C.shape)
-print(&quot;D: &quot;, D, D.shape)
-
-C:  [[[0. 0.]
-  [0. 0.]]
-
- [[0. 0.]
-  [0. 0.]]] 
-shape=(2, 2, 2)
-
-D:  [[[1. 1.]
-  [1. 1.]]
-
- [[1. 1.]
-  [1. 1.]]] 
-shape=(2, 2, 2)
-</code></pre>
-<p>然后我们采用不同的方法将其拼合在一起。</p>
-<p>首先是append(C,D)这种直观的方法，可以看到C和D都被展开成了一维。</p>
-<pre><code class="lang-python">np.append(C,D)
-
-array([0., 0., 0., 0., 0., 0., 0., 0., 1., 1., 1., 1., 1., 1., 1., 1.])
-</code></pre>
-<p>在很多时候我们希望数组拼接时能够保持原有的维度，按照行拼接/列拼接/其他维度拼接。此时只需要改动append的参数axis即可。</p>
-<pre><code class="lang-python">np.append(C,D,axis=0)
-array([[[0., 0.],
-        [0., 0.]],
-
-       [[0., 0.],
-        [0., 0.]],
-
-       [[1., 1.],
-        [1., 1.]],
-
-       [[1., 1.],
-        [1., 1.]]])
-
-np.append(C,D,axis=1)
-array([[[0., 0.],
-        [0., 0.],
-        [1., 1.],
-        [1., 1.]],
-
-       [[0., 0.],
-        [0., 0.],
-        [1., 1.],
-        [1., 1.]]])
-
-np.append(C,D,axis=2)
-array([[[0., 0., 1., 1.],
-        [0., 0., 1., 1.]],
-
-       [[0., 0., 1., 1.],
-        [0., 0., 1., 1.]]])
-</code></pre>
-<p>对于三维数组，axis=0为层，axis=1为行，axis=2为列。这不难理解，因为确定单位数组中元素位置的坐标就是(层，行，列)</p>
-<h2 id="2-concatenate拼接"><a href="#2-concatenate拼接" class="headerlink" title="2. concatenate拼接"></a>2. concatenate拼接</h2><p>concatenate从字面意义上就让人明白这个函数专门负责数组拼接。不仅仅是两个，还可以负责多个数组一起拼接。理论上来说concatenate的速度和内存消耗都比append要小，但我并没有实际做实验验证。</p>
-<pre><code class="lang-python">np.concatenate((C,D)) # default axis=0
-array([[[0., 0.],
-        [0., 0.]],
-
-       [[0., 0.],
-        [0., 0.]],
-
-       [[1., 1.],
-        [1., 1.]],
-
-       [[1., 1.],
-        [1., 1.]]])
-
-np.concatenate((C,D), axis=1) # =np.append(C,D,axis=1)
-array([[[0., 0.],
-        [0., 0.],
-        [1., 1.],
-        [1., 1.]],
-
-       [[0., 0.],
-        [0., 0.],
-        [1., 1.],
-        [1., 1.]]])
-</code></pre>
-<h2 id="3-stack系列"><a href="#3-stack系列" class="headerlink" title="3. stack系列"></a>3. stack系列</h2><p>stack系列函数包括np.stack/hstack/vstack/dstack/column_stack/row_stack，顾名思义，hstack是按照横向拼接，vstack竖着拼接，dstack则是层叠数组。其实我最烦这种抽象描述了，因为二维数组和三维数组/高维数组的抽象描述根本不一致，还是axis好。不明白axis的同学可以看<a href="https://superlova.github.io/2020/05/19/numpy%E4%B8%ADaxis%E7%9A%84%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3/">这篇文章</a>。</p>
-<pre><code class="lang-python">np.hstack((C,D)) # = np.append(C,D,axis=1) = np.column_stack()
-array([[[0., 0.],
-        [0., 0.],
-        [1., 1.],
-        [1., 1.]],
-
-       [[0., 0.],
-        [0., 0.],
-        [1., 1.],
-        [1., 1.]]])
-
-np.vstack((C,D)) # =np.append(C,D,axis=0) = np.row_stack()
-array([[[0., 0.],
-        [0., 0.]],
-
-       [[0., 0.],
-        [0., 0.]],
-
-       [[1., 1.],
-        [1., 1.]],
-
-       [[1., 1.],
-        [1., 1.]]])
-
-np.dstack((C,D)) # =np.append(C,D,aixs=2)
-array([[[0., 0., 1., 1.],
-        [0., 0., 1., 1.]],
-
-       [[0., 0., 1., 1.],
-        [0., 0., 1., 1.]]])
-</code></pre>
-<h2 id="4-np-r"><a href="#4-np-r" class="headerlink" title="4. np.r_[]"></a>4. np.r_[]</h2><p>神奇的numpy总能给出神奇的解法。np.r_是构建数组/拼合数组的最简便写法，但不一定是好理解的。这种写法和之前写的append没什么不同，但是更加简洁。你也可以使用np.r_做出更加复杂的功能。</p>
-<p>一言以蔽之，np.r_[]表达式能够快速使得多个在中括号里面的array/array切片，按照axis=0拼接起来。</p>
-<p>np.r_[]存在两种使用情况：</p>
-<ol>
-<li>如果中括号内部是由若干逗号(comma,)分隔的array，就将他们按照axis=0拼接起来。</li>
-<li>如果中括号内部包括矩阵切片(slices)或者标量(scalars)，就将他们全部变成一维数组首尾相接。</li>
-</ol>
-<p><strong>注意：</strong></p>
-<ul>
-<li>中括号<code>[3:6:1]</code>内部代表的切片，其含义相当于<code>np.arange(3,6,1)</code>，即在<code>[3,6)</code>范围内，从3开始走一步取一个元素，也就是<code>[3,4,5]</code>。</li>
-<li>中括号<code>[0:5:3j]</code>在最后加了字母<code>j</code>，相当于<code>np.linspace(0,5,3,endpoint=True)</code>，在<code>[0,5]</code>范围内，均匀地取三个元素。</li>
-</ul>
-<pre><code class="lang-python">np.r_[C,D] # =np.append(C,D,axis=0)
-array([[[0., 0.],
-        [0., 0.]],
-
-       [[0., 0.],
-        [0., 0.]],
-
-       [[1., 1.],
-        [1., 1.]],
-
-       [[1., 1.],
-        [1., 1.]]])
-
-np.r_[0:10:3, 0:5:4j]
-array([0.        , 3.        , 6.        , 9.        , 0.        ,
-       1.66666667, 3.33333333, 5.        ])
-</code></pre>
-<p>在中括号内，如果最开始是一个<strong>特定的字符串</strong>，np.r_会试图根据字符串的含义，改变其输出格式。</p>
-<ul>
-<li><code>np.r_[&#39;r&#39;, index_expression]</code>和<code>np.r_[&#39;c&#39;, index_expression]</code>将输出从array类型转变成matrix类型。<code>np.r_[&#39;c&#39;, index_expression]</code>会把一维index_expression组装成N*1的列向量。</li>
-</ul>
-<pre><code class="lang-python">np.r_[&quot;r&quot;, 0:10:3, 0:5:4j]
-matrix([[0.        , 3.        , 6.        , 9.        , 0.        ,
-         1.66666667, 3.33333333, 5.        ]])
-
-np.r_[&quot;c&quot;, 0:10:3, 0:5:4j]
-matrix([[0.        ],
-        [3.        ],
-        [6.        ],
-        [9.        ],
-        [0.        ],
-        [1.66666667],
-        [3.33333333],
-        [5.        ]])
-</code></pre>
-<ul>
-<li><code>np.r_[&quot;n&quot;, index_expression]</code>前面字符串是整数，则拼接时将会按照axis=n进行拼接。</li>
-</ul>
-<pre><code class="lang-python">np.r_[&quot;-1&quot;,C,D]
-array([[[0., 0., 1., 1.],
-        [0., 0., 1., 1.]],
-
-       [[0., 0., 1., 1.],
-        [0., 0., 1., 1.]]])
-</code></pre>
-<h2 id="5-np-c"><a href="#5-np-c" class="headerlink" title="5. np.c_"></a>5. np.c_</h2><p>在日常使用时，我们经常需要按照最后一个维度拼合两个数组，也就是np.r_[‘-1’,index_expression]。此时我们可以直接使用<code>np.c_[]</code></p>
-<pre><code class="lang-python">np.c_[C,D] # =np.append(C,D,axis=2)
-array([[[0., 0., 1., 1.],
-        [0., 0., 1., 1.]],
-
-       [[0., 0., 1., 1.],
-        [0., 0., 1., 1.]]])
-
-np.c_[0:10:3, 0:5:4j]
-array([[0.        , 0.        ],
-       [3.        , 1.66666667],
-       [6.        , 3.33333333],
-       [9.        , 5.        ]])
-</code></pre>
-<p>关于numpy中的<code>np.c_</code>和<code>np.r_</code>相关知识，可以参考<a href="https://numpy.org/devdocs/reference/generated/numpy.r_.html#numpy.r_" target="_blank" rel="noopener">官方文档</a>，里面有关于中括号前参数的详细解释。</p>
+              <p>我也是加把劲骑士！<br><a id="more"></a></p>
+<p>数据和特征决定了机器学习的上限，而模型和算法只是逼近这个上限而已。由此可见，特征工程在机器学习中占有相当重要的地位。在实际应用当中，可以说特征工程是机器学习成功的关键。</p>
+<p>那特征工程是什么？</p>
+<p>特征工程是利用数据领域的相关知识来创建能够使机器学习算法达到最佳性能的特征的过程。</p>
+<p>特征工程又包含了 Data PreProcessing（数据预处理）、Feature Extraction（特征提取）、Feature Selection（特征选择）和 Feature construction（特征构造）等子问题，本章内容主要讨论特征构造的方法。</p>
+<p>创造新的特征是一件十分困难的事情，需要丰富的专业知识和大量的时间。机器学习应用的本质基本上就是特征工程。<br>——Andrew Ng</p>
+<p>对于时间型数据来说，即可以把它转换成连续值，也可以转换成离散值。</p>
+<p>1.连续值时间特征<br>持续时间（单页浏览时长）；间隔时间；上次购买/点击离现在的时长；产品上线到现在经过的时长；2.离散值时间特征<br>1）时间特征拆解</p>
+<p>年；月；日；时；分；数；一天中的第几分钟；星期几；一年中的第几天；一年中的第几个周；一天中哪个时间段：凌晨、早晨、上午、中午、下午、傍晚、晚上、深夜；一年中的哪个季度；</p>
+<p>2）时间特征判断<br>是否闰年；是否月初；是否月末；是否季节初；是否季节末；是否年初；是否年尾；是否周末；是否公共假期；是否营业时间；两个时间间隔之间是否包含节假日/特殊日期；</p>
 
             </div>
             <hr>
@@ -386,13 +205,11 @@ array([[0.        , 0.        ],
                   <span>
                 <i class="iconfont icon-tag"></i>
                     
-                      <a class="hover-with-bg" href="/tags/Python/">Python</a>
+                      <a class="hover-with-bg" href="/tags/Datawhale/">Datawhale</a>
                     
-                      <a class="hover-with-bg" href="/tags/array/">array</a>
+                      <a class="hover-with-bg" href="/tags/Data-Mining/">Data Mining</a>
                     
-                      <a class="hover-with-bg" href="/tags/numpy/">numpy</a>
-                    
-                      <a class="hover-with-bg" href="/tags/concatenate/">concatenate</a>
+                      <a class="hover-with-bg" href="/tags/Time-Series-Analysis/">Time Series Analysis</a>
                     
                   </span>
                 
@@ -668,7 +485,7 @@ array([[0.        , 0.        ],
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "numpy拼合数组方法大全&nbsp;",
+        "【竞赛打卡】数据挖掘实践——特征工程&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 90,
@@ -725,6 +542,32 @@ array([[0.        , 0.        ],
   </script>
 
 
+
+  
+
+  
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+          tex2jax: {
+              inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+              processEscapes: true,
+              skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+          }
+      });
+
+      MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+
+    </script>
+
+    <script  src="https://cdn.staticfile.org/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" ></script>
+
+  
 
 
 

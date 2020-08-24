@@ -4,6 +4,64 @@
   
   
   <entry>
+    <title>【竞赛打卡】数据挖掘实践——建模预测</title>
+    <link href="/2020/08/24/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%E5%AE%9E%E8%B7%B5%E2%80%94%E2%80%94%E5%BB%BA%E6%A8%A1%E9%A2%84%E6%B5%8B/"/>
+    <url>/2020/08/24/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%E5%AE%9E%E8%B7%B5%E2%80%94%E2%80%94%E5%BB%BA%E6%A8%A1%E9%A2%84%E6%B5%8B/</url>
+    
+    <content type="html"><![CDATA[<p>我也是加把劲骑士！<br><a id="more"></a></p><pre><code class="lang-py">import matplotlib.pyplot as pltimport pandas as pdimport numpy as npfrom tensorflow.keras.layers import Input, Conv1D, MaxPooling1D, Dense, Add, Dropout, Flatten, TimeDistributedfrom tensorflow.keras.models import Model, Sequentialfrom tensorflow.keras import activations, optimizers, regularizersfrom tensorflow.keras.callbacks import EarlyStoppingimport tensorflow.keras.backend as kbfrom tensorflow import kerasfrom sklearn.preprocessing import MinMaxScalerfrom sklearn.metrics import mean_squared_error, mean_absolute_errorfrom time import *user_balance = pd.read_csv(&#39;Purchase Redemption Data/user_balance_table.csv&#39;)df_tmp = user_balance.groupby([&#39;report_date&#39;])[&#39;total_purchase_amt&#39;, &#39;total_redeem_amt&#39;].sum()df_tmp.index = pd.to_datetime(df_tmp.index, format=&#39;%Y%m%d&#39;)holidays = (&#39;20130813&#39;, &#39;20130902&#39;, &#39;20131001&#39;, &#39;20131111&#39;, &#39;20130919&#39;, &#39;20131225&#39;, &#39;20140101&#39;, &#39;20140130&#39;, &#39;20140131&#39;,           &#39;20140214&#39;, &#39;20140405&#39;, &#39;20140501&#39;, &#39;20140602&#39;, &#39;20140802&#39;, &#39;20140901&#39;, &#39;20140908&#39;)def create_features(timeindex):    n = len(timeindex)    features = np.zeros((n, 4))    features[:, 0] = timeindex.day.values/31    features[:, 1] = timeindex.month.values/12    features[:, 2] = timeindex.weekday.values/6    for i in range(n):        if timeindex[i].strftime(&#39;%Y%m%d&#39;) in holidays:            features[i, 3] = 1    return featuresfeatures = create_features(df_tmp.index)september = pd.to_datetime([&#39;201409%02d&#39; % i for i in range(1, 31)])features_sep = create_features(september)scaler_pur = MinMaxScaler()scaler_red = MinMaxScaler()data_pur = scaler_pur.fit_transform(df_tmp.values[:, 0:1])data_red = scaler_red.fit_transform(df_tmp.values[:, 1:2])def create_dataset(data, back, forward=30):    n_samples = len(data) - back - forward + 1    X, Y = np.zeros((n_samples, back, data.shape[-1])), np.zeros((n_samples, forward, data.shape[-1]))    for i in range(n_samples):        X[i, ...] = data[i:i+back, :]        Y[i, ...] = data[i+back:i+back+forward, :]    return X, Ydef build_cnn(X_trn, lr, n_outputs, dropout_rate):    inputs = Input(X_trn.shape[1:])    z = Conv1D(64, 14, padding=&#39;valid&#39;, activation=&#39;relu&#39;, kernel_initializer=&#39;he_uniform&#39;)(inputs)#     z = MaxPooling1D(2)(z)    z = Conv1D(128, 7, padding=&#39;valid&#39;, activation=&#39;relu&#39;, kernel_initializer=&#39;he_uniform&#39;)(z)    z = MaxPooling1D(2)(z)    z = Conv1D(256, 3, padding=&#39;valid&#39;, activation=&#39;relu&#39;, kernel_initializer=&#39;he_uniform&#39;)(z)    z = Conv1D(256, 3, padding=&#39;valid&#39;, activation=&#39;relu&#39;, kernel_initializer=&#39;he_uniform&#39;)(z)    z = MaxPooling1D(2)(z)    z = Flatten()(z)    z = Dropout(dropout_rate)(z)    z = Dense(128, activation=&#39;relu&#39;, kernel_initializer=&#39;he_uniform&#39;)(z)    z = Dropout(dropout_rate)(z)    z = Dense(84, activation=&#39;relu&#39;, kernel_initializer=&#39;he_uniform&#39;)(z)    outputs = Dense(n_outputs)(z)    model = Model(inputs=inputs, outputs=outputs)    adam = optimizers.Adam(lr=lr)    model.compile(loss=&#39;mse&#39;, optimizer=adam, metrics=[&#39;mae&#39;])    model.summary()    return modelback = 60forward = 30X_pur_data, Y_pur_data = create_dataset(data_pur, back, forward)X_red_data, Y_red_data = create_dataset(data_red, back, forward)X_features, Y_features = create_dataset(features, back, forward)Y_features = np.concatenate((Y_features, np.zeros((Y_features.shape[0], back-forward, Y_features.shape[-1]))), axis=1)# X_pur, X_red = np.concatenate((X_pur_data, X_features, Y_features), axis=-1), np.concatenate((X_red_data, X_features, Y_features), axis=-1)# X_pur_trn, X_pur_val, X_red_trn, X_red_val = X_pur[:-forward, ...], X_pur[-1:, ...], X_red[:-forward, ...], X_red[-1:, ...]# Y_pur_trn, Y_pur_val, Y_red_trn, Y_red_val = Y_pur_data[:-forward, ...], Y_pur_data[-1:, ...], Y_red_data[:-forward, ...], Y_red_data[-1:, ...]Y_fea_sep = np.concatenate((features_sep, np.zeros((back-forward, features_sep.shape[-1]))), axis=0)# X_pur_tst = np.concatenate((data_pur[-back:, :], features[-back:, :], Y_fea_sep), axis=-1)[None, ...]# X_red_tst = np.concatenate((data_red[-back:, :], features[-back:, :], Y_fea_sep), axis=-1)[None, ...]X = np.concatenate((X_pur_data, X_red_data, X_features, Y_features), axis=-1)Y = np.concatenate((Y_pur_data, Y_red_data), axis=1)X_trn, X_val, Y_trn, Y_val = X[:-forward, ...], X[-1:, ...], Y[:-forward, ...], Y[-1:, ...]X_tst = np.concatenate((data_pur[-back:, :], data_red[-back:, :], features[-back:, :], Y_fea_sep), axis=-1)[None, ...]cnn_pur = build_cnn(X_trn, lr=0.0008, n_outputs=2*forward, dropout_rate=0.5)history = cnn_pur.fit(X_trn, Y_trn, batch_size=32, epochs=1000, verbose=2,                       validation_data=(X_val, Y_val),                     callbacks=[EarlyStopping(monitor=&#39;val_mae&#39;, patience=200, restore_best_weights=True)])plt.figure(figsize=(8, 5))plt.plot(history.history[&#39;mae&#39;], label=&#39;train mae&#39;)plt.plot(history.history[&#39;val_mae&#39;], label=&#39;validation mae&#39;)plt.ylim([0, 0.2])plt.legend()plt.show()def plot_prediction(y_pred, y_true):    plt.figure(figsize=(16,4))    plt.plot(np.squeeze(y_pred), label=&#39;prediction&#39;)    plt.plot(np.squeeze(y_true), label=&#39;true&#39;)    plt.legend()    plt.show()    print(&#39;MAE: %.3f&#39; % mean_absolute_error(np.squeeze(y_pred), np.squeeze(y_true)))pred = cnn.predict(X_val)plot_prediction(pred, Y_val)history = cnn.fit(X, Y, batch_size=32, epochs=500, verbose=2,                     callbacks=[EarlyStopping(monitor=&#39;mae&#39;, patience=30, restore_best_weights=True)])plt.figure(figsize=(8, 5))plt.plot(history.history[&#39;mae&#39;], label=&#39;train mae&#39;)plt.legend()plt.show()print(cnn.evaluate(X, Y, verbose=2))pred_tst = cnn.predict(X_tst)pur_sep = scaler_pur.inverse_transform(pred_tst[:, :forward].transpose())red_sep = scaler_red.inverse_transform(pred_tst[:, forward:].transpose())test_user = pd.DataFrame({&#39;report_date&#39;: [20140900 + i for i in range(1, 31)]})test_user[&#39;pur&#39;] = pur_sep.astype(&#39;int&#39;)test_user[&#39;red&#39;] = red_sep.astype(&#39;int&#39;)test_user.to_csv(&#39;submission.csv&#39;, encoding=&#39;utf-8&#39;, index=None, header=None)from google.colab import filesfiles.download(&quot;submission.csv&quot;)</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>notes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Datawhale</tag>
+      
+      <tag>Data Mining</tag>
+      
+      <tag>Time Series Analysis</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>【竞赛打卡】数据挖掘实践——特征工程</title>
+    <link href="/2020/08/24/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%E5%AE%9E%E8%B7%B5%E2%80%94%E2%80%94%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/"/>
+    <url>/2020/08/24/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%E5%AE%9E%E8%B7%B5%E2%80%94%E2%80%94%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/</url>
+    
+    <content type="html"><![CDATA[<p>我也是加把劲骑士！<br><a id="more"></a></p><p>数据和特征决定了机器学习的上限，而模型和算法只是逼近这个上限而已。由此可见，特征工程在机器学习中占有相当重要的地位。在实际应用当中，可以说特征工程是机器学习成功的关键。</p><p>那特征工程是什么？</p><p>特征工程是利用数据领域的相关知识来创建能够使机器学习算法达到最佳性能的特征的过程。</p><p>特征工程又包含了 Data PreProcessing（数据预处理）、Feature Extraction（特征提取）、Feature Selection（特征选择）和 Feature construction（特征构造）等子问题，本章内容主要讨论特征构造的方法。</p><p>创造新的特征是一件十分困难的事情，需要丰富的专业知识和大量的时间。机器学习应用的本质基本上就是特征工程。<br>——Andrew Ng</p><p>对于时间型数据来说，即可以把它转换成连续值，也可以转换成离散值。</p><p>1.连续值时间特征<br>持续时间（单页浏览时长）；间隔时间；上次购买/点击离现在的时长；产品上线到现在经过的时长；2.离散值时间特征<br>1）时间特征拆解</p><p>年；月；日；时；分；数；一天中的第几分钟；星期几；一年中的第几天；一年中的第几个周；一天中哪个时间段：凌晨、早晨、上午、中午、下午、傍晚、晚上、深夜；一年中的哪个季度；</p><p>2）时间特征判断<br>是否闰年；是否月初；是否月末；是否季节初；是否季节末；是否年初；是否年尾；是否周末；是否公共假期；是否营业时间；两个时间间隔之间是否包含节假日/特殊日期；</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>notes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Datawhale</tag>
+      
+      <tag>Data Mining</tag>
+      
+      <tag>Time Series Analysis</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>【竞赛打卡】leetcode打卡：查找算法</title>
     <link href="/2020/08/24/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91leetcode%E6%89%93%E5%8D%A1%EF%BC%9A%E6%9F%A5%E6%89%BE%E7%AE%97%E6%B3%95/"/>
     <url>/2020/08/24/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91leetcode%E6%89%93%E5%8D%A1%EF%BC%9A%E6%9F%A5%E6%89%BE%E7%AE%97%E6%B3%95/</url>
@@ -499,9 +557,9 @@
       
       <tag>Datawhale</tag>
       
-      <tag>Classification</tag>
-      
       <tag>Deep Learning</tag>
+      
+      <tag>Classification</tag>
       
       <tag>attention</tag>
       
@@ -530,9 +588,9 @@
       
       <tag>Datawhale</tag>
       
-      <tag>Classification</tag>
-      
       <tag>Deep Learning</tag>
+      
+      <tag>Classification</tag>
       
       <tag>word2vec</tag>
       
@@ -561,9 +619,9 @@
       
       <tag>Datawhale</tag>
       
-      <tag>Classification</tag>
-      
       <tag>Deep Learning</tag>
+      
+      <tag>Classification</tag>
       
       <tag>FastText</tag>
       
@@ -828,9 +886,9 @@
       
       <tag>NLP</tag>
       
-      <tag>testing</tag>
-      
       <tag>DNN</tag>
+      
+      <tag>testing</tag>
       
     </tags>
     
@@ -1130,9 +1188,9 @@
       
       <tag>Python</tag>
       
-      <tag>numpy</tag>
-      
       <tag>array</tag>
+      
+      <tag>numpy</tag>
       
       <tag>concatenate</tag>
       
@@ -1619,11 +1677,11 @@
       
       <tag>C++</tag>
       
-      <tag>STL</tag>
-      
       <tag>string</tag>
       
       <tag>regex</tag>
+      
+      <tag>STL</tag>
       
     </tags>
     
@@ -1650,11 +1708,11 @@
       
       <tag>C++</tag>
       
+      <tag>STL</tag>
+      
       <tag>map</tag>
       
       <tag>set</tag>
-      
-      <tag>STL</tag>
       
     </tags>
     
