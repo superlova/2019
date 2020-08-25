@@ -4,6 +4,35 @@
   
   
   <entry>
+    <title>【竞赛打卡】数据挖掘实践——总结与反思</title>
+    <link href="/2020/08/25/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%E5%AE%9E%E8%B7%B5%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93%E4%B8%8E%E5%8F%8D%E6%80%9D/"/>
+    <url>/2020/08/25/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%E5%AE%9E%E8%B7%B5%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93%E4%B8%8E%E5%8F%8D%E6%80%9D/</url>
+    
+    <content type="html"><![CDATA[<a id="more"></a><p>这次组队学习确实是自己不太擅长的领域。借着上次NLP组队学习的冲劲，本以为想在不熟悉的领域也能至少学点东西，但确实是小看了这次学习的难度。</p><p>回头来看，组队学习进入到特征工程的时候，我已经完全一脸懵逼了。我很想跟上大家的节奏，但是确实一个是没有时间，另一个是差太多了，已经进入了恐慌区，脑海里也是拒绝的心态。我知道这次组队学习已经彻底失败了。</p><p>唉！内心充满了挫败感。这次组队学习唯一的收获就是，获得了这次比赛的Baseline。自此之后我就要投入到秋招了，我曾参加过CV赛事、NLP赛事，再加上这个结构化赛事，我的比赛经历算是圆满了，接下来的日子就是研究Baseline、好好准备简历了，也该收收心了。</p><p>祝自己好运。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>notes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Datawhale</tag>
+      
+      <tag>Data Mining</tag>
+      
+      <tag>Time Series Analysis</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>【竞赛打卡】数据挖掘实践——建模预测</title>
     <link href="/2020/08/24/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%E5%AE%9E%E8%B7%B5%E2%80%94%E2%80%94%E5%BB%BA%E6%A8%A1%E9%A2%84%E6%B5%8B/"/>
     <url>/2020/08/24/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%E5%AE%9E%E8%B7%B5%E2%80%94%E2%80%94%E5%BB%BA%E6%A8%A1%E9%A2%84%E6%B5%8B/</url>
@@ -557,9 +586,9 @@
       
       <tag>Datawhale</tag>
       
-      <tag>Deep Learning</tag>
-      
       <tag>Classification</tag>
+      
+      <tag>Deep Learning</tag>
       
       <tag>attention</tag>
       
@@ -588,9 +617,9 @@
       
       <tag>Datawhale</tag>
       
-      <tag>Deep Learning</tag>
-      
       <tag>Classification</tag>
+      
+      <tag>Deep Learning</tag>
       
       <tag>word2vec</tag>
       
@@ -619,9 +648,9 @@
       
       <tag>Datawhale</tag>
       
-      <tag>Deep Learning</tag>
-      
       <tag>Classification</tag>
+      
+      <tag>Deep Learning</tag>
       
       <tag>FastText</tag>
       
@@ -886,9 +915,9 @@
       
       <tag>NLP</tag>
       
-      <tag>DNN</tag>
-      
       <tag>testing</tag>
+      
+      <tag>DNN</tag>
       
     </tags>
     
@@ -1095,9 +1124,9 @@
       
       <tag>Robustness</tag>
       
-      <tag>Deep Neural Networks</tag>
-      
       <tag>Fuzz Testing</tag>
+      
+      <tag>Deep Neural Networks</tag>
       
     </tags>
     
@@ -1126,9 +1155,9 @@
       
       <tag>NLP</tag>
       
-      <tag>Text Classification</tag>
-      
       <tag>Deep Neural Networks</tag>
+      
+      <tag>Text Classification</tag>
       
     </tags>
     
@@ -1188,9 +1217,9 @@
       
       <tag>Python</tag>
       
-      <tag>array</tag>
-      
       <tag>numpy</tag>
+      
+      <tag>array</tag>
       
       <tag>concatenate</tag>
       
@@ -1677,11 +1706,11 @@
       
       <tag>C++</tag>
       
+      <tag>STL</tag>
+      
       <tag>string</tag>
       
       <tag>regex</tag>
-      
-      <tag>STL</tag>
       
     </tags>
     
@@ -1708,11 +1737,11 @@
       
       <tag>C++</tag>
       
-      <tag>STL</tag>
-      
       <tag>map</tag>
       
       <tag>set</tag>
+      
+      <tag>STL</tag>
       
     </tags>
     
