@@ -4,6 +4,19 @@
   
   
   <entry>
+    <title>【竞赛打卡】leetcode打卡：查找算法2</title>
+    <link href="/2020/08/27/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91leetcode%E6%89%93%E5%8D%A1%EF%BC%9A%E6%9F%A5%E6%89%BE%E7%AE%97%E6%B3%952/"/>
+    <url>/2020/08/27/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91leetcode%E6%89%93%E5%8D%A1%EF%BC%9A%E6%9F%A5%E6%89%BE%E7%AE%97%E6%B3%952/</url>
+    
+    <content type="html"><![CDATA[<h2 id="1-两数之和"><a href="#1-两数之和" class="headerlink" title="1 两数之和"></a>1 两数之和</h2><pre><code class="lang-cpp">class Solution {public:    vector&lt;int&gt; twoSum(vector&lt;int&gt;&amp; nums, int target) {        if (nums.empty()) return {};        unordered_map&lt;int, int&gt; hash;        vector&lt;int&gt; res;        // construct dict        for (int i = 0; i &lt; nums.size(); ++i) {            hash[nums[i]] = i;        }        for (int i = 0; i &lt; nums.size(); ++i) {            int temp = target - nums[i];            auto iter = hash.find(temp);            if (iter != hash.end() &amp;&amp; iter-&gt;second != i) {                res.push_back(i);                res.push_back(iter-&gt;second);                break;            }        }        return res;    }};</code></pre><p>思想：用hash把待查数组保存起来，这样再次查找的时间就是O(1)了。</p><h2 id="15-三数之和"><a href="#15-三数之和" class="headerlink" title="15 三数之和"></a>15 三数之和</h2><pre><code class="lang-py">class Solution:    def threeSum(self, nums: List[int]) -&gt; List[List[int]]:        res = []        size = len(nums)        if size &lt; 3: return res        nums.sort()        for i in range(size-2):            if i &gt; 0 and nums[i] == nums[i-1]: continue            j = i + 1            k = size - 1            while j &lt; k:                ans = nums[i] + nums[j] + nums[k]                if (ans &gt; 0): k = k - 1                elif (ans &lt; 0): j = j + 1                else:                    res.append([nums[i], nums[j], nums[k]])                    while j &lt; size and nums[j] == nums[j-1]: j += 1                    k -= 1                    while k &gt;= 0 and nums[k] == nums[k+1]: k -= 1        return res</code></pre><p>思想：用三个下标<code>i,j,k</code>遍历所有可能。首先排序，然后不断缩小i、j和k的区间。</p><h2 id="16-最接近的三数之和"><a href="#16-最接近的三数之和" class="headerlink" title="16 最接近的三数之和"></a>16 最接近的三数之和</h2><pre><code class="lang-cpp">class Solution {public:    int threeSumClosest(vector&lt;int&gt;&amp; nums, int target) {        const int size = nums.size();        if (size &lt;= 3) return std::accumulate(nums.begin(), nums.end(), 0); // 0是累加的初值        std::sort(nums.begin(), nums.end());        int result = nums[0] + nums[1] + nums[2]; // 初值        for (int i = 0; i &lt; size - 2; ++i) {            int j = i + 1;            int k = size - 1;            while (j &lt; k) {                int temp = nums[i] + nums[j] + nums[k];                if (std::abs(target - temp) &lt; std::abs(target - result)) {                    result = temp;                }                if (result == target) { // 直接找到了                    return result;                }                if (temp &gt; target) {                    --k; // temp太大，需要缩小右边界                } else {                    ++j; // temp太小，需要缩小左边界                }            }        }        return result;    }};</code></pre><p>思路：还是利用三个下标<code>i,j,k</code>遍历全部数组。中途不断保存和target最近的temp值。</p><h2 id="18-四数之和"><a href="#18-四数之和" class="headerlink" title="18 四数之和"></a>18 四数之和</h2><pre><code class="lang-cpp">class Solution {public:    vector&lt;vector&lt;int&gt;&gt; fourSum(vector&lt;int&gt;&amp; nums, int target) {        sort(nums.begin(),nums.end());        vector&lt;vector&lt;int&gt; &gt; res;        if(nums.size()&lt;4) return res;        int a,b,c,d,_size=nums.size();        for(a=0;a&lt;_size-3;a++){            if(a&gt;0&amp;&amp;nums[a]==nums[a-1]) continue;      //确保nums[a] 改变了            for(b=a+1;b&lt;_size-2;b++){                if(b&gt;a+1&amp;&amp;nums[b]==nums[b-1])continue;   //确保nums[b] 改变了                c=b+1,d=_size-1;                while(c&lt;d){                    if(nums[a]+nums[b]+nums[c]+nums[d]&lt;target)                        c++;                    else if(nums[a]+nums[b]+nums[c]+nums[d]&gt;target)                        d--;                    else{                        res.push_back({nums[a],nums[b],nums[c],nums[d]});                        while(c&lt;d&amp;&amp;nums[c+1]==nums[c])      //确保nums[c] 改变了                            c++;                        while(c&lt;d&amp;&amp;nums[d-1]==nums[d])      //确保nums[d] 改变了                            d--;                        c++;                        d--;                    }                }            }        }        return res;    }};</code></pre><p>思路：四指针。</p>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>【竞赛打卡】数据挖掘实践——总结与反思</title>
     <link href="/2020/08/25/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%E5%AE%9E%E8%B7%B5%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93%E4%B8%8E%E5%8F%8D%E6%80%9D/"/>
     <url>/2020/08/25/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%E5%AE%9E%E8%B7%B5%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93%E4%B8%8E%E5%8F%8D%E6%80%9D/</url>
@@ -915,9 +928,9 @@
       
       <tag>NLP</tag>
       
-      <tag>testing</tag>
-      
       <tag>DNN</tag>
+      
+      <tag>testing</tag>
       
     </tags>
     
@@ -1219,9 +1232,9 @@
       
       <tag>numpy</tag>
       
-      <tag>array</tag>
-      
       <tag>concatenate</tag>
+      
+      <tag>array</tag>
       
     </tags>
     
@@ -1675,11 +1688,11 @@
     
     <tags>
       
+      <tag>array</tag>
+      
       <tag>algorithm</tag>
       
       <tag>lintcode</tag>
-      
-      <tag>array</tag>
       
     </tags>
     
@@ -1706,11 +1719,11 @@
       
       <tag>C++</tag>
       
-      <tag>STL</tag>
-      
       <tag>string</tag>
       
       <tag>regex</tag>
+      
+      <tag>STL</tag>
       
     </tags>
     
@@ -1737,11 +1750,11 @@
       
       <tag>C++</tag>
       
+      <tag>STL</tag>
+      
       <tag>map</tag>
       
       <tag>set</tag>
-      
-      <tag>STL</tag>
       
     </tags>
     

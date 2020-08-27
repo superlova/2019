@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://superlova.github.io/"/>
-  <updated>2020-08-25T15:33:14.930Z</updated>
+  <updated>2020-08-27T12:33:04.774Z</updated>
   <id>https://superlova.github.io/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>【竞赛打卡】leetcode打卡：查找算法2</title>
+    <link href="https://superlova.github.io/2020/08/27/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91leetcode%E6%89%93%E5%8D%A1%EF%BC%9A%E6%9F%A5%E6%89%BE%E7%AE%97%E6%B3%952/"/>
+    <id>https://superlova.github.io/2020/08/27/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91leetcode%E6%89%93%E5%8D%A1%EF%BC%9A%E6%9F%A5%E6%89%BE%E7%AE%97%E6%B3%952/</id>
+    <published>2020-08-27T11:32:22.000Z</published>
+    <updated>2020-08-27T12:33:04.774Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="1-两数之和"><a href="#1-两数之和" class="headerlink" title="1 两数之和"></a>1 两数之和</h2><pre><code class="lang-cpp">class Solution {public:    vector&lt;int&gt; twoSum(vector&lt;int&gt;&amp; nums, int target) {        if (nums.empty()) return {};        unordered_map&lt;int, int&gt; hash;        vector&lt;int&gt; res;        // construct dict        for (int i = 0; i &lt; nums.size(); ++i) {            hash[nums[i]] = i;        }        for (int i = 0; i &lt; nums.size(); ++i) {            int temp = target - nums[i];            auto iter = hash.find(temp);            if (iter != hash.end() &amp;&amp; iter-&gt;second != i) {                res.push_back(i);                res.push_back(iter-&gt;second);                break;            }        }        return res;    }};</code></pre><p>思想：用hash把待查数组保存起来，这样再次查找的时间就是O(1)了。</p><h2 id="15-三数之和"><a href="#15-三数之和" class="headerlink" title="15 三数之和"></a>15 三数之和</h2><pre><code class="lang-py">class Solution:    def threeSum(self, nums: List[int]) -&gt; List[List[int]]:        res = []        size = len(nums)        if size &lt; 3: return res        nums.sort()        for i in range(size-2):            if i &gt; 0 and nums[i] == nums[i-1]: continue            j = i + 1            k = size - 1            while j &lt; k:                ans = nums[i] + nums[j] + nums[k]                if (ans &gt; 0): k = k - 1                elif (ans &lt; 0): j = j + 1                else:                    res.append([nums[i], nums[j], nums[k]])                    while j &lt; size and nums[j] == nums[j-1]: j += 1                    k -= 1                    while k &gt;= 0 and nums[k] == nums[k+1]: k -= 1        return res</code></pre><p>思想：用三个下标<code>i,j,k</code>遍历所有可能。首先排序，然后不断缩小i、j和k的区间。</p><h2 id="16-最接近的三数之和"><a href="#16-最接近的三数之和" class="headerlink" title="16 最接近的三数之和"></a>16 最接近的三数之和</h2><pre><code class="lang-cpp">class Solution {public:    int threeSumClosest(vector&lt;int&gt;&amp; nums, int target) {        const int size = nums.size();        if (size &lt;= 3) return std::accumulate(nums.begin(), nums.end(), 0); // 0是累加的初值        std::sort(nums.begin(), nums.end());        int result = nums[0] + nums[1] + nums[2]; // 初值        for (int i = 0; i &lt; size - 2; ++i) {            int j = i + 1;            int k = size - 1;            while (j &lt; k) {                int temp = nums[i] + nums[j] + nums[k];                if (std::abs(target - temp) &lt; std::abs(target - result)) {                    result = temp;                }                if (result == target) { // 直接找到了                    return result;                }                if (temp &gt; target) {                    --k; // temp太大，需要缩小右边界                } else {                    ++j; // temp太小，需要缩小左边界                }            }        }        return result;    }};</code></pre><p>思路：还是利用三个下标<code>i,j,k</code>遍历全部数组。中途不断保存和target最近的temp值。</p><h2 id="18-四数之和"><a href="#18-四数之和" class="headerlink" title="18 四数之和"></a>18 四数之和</h2><pre><code class="lang-cpp">class Solution {public:    vector&lt;vector&lt;int&gt;&gt; fourSum(vector&lt;int&gt;&amp; nums, int target) {        sort(nums.begin(),nums.end());        vector&lt;vector&lt;int&gt; &gt; res;        if(nums.size()&lt;4) return res;        int a,b,c,d,_size=nums.size();        for(a=0;a&lt;_size-3;a++){            if(a&gt;0&amp;&amp;nums[a]==nums[a-1]) continue;      //确保nums[a] 改变了            for(b=a+1;b&lt;_size-2;b++){                if(b&gt;a+1&amp;&amp;nums[b]==nums[b-1])continue;   //确保nums[b] 改变了                c=b+1,d=_size-1;                while(c&lt;d){                    if(nums[a]+nums[b]+nums[c]+nums[d]&lt;target)                        c++;                    else if(nums[a]+nums[b]+nums[c]+nums[d]&gt;target)                        d--;                    else{                        res.push_back({nums[a],nums[b],nums[c],nums[d]});                        while(c&lt;d&amp;&amp;nums[c+1]==nums[c])      //确保nums[c] 改变了                            c++;                        while(c&lt;d&amp;&amp;nums[d-1]==nums[d])      //确保nums[d] 改变了                            d--;                        c++;                        d--;                    }                }            }        }        return res;    }};</code></pre><p>思路：四指针。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;1-两数之和&quot;&gt;&lt;a href=&quot;#1-两数之和&quot; class=&quot;headerlink&quot; title=&quot;1 两数之和&quot;&gt;&lt;/a&gt;1 两数之和&lt;/h2&gt;&lt;pre&gt;&lt;code class=&quot;lang-cpp&quot;&gt;class Solution {
+public:
+    
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
   
   <entry>
     <title>【竞赛打卡】数据挖掘实践——总结与反思</title>
@@ -507,31 +531,6 @@
     <summary type="html">
     
       &lt;p&gt;这是TensorBoard笔记的第二篇，讲述的是如何令TensorBoard展示外界已有的图片和Tensor。&lt;br&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="notes" scheme="https://superlova.github.io/categories/notes/"/>
-    
-    
-      <category term="Tensorflow" scheme="https://superlova.github.io/tags/Tensorflow/"/>
-    
-      <category term="TensorBoard" scheme="https://superlova.github.io/tags/TensorBoard/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【学习笔记】TensorBoard简介</title>
-    <link href="https://superlova.github.io/2020/08/14/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91TensorBoard%E7%AE%80%E4%BB%8B/"/>
-    <id>https://superlova.github.io/2020/08/14/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91TensorBoard%E7%AE%80%E4%BB%8B/</id>
-    <published>2020-08-14T07:28:09.000Z</published>
-    <updated>2020-08-14T08:25:08.319Z</updated>
-    
-    <content type="html"><![CDATA[<p>简单介绍了TensorBoard的用途和使用方法。<br><a id="more"></a></p><h2 id="TensorBoard简介"><a href="#TensorBoard简介" class="headerlink" title="TensorBoard简介"></a>TensorBoard简介</h2><p>TensorBoard是Google开发的模型内部参数跟踪和可视化的调试工具。在Tensorflow中，用TensorBoard可以监控模型的各种指标的变化（如acc、loss的动态变化），可以将模型结构可视化，可以可视化词嵌入空间，可以分析模型性能，可以分析数据集的公平性等等，是一个非常强大且非常简单的工具。</p><p>TensorBoard核心就是回调函数和可视化操作面板。通过编写回调函数获取模型信息，通过命令行启动TensorBoard图形化界面。</p><p>TensorBoard的回调函数API为：</p><pre><code class="lang-python">tf.keras.callbacks.TensorBoard(    log_dir=&#39;logs&#39;, histogram_freq=0, write_graph=True, write_images=False,    update_freq=&#39;epoch&#39;, profile_batch=2, embeddings_freq=0,    embeddings_metadata=None, **kwargs)</code></pre><div class="table-container"><table><thead><tr><th>参数</th><th>含义</th></tr></thead><tbody><tr><td>log_dir</td><td>模型的信息保存目录</td></tr><tr><td>histogram_freq</td><td>模型激活和参数信息记录的频率，每隔几个epochs记录一次</td></tr><tr><td>write_graph</td><td>是否保存模型图文件</td></tr><tr><td>write_images</td><td>是否保存模型参数可视化图</td></tr><tr><td>update_freq</td><td>模型loss和其他metrics的记录频率，每隔几个batch更新一次</td></tr><tr><td>profile_batch</td><td>指定性能分析时使用的批次</td></tr><tr><td>embeddings_freq</td><td>embedding 层更新的频率</td></tr></tbody></table></div><p>在Colab中使用TensorBoard需输入：</p><pre><code class="lang-bash">%load_ext tensorboard</code></pre><p>为了跟踪模型训练过程，需要在模型的<code>fit</code>过程中添加回调函数</p><pre><code class="lang-python">tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)</code></pre><p>其中<code>log_dir</code>为你想储存log的目录，在教程中，<code>log_dir=&quot;logs/fit/&quot; + datetime.datetime.now().strftime(&quot;%Y%m%d-%H%M%S&quot;)</code>。</p><pre><code class="lang-python">model.fit(x=x_train,           y=y_train,           epochs=5,           validation_data=(x_test, y_test),           callbacks=[tensorboard_callback])</code></pre><p>在<code>log_dir</code>中生成了一系列的日志文件：</p><p><img src="/2020/08/14/【学习笔记】TensorBoard简介/2020-08-13-12-39-02.png" srcset="/img/loading.gif" alt></p><p>这些日志文件可以通过TensorBoard解析：</p><pre><code class="lang-shell">%tensorboard --logdir logs/fit</code></pre><p>在命令行中， 运行不带“％”的相同命令。结果如下：</p><p><img src="https://raw.githubusercontent.com/tensorflow/tensorboard/master/docs/images/quickstart_model_fit.png" srcset="/img/loading.gif" alt></p><p>在TensorBoard面板上，有四个选项卡：</p><ul><li><strong>Scalars</strong> 显示损失和指标在每个时期如何变化</li><li><strong>Graphs</strong> 可帮助您可视化模型</li><li><strong>Distributions</strong> 和 <strong>Histograms</strong> 显示张量随时间的分布</li></ul><p>如果使用tensorflow原生API训练模型，也可以利用<code>tf.summary</code>记录log，然后利用TensorBoard可视化。具体流程如下：</p><ol><li>使用 <code>tf.summary.create_file_writer()</code> 创建文件编写器；</li><li>使用 <code>tf.summary.scalar()</code> 记录感兴趣的指标</li><li>将 <code>LearningRateScheduler</code> 回调传递给 <code>Model.fit()</code></li><li>使用命令行<code>tensorboard --logdir logs/fit</code>打开可视化界面</li></ol>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;简单介绍了TensorBoard的用途和使用方法。&lt;br&gt;&lt;/p&gt;
     
     </summary>
     
