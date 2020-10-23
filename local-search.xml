@@ -4,13 +4,58 @@
   
   
   <entry>
+    <title>【学习笔记】Ubuntu 18.04 安装Go的踩坑指南</title>
+    <link href="/2020/10/02/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91Ubuntu-18-04-%E5%AE%89%E8%A3%85Go%E7%9A%84%E8%B8%A9%E5%9D%91%E6%8C%87%E5%8D%97/"/>
+    <url>/2020/10/02/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91Ubuntu-18-04-%E5%AE%89%E8%A3%85Go%E7%9A%84%E8%B8%A9%E5%9D%91%E6%8C%87%E5%8D%97/</url>
+    
+    <content type="html"><![CDATA[<p>Go安装中遇到的坑<br><a id="more"></a></p><p>gvm是第三方开发的Go多版本管理工具，利用gvm下载和安装go。</p><p>执行以下代码时，你应该确保自己安装有curl</p><pre><code>bash &lt; &lt;(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)</code></pre><p>在执行上述curl时，我的ubuntu 18.04报错</p><p>curl: (7) Failed to connect to <a href="http://raw.githubusercontent.com/" target="_blank" rel="noopener">raw.githubusercontent.com</a> port 443: Connection refused</p><p>经过<a href="[https://github.com/hawtim/blog/issues/10](https://github.com/hawtim/blog/issues/10">这个</a>)帖子的指引，我在hosts中添加了如下几行：</p><p>199.232.68.133 raw.githubusercontent.com</p><p>199.232.68.133 user-images.githubusercontent.com</p><p>199.232.68.133 avatars2.githubusercontent.com</p><p>199.232.68.133 avatars1.githubusercontent.com</p><p>curl便可以正常下载了。</p><p>安装完成gvm后我们就可以安装go了：</p><pre><code>gvm install go1.15.2gvm use go1.15.2</code></pre><p>这个时候出现错误</p><p>zyt@ubuntu:~$ gvm install go1.15.2<br>Installing go1.15.2…</p><ul><li>Compiling…<br>/home/zyt/.gvm/scripts/install: line 84: go: command not found<br>ERROR: Failed to compile. Check the logs at /home/zyt/.gvm/logs/go-go1.15.2-compile.log<br>ERROR: Failed to use installed version</li></ul><p>经查询，Go版本在1.5以上，需要在指令最后加上-B</p><p><a href="https://github.com/moovweb/gvm#a-note-on-compiling-go-15" target="_blank" rel="noopener">https://github.com/moovweb/gvm#a-note-on-compiling-go-15</a></p><p>zyt@ubuntu:~$ gvm install go1.15.2 -B<br>Installing go1.15.2 from binary source</p><pre><code>gvm use go1.15.2export GOROOT_BOOTSTRAP=$GOROOTgvm install go1.5zyt@ubuntu:~$ gvm listgvm gos (installed)=&gt; go1.15.2zyt@ubuntu:~$ gvm listallgvm gos (available)</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>notes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Golang</tag>
+      
+      <tag>安装</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>【竞赛打卡】leetcode打卡：查找算法2</title>
     <link href="/2020/08/27/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91leetcode%E6%89%93%E5%8D%A1%EF%BC%9A%E6%9F%A5%E6%89%BE%E7%AE%97%E6%B3%952/"/>
     <url>/2020/08/27/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91leetcode%E6%89%93%E5%8D%A1%EF%BC%9A%E6%9F%A5%E6%89%BE%E7%AE%97%E6%B3%952/</url>
     
-    <content type="html"><![CDATA[<h2 id="1-两数之和"><a href="#1-两数之和" class="headerlink" title="1 两数之和"></a>1 两数之和</h2><pre><code class="lang-cpp">class Solution {public:    vector&lt;int&gt; twoSum(vector&lt;int&gt;&amp; nums, int target) {        if (nums.empty()) return {};        unordered_map&lt;int, int&gt; hash;        vector&lt;int&gt; res;        // construct dict        for (int i = 0; i &lt; nums.size(); ++i) {            hash[nums[i]] = i;        }        for (int i = 0; i &lt; nums.size(); ++i) {            int temp = target - nums[i];            auto iter = hash.find(temp);            if (iter != hash.end() &amp;&amp; iter-&gt;second != i) {                res.push_back(i);                res.push_back(iter-&gt;second);                break;            }        }        return res;    }};</code></pre><p>思想：用hash把待查数组保存起来，这样再次查找的时间就是O(1)了。</p><h2 id="15-三数之和"><a href="#15-三数之和" class="headerlink" title="15 三数之和"></a>15 三数之和</h2><pre><code class="lang-py">class Solution:    def threeSum(self, nums: List[int]) -&gt; List[List[int]]:        res = []        size = len(nums)        if size &lt; 3: return res        nums.sort()        for i in range(size-2):            if i &gt; 0 and nums[i] == nums[i-1]: continue            j = i + 1            k = size - 1            while j &lt; k:                ans = nums[i] + nums[j] + nums[k]                if (ans &gt; 0): k = k - 1                elif (ans &lt; 0): j = j + 1                else:                    res.append([nums[i], nums[j], nums[k]])                    while j &lt; size and nums[j] == nums[j-1]: j += 1                    k -= 1                    while k &gt;= 0 and nums[k] == nums[k+1]: k -= 1        return res</code></pre><p>思想：用三个下标<code>i,j,k</code>遍历所有可能。首先排序，然后不断缩小i、j和k的区间。</p><h2 id="16-最接近的三数之和"><a href="#16-最接近的三数之和" class="headerlink" title="16 最接近的三数之和"></a>16 最接近的三数之和</h2><pre><code class="lang-cpp">class Solution {public:    int threeSumClosest(vector&lt;int&gt;&amp; nums, int target) {        const int size = nums.size();        if (size &lt;= 3) return std::accumulate(nums.begin(), nums.end(), 0); // 0是累加的初值        std::sort(nums.begin(), nums.end());        int result = nums[0] + nums[1] + nums[2]; // 初值        for (int i = 0; i &lt; size - 2; ++i) {            int j = i + 1;            int k = size - 1;            while (j &lt; k) {                int temp = nums[i] + nums[j] + nums[k];                if (std::abs(target - temp) &lt; std::abs(target - result)) {                    result = temp;                }                if (result == target) { // 直接找到了                    return result;                }                if (temp &gt; target) {                    --k; // temp太大，需要缩小右边界                } else {                    ++j; // temp太小，需要缩小左边界                }            }        }        return result;    }};</code></pre><p>思路：还是利用三个下标<code>i,j,k</code>遍历全部数组。中途不断保存和target最近的temp值。</p><h2 id="18-四数之和"><a href="#18-四数之和" class="headerlink" title="18 四数之和"></a>18 四数之和</h2><pre><code class="lang-cpp">class Solution {public:    vector&lt;vector&lt;int&gt;&gt; fourSum(vector&lt;int&gt;&amp; nums, int target) {        sort(nums.begin(),nums.end());        vector&lt;vector&lt;int&gt; &gt; res;        if(nums.size()&lt;4) return res;        int a,b,c,d,_size=nums.size();        for(a=0;a&lt;_size-3;a++){            if(a&gt;0&amp;&amp;nums[a]==nums[a-1]) continue;      //确保nums[a] 改变了            for(b=a+1;b&lt;_size-2;b++){                if(b&gt;a+1&amp;&amp;nums[b]==nums[b-1])continue;   //确保nums[b] 改变了                c=b+1,d=_size-1;                while(c&lt;d){                    if(nums[a]+nums[b]+nums[c]+nums[d]&lt;target)                        c++;                    else if(nums[a]+nums[b]+nums[c]+nums[d]&gt;target)                        d--;                    else{                        res.push_back({nums[a],nums[b],nums[c],nums[d]});                        while(c&lt;d&amp;&amp;nums[c+1]==nums[c])      //确保nums[c] 改变了                            c++;                        while(c&lt;d&amp;&amp;nums[d-1]==nums[d])      //确保nums[d] 改变了                            d--;                        c++;                        d--;                    }                }            }        }        return res;    }};</code></pre><p>思路：四指针。</p>]]></content>
+    <content type="html"><![CDATA[<p>见多了优秀的文章，再写博客的时候就会感叹自己的学识浅薄。<br><a id="more"></a></p><h2 id="1-两数之和"><a href="#1-两数之和" class="headerlink" title="1 两数之和"></a>1 两数之和</h2><pre><code class="lang-cpp">class Solution {public:    vector&lt;int&gt; twoSum(vector&lt;int&gt;&amp; nums, int target) {        if (nums.empty()) return {};        unordered_map&lt;int, int&gt; hash;        vector&lt;int&gt; res;        // construct dict        for (int i = 0; i &lt; nums.size(); ++i) {            hash[nums[i]] = i;        }        for (int i = 0; i &lt; nums.size(); ++i) {            int temp = target - nums[i];            auto iter = hash.find(temp);            if (iter != hash.end() &amp;&amp; iter-&gt;second != i) {                res.push_back(i);                res.push_back(iter-&gt;second);                break;            }        }        return res;    }};</code></pre><p>思想：用hash把待查数组保存起来，这样再次查找的时间就是O(1)了。</p><h2 id="15-三数之和"><a href="#15-三数之和" class="headerlink" title="15 三数之和"></a>15 三数之和</h2><pre><code class="lang-py">class Solution:    def threeSum(self, nums: List[int]) -&gt; List[List[int]]:        res = []        size = len(nums)        if size &lt; 3: return res        nums.sort()        for i in range(size-2):            if i &gt; 0 and nums[i] == nums[i-1]: continue            j = i + 1            k = size - 1            while j &lt; k:                ans = nums[i] + nums[j] + nums[k]                if (ans &gt; 0): k = k - 1                elif (ans &lt; 0): j = j + 1                else:                    res.append([nums[i], nums[j], nums[k]])                    while j &lt; size and nums[j] == nums[j-1]: j += 1                    k -= 1                    while k &gt;= 0 and nums[k] == nums[k+1]: k -= 1        return res</code></pre><p>思想：用三个下标<code>i,j,k</code>遍历所有可能。首先排序，然后不断缩小i、j和k的区间。</p><h2 id="16-最接近的三数之和"><a href="#16-最接近的三数之和" class="headerlink" title="16 最接近的三数之和"></a>16 最接近的三数之和</h2><pre><code class="lang-cpp">class Solution {public:    int threeSumClosest(vector&lt;int&gt;&amp; nums, int target) {        const int size = nums.size();        if (size &lt;= 3) return std::accumulate(nums.begin(), nums.end(), 0); // 0是累加的初值        std::sort(nums.begin(), nums.end());        int result = nums[0] + nums[1] + nums[2]; // 初值        for (int i = 0; i &lt; size - 2; ++i) {            int j = i + 1;            int k = size - 1;            while (j &lt; k) {                int temp = nums[i] + nums[j] + nums[k];                if (std::abs(target - temp) &lt; std::abs(target - result)) {                    result = temp;                }                if (result == target) { // 直接找到了                    return result;                }                if (temp &gt; target) {                    --k; // temp太大，需要缩小右边界                } else {                    ++j; // temp太小，需要缩小左边界                }            }        }        return result;    }};</code></pre><p>思路：还是利用三个下标<code>i,j,k</code>遍历全部数组。中途不断保存和target最近的temp值。</p><h2 id="18-四数之和"><a href="#18-四数之和" class="headerlink" title="18 四数之和"></a>18 四数之和</h2><pre><code class="lang-cpp">class Solution {public:    vector&lt;vector&lt;int&gt;&gt; fourSum(vector&lt;int&gt;&amp; nums, int target) {        sort(nums.begin(),nums.end());        vector&lt;vector&lt;int&gt; &gt; res;        if(nums.size()&lt;4) return res;        int a,b,c,d,_size=nums.size();        for(a=0;a&lt;_size-3;a++){            if(a&gt;0&amp;&amp;nums[a]==nums[a-1]) continue;      //确保nums[a] 改变了            for(b=a+1;b&lt;_size-2;b++){                if(b&gt;a+1&amp;&amp;nums[b]==nums[b-1])continue;   //确保nums[b] 改变了                c=b+1,d=_size-1;                while(c&lt;d){                    if(nums[a]+nums[b]+nums[c]+nums[d]&lt;target)                        c++;                    else if(nums[a]+nums[b]+nums[c]+nums[d]&gt;target)                        d--;                    else{                        res.push_back({nums[a],nums[b],nums[c],nums[d]});                        while(c&lt;d&amp;&amp;nums[c+1]==nums[c])      //确保nums[c] 改变了                            c++;                        while(c&lt;d&amp;&amp;nums[d-1]==nums[d])      //确保nums[d] 改变了                            d--;                        c++;                        d--;                    }                }            }        }        return res;    }};</code></pre><p>思路：四指针。</p>]]></content>
     
     
+    <categories>
+      
+      <category>notes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>algorithm</tag>
+      
+      <tag>Datawhale</tag>
+      
+      <tag>leetcode</tag>
+      
+      <tag>search</tag>
+      
+    </tags>
     
   </entry>
   
@@ -599,9 +644,9 @@
       
       <tag>Datawhale</tag>
       
-      <tag>Classification</tag>
-      
       <tag>Deep Learning</tag>
+      
+      <tag>Classification</tag>
       
       <tag>attention</tag>
       
@@ -630,9 +675,9 @@
       
       <tag>Datawhale</tag>
       
-      <tag>Classification</tag>
-      
       <tag>Deep Learning</tag>
+      
+      <tag>Classification</tag>
       
       <tag>word2vec</tag>
       
@@ -661,9 +706,9 @@
       
       <tag>Datawhale</tag>
       
-      <tag>Classification</tag>
-      
       <tag>Deep Learning</tag>
+      
+      <tag>Classification</tag>
       
       <tag>FastText</tag>
       
@@ -928,9 +973,9 @@
       
       <tag>NLP</tag>
       
-      <tag>DNN</tag>
-      
       <tag>testing</tag>
+      
+      <tag>DNN</tag>
       
     </tags>
     
@@ -1137,9 +1182,9 @@
       
       <tag>Robustness</tag>
       
-      <tag>Fuzz Testing</tag>
-      
       <tag>Deep Neural Networks</tag>
+      
+      <tag>Fuzz Testing</tag>
       
     </tags>
     
@@ -1168,9 +1213,9 @@
       
       <tag>NLP</tag>
       
-      <tag>Deep Neural Networks</tag>
-      
       <tag>Text Classification</tag>
+      
+      <tag>Deep Neural Networks</tag>
       
     </tags>
     
@@ -1232,9 +1277,9 @@
       
       <tag>numpy</tag>
       
-      <tag>concatenate</tag>
-      
       <tag>array</tag>
+      
+      <tag>concatenate</tag>
       
     </tags>
     
@@ -1688,11 +1733,11 @@
     
     <tags>
       
-      <tag>array</tag>
-      
       <tag>algorithm</tag>
       
       <tag>lintcode</tag>
+      
+      <tag>array</tag>
       
     </tags>
     
@@ -1719,11 +1764,11 @@
       
       <tag>C++</tag>
       
+      <tag>STL</tag>
+      
       <tag>string</tag>
       
       <tag>regex</tag>
-      
-      <tag>STL</tag>
       
     </tags>
     
@@ -1750,11 +1795,11 @@
       
       <tag>C++</tag>
       
-      <tag>STL</tag>
-      
       <tag>map</tag>
       
       <tag>set</tag>
+      
+      <tag>STL</tag>
       
     </tags>
     
