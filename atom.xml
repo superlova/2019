@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://superlova.github.io/"/>
-  <updated>2020-10-02T06:56:11.134Z</updated>
+  <updated>2021-01-26T07:01:41.538Z</updated>
   <id>https://superlova.github.io/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>【学习笔记】机器学习——支持向量机SVM</title>
+    <link href="https://superlova.github.io/2020/12/29/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BASVM/"/>
+    <id>https://superlova.github.io/2020/12/29/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BASVM/</id>
+    <published>2020-12-29T11:57:32.000Z</published>
+    <updated>2021-01-26T07:01:41.538Z</updated>
+    
+    <content type="html"><![CDATA[<p>什么是SVM？SVM是如何用于分类的？为什么求解对偶问题？核函数的原理是什么？<br><a id="more"></a></p><h1 id="什么是支持向量机（Support-Vector-Machine-SVM）"><a href="#什么是支持向量机（Support-Vector-Machine-SVM）" class="headerlink" title="什么是支持向量机（Support Vector Machine, SVM）"></a>什么是支持向量机（Support Vector Machine, SVM）</h1><p>支持向量机是一种二分类模型。它的基本模型是定义在特征空间上的间隔最大的线性分类器，间隔最大使它有别于感知机。通过核技巧，支持向量机可以处理非线性分类问题。</p><p>支持向量机的学习算法是求解凸二次规划的最优化算法。</p><p>由于算法确定超平面时需要使用距离超平面最近的几个训练样本点，这些样本被称为“支持向量”，支持向量机由此得名。</p><p>假设训练样本<br><img src="/2020/12/29/【学习笔记】机器学习——支持向量机SVM/2020-12-29-20-56-41.png" srcset="/img/loading.gif" alt></p><p>则超平面可以这样表示<br><img src="/2020/12/29/【学习笔记】机器学习——支持向量机SVM/2020-12-29-20-56-54.png" srcset="/img/loading.gif" alt></p><p>这也就意味着<br><img src="/2020/12/29/【学习笔记】机器学习——支持向量机SVM/2020-12-29-20-57-06.png" srcset="/img/loading.gif" alt></p><p>选取那些离超平面最近的两个不同类别的数据点，将他们带入超平面方程，发现<br><img src="/2020/12/29/【学习笔记】机器学习——支持向量机SVM/2020-12-29-20-57-21.png" srcset="/img/loading.gif" alt><br><img src="/2020/12/29/【学习笔记】机器学习——支持向量机SVM/2020-12-29-20-57-25.png" srcset="/img/loading.gif" alt></p><p>则两个点到超平面距离之和为<br><img src="/2020/12/29/【学习笔记】机器学习——支持向量机SVM/2020-12-29-20-57-37.png" srcset="/img/loading.gif" alt></p><p>这是由于点到直线的距离公式为<br><img src="/2020/12/29/【学习笔记】机器学习——支持向量机SVM/2020-12-29-20-57-49.png" srcset="/img/loading.gif" alt></p><p>这几个令分子为1的数据点，就被称作支持向量。</p><h1 id="支持向量机如何分类"><a href="#支持向量机如何分类" class="headerlink" title="支持向量机如何分类"></a>支持向量机如何分类</h1><p>支持向量机的学习算法的目标是在特征空间中找到一个分离超平面，能将实例分到不同的类。当数据线性可分时，存在无数个分离超平面能将实例正确分开。感知机利用误分类最小的策略，而支持向量机则利用间隔最大化求得最优超平面，这时解是唯一的。</p><p>选取那些支持向量，即距离超平面最近的两个样本点，计算它们到超平面的距离2/||w||<br>通过优化2/||w||使之最大化，便可使得边距扩大。为了寻找超平面 $ F(x)=wx+b $ ，支持向量机试图求解这个优化问题：<br><img src="/2020/12/29/【学习笔记】机器学习——支持向量机SVM/2020-12-29-20-59-04.png" srcset="/img/loading.gif" alt></p><p>可以转化为<br><img src="/2020/12/29/【学习笔记】机器学习——支持向量机SVM/2020-12-29-20-54-11.png" srcset="/img/loading.gif" alt></p><p>高等数学告诉我们，求解带有限制条件的优化问题，拉格朗日乘子法是经常用于考虑的方法。<br>问题转化为：<br><img src="/2020/12/29/【学习笔记】机器学习——支持向量机SVM/2020-12-29-20-59-33.png" srcset="/img/loading.gif" alt></p><p>也就是说，将带N个约束条件的二次优化问题，转换为无约束优化问题。<br>这里注意限制条件变成了1-。。。这是因为拉格朗日乘数法要求参数必须大于等于零，限制条件需要相遇等于零。</p><p>由此，问题变成了$\min_{w,b}\max_{\lambda}\mathcal{L}(w,b,\lambda)$<br>先把$\lambda$视作参数，将$w,b$视作常数，求$\mathcal{L}$的最大值。</p><p>$\min_{w,b} \max_{\lambda} \mathcal{L}(w,b,\lambda)$和原问题是等价的。</p><h1 id="为什么求解对偶问题"><a href="#为什么求解对偶问题" class="headerlink" title="为什么求解对偶问题"></a>为什么求解对偶问题</h1><p>由于满足KKT条件，进而将原问题转化为对偶问题，即更换求解max和min 的次序。<br><img src="/2020/12/29/【学习笔记】机器学习——支持向量机SVM/2020-12-29-21-11-01.png" srcset="/img/loading.gif" alt></p><p>可以看到，原问题的限制条件中包含较为复杂的线性不等式，这是阻碍我们进行优化的问题所在；而其对偶问题不但简化了限制条件，而且包含$\sum{\lambda_iy_i}=0$很容易消去，极大降低了求解难度。</p><h1 id="核函数的原理"><a href="#核函数的原理" class="headerlink" title="核函数的原理"></a>核函数的原理</h1><p>计算两个向量在隐式映射过后的空间中的内积的函数叫做核函数（Kernel Function）<br><img src="/2020/12/29/【学习笔记】机器学习——支持向量机SVM/2020-12-29-21-16-23.png" srcset="/img/loading.gif" alt></p><p><img src="/2020/12/29/【学习笔记】机器学习——支持向量机SVM/2020-12-29-21-27-34.png" srcset="/img/loading.gif" alt></p><p><img src="/2020/12/29/【学习笔记】机器学习——支持向量机SVM/2020-12-29-21-27-49.png" srcset="/img/loading.gif" alt></p><p>核函数目的：把原坐标系里线性不可分的数据用Kernel投影到另一个空间，尽量使得数据在新的空间里线性可分。</p><p>核函数的特点：</p><p>1）核函数的引入避免了“维数灾难”，大大减小了计算量。而输入空间的维数n对核函数矩阵无影响，因此，核函数方法可以有效处理高维输入。</p><p>2）无需知道非线性变换函数$\phi$的形式和参数.</p><p>3）核函数的形式和参数的变化会隐式地改变从输入空间到特征空间的映射，进而对特征空间的性质产生影响，最终改变各种核函数方法的性能。</p><p>4）核函数方法可以和不同的算法相结合，形成多种不同的基于核函数技术的方法，且这两部分的设计可以单独进行，并可以为不同的应用选择不同的核函数和算法。</p><h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p>《机器学习》周志华</p><p>《统计学习方法》李航</p><p>《机器学习基础》梅尔亚·莫里等</p><p>SVM入门（七）为何需要核函数：<a href="http://www.blogjava.net/zhenandaci/archive/2009/03/06/258288.html" target="_blank" rel="noopener">http://www.blogjava.net/zhenandaci/archive/2009/03/06/258288.html</a></p><p>如何通俗地讲解对偶问题？尤其是拉格朗日对偶lagrangian duality？知乎回答：<a href="https://www.zhihu.com/question/58584814" target="_blank" rel="noopener">https://www.zhihu.com/question/58584814</a></p><p>为什么支持向量机要用拉格朗日对偶算法来解最大化间隔问题？知乎回答：<a href="https://www.zhihu.com/question/36694952" target="_blank" rel="noopener">https://www.zhihu.com/question/36694952</a></p><p>简易解说拉格朗日对偶（Lagrange duality）：<a href="https://www.cnblogs.com/90zeng/p/Lagrange_duality.html" target="_blank" rel="noopener">https://www.cnblogs.com/90zeng/p/Lagrange_duality.html</a></p><p>拉格朗日对偶性：<a href="https://www.cnblogs.com/nxf-rabbit75/p/11453355.html" target="_blank" rel="noopener">https://www.cnblogs.com/nxf-rabbit75/p/11453355.html</a></p><p>机器学习白板推导：<a href="https://www.bilibili.com/video/BV1aE411o7qd" target="_blank" rel="noopener">https://www.bilibili.com/video/BV1aE411o7qd</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;什么是SVM？SVM是如何用于分类的？为什么求解对偶问题？核函数的原理是什么？&lt;br&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="notes" scheme="https://superlova.github.io/categories/notes/"/>
+    
+    
+      <category term="machine learning" scheme="https://superlova.github.io/tags/machine-learning/"/>
+    
+      <category term="SVM" scheme="https://superlova.github.io/tags/SVM/"/>
+    
+  </entry>
   
   <entry>
     <title>【学习笔记】Ubuntu 18.04 安装Go的踩坑指南</title>
@@ -511,31 +536,6 @@
     <summary type="html">
     
       &lt;p&gt;这是TensorBoard笔记的第四篇，讲述的是如何借助TensorBoard调整模型的超参数。&lt;br&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="notes" scheme="https://superlova.github.io/categories/notes/"/>
-    
-    
-      <category term="Tensorflow" scheme="https://superlova.github.io/tags/Tensorflow/"/>
-    
-      <category term="TensorBoard" scheme="https://superlova.github.io/tags/TensorBoard/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【学习笔记】用TensorBoard生成模型图</title>
-    <link href="https://superlova.github.io/2020/08/14/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E7%94%A8TensorBoard%E7%94%9F%E6%88%90%E6%A8%A1%E5%9E%8B%E5%9B%BE/"/>
-    <id>https://superlova.github.io/2020/08/14/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E7%94%A8TensorBoard%E7%94%9F%E6%88%90%E6%A8%A1%E5%9E%8B%E5%9B%BE/</id>
-    <published>2020-08-14T08:31:40.000Z</published>
-    <updated>2020-08-14T08:34:09.831Z</updated>
-    
-    <content type="html"><![CDATA[<p>这是TensorBoard笔记的第三篇，讲述的是如何令TensorBoard生成模型架构图。<br><a id="more"></a></p><p>TensorBoard不但可以展示存在的图片和张量，还可以生成图片，诸如模型图等。通过TensorBoard的GRAPHS选项卡，可以快速查看模型结构的预览图，并确保其符合设计预期。</p><p>比如我们定义模型如下：</p><pre><code class="lang-python">model = keras.models.Sequential([    keras.layers.Flatten(input_shape=(28, 28)),    keras.layers.Dense(32, activation=&#39;relu&#39;),    keras.layers.Dropout(0.2),    keras.layers.Dense(10, activation=&#39;softmax&#39;)])model.compile(    optimizer=&#39;adam&#39;,    loss=&#39;sparse_categorical_crossentropy&#39;,    metrics=[&#39;accuracy&#39;])</code></pre><p><img src="/2020/08/14/【学习笔记】用TensorBoard生成模型图/2020-08-13-13-31-51.png" srcset="/img/loading.gif" alt></p><p>通过TensorBoard中的GRAPHS选项卡，我们看到执行图。图是倒置的，数据从下到上流动，因此与代码相比是上下颠倒的。</p><p>可以更改Tag，选择Keras，选择左边的Conceptual Graph查看概念图，双击Sequential，得到概念图。概念图更像是代码。</p><p><img src="/2020/08/14/【学习笔记】用TensorBoard生成模型图/2020-08-13-13-35-03.png" srcset="/img/loading.gif" alt></p><p>有的时候我们希望得到计算图，研究数据经过了何种计算。比如下面这个函数：</p><pre><code class="lang-python"># Sample data for your function.x = tf.random.uniform((3, 3))y = tf.random.uniform((3, 3))# The function to be traced.@tf.functiondef my_func(x, y):  # A simple hand-rolled layer.  return tf.nn.relu(tf.matmul(x, y))# z = my_func(x, y)</code></pre><p>我们希望得到它的计算图。首先需要使用<code>@tf.function</code>修饰被监控的函数，然后使用<code>tf.summary.trace_on()</code>在<code>z = my_func(x, y)</code>函数运行之前开始记录。</p><p><img src="https://as2.bitinn.net/uploads/legacy/og/cistioqrt008t8q5nh9gtx9og.1200.jpg" srcset="/img/loading.gif" alt="Trace On"></p><pre><code class="lang-python">tf.summary.trace_on(graph=True, profiler=True)z = my_func(x, y)</code></pre><p>定义日志目录名称和文件写入句柄，这些都是刻在DNA里的操作：</p><pre><code class="lang-python"># Set up logging.stamp = datetime.now().strftime(&quot;%Y%m%d-%H%M%S&quot;)logdir = &#39;logs/func/%s&#39; % stampwriter = tf.summary.create_file_writer(logdir)</code></pre><p>最后执行记录：</p><pre><code class="lang-python"># Call only one tf.function when tracing.with writer.as_default():  tf.summary.trace_export(      name=&quot;my_func_trace&quot;,      step=0,      profiler_outdir=logdir)</code></pre><pre><code class="lang-bash">%tensorboard --logdir logs/func</code></pre><p><img src="/2020/08/14/【学习笔记】用TensorBoard生成模型图/2020-08-13-13-47-57.png" srcset="/img/loading.gif" alt></p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;这是TensorBoard笔记的第三篇，讲述的是如何令TensorBoard生成模型架构图。&lt;br&gt;&lt;/p&gt;
     
     </summary>
     
