@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>【学习笔记】Docker的安装</title>
+    <link href="/2021/04/13/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91Docker%E7%9A%84%E5%AE%89%E8%A3%85/"/>
+    <url>/2021/04/13/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91Docker%E7%9A%84%E5%AE%89%E8%A3%85/</url>
+    
+    <content type="html"><![CDATA[<p>Datawhale Docker学习笔记第一篇<br><a id="more"></a></p><p>为了今后的方便，我选择将Docker安装在实验室的电脑上，服务器的操作系统为 Ubuntu 18.04 LTS 。整个安装过程参考这篇文章(<a href="https://vuepress.mirror.docker-practice.com/install/ubuntu)。" target="_blank" rel="noopener">https://vuepress.mirror.docker-practice.com/install/ubuntu)。</a></p><p>我曾在一款老旧的笔记本电脑上尝试过安装 Docker ，但是最终失败了，原因是 Docker 不支持 32 位的操作系统。震惊！ Docker竟然不支持 32位操作系统！</p><p>由于我没有安装过老版本，因此不需要执行卸载旧版本的语句。直接执行</p><pre><code class="lang-sh">$ sudo apt-get update$ sudo apt-get install \    apt-transport-https \    ca-certificates \    curl \    gnupg \    lsb-release</code></pre><p>这里还出现了一些小插曲，当我执行完上面的 install 语句后，我与服务器建立的 ssh 连接断掉了，之后我试图重新连接居然提示密码错误。最后我重启虚拟机，修改 /etc/ssh/sshd_config 中的 PermitRootLogin 字段为 yes 解决了该问题。</p><p>添加软件源的 GPG 密钥，下载并安装，这一部分不再赘述。</p><pre><code class="lang-sh">$ curl -fsSL https://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg$ echo \  &quot;deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://mirrors.aliyun.com/docker-ce/linux/ubuntu \  $(lsb_release -cs) stable&quot; | sudo tee /etc/apt/sources.list.d/docker.list &gt; /dev/null$ sudo apt-get update$ sudo apt-get install docker-ce docker-ce-cli containerd.io</code></pre><p>之后启动 Docker 服务：</p><pre><code class="lang-sh">$ sudo systemctl enable docker$ sudo systemctl start docker</code></pre><p>激动人心的时刻到了，测试下 Docker 是否安装成功，执行一个 Hello World 看看：</p><pre><code class="lang-sh">$ sudo docker run --rm hello-world</code></pre><p><img src="/2021/04/13/【学习笔记】Docker的安装/2021-04-13-00-48-07.png" srcset="/img/loading.gif" alt></p><p>大功告成！收工睡觉~</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>notes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Docker</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>【学习笔记】机器学习——支持向量机SVM</title>
     <link href="/2020/12/29/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BASVM/"/>
     <url>/2020/12/29/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BASVM/</url>
@@ -1209,9 +1234,9 @@
       
       <tag>Robustness</tag>
       
-      <tag>Deep Neural Networks</tag>
-      
       <tag>Fuzz Testing</tag>
+      
+      <tag>Deep Neural Networks</tag>
       
     </tags>
     
@@ -1240,9 +1265,9 @@
       
       <tag>NLP</tag>
       
-      <tag>Text Classification</tag>
-      
       <tag>Deep Neural Networks</tag>
+      
+      <tag>Text Classification</tag>
       
     </tags>
     
@@ -1302,9 +1327,9 @@
       
       <tag>Python</tag>
       
-      <tag>numpy</tag>
-      
       <tag>array</tag>
+      
+      <tag>numpy</tag>
       
       <tag>concatenate</tag>
       
@@ -1791,11 +1816,11 @@
       
       <tag>C++</tag>
       
-      <tag>STL</tag>
-      
       <tag>string</tag>
       
       <tag>regex</tag>
+      
+      <tag>STL</tag>
       
     </tags>
     
@@ -1822,11 +1847,11 @@
       
       <tag>C++</tag>
       
+      <tag>STL</tag>
+      
       <tag>map</tag>
       
       <tag>set</tag>
-      
-      <tag>STL</tag>
       
     </tags>
     
