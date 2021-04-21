@@ -4,6 +4,58 @@
   
   
   <entry>
+    <title>【学习笔记】Docker Compose</title>
+    <link href="/2021/04/21/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91Docker-Compose/"/>
+    <url>/2021/04/21/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91Docker-Compose/</url>
+    
+    <content type="html"><![CDATA[<p>Datawhale Docker学习笔记第五篇<br><a id="more"></a></p><h1 id="什么是docker-compose"><a href="#什么是docker-compose" class="headerlink" title="什么是docker compose"></a>什么是docker compose</h1><p>要实现一个 Web 项目，除了 Web 服务容器本身，往往还需要再加上后端的数据库服务容器，甚至还包括负载均衡容器等，这些需要多个容器相互配合来完成。</p><p>Docker Compose 允许用户通过一个单独的 docker-compose.yml 模板文件（YAML 格式）来定义一组相关联的应用容器为一个项目（project）。</p><p>下面是一个 docker-compose.yml 示例：</p><p><img src="/2021/04/21/【学习笔记】Docker-Compose/2021-04-21-23-54-09.png" srcset="/img/loading.gif" alt></p><p>里面多了image、ports、networks等标签。</p><h1 id="如何使用docker-compose"><a href="#如何使用docker-compose" class="headerlink" title="如何使用docker compose"></a>如何使用docker compose</h1><p>在Compose 中有两个重要的概念：</p><p><strong>服务 (service)</strong>：一个应用的容器，实际上可以包括若干运行相同镜像的容器实例。</p><p><strong>项目 (project)</strong>：由一组关联的应用容器组成的一个完整业务单元，在 docker-compose.yml 文件中定义。</p><p>Compose的默认管理对象是<strong>项目</strong>，也就是通过docker-compose.yml定义的一组服务集合，通过一些命令来对项目中的一组容器进行便捷地生命周期管理。</p><p>下面我们来看一个真实的场景，在该场景下我们是通过Python来写一个能够记录页面访问次数的 web 网站。</p><h2 id="web-应用示例"><a href="#web-应用示例" class="headerlink" title="web 应用示例"></a>web 应用示例</h2><p><strong>app.py</strong></p><pre><code class="lang-py">from flask import Flaskfrom redis import Redisimport osimport socketapp = Flask(__name__)redis = Redis(host=os.environ.get(&#39;REDIS_HOST&#39;, &#39;127.0.0.1&#39;), port=6379)@app.route(&#39;/&#39;)def hello():    redis.incr(&#39;hits&#39;)    return &#39;Hello Container World! I have been seen %s times and my hostname is %s.\n&#39; % (redis.get(&#39;hits&#39;),socket.gethostname())if __name__ == &quot;__main__&quot;:    app.run(host=&quot;0.0.0.0&quot;, port=5000, debug=True)</code></pre><p><strong>Dockerfile</strong></p><pre><code class="lang-docker">FROM python:2.7COPY . /appWORKDIR /appRUN pip install flask redisEXPOSE 5000CMD [ &quot;python&quot;, &quot;app.py&quot; ]</code></pre><p><strong>docker-compose.yml</strong></p><pre><code class="lang-yaml">version: &quot;3&quot;services:  redis:    image: redis  web:    build:      context: .      dockerfile: Dockerfile    ports:      - &quot;5000:5000&quot;    environment:      REDIS_HOST: redis</code></pre><p><strong>运行 compose 项目</strong></p><p><code>$ docker-compose up -d</code></p><p>此时访问本地 5000 端口<a href="http://localhost:5000，每次刷新页面，计数就会加" target="_blank" rel="noopener">http://localhost:5000，每次刷新页面，计数就会加</a> 1。</p><h1 id="docker-compose基本使用"><a href="#docker-compose基本使用" class="headerlink" title="docker compose基本使用"></a>docker compose基本使用</h1><h2 id="启动服务"><a href="#启动服务" class="headerlink" title="启动服务"></a>启动服务</h2><p>在创建好docker-compose.yml文件后，可以通过下面这个命令将文件中定义的容器都启动起来，在docker compose中我们更习惯于将每一个容器叫做service。</p><pre><code>docker-compose up</code></pre><p>命令后会自动接一个默认值-f docker-compose.yml，也就是默认是使用docker-compose.yml文件的。我们也可以给文件起名为docke-test.yml，这样在使用时指定文件名，但是为了符合规范，还是统一为docker-compose.yml。</p><pre><code>docker-compose up -f docer-test.yml</code></pre><p>但是直接通过这种方式的话会直接将启动时的输出打印到终端，所以我们常会加上-d参数。</p><pre><code>docker-compose up -d</code></pre><h2 id="查看服务状态"><a href="#查看服务状态" class="headerlink" title="查看服务状态"></a>查看服务状态</h2><p>接下来可以查看一下我们创建的service状态</p><pre><code>docker-compose ps</code></pre><p>要是想要查看所有service的状态可以使用-a参数：</p><pre><code>docker-compose ps -a</code></pre><h2 id="停止或删除服务"><a href="#停止或删除服务" class="headerlink" title="停止或删除服务"></a>停止或删除服务</h2><p>如何停止已经运行的services呢，可以使用以下两个命令</p><pre><code>docker-compose stopdocker-compose down</code></pre><p>其中stop是直接停止services，而down则会停止并删除创建的service，volume和network。</p><h2 id="进入服务"><a href="#进入服务" class="headerlink" title="进入服务"></a>进入服务</h2><p>有些情况下我们还需要进入容器来执行一些命令，可以通过如下方式进入容器</p><pre><code>docker-compose exec mysql bash</code></pre><p>exec后面接的就是我们要进入具体的service的名字，名字后面就是我们要执行的命令。</p><h2 id="查看服务输出日志"><a href="#查看服务输出日志" class="headerlink" title="查看服务输出日志"></a>查看服务输出日志</h2><p>有些情况下一些服务可能无法正常启动，这时可以使用命令查看日志并定位发生错误的原因</p><pre><code>docker-compose logs</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>notes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Docker</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>央行工作论文读后感</title>
+    <link href="/2021/04/21/%E5%A4%AE%E8%A1%8C%E5%B7%A5%E4%BD%9C%E8%AE%BA%E6%96%87%E8%AF%BB%E5%90%8E%E6%84%9F/"/>
+    <url>/2021/04/21/%E5%A4%AE%E8%A1%8C%E5%B7%A5%E4%BD%9C%E8%AE%BA%E6%96%87%E8%AF%BB%E5%90%8E%E6%84%9F/</url>
+    
+    <content type="html"><![CDATA[<p>央行（中国人民银行）在2021年3月26日发表了一篇工作论文《关于我国人口转型的认识和应对之策》。论文一经发表便引起了全网的大讨论，新浪微博上的相关点击量达到3.2亿次。然而网络上的消息难免囿于其碎片话叙事风格，使人产生偏见。因此我抱着批判性学习的心态，拜读了该篇论文，并试图梳理主要内容，最后就相关观点提出自己的评论。<br><a id="more"></a></p><p>声明：本文并非学术文章，而是代表个人见解的社会评论；针对的也仅限于该篇文章，而不能涵盖文章所涉及的所有相关议题。本文写作目的仅出于学习和交流。本文作者并非研究人口与社会问题的专业人士，因此观点未免存在疏漏和幼稚之处，望读者海涵。</p><p>所有的中国人民银行工作论文可在如下网站查看：<br><a href="http://www.pbc.gov.cn/yanjiuju/124427/133100/index.html" target="_blank" rel="noopener">http://www.pbc.gov.cn/yanjiuju/124427/133100/index.html</a></p><h1 id="论文原文内容概括"><a href="#论文原文内容概括" class="headerlink" title="论文原文内容概括"></a>论文原文内容概括</h1><h2 id="一、世界人口的转型"><a href="#一、世界人口的转型" class="headerlink" title="一、世界人口的转型"></a>一、世界人口的转型</h2><p>该部分讨论了经济社会发展和出生率与死亡率的关系问题。文章认为，经济社会的发展将导致出生率和死亡率下降，但是死亡率会先于出生率下降，因此该文将人口增长状态分为四个阶段：低增长（I）、加速增长（II）、增长减缓（III）和恢复低增长（IV）。</p><p><img src="/2021/04/21/央行工作论文读后感/2021-04-21-12-02-48.png" srcset="/img/loading.gif" alt></p><p>本节最终的结论是发达经济体已经位于IV阶段，而大多数发展中经济体位于II或III阶段。</p><p>什么是人口红利？人口红利是指生育率下降带来的劳动人口占比提升的现象。在人口红利时期，因为抚养子女和老人的压力变小，更多的人口能够从事经济发展有关的工作，因此这个地区相较于其他地区增长快。具体表现为居民储蓄率高、投资高等。</p><p>人口红利是一个地区发展的机会，但是能否利用这个机会，则有赖于社会和政治条件所创造的生产性就业和投资环境。</p><p>但是劳动适龄人口占多数的时期是短暂的（约50年），这一部分劳动人口终究会老去并成为负担，届时新一代人将成为社会发展的主力。这种人口红利之后的现象称之为人口转型。</p><h2 id="二、如何应对人口转型？"><a href="#二、如何应对人口转型？" class="headerlink" title="二、如何应对人口转型？"></a>二、如何应对人口转型？</h2><p>发达经济体早在工业革命时期就已经积累了一定的人口转型方面的经验和教训。比如TODO</p><h1 id="一些观点的批判"><a href="#一些观点的批判" class="headerlink" title="一些观点的批判"></a>一些观点的批判</h1><h2 id="文笔"><a href="#文笔" class="headerlink" title="文笔"></a>文笔</h2><p>从行文上来看，本片工作论文与其说是一篇论文，不如说是一篇由央行背书的社会评论。从其观点的严谨程度到行文的文笔上都不够“学术”，更加口语化。</p><p>例如在第三章第二小节中的一段关于人口与经济的关系的论述如下所示：</p><ul><li>人口与经济的关系<strong>似乎有点像</strong>物价。过快增长不好，萎缩更糟糕，<strong>也许就像</strong>温和的通胀一样，适度、可持续的人口增长才有利于经济社会发展。</li></ul><p>再比如论文第14页的脚注中，关于日本“失去的二十年”的相关注解：</p><ul><li><strong>有人说</strong>，日本失去的二十年的主要原因是日本泡沫经济，而非人口老龄化。……（即便是上世纪三十年代的大萧条，持续时间即使算满，<strong>也就</strong>十年）。<strong>还有人说</strong>，……。 </li></ul><p>并且“有人说”之后也没有跟随参考文献，不由得让人怀疑该“人”的存在性。如此种种不一而足。</p><p>我认为无论是学术论文还是工作论文都应当尽可能避免这种模棱两可的文风。如果《转型》和本文一样是一篇社论倒无可厚非；然而本文的作者为央行经验丰富的四位经济学家，发表在国家机关的学术刊物上，不得不令人感到遗憾。</p><h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>该篇文章既没有经过充分的调研，又充斥着不成熟的观点和不严谨的论述。</p><p>TODO</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>record</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>middle income trap</tag>
+      
+      <tag>social sciences</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>【学习笔记】Docker网络</title>
     <link href="/2021/04/18/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91Docker%E7%BD%91%E7%BB%9C/"/>
     <url>/2021/04/18/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91Docker%E7%BD%91%E7%BB%9C/</url>
@@ -798,9 +850,9 @@
       
       <tag>Datawhale</tag>
       
-      <tag>Deep Learning</tag>
-      
       <tag>Classification</tag>
+      
+      <tag>Deep Learning</tag>
       
       <tag>attention</tag>
       
@@ -829,9 +881,9 @@
       
       <tag>Datawhale</tag>
       
-      <tag>Deep Learning</tag>
-      
       <tag>Classification</tag>
+      
+      <tag>Deep Learning</tag>
       
       <tag>word2vec</tag>
       
@@ -860,9 +912,9 @@
       
       <tag>Datawhale</tag>
       
-      <tag>Deep Learning</tag>
-      
       <tag>Classification</tag>
+      
+      <tag>Deep Learning</tag>
       
       <tag>FastText</tag>
       
@@ -1127,9 +1179,9 @@
       
       <tag>NLP</tag>
       
-      <tag>DNN</tag>
-      
       <tag>testing</tag>
+      
+      <tag>DNN</tag>
       
     </tags>
     
@@ -1336,9 +1388,9 @@
       
       <tag>Robustness</tag>
       
-      <tag>Deep Neural Networks</tag>
-      
       <tag>Fuzz Testing</tag>
+      
+      <tag>Deep Neural Networks</tag>
       
     </tags>
     
@@ -1367,9 +1419,9 @@
       
       <tag>NLP</tag>
       
-      <tag>Text Classification</tag>
-      
       <tag>Deep Neural Networks</tag>
+      
+      <tag>Text Classification</tag>
       
     </tags>
     
@@ -1918,11 +1970,11 @@
       
       <tag>C++</tag>
       
-      <tag>STL</tag>
-      
       <tag>string</tag>
       
       <tag>regex</tag>
+      
+      <tag>STL</tag>
       
     </tags>
     
@@ -1949,11 +2001,11 @@
       
       <tag>C++</tag>
       
+      <tag>STL</tag>
+      
       <tag>map</tag>
       
       <tag>set</tag>
-      
-      <tag>STL</tag>
       
     </tags>
     
