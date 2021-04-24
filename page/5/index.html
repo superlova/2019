@@ -147,6 +147,58 @@
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2019/06/21/NLP学习笔记1/">
+        <p class="h4 index-header">NLP学习笔记1</p>
+      </a>
+
+      <a href="/2019/06/21/NLP学习笔记1/">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">IMDB数据集探索实验是在Google Colab上面做的，机器也是用的谷歌云。
+# keras.datasets.imdb is broken in 1.13 and 1.14, by np 1.16.3
+!pip install tf_nightly
+
+安装tensorflow
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+import tensorflow as tf
+from tensorflow import keras
+
+import numpy as np
+
+</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-06-21&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/notes/">notes</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/NLP/">NLP</a>&nbsp;
+          
+            <a href="/tags/deep-learning/">deep learning</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
       <a href="/2019/06/21/模型评估与选择——周志华《机器学习》CH2/">
         <p class="h4 index-header">模型评估与选择——周志华《机器学习》CH2</p>
       </a>
@@ -997,64 +1049,6 @@ g(z)=\left\</div>
             <a href="/tags/procrastination/">procrastination</a>&nbsp;
           
             <a href="/tags/study-method/">study method</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2019/04/14/Coreutils重新编译方法/">
-        <p class="h4 index-header">Coreutils重新编译方法</p>
-      </a>
-
-      <a href="/2019/04/14/Coreutils重新编译方法/">
-        
-        
-          
-        
-        <div class="index-excerpt" >
-          <div class="index-text mb-1">Coreutils重新编译方法
-下载coreutils，在Linux系统下解压
-
-
-
-运行指令 ./configure
-
-
-
-运行 make
-
-进入src文件夹，挑选您要修改的文件，我以pwd.c为例，将其复制到我的个人文件夹
-
-修改pwd.c，将其内部所有带“VERSION”的行全部注释掉
-
-运行指令1
-$ gcc -E -I ~/MyCode/coreutils-8.30/lib/ -I ~/MyCode/coreutils-8.30/ -I ~/MyCode/coreutils-8.30/src pwd.c -o pwd.i
-
-运行指令2
-$ gcc -c pwd.i -o pwd.o
-</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-04-14&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/record/">record</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/compiler/">compiler</a>&nbsp;
           
         
       </div>
