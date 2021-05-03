@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://superlova.github.io/"/>
-  <updated>2021-04-24T16:30:32.167Z</updated>
+  <updated>2021-05-03T09:30:24.705Z</updated>
   <id>https://superlova.github.io/</id>
   
   <author>
@@ -15,6 +15,112 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>【学习笔记】计算二进制中1的个数</title>
+    <link href="https://superlova.github.io/2021/05/03/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E8%AE%A1%E7%AE%97%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%AD1%E7%9A%84%E4%B8%AA%E6%95%B0/"/>
+    <id>https://superlova.github.io/2021/05/03/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E8%AE%A1%E7%AE%97%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%AD1%E7%9A%84%E4%B8%AA%E6%95%B0/</id>
+    <published>2021-05-03T06:30:06.000Z</published>
+    <updated>2021-05-03T09:30:24.705Z</updated>
+    
+    <content type="html"><![CDATA[<p>二进制中1的个数的两种计算方法</p><a id="more"></a><p>第一种解法，<code>n &amp;= (n - 1);</code>这一句消灭了二进制末尾的1。循环次数与二进制中1的个数相同。</p><pre><code class="lang-cpp">int hammingWeight(uint32_t n) {    int count = 0;    while (n != 0) {        n &amp;= (n - 1);        ++count;    }    return count;}</code></pre><p>第二种解法，是把性能挖掘到极致的解法：</p><pre><code class="lang-cpp">size_t hammingWeight(uint64_t V) {    V -= ((V &gt;&gt; 1) &amp; 0x5555555555555555); // 010101010101    V = (V &amp; 0x3333333333333333) + ((V &gt;&gt; 2) &amp; 0x3333333333333333);    return ((V + (V &gt;&gt; 4) &amp; 0xF0F0F0F0F0F0F0F) * 0x101010101010101) &gt;&gt; 56;}</code></pre><p>只依靠位运算，不进行条件判断，方便并行计算。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;二进制中1的个数的两种计算方法&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="notes" scheme="https://superlova.github.io/categories/notes/"/>
+    
+    
+      <category term="leetcode" scheme="https://superlova.github.io/tags/leetcode/"/>
+    
+      <category term="binary" scheme="https://superlova.github.io/tags/binary/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【竞赛打卡】不限精度的大整数表示</title>
+    <link href="https://superlova.github.io/2021/05/03/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91%E4%B8%8D%E9%99%90%E7%B2%BE%E5%BA%A6%E7%9A%84%E6%95%B4%E6%95%B0%E4%B9%98%E6%B3%95/"/>
+    <id>https://superlova.github.io/2021/05/03/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91%E4%B8%8D%E9%99%90%E7%B2%BE%E5%BA%A6%E7%9A%84%E6%95%B4%E6%95%B0%E4%B9%98%E6%B3%95/</id>
+    <published>2021-05-03T06:27:43.000Z</published>
+    <updated>2021-05-03T09:25:22.107Z</updated>
+    
+    <content type="html"><![CDATA[<p>两个大整数相乘，如何在不损失精度的前提下计算得到正确的结果？<br><a id="more"></a></p><h1 id="不限精度的整数运算"><a href="#不限精度的整数运算" class="headerlink" title="不限精度的整数运算"></a>不限精度的整数运算</h1><p>前一篇文章我们讨论了两个64位整数的乘法，本篇文章我们讨论高精度数值的加减运算问题。</p><h2 id="大整数存储"><a href="#大整数存储" class="headerlink" title="大整数存储"></a>大整数存储</h2><p>很简单，使用数组即可。注意整数的高位存储在数组的末尾，整数的低位存储在数组的开头。</p><pre><code class="lang-py"># 235813d[0] = 3d[1] = 1d[2] = 8d[3] = 5d[4] = 3d[5] = 2</code></pre><p>这样做的原因是，四则运算一般是从低位向高位计算的，数组则是从0开始遍历的。不过如果数字以字符串存储则不然。比如<code>s=&quot;235813&quot;</code>这个字符串的存储顺序和逻辑顺序恰恰相反。</p><pre><code class="lang-cpp">class BigInt {public:    int d[1000]{};    int len;    BigInt() {        memset(d, 0, sizeof(d));        len = 0;    }    static BigInt change(std::string str);    static int compare(BigInt a, BigInt b);    static BigInt add(BigInt a, BigInt b);    static BigInt sub(BigInt a, BigInt b);};</code></pre><p>输入大整数时，一般都以<code>string</code>类型输入，因此需要执行<code>reverse</code>操作，或者直接逆序赋值。</p><h2 id="大整数运算"><a href="#大整数运算" class="headerlink" title="大整数运算"></a>大整数运算</h2><h3 id="加法"><a href="#加法" class="headerlink" title="加法"></a>加法</h3><pre><code class="lang-cpp">BigInt BigInt::add(BigInt a, BigInt b) {    BigInt c;    int carry = 0;    for (int i = 0; i &lt; a.len || i &lt; b.len; ++i) {        int temp = a.d[i] + b.d[i] + carry;        c.d[c.len++] = temp % 10;        carry = temp / 10;    }    if (carry != 0) {        c.d[c.len++] = carry;    }    return c;}</code></pre><h3 id="减法"><a href="#减法" class="headerlink" title="减法"></a>减法</h3><pre><code class="lang-cpp">BigInt BigInt::sub(BigInt a, BigInt b) {    BigInt c;    for (int i = 0; i &lt; a.len || i &lt; b.len; ++i) {        if (a.d[i] &lt; b.d[i]) {            a.d[i+1]--;            a.d[i] += 10; // 借位        }        c.d[c.len++] = a.d[i] - b.d[i];    }    while (c.len - 1 &gt;= 1 &amp;&amp; c.d[c.len - 1] == 0) {        c.len--;    }    return c;}</code></pre><h3 id="比较"><a href="#比较" class="headerlink" title="比较"></a>比较</h3><pre><code class="lang-cpp">int BigInt::compare(BigInt a, BigInt b) {    if (a.len &gt; b.len) return 1;    else if (a.len &lt; b.len) return -1;    else {        for (int i = a.len-1; i &gt;= 0; --i) {            if (a.d[i] &gt; b.d[i]) return 1;            else if (a.d[i] &lt; b.d[i]) return -1;        }        return 0;    }}</code></pre><h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>算法笔记 5.6 节</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;两个大整数相乘，如何在不损失精度的前提下计算得到正确的结果？&lt;br&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="notes" scheme="https://superlova.github.io/categories/notes/"/>
+    
+    
+      <category term="algorithm" scheme="https://superlova.github.io/tags/algorithm/"/>
+    
+      <category term="leetcode" scheme="https://superlova.github.io/tags/leetcode/"/>
+    
+      <category term="searching" scheme="https://superlova.github.io/tags/searching/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【学习笔记】在 Clion 中使用 Google Test</title>
+    <link href="https://superlova.github.io/2021/05/01/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E5%9C%A8-Clion-%E4%B8%AD%E4%BD%BF%E7%94%A8-Google-Test/"/>
+    <id>https://superlova.github.io/2021/05/01/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E5%9C%A8-Clion-%E4%B8%AD%E4%BD%BF%E7%94%A8-Google-Test/</id>
+    <published>2021-05-01T00:41:43.000Z</published>
+    <updated>2021-05-01T03:01:55.385Z</updated>
+    
+    <content type="html"><![CDATA[<p>Google Test 是著名的 C++ 单元测试框架。如何在 CLion中使用 Google Test？<br><a id="more"></a></p><h1 id="1-下载和安装"><a href="#1-下载和安装" class="headerlink" title="1. 下载和安装"></a>1. 下载和安装</h1><p>首先去<a href="https://github.com/google/googletest" target="_blank" rel="noopener">这个网站</a>下载 google test 最新版本。</p><p><img src="/2021/05/01/【学习笔记】在-Clion-中使用-Google-Test/readme.png" srcset="/img/loading.gif" alt></p><p>笔者写作时， google test 的版本为 1.10。</p><p>然后下载最新版本的压缩文件。</p><p><img src="/2021/05/01/【学习笔记】在-Clion-中使用-Google-Test/download.png" srcset="/img/loading.gif" alt></p><p>解压得到文件夹<code>googletest-release-1.10.0</code>，打开文件夹后，把<code>googletest</code>文件夹复制到你的目标工程目录。</p><p><img src="/2021/05/01/【学习笔记】在-Clion-中使用-Google-Test/googletestdir.png" srcset="/img/loading.gif" alt></p><p><img src="/2021/05/01/【学习笔记】在-Clion-中使用-Google-Test/putitinproject.png" srcset="/img/loading.gif" alt></p><p>还没结束，我们需要修改工程根目录的<code>CMakeLists.txt</code>，以使 google test 生效。注意不要修改<code>googletest/CMakeLists.txt</code>！</p><p>向<code>CMakeLists.txt</code>添加如下代码：</p><pre><code class="lang-sh">add_subdirectory(./googletest)include_directories(${PROJECT_SOURCE_DIR}/src/include ./googletest/include)link_directories(${PROJECT_SOURCE_DIR}/lib ${PROJECT_SOURCE_DIR}/googletest)target_link_libraries(${PROJECT_NAME} gtest)</code></pre><p>如果我们想要使用 google test，就在任意cpp文件添加头<code>#include &quot;gtest/gtest.h&quot;</code></p><h1 id="2-简单的用例"><a href="#2-简单的用例" class="headerlink" title="2. 简单的用例"></a>2. 简单的用例</h1><p>做一个简单的测试，我编写了一个将<code>unsigned long long</code>转为二进制数据的函数<code>ulld_to_b</code>，该函数能将一个无符号64位整数转换为64位长的二进制字符串。</p><pre><code class="lang-cpp">string ulld_to_b(uint64_t i) {    return bitset&lt;64&gt;(i).to_string();}</code></pre><p>现在对其进行测试。测试用例为18，我的预期结果为10010，但是前面应该补零至64位长：</p><pre><code class="lang-cpp">TEST(TestCase, test1) {    EXPECT_STREQ(&quot;10010&quot;, ulld_to_b(18ULL).c_str());}TEST(TestCase, test2) {    EXPECT_STREQ(&quot;00000000000000000000000000010010&quot;, ulld_to_b(18ULL).c_str());}TEST(TestCase, test3) {    EXPECT_STREQ(&quot;0000000000000000000000000000000000000000000000000000000000010010&quot;, ulld_to_b(18ULL).c_str());}</code></pre><p>写完测试用例后，需要改造下<code>main()</code>使其运行所有测试用例：</p><pre><code class="lang-cpp">int main(int argc, char** argv) {    testing::InitGoogleTest(&amp;argc, argv);    return RUN_ALL_TESTS();}</code></pre><p>预期结果为前两个测试用例不通过，后一个测试用例通过。</p><p>编译运行后结果如下，完全符合我们的预期：</p><p><img src="/2021/05/01/【学习笔记】在-Clion-中使用-Google-Test/results.png" srcset="/img/loading.gif" alt></p><p>当然这里的使用是不恰当的，我们应当尽可能令所有单元测试都通过。</p><p>在CLion的代码编辑器中可以方便地查看出错的测试用例：</p><p><img src="/2021/05/01/【学习笔记】在-Clion-中使用-Google-Test/result_wrong.png" srcset="/img/loading.gif" alt></p><h1 id="3-批量开关测试用例"><a href="#3-批量开关测试用例" class="headerlink" title="3. 批量开关测试用例"></a>3. 批量开关测试用例</h1><p>在大型工程中，项目上线前需要关闭所有测试用例，逐个删除未免显得笨拙。这个时候我们可以使用宏定义。</p><p>首先将<code>googletest</code>的头文件放在一个统一的头文件<code>stdafx.h</code>中，然后以<code>#ifdef</code>包裹起来：</p><pre><code class="lang-cpp">#ifndef LEETCODE_2021_STDAFX_H#define LEETCODE_2021_STDAFX_H#include &lt;iostream&gt;#include &lt;vector&gt;#include &lt;string&gt;#include &lt;map&gt;#include &lt;set&gt;#include &lt;algorithm&gt;#include &lt;stack&gt;#include &lt;memory&gt;#include &lt;bitset&gt;// 开启测试模式#define DEBUG_MODE#ifdef DEBUG_MODE#include &quot;gtest/gtest.h&quot;#endif#endif //LEETCODE_2021_STDAFX_H</code></pre><p>如果我把<code>#define DEBUG_MODE</code>删除的话，<code>#include &quot;gtest/gtest.h&quot;</code>就不会执行了。</p><p>然后回到每个函数实现处，我们在这里写了很多的测试用例，以及修改了<code>main()</code>函数。同样将它们用<code>#ifdef</code>包裹起来：</p><pre><code class="lang-cpp">#ifdef DEBUG_MODETEST(TestCase, test1) {    EXPECT_STREQ(&quot;10010&quot;, ulld_to_b(18ULL).c_str());}TEST(TestCase, test2) {    EXPECT_STREQ(&quot;00000000000000000000000000010010&quot;, ulld_to_b(18ULL).c_str());}TEST(TestCase, test3) {    EXPECT_STREQ(&quot;0000000000000000000000000000000000000000000000000000000000010010&quot;, ulld_to_b(18ULL).c_str());}#endif</code></pre><p>这些测试用例会随着<code>&quot;stdafx.h&quot;</code>中<code>#define DEBUG_MODE</code>语句的删除而失效。</p><p>最后来看看<code>main()</code>函数如何处理：</p><pre><code class="lang-cpp">#ifndef DEBUG_MODEint main() {    /*...*/    return 0;}#elseint main(int argc, char** argv) {    testing::InitGoogleTest(&amp;argc, argv);    return RUN_ALL_TESTS();}#endif</code></pre><p>如果没定义<code>DEBUG_MODE</code>，则执行正常的<code>main()</code>；否则执行所有测试用例的<code>main(int argc, char** argv)</code>。</p><p>在项目需要上线时，把<code>#define DEBUG_MODE</code>那一行删除即可。</p><h1 id="4-测试用例编写"><a href="#4-测试用例编写" class="headerlink" title="4. 测试用例编写"></a>4. 测试用例编写</h1><h2 id="4-1-EXPECT和ASSERT"><a href="#4-1-EXPECT和ASSERT" class="headerlink" title="4.1 EXPECT和ASSERT"></a>4.1 <code>EXPECT</code>和<code>ASSERT</code></h2><p>google test 使用 TEST 宏声明测试用例。TEST() 有两个参数，<code>TestCaseName</code>，<code>TestName</code>。</p><p>我们之前使用了<code>EXPECT_STREQ</code>这个宏，其含义为验证内部的两个参数为相同的字符串。除此之外，还有很多以EXPECT开头的宏，它们功能各不相同，比如<code>EXPECT_EQ</code>这个宏比较两个数字是否相等。</p><p>EXPECT系列和ASSERT系列的区别是，EXPECT失败后，继续往下执行；ASSERT失败则直接终止程序。</p><p>EXPECT和ASSERT的返回是一个流对象，这意味着我们可以在之后使用<code>&lt;&lt;</code>运算符输出额外信息：</p><pre><code class="lang-cpp">for (int i = 0; i &lt; x.size(); ++i) {    EXPECT_EQ(x[i], y[i]) &lt;&lt; &quot;Vectors x and y differ at index &quot; &lt;&lt; i;}</code></pre><h2 id="4-2-各种不同的宏断言"><a href="#4-2-各种不同的宏断言" class="headerlink" title="4.2 各种不同的宏断言"></a>4.2 各种不同的宏断言</h2><p>本节只列出了<code>ASSERT</code>，实际上每个<code>ASSERT</code>对应一个<code>EXPECT</code>版本。</p><p><strong>编写测试用例时，如果有两个参数，注意把待测函数输出放在后面！前面的参数是Ground Truth，也就是答案。</strong></p><h3 id="布尔值断言，只有一个参数，参数只能为true或者false："><a href="#布尔值断言，只有一个参数，参数只能为true或者false：" class="headerlink" title="布尔值断言，只有一个参数，参数只能为true或者false："></a>布尔值断言，只有一个参数，参数只能为true或者false：</h3><pre><code class="lang-cpp">ASSERT_TRUE(condition)ASSERT_FALSE(condition)</code></pre><h3 id="数值断言："><a href="#数值断言：" class="headerlink" title="数值断言："></a>数值断言：</h3><pre><code class="lang-cpp">ASSERT_EQ(v1, v2) // v1 == v2ASSERT_NE(v1, v2) // v1 != v2ASSERT_LT(v1, v2) // v1 &lt; v2ASSERT_LE(v1, v2) // v1 &lt;= v2ASSERT_GT(v1, v2) // v1 &gt; v2ASSERT_GE(v1, v2) // v1 &gt;= v2</code></pre><h3 id="字符串断言"><a href="#字符串断言" class="headerlink" title="字符串断言"></a>字符串断言</h3><p>这里的参数为C风格字符串，因此当参数为<code>string</code>类型时，你需要调用<code>c_str()</code>方法。</p><pre><code class="lang-cpp">ASSERT_STREQ(s1, s2) // s1和s2内容相同ASSERT_STRNE(s1, s2) // s1和s2内容不同ASSERT_STRCASEEQ(s1, s2) // 忽略大小写，s1和s2内容相同ASSERT_STRCASENE(s1, s2) // 忽略大小写，s1和s2内容不同</code></pre><h3 id="断言返回成功或者失败"><a href="#断言返回成功或者失败" class="headerlink" title="断言返回成功或者失败"></a>断言返回成功或者失败</h3><pre><code class="lang-cpp">TEST(ExplicitTest, Demo){    ADD_FAILURE() &lt;&lt; &quot;Sorry&quot;; // None Fatal Asserton，继续往下执行。    FAIL(); // Fatal Assertion，不往下执行该案例。    SUCCEED();}</code></pre><h3 id="抛出异常的断言"><a href="#抛出异常的断言" class="headerlink" title="抛出异常的断言"></a>抛出异常的断言</h3><pre><code class="lang-cpp">int Foo(int a, int b){    if (a == 0 || b == 0)    {        throw &quot;don&#39;t do that&quot;;    }    int c = a % b;    if (c == 0)        return b;    return Foo(b, c);}TEST(FooTest, HandleZeroInput){    EXPECT_ANY_THROW(Foo(10, 0)); // Foo应当抛出异常    EXPECT_THROW(Foo(0, 5), char*); // Foo应当抛出字符串类型的异常    EXPECT_NO_THROW(Foo(1, 1)); // Foo不应该抛出异常}</code></pre><h3 id="浮点数断言"><a href="#浮点数断言" class="headerlink" title="浮点数断言"></a>浮点数断言</h3><pre><code class="lang-cpp">ASSERT_FLOAT_EQ(exp, act) // 检验两个浮点数是否**几乎**相等ASSERT_DOUBLE_EQ(exp, act) // 同上，只不过精度更高ASSERT_NEAR(exp, act, abs_error) // exp和act之间的差值不会超过abs_error</code></pre><h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.cnblogs.com/coderzh/archive/2009/04/06/1426755.html" target="_blank" rel="noopener">https://www.cnblogs.com/coderzh/archive/2009/04/06/1426755.html</a></p><p><a href="https://blog.csdn.net/zhizhengguan/article/details/110313265" target="_blank" rel="noopener">https://blog.csdn.net/zhizhengguan/article/details/110313265</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Google Test 是著名的 C++ 单元测试框架。如何在 CLion中使用 Google Test？&lt;br&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="notes" scheme="https://superlova.github.io/categories/notes/"/>
+    
+    
+      <category term="clion" scheme="https://superlova.github.io/tags/clion/"/>
+    
+      <category term="google test" scheme="https://superlova.github.io/tags/google-test/"/>
+    
+      <category term="unit test" scheme="https://superlova.github.io/tags/unit-test/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【竞赛打卡】大整数相乘 I</title>
+    <link href="https://superlova.github.io/2021/04/28/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91%E4%B8%A4%E6%95%B0%E7%9B%B8%E4%B9%98/"/>
+    <id>https://superlova.github.io/2021/04/28/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91%E4%B8%A4%E6%95%B0%E7%9B%B8%E4%B9%98/</id>
+    <published>2021-04-28T06:49:39.000Z</published>
+    <updated>2021-05-03T06:27:19.213Z</updated>
+    
+    <content type="html"><![CDATA[<p>两个大整数相乘，如何在不损失精度的前提下计算得到正确的结果？<br><a id="more"></a></p><h1 id="unsigned-long-long-整数之间的乘法"><a href="#unsigned-long-long-整数之间的乘法" class="headerlink" title="unsigned long long 整数之间的乘法"></a><code>unsigned long long</code> 整数之间的乘法</h1><h2 id="1-问题引入"><a href="#1-问题引入" class="headerlink" title="1. 问题引入"></a>1. 问题引入</h2><p>如果我们使用 <code>C++</code> 语言，在 64 位系统上，<code>unsigned long long</code> 类型（或者 <code>uint64_t</code> 类型）的变量能够保存的数值范围是 $\left[0,2^{64}\right)$。任何小于该数值的数字都能被正确存储。</p><script type="math/tex; mode=display">2^{64}-1=18,446,744,073,709,551,615</script><p>这个十进制的整数足足有20位，一般情况下我们是不需要考虑溢出问题的。</p><p>但是如果两个<code>uint64_t</code>的变量要做乘法，就必须考虑溢出问题了。因为两个64位整数相乘，其结果可能达到128位，超过了一个变量能存储的数据的极限大小。</p><p>两个<code>uint64_t</code>变量的乘法该如何正确计算？考虑极端情况，两个<code>uint64_t</code>整数所能表达的最大数字<code>UINT_MAX</code>相乘：</p><script type="math/tex; mode=display">(2^{64}-1)\times (2^{64}-1)=2^{128}-2^{65}+1</script><p>这里面最大的数字是$2^{128}$，因此我们最极端情况下有128位的信息需要保存。</p><h2 id="2-问题简化"><a href="#2-问题简化" class="headerlink" title="2. 问题简化"></a>2. 问题简化</h2><p>首先让我们<strong>简化一下问题</strong>。假设我现在只能用一款古董电脑，它只支持保存四位十进制整数的变量，也就是一个变量的保存范围为$[0,9999]$。如何计算两个四位整数相乘？</p><p>还记得乘法是怎么计算的吗？我们应该都学习过小学数学，通过将数字中的每一个字符看作计算单元，然后利用99乘法表就能够口算出结果了。</p><p><img src="/2021/04/28/【竞赛打卡】两数相乘/2021-04-29-08-44-58.png" srcset="/img/loading.gif" alt></p><p>或者可以每两个字符看成计算的基本单元，这样就需要计算两位数乘法。</p><p><img src="/2021/04/28/【竞赛打卡】两数相乘/2021-04-29-08-50-09.png" srcset="/img/loading.gif" alt></p><p>同样可以计算得到正确结果。假设每个方框是计算机的一个变量，后一种计算方式可以保证每个变量中保存的元素大小不超过计算机的保存能力（假设计算机保存能力为2位）。</p><p>回到题目本身。该运算的结果达到7位，超过了我们计算机限制的4位，因此可以使用两个变量保存该结果：<code>lo</code>保存结果的低四位，<code>hi</code>保存结果的高四位。</p><p>另外我们使用四个变量将两个乘数拆分成前后两个部分，<code>a</code>保存第一个操作数的高2位，<code>b</code>保存第一个操作数的低2位,<code>c</code>保存第二个操作数的高2位，<code>d</code>保存第二个操作数的低2位。</p><p>为什么要这么做？因为计算机的存储能力为4位，两个四位数字相乘，结果最多能达到八位，所以我们肯定不能容忍两个四位数字相乘；但是两个两位数字相乘，结果最多达到四位，是可以被当前的计算机所存储的。所以我们需要把四位数字拆分成前后两个部分。</p><p>抽象一下计算过程，以下不考虑进位。</p><p><img src="/2021/04/28/【竞赛打卡】两数相乘/2021-04-29-09-07-00.png" srcset="/img/loading.gif" alt></p><p>第一步，计算b与d的乘积，得到结果<code>bd</code>和进位k_1：</p><p><img src="/2021/04/28/【竞赛打卡】两数相乘/计算b与d的乘积.png" srcset="/img/loading.gif" alt></p><p>第二步，计算a与d的乘积，并且加上bd的进位k_1，得到结果ad和进位k_2，注意这个k_2最终会与ac求和：</p><p><img src="/2021/04/28/【竞赛打卡】两数相乘/计算a与d的乘积.png" srcset="/img/loading.gif" alt></p><p>第三步，计算b与c的乘积，得到结果bc和进位k_3：</p><p><img src="/2021/04/28/【竞赛打卡】两数相乘/计算b与c的乘积.png" srcset="/img/loading.gif" alt></p><p>第四步，计算a与c的乘积，并且加上bc的进位k_3，得到结果ac和进位k_4，注意这个k_4最终会成为高位hi的最大的部分，因此ac得到的k_4没必要和ac分离开：</p><p><img src="/2021/04/28/【竞赛打卡】两数相乘/计算a与c的乘积.png" srcset="/img/loading.gif" alt></p><p>第五步，低位结果计算，首先将ad和bc加起来，得到ad+bc以及可能存在的进位k_5；然后将ad+bc向左移位两格，再加上bd，就是低位结果lo。</p><p><img src="/2021/04/28/【竞赛打卡】两数相乘/低位结果计算.png" srcset="/img/loading.gif" alt></p><p>第六步，高位结果计算，将ac和进位k_5加起来，注意此时的ac包含了进位k_4，并没有分离出去。我们还需要加上计算ad得到的k_2，因此hi=ac+k_2+k_5。</p><p><img src="/2021/04/28/【竞赛打卡】两数相乘/高位结果计算.png" srcset="/img/loading.gif" alt></p><h2 id="3-示例"><a href="#3-示例" class="headerlink" title="3. 示例"></a>3. 示例</h2><p>举一个具体点的例子：如何利用该电脑正确计算<code>1213*1214</code>？</p><script type="math/tex; mode=display">1213\times 1214=1,472,582</script><pre><code>a = 12b = 13c = 12d = 14</code></pre><ol><li>计算b与d的乘积，得到结果<code>bd</code>和进位k_1：<br>```<br>b <em> d = 13 </em> 14 = 182</li></ol><hr><p>k_1 = 1<br>bd = 82</p><pre><code>2. 计算a与d的乘积，并且加上bd的进位k_1，得到结果ad和进位k_2</code></pre><p>a <em> d + k_1 = 12 </em> 14 + 1 = 169<br>k_2 = 1<br>ad = 69</p><pre><code>3. 计算b与c的乘积，得到结果bc和进位k_3</code></pre><p>b <em> c = 13 </em> 12 = 156<br>k_3 = 1<br>bc = 56</p><pre><code>4. 计算a与c的乘积，并且加上bc的进位k_3，得到结果ac。此时不用分离进位，因此没有k_4。</code></pre><p>a <em> c + k_3 = 12 </em> 12 + 1 = 145<br>ac = 145</p><pre><code>5. 低位结果计算，首先将ad和bc加起来，得到ad+bc以及可能存在的进位k_5；然后将ad+bc向左移位两格，再加上bd，就是低位结果lo</code></pre><p>ad + bc = 125<br>k_5 = 1<br>adbc = 25<br>lo = adbc &lt;&lt; 2 + bd = 2500 + 82 = 2582</p><pre><code>6. 高位结果计算，将ac和进位k_5加起来，注意此时的ac包含了进位k_4，并没有分离出去。我们还需要加上计算ad得到的k_2，因此hi=ac+k_2+k_5</code></pre><p>hi = ac + k_2 + k_5 = 145 + 1 + 1 = 147</p><pre><code>最终结果的高位部分为147，低位部分为2582，与答案1472582相同。## 迁移到64位整数相乘以上我们讨论的都是四位整数相乘的问题，其实64位二进制数相乘也是一样的道理。首先我们将两个64位乘数OP1和OP2各自分成两半32位整数，也就是a/b/c/d，然后按照上述算法计算，即可得到结果的高64位和低64位。算法如下：```cppvoid mul_64_64_to_128(uint64_t op1, uint64_t op2, uint64_t *hi, uint64_t *lo) {    // 取abcd    uint64_t a, b, c, d;    b = (op1 &amp; 0xFFFFFFFF);    a = (op1 &gt;&gt; 32);    d = (op2 &amp; 0xFFFFFFFF);    c = (op2 &gt;&gt; 32);    // bd    uint64_t k_1 = b * d;    uint64_t bd = (k_1 &amp; 0xFFFFFFFF);    k_1 &gt;&gt;= 32;    // ad    uint64_t k_2 = a * d + k_1;    uint64_t ad = (k_2 &amp; 0xFFFFFFFF);    k_2 &gt;&gt;= 32;    // bc    uint64_t k_3 = b * c;    uint64_t bc = (k_3 &amp; 0xFFFFFFFF);    k_3 &gt;&gt;= 32;    // ac    uint64_t ac = a * c + k_3;    // lo    uint64_t k_5 = ad + bc;    uint64_t ad_bc = (k_5 &amp; 0xFFFFFFFF);    k_5 &gt;&gt;= 32;    *lo = (ad_bc &lt;&lt; 32) + bd;    // hi    *hi = ac + k_2 + k_5;}</code></pre><p>验证一下结果：</p><pre><code class="lang-cpp">int main() {    uint64_t op1 = 1e12;    uint64_t op2 = 1e12;    uint64_t hi = 0ULL, lo = 0ULL;    mul_64_64_to_128(op1, op2, &amp;hi, &amp;lo);    cout &lt;&lt; hi &lt;&lt; &quot;\n&quot; &lt;&lt; lo &lt;&lt; endl;    return 0;}&gt;&gt;&gt;542102003764205206896640Process finished with exit code 0</code></pre><p>乍一看结果，<code>1e12*1e12</code>结果怎么不是<code>1e24</code>呢？其实这是由于结果是十进制导致不直观，实际上我们的结果是正确的。我们比较下二进制就可以了。</p><p>首先定义一个函数<code>ulld_to_b</code>，将<code>uint64_t</code>变量转换为64位的二进制字符串：</p><pre><code class="lang-cpp">string ulld_to_b(uint64_t i) {    return bitset&lt;64&gt;(i).to_string();}</code></pre><p>然后查询<code>1e24</code>的二进制表示为：</p><pre><code>00000000000000000000000000000000000000000000000011010011110000100001101111001110110011001110110110100001000000000000000000000000</code></pre><p>该数值是我在<a href="https://www.sojson.com/hexconvert.html" target="_blank" rel="noopener">这个网站</a>上查询的。</p><p>然后编写测试用例：</p><pre><code class="lang-cpp">TEST(TestCase, test1) {    uint64_t op1 = 1e12;    uint64_t op2 = 1e12;    uint64_t hi = 0ULL, lo = 0ULL;    mul_64_64_to_128(op1, op2, &amp;hi, &amp;lo);    string res = &quot;&quot;;    res = ulld_to_b(hi) + ulld_to_b(lo);    cout &lt;&lt; res &lt;&lt; endl;    string ground_truth = &quot;00000000000000000000000000000000000000000000000011010011110000100001101111001110110011001110110110100001000000000000000000000000&quot;;    EXPECT_STREQ(ground_truth.c_str(), res.c_str());}int main(int argc, char** argv) {    testing::InitGoogleTest(&amp;argc, argv);    return RUN_ALL_TESTS();}</code></pre><p>没问题，通过了。当然，仅通过一个测试用例不算证明程序的正确性，勤劳的你可以多用几个测试用例试试。</p><h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.codeproject.com/Tips/618570/UInt-Multiplication-Squaring" target="_blank" rel="noopener">https://www.codeproject.com/Tips/618570/UInt-Multiplication-Squaring</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;两个大整数相乘，如何在不损失精度的前提下计算得到正确的结果？&lt;br&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="notes" scheme="https://superlova.github.io/categories/notes/"/>
+    
+    
+      <category term="algorithm" scheme="https://superlova.github.io/tags/algorithm/"/>
+    
+      <category term="leetcode" scheme="https://superlova.github.io/tags/leetcode/"/>
+    
+      <category term="searching" scheme="https://superlova.github.io/tags/searching/"/>
+    
+  </entry>
   
   <entry>
     <title>【学习笔记】Docker综合实践</title>
@@ -275,9 +381,9 @@
     
       <category term="algorithm" scheme="https://superlova.github.io/tags/algorithm/"/>
     
-      <category term="Datawhale" scheme="https://superlova.github.io/tags/Datawhale/"/>
-    
       <category term="leetcode" scheme="https://superlova.github.io/tags/leetcode/"/>
+    
+      <category term="Datawhale" scheme="https://superlova.github.io/tags/Datawhale/"/>
     
       <category term="search" scheme="https://superlova.github.io/tags/search/"/>
     
@@ -390,9 +496,9 @@
     
       <category term="algorithm" scheme="https://superlova.github.io/tags/algorithm/"/>
     
-      <category term="Datawhale" scheme="https://superlova.github.io/tags/Datawhale/"/>
-    
       <category term="leetcode" scheme="https://superlova.github.io/tags/leetcode/"/>
+    
+      <category term="Datawhale" scheme="https://superlova.github.io/tags/Datawhale/"/>
     
       <category term="searching" scheme="https://superlova.github.io/tags/searching/"/>
     
@@ -419,117 +525,11 @@
     
       <category term="algorithm" scheme="https://superlova.github.io/tags/algorithm/"/>
     
-      <category term="Datawhale" scheme="https://superlova.github.io/tags/Datawhale/"/>
-    
       <category term="leetcode" scheme="https://superlova.github.io/tags/leetcode/"/>
     
+      <category term="Datawhale" scheme="https://superlova.github.io/tags/Datawhale/"/>
+    
       <category term="Dynamic Programming" scheme="https://superlova.github.io/tags/Dynamic-Programming/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【竞赛打卡】数据挖掘实践——时间序列模型</title>
-    <link href="https://superlova.github.io/2020/08/22/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%E5%AE%9E%E8%B7%B5%E2%80%94%E2%80%94%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E6%A8%A1%E5%9E%8B/"/>
-    <id>https://superlova.github.io/2020/08/22/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%E5%AE%9E%E8%B7%B5%E2%80%94%E2%80%94%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E6%A8%A1%E5%9E%8B/</id>
-    <published>2020-08-22T15:40:04.000Z</published>
-    <updated>2020-08-22T15:43:49.737Z</updated>
-    
-    <content type="html"><![CDATA[<p>不要停下来啊！<br><a id="more"></a><br>AR模型是自回归模型，AutoRegression的简称。是一种较为朴素的时间序列数据处理方法，利用同一变量的前n期来预测本期的变量的数值，并且假定为线性关系。这种分析方法中，自变量不是其他的影响因素，而是变量本身的历史数据，利用xt-n来预测xt，因此被称为自回归。</p><p>MA模型：移动平均模型将序列{xt}表示为白噪声的线性加权。</p><p>在一个平稳的随机过程中，如果既有自回归的特性，又有移动平均过程的特性，则需要对两个模型进行混合使用，也即是较为普遍的ARMA模型，一般记为ARMA(p,q)。</p><p>ARIMA(p,d,q)是差分自回归移动平均模型，是运用最为广泛的一种时间序列分析模型。p,q的意义不变，其中d的含义是将时间序列化为平稳时间序列所做的差分次数。</p><p>在建立时间序列的模型后，我们要对时间序列数据进行多重检验，以确定该数据符合我们的统计学上的分析准则。主要的检验要观察数据的自相关性，阶数识别和单位根检验（ADF检验）。对于ARMA模型来说，最难的步骤是进行阶数的识别。ADF检验是时间序列中最为重要的检验之一，帮助我们准确判断时间序列数据是否平稳，是为后期的Johansen 检验、Granger 检验等的基础。</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;不要停下来啊！&lt;br&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="notes" scheme="https://superlova.github.io/categories/notes/"/>
-    
-    
-      <category term="Datawhale" scheme="https://superlova.github.io/tags/Datawhale/"/>
-    
-      <category term="Data Mining" scheme="https://superlova.github.io/tags/Data-Mining/"/>
-    
-      <category term="Time Series Analysis" scheme="https://superlova.github.io/tags/Time-Series-Analysis/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【竞赛打卡】数据挖掘实践——时间序列规则</title>
-    <link href="https://superlova.github.io/2020/08/22/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%E5%AE%9E%E8%B7%B5%E2%80%94%E2%80%94%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E8%A7%84%E5%88%99/"/>
-    <id>https://superlova.github.io/2020/08/22/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%E5%AE%9E%E8%B7%B5%E2%80%94%E2%80%94%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E8%A7%84%E5%88%99/</id>
-    <published>2020-08-22T15:38:15.000Z</published>
-    <updated>2020-08-22T15:43:47.259Z</updated>
-    
-    <content type="html"><![CDATA[<p>不要停下来啊！<br><a id="more"></a></p><p>时间序列基本规则法<br>提取时间序列的周期性特征进行预测，参考：时间序列规则法快速入门<br>观察序列，当序列存在周期性时，可以用线性回归-利用时间特征做线性回归做为baseline</p><p>时间序列是指将同一统计指标的数值按其发生的时间先后顺序排列而成的数列。</p><p>时间序列分析的主要目的是根据已有的历史数据对未来进行预测。与面板数据不同，面板数据侧重于同一时间点不同样本的数值，而时间序列侧重于同一统计指标在时间的不同点的数值。时间序列有两个重要指标，一个是资料所属的时间，另一个是时间上的统计指标数值。时间序列可以描述社会经济现象在不同时间的发展状态和过程，也可以根据历史数据进行合理的未来推测。</p><p>一般地，我们认为一个随机游走的变量会服从正态分布。</p><p>提取时间的周期性特点做为特征，此时训练集每条样本为”时间特征-&gt;目标值”，时间序列的依赖关系被剔除，不需要严格依赖滑窗截取训练样本。常见是将时间用0-1哑变量表达，有以下若干种特征：</p><ul><li>将星期转化为了0-1变量，从周一至周天，独热编码共7个变量</li><li>将节假日转化为0-1变量，视具体节假日数目，可简单分为两类，”有假日”-“无假日”，独热编码共2个变量；或赋予不同编码值，如区分国庆、春节、劳动节等使用1、2、3表示</li><li>将月初转化为0-1变量，简单分两类表示为”是月初”-“非月初”，共2个特征</li><li>类似的月中、月初可以转化为0-1变量</li><li>控制时间粒度，区分是weekday or weekend</li></ul><p>按列提取中位数是一种简单而有效的提取周期因子的方法。中位数十分鲁棒，不受极端值的影响。但中位数损失了很多信息。实践中，可以在此基础上进一步优化。比如可以提取一个均值和一个中位数，然后将均值和中位数融合。融合的比例按照测试集的表现来确定。也可以根据与预测周的时间距离来赋予不同的权重。</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;不要停下来啊！&lt;br&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="notes" scheme="https://superlova.github.io/categories/notes/"/>
-    
-    
-      <category term="Datawhale" scheme="https://superlova.github.io/tags/Datawhale/"/>
-    
-      <category term="Data Mining" scheme="https://superlova.github.io/tags/Data-Mining/"/>
-    
-      <category term="Time Series Analysis" scheme="https://superlova.github.io/tags/Time-Series-Analysis/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【竞赛打卡】数据挖掘实践——数据探索和分析</title>
-    <link href="https://superlova.github.io/2020/08/20/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%E5%AE%9E%E8%B7%B5%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E6%8E%A2%E7%B4%A2%E5%92%8C%E5%88%86%E6%9E%90/"/>
-    <id>https://superlova.github.io/2020/08/20/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%E5%AE%9E%E8%B7%B5%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E6%8E%A2%E7%B4%A2%E5%92%8C%E5%88%86%E6%9E%90/</id>
-    <published>2020-08-20T15:40:07.000Z</published>
-    <updated>2020-08-20T15:49:38.181Z</updated>
-    
-    <content type="html"><![CDATA[<p>我也是加把劲骑士！<br><a id="more"></a></p><pre><code class="lang-py">file_names = glob.glob(&#39;Purchase Redemption Data/*.csv&#39;)file_names[&#39;Purchase Redemption Data/mfd_bank_shibor.csv&#39;, &#39;Purchase Redemption Data/comp_predict_table.csv&#39;, &#39;Purchase Redemption Data/user_profile_table.csv&#39;, &#39;Purchase Redemption Data/mfd_day_share_interest.csv&#39;, &#39;Purchase Redemption Data/user_balance_table.csv&#39;]</code></pre><h2 id="1-用户信息表-user-profile-table"><a href="#1-用户信息表-user-profile-table" class="headerlink" title="1. 用户信息表 user_profile_table"></a>1. 用户信息表 user_profile_table</h2><p>我们总共随机抽取了约 3 万用户。</p><p>其中部分用户在 2014 年 9 月份第一次出现，这部分用户只在测试数据中（真的太鉴了这个）。</p><p>因此用户信息表是约 2.8 万 个用户的基本数据，在原始数据的基础上处理后，主要包含了用户的性别、城市和星座。</p><p><img src="/2020/08/20/【竞赛打卡】数据挖掘实践——数据探索和分析/2020-08-20-23-43-55.png" srcset="/img/loading.gif" alt></p><h2 id="2-用户申购赎回数据表-user-balance-table"><a href="#2-用户申购赎回数据表-user-balance-table" class="headerlink" title="2. 用户申购赎回数据表 user_balance_table"></a>2. 用户申购赎回数据表 user_balance_table</h2><p>里面有 20130701 至 20140831 申购和赎回信息、以及所有的子类目信息。</p><p>数据经过脱敏处理。脱敏之后的数据，基本保持了原数据趋势。</p><p>数据主要包括用户操作时间和操作记录，其中操作记录包括申购和赎回两个部分。</p><p>金额的单位是分，即 0.01 元人民币。 如果用户今日消费总量为0，即consume_amt=0，则四个字类目为空。</p><div class="table-container"><table><thead><tr><th>字段名称</th><th>含义</th></tr></thead><tbody><tr><td>report_date</td><td>日期</td></tr><tr><td>tBalance</td><td>今日余额</td></tr><tr><td>yBalance</td><td>昨日余额</td></tr><tr><td>total_purchase_amt</td><td>今日总购买量 = 直接购买 + 收益</td></tr><tr><td>direct_purchase_amt</td><td>今日直接购买量</td></tr><tr><td>purchase_bal_amt</td><td>今日支付宝余额购买量</td></tr><tr><td>purchase_bank_amt</td><td>今日银行卡购买量</td></tr><tr><td>total_redeem_amt</td><td>今日总赎回量 = 消费 + 转出</td></tr><tr><td>consume_amt</td><td>今日消费总量</td></tr><tr><td>transfer_amt</td><td>今日转出总量</td></tr><tr><td>tftobal_amt</td><td>今日转出到支付宝余额总量</td></tr><tr><td>tftocard_amt</td><td>今日转出到银行卡总量</td></tr><tr><td>share_amt</td><td>今日收益</td></tr><tr><td>category1</td><td>今日类目 1 消费总额</td></tr><tr><td>category2</td><td>今日类目 2 消费总额</td></tr><tr><td>category3</td><td>今日类目 3 消费总额</td></tr><tr><td>category4</td><td>今日类目 4 消费总额</td></tr></tbody></table></div><p><img src="/2020/08/20/【竞赛打卡】数据挖掘实践——数据探索和分析/2020-08-20-23-47-13.png" srcset="/img/loading.gif" alt></p><p>注 1 ：上述的数据都是经过脱敏处理的，收益为重新计算得到的，计算方法按照简化后的计算方式处理，具体计算方式在下节余额宝收益计算方式中描述。</p><p>注 2 ：脱敏后的数据保证了今日余额 = 昨日余额 + 今日申购 - 今日赎回，不会出现负值。</p><h2 id="3-收益率表-mfd-day-share-interest"><a href="#3-收益率表-mfd-day-share-interest" class="headerlink" title="3. 收益率表 mfd_day_share_interest"></a>3. 收益率表 mfd_day_share_interest</h2><p>收益表为余额宝在 14 个月内的收益率表 。</p><p><img src="/2020/08/20/【竞赛打卡】数据挖掘实践——数据探索和分析/2020-08-20-23-47-55.png" srcset="/img/loading.gif" alt></p><div class="table-container"><table><thead><tr><th>列名</th><th>含义</th></tr></thead><tbody><tr><td>mfd_date</td><td>日期</td></tr><tr><td>mfd_daily_yield</td><td>万份收益，即 1 万块钱的收益。</td></tr><tr><td>mfd_7daily_yield</td><td>七日年化收益率（ % ）</td></tr></tbody></table></div><h2 id="4-上海银行间同业拆放利率（Shibor）表-df-mfd-bank-shibor"><a href="#4-上海银行间同业拆放利率（Shibor）表-df-mfd-bank-shibor" class="headerlink" title="4. 上海银行间同业拆放利率（Shibor）表 df_mfd_bank_shibor"></a>4. 上海银行间同业拆放利率（Shibor）表 df_mfd_bank_shibor</h2><p>银行间拆借利率表是 14 个月期间银行之间的拆借利率（皆为年化利率）</p><p><img src="/2020/08/20/【竞赛打卡】数据挖掘实践——数据探索和分析/2020-08-20-23-48-31.png" srcset="/img/loading.gif" alt></p><div class="table-container"><table><thead><tr><th>列名</th><th>类型</th><th>含义</th><th>示例</th></tr></thead><tbody><tr><td>mfd_date</td><td>String</td><td>日期</td><td>20140102</td></tr><tr><td>Interest_O_N</td><td>Double</td><td>隔夜利率（%）</td><td>2.8</td></tr><tr><td>Interest_1_W</td><td>Double</td><td>1周利率（%）</td><td>4.25</td></tr><tr><td>Interest_2_W</td><td>Double</td><td>2周利率（%）</td><td>4.9</td></tr><tr><td>Interest_1_M</td><td>Double</td><td>1个月利率（%）</td><td>5.04</td></tr><tr><td>Interest_3_M</td><td>Double</td><td>3个月利率（%）</td><td>4.91</td></tr><tr><td>Interest_6_M</td><td>Double</td><td>6个月利率（%）</td><td>4.79</td></tr><tr><td>Interest_9_M</td><td>Double</td><td>9个月利率（%）</td><td>4.76</td></tr><tr><td>Interest_1_Y</td><td>Double</td><td>1年利率（%）</td><td>4.78</td></tr></tbody></table></div><h1 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h1><h2 id="收益计算方式"><a href="#收益计算方式" class="headerlink" title="收益计算方式"></a>收益计算方式</h2><p>本赛题的余额宝收益方式，主要基于实际余额宝收益计算方法，但是进行了一定的简化，此处计算简化的地方如下：</p><p>首先，收益计算的时间不再是会计日，而是自然日，以 0 点为分隔，如果是 0 点之前转入或者转出的金额算作昨天的，如果是 0 点以后转入或者转出的金额则算作今天的。</p><p>然后，收益的显示时间，即实际将第一份收益打入用户账户的时间为如下表格，以周一转入周三显示为例，如果用户在周一存入 10000 元，即 1000000 分，那么这笔金额是周一确认，周二是开始产生收益，用户的余额还是 10000 元，在周三将周二产生的收益打入到用户的账户中，此时用户的账户中显示的是 10001.1 元，即 1000110 分。其他时间的计算按照表格中的时间来计算得到。</p><div class="table-container"><table><thead><tr><th>转入时间</th><th>首次显示收益时间</th></tr></thead><tbody><tr><td>周一</td><td>周三</td></tr><tr><td>周二</td><td>周四</td></tr><tr><td>周三</td><td>周五</td></tr><tr><td>周四</td><td>周六</td></tr><tr><td>周五</td><td>下周二</td></tr><tr><td>周六</td><td>下周三</td></tr><tr><td>周天</td><td>下周三</td></tr></tbody></table></div><h2 id="提交格式"><a href="#提交格式" class="headerlink" title="提交格式"></a>提交格式</h2><div class="table-container"><table><thead><tr><th>字段</th><th>类型</th><th>含义</th><th>示例</th></tr></thead><tbody><tr><td>report_date</td><td>bigint</td><td>日期</td><td>20140901</td></tr><tr><td>purchase</td><td>bigint</td><td>申购总额</td><td>40000000</td></tr><tr><td>redeem</td><td>bigint</td><td>赎回总额</td><td>30000000</td></tr></tbody></table></div><p><img src="/2020/08/20/【竞赛打卡】数据挖掘实践——数据探索和分析/2020-08-20-23-49-17.png" srcset="/img/loading.gif" alt></p><p>每一行数据是一天对申购、赎回总额的预测值， 2014 年 9 月每天一行数据，共 30 行数据。 Purchase 和 redeem 都是金额数据，精确到分，而不是精确到元。</p><p>评分数据格式要求与“选手结果数据样例文件”一致，结果表命名为：tc_comp_predict_table， 字段之间以逗号为分隔符</p><h2 id="评估"><a href="#评估" class="headerlink" title="评估"></a>评估</h2><p>评估指标的设计主要期望选手对未来 30 天内每一天申购和赎回的总量数据预测的越准越好，同时考虑到可能存在的多种情况。</p><p>譬如有些选手在 30 天中 29 天预测都是非常精准的但是某一天预测的结果可能误差很大，而有些选手在 30 天中每天的预测都不是很精准误差较大，如果采用绝对误差则可能导致前者的成绩比后者差，而在实际业务中可能更倾向于前者。</p><p>所以最终选用积分式的计算方法：每天的误差选用相对误差来计算，然后根据用户预测申购和赎回的相对误差，通过得分函数映射得到一个每天预测结果的得分，将 30 天内的得分汇总，然后结合实际业务的倾向，对申购赎回总量预测的得分情况进行加权求和，得到最终评分。具体的操作如下：</p><p>1) 计算所有用户在测试集上每天的申购及赎回总额与实际情况总额的误差。</p><p><img src="https://gtms02.alicdn.com/tps/i2/TB1UMhaHVXXXXbWXpXXmP_sPXXX-372-168.png" srcset="/img/loading.gif" alt></p><p>2) 申购预测得分与 Purchasei 相关，赎回预测得分与 Redeemi 相关 , 误差与得分之间的计算公式不公布，但保证该计算公式为单调递减的，即误差越小，得分越高，误差与大，得分越低。当第 i 天的申购误差 Purchasei =0 ，这一天的得分为 10 分；当 Purchasei &gt; 0.3 ，其得分为 0 。</p><p>3) 最后公布总积分 = 申购预测得分 <em>45%+ 赎回预测得分 </em>55% 。 </p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;我也是加把劲骑士！&lt;br&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="notes" scheme="https://superlova.github.io/categories/notes/"/>
-    
-    
-      <category term="Datawhale" scheme="https://superlova.github.io/tags/Datawhale/"/>
-    
-      <category term="Data Mining" scheme="https://superlova.github.io/tags/Data-Mining/"/>
-    
-      <category term="Time Series Analysis" scheme="https://superlova.github.io/tags/Time-Series-Analysis/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【学习笔记】Fuzzing学习笔记3——灰盒Fuzzing</title>
-    <link href="https://superlova.github.io/2020/08/20/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91Fuzzing%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03%E2%80%94%E2%80%94%E7%81%B0%E7%9B%92Fuzzing/"/>
-    <id>https://superlova.github.io/2020/08/20/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91Fuzzing%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03%E2%80%94%E2%80%94%E7%81%B0%E7%9B%92Fuzzing/</id>
-    <published>2020-08-19T17:01:27.000Z</published>
-    <updated>2020-08-19T17:04:57.391Z</updated>
-    
-    <content type="html"><![CDATA[<p>灰盒变异的模糊测试。<br><a id="more"></a></p><p>普通fuzzing：从0开始构造测试用例<br>突变fuzzing：从seed开始构造测试用例<br>灰盒fuzzing：有引导的突变fuzzing</p><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>上回书说到，AFL是突变fuzzer，通过把种子字符串进行些微修改，得到变异体；此外AFL还会将一个种子的前半部分与另一个种子的后半部分连接，形成变异体。</p><p>AFL也是个灰盒fuzzer，这是由于AFL需要使用程序内部信息（即覆盖率）。AFL不是白盒，因为AFL没有对程序进行约束求解、程序分析之类的，只是简单获取了一个覆盖率。如果生成的样本能够提升覆盖率，那么就将这个样本添加进种子队列以供下次突变使用（这就意味着突变体有重复突变的可能）。</p><p>AFL计算覆盖率的方法，是通过在每个分支的跳转指令后执行一段标记代码。这样就可以做到，监控每个输入导致的激活分支，以及每个分支被激活的大概频率。注入代码这个环节通常在编译时完成。对于Python，可以在未经处理的情况下执行覆盖率信息收集。</p><h2 id="突变算法和种子"><a href="#突变算法和种子" class="headerlink" title="突变算法和种子"></a>突变算法和种子</h2><p>引入Mutator类。Mutator类是个过程类，包装了对输入inp的突变方法。</p><pre><code class="lang-py">class Mutator(object):    def __init__(self):        self.mutators = [            self.delete_random_character,            self.insert_random_character,            self.flip_random_character    def insert_random_character(self,s):        &quot;&quot;&quot;Returns s with a random character inserted&quot;&quot;&quot;        pos = random.randint(0, len(s))        random_character = chr(random.randrange(32, 127))        return s[:pos] + random_character + s[pos:]    def delete_random_character(self,s):        &quot;&quot;&quot;Returns s with a random character deleted&quot;&quot;&quot;        if s == &quot;&quot;:            return self.insert_random_character(s)        pos = random.randint(0, len(s) - 1)        return s[:pos] + s[pos + 1:]    def flip_random_character(self,s):        &quot;&quot;&quot;Returns s with a random bit flipped in a random position&quot;&quot;&quot;        if s == &quot;&quot;:            return self.insert_random_character(s)        pos = random.randint(0, len(s) - 1)        c = s[pos]        bit = 1 &lt;&lt; random.randint(0, 6)        new_c = chr(ord(c) ^ bit)        return s[:pos] + new_c + s[pos + 1:]    def mutate(self, inp):        &quot;&quot;&quot;Return s with a random mutation applied&quot;&quot;&quot;        mutator = random.choice(self.mutators)        return mutator(inp)</code></pre><p>使用Mutator是只需实例化Mutator，然后调用mutate()方法即可。</p><pre><code class="lang-py">Mutator().mutate(&quot;good&quot;)&#39;cood&#39;</code></pre><h2 id="精力分配（Power-Schedule）"><a href="#精力分配（Power-Schedule）" class="headerlink" title="精力分配（Power Schedule）"></a>精力分配（Power Schedule）</h2><p>模糊测试是一种执行很慢的测试方法。既然并不是每个测试用例种子都值得分配同样的精力，那么试图发现那些更令人感兴趣的种子就是理所当然的选择了。</p><p>我们把一个种子从种群中被选中的可能性称为种子的能量（energy）。我们希望优先突变和执行那些更有希望发现待测程序错误的种子，不希望在无进步的种子身上浪费精力。</p><p>决定种子能量分配的算法称为“功率表”（Power Schedule）。AFL的功率表会将更多的能量分配给那些长度较短、执行速度较快、覆盖率增加较多的种子。</p><p>由此，每个种子需要额外维护其能量。构建Seed类如下：</p><pre><code class="lang-py">class Seed(object):        def __init__(self, data):        &quot;&quot;&quot;Set seed data&quot;&quot;&quot;        self.data = data    def __str__(self):        &quot;&quot;&quot;Returns data as string representation of the seed&quot;&quot;&quot;        return self.data    __repr__ = __str__</code></pre><p>下面是功率表PowerSchedule类的定义：</p><pre><code class="lang-py">class PowerSchedule(object):        def assignEnergy(self, population):        &quot;&quot;&quot;Assigns each seed the same energy&quot;&quot;&quot;        for seed in population:            seed.energy = 1    def normalizedEnergy(self, population):        &quot;&quot;&quot;Normalize energy&quot;&quot;&quot;        energy = list(map(lambda seed: seed.energy, population))        sum_energy = sum(energy)  # Add up all values in energy        norm_energy = list(map(lambda nrg: nrg/sum_energy, energy))        return norm_energy    def choose(self, population):        &quot;&quot;&quot;Choose weighted by normalized energy.&quot;&quot;&quot;        import numpy as np        self.assignEnergy(population)        norm_energy = self.normalizedEnergy(population)        seed = np.random.choice(population, p=norm_energy)        return seed</code></pre><h2 id="灰盒fuzzing与黑盒fuzzing的比较"><a href="#灰盒fuzzing与黑盒fuzzing的比较" class="headerlink" title="灰盒fuzzing与黑盒fuzzing的比较"></a>灰盒fuzzing与黑盒fuzzing的比较</h2><p>首先定义不使用coverage的黑盒fuzzer，MutationFuzzer 类：</p><pre><code class="lang-py">class MutationFuzzer(Fuzzer):    def __init__(self, seeds, mutator, schedule):        self.seeds = seeds        self.mutator = mutator        self.schedule = schedule        self.inputs = []        self.reset()    def reset(self):        &quot;&quot;&quot;Reset the initial population and seed index&quot;&quot;&quot;        self.population = list(map(lambda x: Seed(x), self.seeds))        self.seed_index = 0    def create_candidate(self):        &quot;&quot;&quot;Returns an input generated by fuzzing a seed in the population&quot;&quot;&quot;        seed = self.schedule.choose(self.population)        # Stacking: Apply multiple mutations to generate the candidate        candidate = seed.data        trials = min(len(candidate), 1 &lt;&lt; random.randint(1,5))        for i in range(trials):            candidate = self.mutator.mutate(candidate)        return candidate    def fuzz(self):        &quot;&quot;&quot;Returns first each seed once and then generates new inputs&quot;&quot;&quot;        if self.seed_index &lt; len(self.seeds):            # Still seeding            self.inp = self.seeds[self.seed_index]            self.seed_index += 1        else:            # Mutating            self.inp = self.create_candidate()        self.inputs.append(self.inp)        return self.inp</code></pre><p>MutationFuzzer 是由一组初始种子、一个突变器和一个功率表构成的。在整个模糊化过程中，它维护着一个名为population的种子语料库。create_candidate对某个种子执行多次突变，fuzz先试图返回正常种子，随后返回突变种子。</p><p>population_coverage 是预先定义好的覆盖率计算库，返回（all_coverage，cumulative_coverage）。其中all_coverage是所有输入所覆盖的语句集，cumulative_coverage是随着执行输入数量的增加而覆盖的语句数量。</p><p>下面是GrayBox fuzzing的实现：</p><pre><code class="lang-py">class GreyboxFuzzer(MutationFuzzer):        def reset(self):        &quot;&quot;&quot;Reset the initial population, seed index, coverage information&quot;&quot;&quot;        super().reset()        self.coverages_seen = set()        self.population = [] # population is filled during greybox fuzzing    def run(self, runner):        &quot;&quot;&quot;Run function(inp) while tracking coverage.           If we reach new coverage,           add inp to population and its coverage to population_coverage        &quot;&quot;&quot;        result, outcome = super().run(runner)        new_coverage = frozenset(runner.coverage())        if new_coverage not in self.coverages_seen:            # We have new coverage            seed = Seed(self.inp)            seed.coverage = runner.coverage()            self.coverages_seen.add(new_coverage)            self.population.append(seed)        return (result, outcome)</code></pre><p>经过计算，分别得到覆盖率变化趋势blackbox_coverage和greybox_coverage，可视化如下：</p><p><img src="/2020/08/20/【学习笔记】Fuzzing学习笔记3——灰盒Fuzzing/2020-08-20-00-42-27.png" srcset="/img/loading.gif" alt></p><p>可以看到，灰盒fuzzing的覆盖率增长明显比黑盒要好。</p><h2 id="增强后的灰盒fuzzer"><a href="#增强后的灰盒fuzzer" class="headerlink" title="增强后的灰盒fuzzer"></a>增强后的灰盒fuzzer</h2><p>通过修改功率表PowerSchedule，使那些能激活不寻常的path的input具有更高的energy。不寻常的path指的是激活次数比较小。</p><p>有多种方法计算一个种子的能量。上述的要求形式化为具体定义即为</p><script type="math/tex; mode=display">e(s)=\frac{1}{f(p(s))^a}</script><p>其中$s$是种子<br>$p(s)$为$s$激活的path<br>$f(p)$返回path激活的次数<br>$a$是给定的超参数<br>$e(s)$是种子$s$被分配的能量</p><p>下面是按照此思想设置的PowerSchedule：</p><pre><code class="lang-py">class AFLFastSchedule(PowerSchedule):     def __init__(self, exponent):        self.exponent = exponent    def assignEnergy(self, population):        &quot;&quot;&quot;Assign exponential energy inversely proportional to path frequency&quot;&quot;&quot;        for seed in population:            seed.energy = 1 / (self.path_frequency[getPathID(seed.coverage)] ** self.exponent)</code></pre><p>改进的灰盒Fuzzer：</p><pre><code class="lang-py">class CountingGreyboxFuzzer(GreyboxFuzzer):    def reset(self):        &quot;&quot;&quot;Reset path frequency&quot;&quot;&quot;        super().reset()        self.schedule.path_frequency = {}    def run(self, runner):        &quot;&quot;&quot;Inform scheduler about path frequency&quot;&quot;&quot;        result, outcome = super().run(runner)        path_id = getPathID(runner.coverage())        if not path_id in self.schedule.path_frequency:            self.schedule.path_frequency[path_id] = 1        else:            self.schedule.path_frequency[path_id] += 1        return(result, outcome)</code></pre><p>覆盖率变化如图所示</p><p><img src="/2020/08/20/【学习笔记】Fuzzing学习笔记3——灰盒Fuzzing/2020-08-20-00-52-08.png" srcset="/img/loading.gif" alt></p><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>三篇Fuzzing文章到此为止。</p><p>Fuzzing 的方法是通过大量生成input，来找出被测程序的错误的方法。</p><p>Fuzzing的关键点之一在于input生成方法，其二在于input的排序方法，其三在于软件内部信息的获取和应用。</p><p>如果input完全是自己构建的，那么这种方法称之为generational fuzzing</p><p>如果input是通过原始种子略微修改后得到的，那么这种fuzzing为Mutational fuzzing。</p><p>如果Mutator可以经过一定的程序信息的引导，那么这叫做GrayBox Fuzzing，比如覆盖率引导的模糊测试</p><p>如果Seed经过Power Schedule的精力分配，随后Mutator根据Seed的精力大小排序，那么这种方法称之为Boosted GrayBox Fuzzing</p><p>使用到的类：</p><p>Runner：待测程序的基类</p><p>Fuzzer：模糊测试器的基类</p><p>Seed：测试用例种子的基类</p><p>PowerSchedule：功率表的基类</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;灰盒变异的模糊测试。&lt;br&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="notes" scheme="https://superlova.github.io/categories/notes/"/>
-    
-    
-      <category term="Fuzzing" scheme="https://superlova.github.io/tags/Fuzzing/"/>
-    
-      <category term="Testing" scheme="https://superlova.github.io/tags/Testing/"/>
     
   </entry>
   

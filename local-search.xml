@@ -4,6 +4,120 @@
   
   
   <entry>
+    <title>【学习笔记】计算二进制中1的个数</title>
+    <link href="/2021/05/03/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E8%AE%A1%E7%AE%97%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%AD1%E7%9A%84%E4%B8%AA%E6%95%B0/"/>
+    <url>/2021/05/03/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E8%AE%A1%E7%AE%97%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%AD1%E7%9A%84%E4%B8%AA%E6%95%B0/</url>
+    
+    <content type="html"><![CDATA[<p>二进制中1的个数的两种计算方法</p><a id="more"></a><p>第一种解法，<code>n &amp;= (n - 1);</code>这一句消灭了二进制末尾的1。循环次数与二进制中1的个数相同。</p><pre><code class="lang-cpp">int hammingWeight(uint32_t n) {    int count = 0;    while (n != 0) {        n &amp;= (n - 1);        ++count;    }    return count;}</code></pre><p>第二种解法，是把性能挖掘到极致的解法：</p><pre><code class="lang-cpp">size_t hammingWeight(uint64_t V) {    V -= ((V &gt;&gt; 1) &amp; 0x5555555555555555); // 010101010101    V = (V &amp; 0x3333333333333333) + ((V &gt;&gt; 2) &amp; 0x3333333333333333);    return ((V + (V &gt;&gt; 4) &amp; 0xF0F0F0F0F0F0F0F) * 0x101010101010101) &gt;&gt; 56;}</code></pre><p>只依靠位运算，不进行条件判断，方便并行计算。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>notes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>leetcode</tag>
+      
+      <tag>binary</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>【竞赛打卡】不限精度的大整数表示</title>
+    <link href="/2021/05/03/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91%E4%B8%8D%E9%99%90%E7%B2%BE%E5%BA%A6%E7%9A%84%E6%95%B4%E6%95%B0%E4%B9%98%E6%B3%95/"/>
+    <url>/2021/05/03/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91%E4%B8%8D%E9%99%90%E7%B2%BE%E5%BA%A6%E7%9A%84%E6%95%B4%E6%95%B0%E4%B9%98%E6%B3%95/</url>
+    
+    <content type="html"><![CDATA[<p>两个大整数相乘，如何在不损失精度的前提下计算得到正确的结果？<br><a id="more"></a></p><h1 id="不限精度的整数运算"><a href="#不限精度的整数运算" class="headerlink" title="不限精度的整数运算"></a>不限精度的整数运算</h1><p>前一篇文章我们讨论了两个64位整数的乘法，本篇文章我们讨论高精度数值的加减运算问题。</p><h2 id="大整数存储"><a href="#大整数存储" class="headerlink" title="大整数存储"></a>大整数存储</h2><p>很简单，使用数组即可。注意整数的高位存储在数组的末尾，整数的低位存储在数组的开头。</p><pre><code class="lang-py"># 235813d[0] = 3d[1] = 1d[2] = 8d[3] = 5d[4] = 3d[5] = 2</code></pre><p>这样做的原因是，四则运算一般是从低位向高位计算的，数组则是从0开始遍历的。不过如果数字以字符串存储则不然。比如<code>s=&quot;235813&quot;</code>这个字符串的存储顺序和逻辑顺序恰恰相反。</p><pre><code class="lang-cpp">class BigInt {public:    int d[1000]{};    int len;    BigInt() {        memset(d, 0, sizeof(d));        len = 0;    }    static BigInt change(std::string str);    static int compare(BigInt a, BigInt b);    static BigInt add(BigInt a, BigInt b);    static BigInt sub(BigInt a, BigInt b);};</code></pre><p>输入大整数时，一般都以<code>string</code>类型输入，因此需要执行<code>reverse</code>操作，或者直接逆序赋值。</p><h2 id="大整数运算"><a href="#大整数运算" class="headerlink" title="大整数运算"></a>大整数运算</h2><h3 id="加法"><a href="#加法" class="headerlink" title="加法"></a>加法</h3><pre><code class="lang-cpp">BigInt BigInt::add(BigInt a, BigInt b) {    BigInt c;    int carry = 0;    for (int i = 0; i &lt; a.len || i &lt; b.len; ++i) {        int temp = a.d[i] + b.d[i] + carry;        c.d[c.len++] = temp % 10;        carry = temp / 10;    }    if (carry != 0) {        c.d[c.len++] = carry;    }    return c;}</code></pre><h3 id="减法"><a href="#减法" class="headerlink" title="减法"></a>减法</h3><pre><code class="lang-cpp">BigInt BigInt::sub(BigInt a, BigInt b) {    BigInt c;    for (int i = 0; i &lt; a.len || i &lt; b.len; ++i) {        if (a.d[i] &lt; b.d[i]) {            a.d[i+1]--;            a.d[i] += 10; // 借位        }        c.d[c.len++] = a.d[i] - b.d[i];    }    while (c.len - 1 &gt;= 1 &amp;&amp; c.d[c.len - 1] == 0) {        c.len--;    }    return c;}</code></pre><h3 id="比较"><a href="#比较" class="headerlink" title="比较"></a>比较</h3><pre><code class="lang-cpp">int BigInt::compare(BigInt a, BigInt b) {    if (a.len &gt; b.len) return 1;    else if (a.len &lt; b.len) return -1;    else {        for (int i = a.len-1; i &gt;= 0; --i) {            if (a.d[i] &gt; b.d[i]) return 1;            else if (a.d[i] &lt; b.d[i]) return -1;        }        return 0;    }}</code></pre><h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>算法笔记 5.6 节</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>notes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>algorithm</tag>
+      
+      <tag>leetcode</tag>
+      
+      <tag>searching</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>【学习笔记】在 Clion 中使用 Google Test</title>
+    <link href="/2021/05/01/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E5%9C%A8-Clion-%E4%B8%AD%E4%BD%BF%E7%94%A8-Google-Test/"/>
+    <url>/2021/05/01/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E5%9C%A8-Clion-%E4%B8%AD%E4%BD%BF%E7%94%A8-Google-Test/</url>
+    
+    <content type="html"><![CDATA[<p>Google Test 是著名的 C++ 单元测试框架。如何在 CLion中使用 Google Test？<br><a id="more"></a></p><h1 id="1-下载和安装"><a href="#1-下载和安装" class="headerlink" title="1. 下载和安装"></a>1. 下载和安装</h1><p>首先去<a href="https://github.com/google/googletest" target="_blank" rel="noopener">这个网站</a>下载 google test 最新版本。</p><p><img src="/2021/05/01/【学习笔记】在-Clion-中使用-Google-Test/readme.png" srcset="/img/loading.gif" alt></p><p>笔者写作时， google test 的版本为 1.10。</p><p>然后下载最新版本的压缩文件。</p><p><img src="/2021/05/01/【学习笔记】在-Clion-中使用-Google-Test/download.png" srcset="/img/loading.gif" alt></p><p>解压得到文件夹<code>googletest-release-1.10.0</code>，打开文件夹后，把<code>googletest</code>文件夹复制到你的目标工程目录。</p><p><img src="/2021/05/01/【学习笔记】在-Clion-中使用-Google-Test/googletestdir.png" srcset="/img/loading.gif" alt></p><p><img src="/2021/05/01/【学习笔记】在-Clion-中使用-Google-Test/putitinproject.png" srcset="/img/loading.gif" alt></p><p>还没结束，我们需要修改工程根目录的<code>CMakeLists.txt</code>，以使 google test 生效。注意不要修改<code>googletest/CMakeLists.txt</code>！</p><p>向<code>CMakeLists.txt</code>添加如下代码：</p><pre><code class="lang-sh">add_subdirectory(./googletest)include_directories(${PROJECT_SOURCE_DIR}/src/include ./googletest/include)link_directories(${PROJECT_SOURCE_DIR}/lib ${PROJECT_SOURCE_DIR}/googletest)target_link_libraries(${PROJECT_NAME} gtest)</code></pre><p>如果我们想要使用 google test，就在任意cpp文件添加头<code>#include &quot;gtest/gtest.h&quot;</code></p><h1 id="2-简单的用例"><a href="#2-简单的用例" class="headerlink" title="2. 简单的用例"></a>2. 简单的用例</h1><p>做一个简单的测试，我编写了一个将<code>unsigned long long</code>转为二进制数据的函数<code>ulld_to_b</code>，该函数能将一个无符号64位整数转换为64位长的二进制字符串。</p><pre><code class="lang-cpp">string ulld_to_b(uint64_t i) {    return bitset&lt;64&gt;(i).to_string();}</code></pre><p>现在对其进行测试。测试用例为18，我的预期结果为10010，但是前面应该补零至64位长：</p><pre><code class="lang-cpp">TEST(TestCase, test1) {    EXPECT_STREQ(&quot;10010&quot;, ulld_to_b(18ULL).c_str());}TEST(TestCase, test2) {    EXPECT_STREQ(&quot;00000000000000000000000000010010&quot;, ulld_to_b(18ULL).c_str());}TEST(TestCase, test3) {    EXPECT_STREQ(&quot;0000000000000000000000000000000000000000000000000000000000010010&quot;, ulld_to_b(18ULL).c_str());}</code></pre><p>写完测试用例后，需要改造下<code>main()</code>使其运行所有测试用例：</p><pre><code class="lang-cpp">int main(int argc, char** argv) {    testing::InitGoogleTest(&amp;argc, argv);    return RUN_ALL_TESTS();}</code></pre><p>预期结果为前两个测试用例不通过，后一个测试用例通过。</p><p>编译运行后结果如下，完全符合我们的预期：</p><p><img src="/2021/05/01/【学习笔记】在-Clion-中使用-Google-Test/results.png" srcset="/img/loading.gif" alt></p><p>当然这里的使用是不恰当的，我们应当尽可能令所有单元测试都通过。</p><p>在CLion的代码编辑器中可以方便地查看出错的测试用例：</p><p><img src="/2021/05/01/【学习笔记】在-Clion-中使用-Google-Test/result_wrong.png" srcset="/img/loading.gif" alt></p><h1 id="3-批量开关测试用例"><a href="#3-批量开关测试用例" class="headerlink" title="3. 批量开关测试用例"></a>3. 批量开关测试用例</h1><p>在大型工程中，项目上线前需要关闭所有测试用例，逐个删除未免显得笨拙。这个时候我们可以使用宏定义。</p><p>首先将<code>googletest</code>的头文件放在一个统一的头文件<code>stdafx.h</code>中，然后以<code>#ifdef</code>包裹起来：</p><pre><code class="lang-cpp">#ifndef LEETCODE_2021_STDAFX_H#define LEETCODE_2021_STDAFX_H#include &lt;iostream&gt;#include &lt;vector&gt;#include &lt;string&gt;#include &lt;map&gt;#include &lt;set&gt;#include &lt;algorithm&gt;#include &lt;stack&gt;#include &lt;memory&gt;#include &lt;bitset&gt;// 开启测试模式#define DEBUG_MODE#ifdef DEBUG_MODE#include &quot;gtest/gtest.h&quot;#endif#endif //LEETCODE_2021_STDAFX_H</code></pre><p>如果我把<code>#define DEBUG_MODE</code>删除的话，<code>#include &quot;gtest/gtest.h&quot;</code>就不会执行了。</p><p>然后回到每个函数实现处，我们在这里写了很多的测试用例，以及修改了<code>main()</code>函数。同样将它们用<code>#ifdef</code>包裹起来：</p><pre><code class="lang-cpp">#ifdef DEBUG_MODETEST(TestCase, test1) {    EXPECT_STREQ(&quot;10010&quot;, ulld_to_b(18ULL).c_str());}TEST(TestCase, test2) {    EXPECT_STREQ(&quot;00000000000000000000000000010010&quot;, ulld_to_b(18ULL).c_str());}TEST(TestCase, test3) {    EXPECT_STREQ(&quot;0000000000000000000000000000000000000000000000000000000000010010&quot;, ulld_to_b(18ULL).c_str());}#endif</code></pre><p>这些测试用例会随着<code>&quot;stdafx.h&quot;</code>中<code>#define DEBUG_MODE</code>语句的删除而失效。</p><p>最后来看看<code>main()</code>函数如何处理：</p><pre><code class="lang-cpp">#ifndef DEBUG_MODEint main() {    /*...*/    return 0;}#elseint main(int argc, char** argv) {    testing::InitGoogleTest(&amp;argc, argv);    return RUN_ALL_TESTS();}#endif</code></pre><p>如果没定义<code>DEBUG_MODE</code>，则执行正常的<code>main()</code>；否则执行所有测试用例的<code>main(int argc, char** argv)</code>。</p><p>在项目需要上线时，把<code>#define DEBUG_MODE</code>那一行删除即可。</p><h1 id="4-测试用例编写"><a href="#4-测试用例编写" class="headerlink" title="4. 测试用例编写"></a>4. 测试用例编写</h1><h2 id="4-1-EXPECT和ASSERT"><a href="#4-1-EXPECT和ASSERT" class="headerlink" title="4.1 EXPECT和ASSERT"></a>4.1 <code>EXPECT</code>和<code>ASSERT</code></h2><p>google test 使用 TEST 宏声明测试用例。TEST() 有两个参数，<code>TestCaseName</code>，<code>TestName</code>。</p><p>我们之前使用了<code>EXPECT_STREQ</code>这个宏，其含义为验证内部的两个参数为相同的字符串。除此之外，还有很多以EXPECT开头的宏，它们功能各不相同，比如<code>EXPECT_EQ</code>这个宏比较两个数字是否相等。</p><p>EXPECT系列和ASSERT系列的区别是，EXPECT失败后，继续往下执行；ASSERT失败则直接终止程序。</p><p>EXPECT和ASSERT的返回是一个流对象，这意味着我们可以在之后使用<code>&lt;&lt;</code>运算符输出额外信息：</p><pre><code class="lang-cpp">for (int i = 0; i &lt; x.size(); ++i) {    EXPECT_EQ(x[i], y[i]) &lt;&lt; &quot;Vectors x and y differ at index &quot; &lt;&lt; i;}</code></pre><h2 id="4-2-各种不同的宏断言"><a href="#4-2-各种不同的宏断言" class="headerlink" title="4.2 各种不同的宏断言"></a>4.2 各种不同的宏断言</h2><p>本节只列出了<code>ASSERT</code>，实际上每个<code>ASSERT</code>对应一个<code>EXPECT</code>版本。</p><p><strong>编写测试用例时，如果有两个参数，注意把待测函数输出放在后面！前面的参数是Ground Truth，也就是答案。</strong></p><h3 id="布尔值断言，只有一个参数，参数只能为true或者false："><a href="#布尔值断言，只有一个参数，参数只能为true或者false：" class="headerlink" title="布尔值断言，只有一个参数，参数只能为true或者false："></a>布尔值断言，只有一个参数，参数只能为true或者false：</h3><pre><code class="lang-cpp">ASSERT_TRUE(condition)ASSERT_FALSE(condition)</code></pre><h3 id="数值断言："><a href="#数值断言：" class="headerlink" title="数值断言："></a>数值断言：</h3><pre><code class="lang-cpp">ASSERT_EQ(v1, v2) // v1 == v2ASSERT_NE(v1, v2) // v1 != v2ASSERT_LT(v1, v2) // v1 &lt; v2ASSERT_LE(v1, v2) // v1 &lt;= v2ASSERT_GT(v1, v2) // v1 &gt; v2ASSERT_GE(v1, v2) // v1 &gt;= v2</code></pre><h3 id="字符串断言"><a href="#字符串断言" class="headerlink" title="字符串断言"></a>字符串断言</h3><p>这里的参数为C风格字符串，因此当参数为<code>string</code>类型时，你需要调用<code>c_str()</code>方法。</p><pre><code class="lang-cpp">ASSERT_STREQ(s1, s2) // s1和s2内容相同ASSERT_STRNE(s1, s2) // s1和s2内容不同ASSERT_STRCASEEQ(s1, s2) // 忽略大小写，s1和s2内容相同ASSERT_STRCASENE(s1, s2) // 忽略大小写，s1和s2内容不同</code></pre><h3 id="断言返回成功或者失败"><a href="#断言返回成功或者失败" class="headerlink" title="断言返回成功或者失败"></a>断言返回成功或者失败</h3><pre><code class="lang-cpp">TEST(ExplicitTest, Demo){    ADD_FAILURE() &lt;&lt; &quot;Sorry&quot;; // None Fatal Asserton，继续往下执行。    FAIL(); // Fatal Assertion，不往下执行该案例。    SUCCEED();}</code></pre><h3 id="抛出异常的断言"><a href="#抛出异常的断言" class="headerlink" title="抛出异常的断言"></a>抛出异常的断言</h3><pre><code class="lang-cpp">int Foo(int a, int b){    if (a == 0 || b == 0)    {        throw &quot;don&#39;t do that&quot;;    }    int c = a % b;    if (c == 0)        return b;    return Foo(b, c);}TEST(FooTest, HandleZeroInput){    EXPECT_ANY_THROW(Foo(10, 0)); // Foo应当抛出异常    EXPECT_THROW(Foo(0, 5), char*); // Foo应当抛出字符串类型的异常    EXPECT_NO_THROW(Foo(1, 1)); // Foo不应该抛出异常}</code></pre><h3 id="浮点数断言"><a href="#浮点数断言" class="headerlink" title="浮点数断言"></a>浮点数断言</h3><pre><code class="lang-cpp">ASSERT_FLOAT_EQ(exp, act) // 检验两个浮点数是否**几乎**相等ASSERT_DOUBLE_EQ(exp, act) // 同上，只不过精度更高ASSERT_NEAR(exp, act, abs_error) // exp和act之间的差值不会超过abs_error</code></pre><h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.cnblogs.com/coderzh/archive/2009/04/06/1426755.html" target="_blank" rel="noopener">https://www.cnblogs.com/coderzh/archive/2009/04/06/1426755.html</a></p><p><a href="https://blog.csdn.net/zhizhengguan/article/details/110313265" target="_blank" rel="noopener">https://blog.csdn.net/zhizhengguan/article/details/110313265</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>notes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>clion</tag>
+      
+      <tag>google test</tag>
+      
+      <tag>unit test</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>【竞赛打卡】大整数相乘 I</title>
+    <link href="/2021/04/28/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91%E4%B8%A4%E6%95%B0%E7%9B%B8%E4%B9%98/"/>
+    <url>/2021/04/28/%E3%80%90%E7%AB%9E%E8%B5%9B%E6%89%93%E5%8D%A1%E3%80%91%E4%B8%A4%E6%95%B0%E7%9B%B8%E4%B9%98/</url>
+    
+    <content type="html"><![CDATA[<p>两个大整数相乘，如何在不损失精度的前提下计算得到正确的结果？<br><a id="more"></a></p><h1 id="unsigned-long-long-整数之间的乘法"><a href="#unsigned-long-long-整数之间的乘法" class="headerlink" title="unsigned long long 整数之间的乘法"></a><code>unsigned long long</code> 整数之间的乘法</h1><h2 id="1-问题引入"><a href="#1-问题引入" class="headerlink" title="1. 问题引入"></a>1. 问题引入</h2><p>如果我们使用 <code>C++</code> 语言，在 64 位系统上，<code>unsigned long long</code> 类型（或者 <code>uint64_t</code> 类型）的变量能够保存的数值范围是 $\left[0,2^{64}\right)$。任何小于该数值的数字都能被正确存储。</p><script type="math/tex; mode=display">2^{64}-1=18,446,744,073,709,551,615</script><p>这个十进制的整数足足有20位，一般情况下我们是不需要考虑溢出问题的。</p><p>但是如果两个<code>uint64_t</code>的变量要做乘法，就必须考虑溢出问题了。因为两个64位整数相乘，其结果可能达到128位，超过了一个变量能存储的数据的极限大小。</p><p>两个<code>uint64_t</code>变量的乘法该如何正确计算？考虑极端情况，两个<code>uint64_t</code>整数所能表达的最大数字<code>UINT_MAX</code>相乘：</p><script type="math/tex; mode=display">(2^{64}-1)\times (2^{64}-1)=2^{128}-2^{65}+1</script><p>这里面最大的数字是$2^{128}$，因此我们最极端情况下有128位的信息需要保存。</p><h2 id="2-问题简化"><a href="#2-问题简化" class="headerlink" title="2. 问题简化"></a>2. 问题简化</h2><p>首先让我们<strong>简化一下问题</strong>。假设我现在只能用一款古董电脑，它只支持保存四位十进制整数的变量，也就是一个变量的保存范围为$[0,9999]$。如何计算两个四位整数相乘？</p><p>还记得乘法是怎么计算的吗？我们应该都学习过小学数学，通过将数字中的每一个字符看作计算单元，然后利用99乘法表就能够口算出结果了。</p><p><img src="/2021/04/28/【竞赛打卡】两数相乘/2021-04-29-08-44-58.png" srcset="/img/loading.gif" alt></p><p>或者可以每两个字符看成计算的基本单元，这样就需要计算两位数乘法。</p><p><img src="/2021/04/28/【竞赛打卡】两数相乘/2021-04-29-08-50-09.png" srcset="/img/loading.gif" alt></p><p>同样可以计算得到正确结果。假设每个方框是计算机的一个变量，后一种计算方式可以保证每个变量中保存的元素大小不超过计算机的保存能力（假设计算机保存能力为2位）。</p><p>回到题目本身。该运算的结果达到7位，超过了我们计算机限制的4位，因此可以使用两个变量保存该结果：<code>lo</code>保存结果的低四位，<code>hi</code>保存结果的高四位。</p><p>另外我们使用四个变量将两个乘数拆分成前后两个部分，<code>a</code>保存第一个操作数的高2位，<code>b</code>保存第一个操作数的低2位,<code>c</code>保存第二个操作数的高2位，<code>d</code>保存第二个操作数的低2位。</p><p>为什么要这么做？因为计算机的存储能力为4位，两个四位数字相乘，结果最多能达到八位，所以我们肯定不能容忍两个四位数字相乘；但是两个两位数字相乘，结果最多达到四位，是可以被当前的计算机所存储的。所以我们需要把四位数字拆分成前后两个部分。</p><p>抽象一下计算过程，以下不考虑进位。</p><p><img src="/2021/04/28/【竞赛打卡】两数相乘/2021-04-29-09-07-00.png" srcset="/img/loading.gif" alt></p><p>第一步，计算b与d的乘积，得到结果<code>bd</code>和进位k_1：</p><p><img src="/2021/04/28/【竞赛打卡】两数相乘/计算b与d的乘积.png" srcset="/img/loading.gif" alt></p><p>第二步，计算a与d的乘积，并且加上bd的进位k_1，得到结果ad和进位k_2，注意这个k_2最终会与ac求和：</p><p><img src="/2021/04/28/【竞赛打卡】两数相乘/计算a与d的乘积.png" srcset="/img/loading.gif" alt></p><p>第三步，计算b与c的乘积，得到结果bc和进位k_3：</p><p><img src="/2021/04/28/【竞赛打卡】两数相乘/计算b与c的乘积.png" srcset="/img/loading.gif" alt></p><p>第四步，计算a与c的乘积，并且加上bc的进位k_3，得到结果ac和进位k_4，注意这个k_4最终会成为高位hi的最大的部分，因此ac得到的k_4没必要和ac分离开：</p><p><img src="/2021/04/28/【竞赛打卡】两数相乘/计算a与c的乘积.png" srcset="/img/loading.gif" alt></p><p>第五步，低位结果计算，首先将ad和bc加起来，得到ad+bc以及可能存在的进位k_5；然后将ad+bc向左移位两格，再加上bd，就是低位结果lo。</p><p><img src="/2021/04/28/【竞赛打卡】两数相乘/低位结果计算.png" srcset="/img/loading.gif" alt></p><p>第六步，高位结果计算，将ac和进位k_5加起来，注意此时的ac包含了进位k_4，并没有分离出去。我们还需要加上计算ad得到的k_2，因此hi=ac+k_2+k_5。</p><p><img src="/2021/04/28/【竞赛打卡】两数相乘/高位结果计算.png" srcset="/img/loading.gif" alt></p><h2 id="3-示例"><a href="#3-示例" class="headerlink" title="3. 示例"></a>3. 示例</h2><p>举一个具体点的例子：如何利用该电脑正确计算<code>1213*1214</code>？</p><script type="math/tex; mode=display">1213\times 1214=1,472,582</script><pre><code>a = 12b = 13c = 12d = 14</code></pre><ol><li>计算b与d的乘积，得到结果<code>bd</code>和进位k_1：<br>```<br>b <em> d = 13 </em> 14 = 182</li></ol><hr><p>k_1 = 1<br>bd = 82</p><pre><code>2. 计算a与d的乘积，并且加上bd的进位k_1，得到结果ad和进位k_2</code></pre><p>a <em> d + k_1 = 12 </em> 14 + 1 = 169<br>k_2 = 1<br>ad = 69</p><pre><code>3. 计算b与c的乘积，得到结果bc和进位k_3</code></pre><p>b <em> c = 13 </em> 12 = 156<br>k_3 = 1<br>bc = 56</p><pre><code>4. 计算a与c的乘积，并且加上bc的进位k_3，得到结果ac。此时不用分离进位，因此没有k_4。</code></pre><p>a <em> c + k_3 = 12 </em> 12 + 1 = 145<br>ac = 145</p><pre><code>5. 低位结果计算，首先将ad和bc加起来，得到ad+bc以及可能存在的进位k_5；然后将ad+bc向左移位两格，再加上bd，就是低位结果lo</code></pre><p>ad + bc = 125<br>k_5 = 1<br>adbc = 25<br>lo = adbc &lt;&lt; 2 + bd = 2500 + 82 = 2582</p><pre><code>6. 高位结果计算，将ac和进位k_5加起来，注意此时的ac包含了进位k_4，并没有分离出去。我们还需要加上计算ad得到的k_2，因此hi=ac+k_2+k_5</code></pre><p>hi = ac + k_2 + k_5 = 145 + 1 + 1 = 147</p><pre><code>最终结果的高位部分为147，低位部分为2582，与答案1472582相同。## 迁移到64位整数相乘以上我们讨论的都是四位整数相乘的问题，其实64位二进制数相乘也是一样的道理。首先我们将两个64位乘数OP1和OP2各自分成两半32位整数，也就是a/b/c/d，然后按照上述算法计算，即可得到结果的高64位和低64位。算法如下：```cppvoid mul_64_64_to_128(uint64_t op1, uint64_t op2, uint64_t *hi, uint64_t *lo) {    // 取abcd    uint64_t a, b, c, d;    b = (op1 &amp; 0xFFFFFFFF);    a = (op1 &gt;&gt; 32);    d = (op2 &amp; 0xFFFFFFFF);    c = (op2 &gt;&gt; 32);    // bd    uint64_t k_1 = b * d;    uint64_t bd = (k_1 &amp; 0xFFFFFFFF);    k_1 &gt;&gt;= 32;    // ad    uint64_t k_2 = a * d + k_1;    uint64_t ad = (k_2 &amp; 0xFFFFFFFF);    k_2 &gt;&gt;= 32;    // bc    uint64_t k_3 = b * c;    uint64_t bc = (k_3 &amp; 0xFFFFFFFF);    k_3 &gt;&gt;= 32;    // ac    uint64_t ac = a * c + k_3;    // lo    uint64_t k_5 = ad + bc;    uint64_t ad_bc = (k_5 &amp; 0xFFFFFFFF);    k_5 &gt;&gt;= 32;    *lo = (ad_bc &lt;&lt; 32) + bd;    // hi    *hi = ac + k_2 + k_5;}</code></pre><p>验证一下结果：</p><pre><code class="lang-cpp">int main() {    uint64_t op1 = 1e12;    uint64_t op2 = 1e12;    uint64_t hi = 0ULL, lo = 0ULL;    mul_64_64_to_128(op1, op2, &amp;hi, &amp;lo);    cout &lt;&lt; hi &lt;&lt; &quot;\n&quot; &lt;&lt; lo &lt;&lt; endl;    return 0;}&gt;&gt;&gt;542102003764205206896640Process finished with exit code 0</code></pre><p>乍一看结果，<code>1e12*1e12</code>结果怎么不是<code>1e24</code>呢？其实这是由于结果是十进制导致不直观，实际上我们的结果是正确的。我们比较下二进制就可以了。</p><p>首先定义一个函数<code>ulld_to_b</code>，将<code>uint64_t</code>变量转换为64位的二进制字符串：</p><pre><code class="lang-cpp">string ulld_to_b(uint64_t i) {    return bitset&lt;64&gt;(i).to_string();}</code></pre><p>然后查询<code>1e24</code>的二进制表示为：</p><pre><code>00000000000000000000000000000000000000000000000011010011110000100001101111001110110011001110110110100001000000000000000000000000</code></pre><p>该数值是我在<a href="https://www.sojson.com/hexconvert.html" target="_blank" rel="noopener">这个网站</a>上查询的。</p><p>然后编写测试用例：</p><pre><code class="lang-cpp">TEST(TestCase, test1) {    uint64_t op1 = 1e12;    uint64_t op2 = 1e12;    uint64_t hi = 0ULL, lo = 0ULL;    mul_64_64_to_128(op1, op2, &amp;hi, &amp;lo);    string res = &quot;&quot;;    res = ulld_to_b(hi) + ulld_to_b(lo);    cout &lt;&lt; res &lt;&lt; endl;    string ground_truth = &quot;00000000000000000000000000000000000000000000000011010011110000100001101111001110110011001110110110100001000000000000000000000000&quot;;    EXPECT_STREQ(ground_truth.c_str(), res.c_str());}int main(int argc, char** argv) {    testing::InitGoogleTest(&amp;argc, argv);    return RUN_ALL_TESTS();}</code></pre><p>没问题，通过了。当然，仅通过一个测试用例不算证明程序的正确性，勤劳的你可以多用几个测试用例试试。</p><h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.codeproject.com/Tips/618570/UInt-Multiplication-Squaring" target="_blank" rel="noopener">https://www.codeproject.com/Tips/618570/UInt-Multiplication-Squaring</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>notes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>algorithm</tag>
+      
+      <tag>leetcode</tag>
+      
+      <tag>searching</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>【学习笔记】Docker综合实践</title>
     <link href="/2021/04/24/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91Docker%E7%BB%BC%E5%90%88%E5%AE%9E%E8%B7%B5/"/>
     <url>/2021/04/24/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91Docker%E7%BB%BC%E5%90%88%E5%AE%9E%E8%B7%B5/</url>
@@ -280,9 +394,9 @@
       
       <tag>algorithm</tag>
       
-      <tag>Datawhale</tag>
-      
       <tag>leetcode</tag>
+      
+      <tag>Datawhale</tag>
       
       <tag>search</tag>
       
@@ -398,9 +512,9 @@
       
       <tag>algorithm</tag>
       
-      <tag>Datawhale</tag>
-      
       <tag>leetcode</tag>
+      
+      <tag>Datawhale</tag>
       
       <tag>searching</tag>
       
@@ -429,9 +543,9 @@
       
       <tag>algorithm</tag>
       
-      <tag>Datawhale</tag>
-      
       <tag>leetcode</tag>
+      
+      <tag>Datawhale</tag>
       
       <tag>Dynamic Programming</tag>
       
@@ -628,9 +742,9 @@
       
       <tag>algorithm</tag>
       
-      <tag>Datawhale</tag>
-      
       <tag>leetcode</tag>
+      
+      <tag>Datawhale</tag>
       
       <tag>divide-and-conquer</tag>
       
@@ -1173,9 +1287,9 @@
     
     <tags>
       
-      <tag>RNN</tag>
-      
       <tag>LSTM</tag>
+      
+      <tag>RNN</tag>
       
       <tag>Keras</tag>
       
@@ -1440,9 +1554,9 @@
     
     <tags>
       
-      <tag>NLP</tag>
-      
       <tag>Data Augmentation</tag>
+      
+      <tag>NLP</tag>
       
       <tag>Text Classification</tag>
       
@@ -1506,9 +1620,9 @@
       
       <tag>Python</tag>
       
-      <tag>array</tag>
-      
       <tag>numpy</tag>
+      
+      <tag>array</tag>
       
       <tag>concatenate</tag>
       
@@ -1995,11 +2109,11 @@
       
       <tag>C++</tag>
       
-      <tag>STL</tag>
-      
       <tag>string</tag>
       
       <tag>regex</tag>
+      
+      <tag>STL</tag>
       
     </tags>
     
@@ -2026,11 +2140,11 @@
       
       <tag>C++</tag>
       
+      <tag>STL</tag>
+      
       <tag>map</tag>
       
       <tag>set</tag>
-      
-      <tag>STL</tag>
       
     </tags>
     

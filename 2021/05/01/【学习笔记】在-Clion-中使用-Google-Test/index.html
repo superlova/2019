@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content>
+  <meta name="author" content="Superlova">
+  <meta name="keywords" content>
+  <title>【学习笔记】在 Clion 中使用 Google Test - Superlova</title>
+  <meta name="google-site-verification" content="CPvPw8mUZw65A1ALJ8uRzsYECq4mXgE4_eCq40VIhPM">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<link rel="alternate" href="/atom.xml" title="Superlova" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Superlova</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/cover_2.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期六, 五月 1日 2021, 8:41 早上
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    1.4k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                      5 分钟
+                  </span>
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  <span id="busuanzi_container_page_pv" class="post-meta" style="display: none">
+                    <i class="far fa-eye" aria-hidden="true"></i>
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5 z-depth-3" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+              <p
+                class="note note-warning">本文最后更新于：星期六, 五月 1日 2021, 11:01 上午</p>
+            
+            <div class="markdown-body">
+              <p>Google Test 是著名的 C++ 单元测试框架。如何在 CLion中使用 Google Test？<br><a id="more"></a></p>
+<h1 id="1-下载和安装"><a href="#1-下载和安装" class="headerlink" title="1. 下载和安装"></a>1. 下载和安装</h1><p>首先去<a href="https://github.com/google/googletest" target="_blank" rel="noopener">这个网站</a>下载 google test 最新版本。</p>
+<p><img src="/2021/05/01/【学习笔记】在-Clion-中使用-Google-Test/readme.png" srcset="/img/loading.gif" alt></p>
+<p>笔者写作时， google test 的版本为 1.10。</p>
+<p>然后下载最新版本的压缩文件。</p>
+<p><img src="/2021/05/01/【学习笔记】在-Clion-中使用-Google-Test/download.png" srcset="/img/loading.gif" alt></p>
+<p>解压得到文件夹<code>googletest-release-1.10.0</code>，打开文件夹后，把<code>googletest</code>文件夹复制到你的目标工程目录。</p>
+<p><img src="/2021/05/01/【学习笔记】在-Clion-中使用-Google-Test/googletestdir.png" srcset="/img/loading.gif" alt></p>
+<p><img src="/2021/05/01/【学习笔记】在-Clion-中使用-Google-Test/putitinproject.png" srcset="/img/loading.gif" alt></p>
+<p>还没结束，我们需要修改工程根目录的<code>CMakeLists.txt</code>，以使 google test 生效。注意不要修改<code>googletest/CMakeLists.txt</code>！</p>
+<p>向<code>CMakeLists.txt</code>添加如下代码：</p>
+<pre><code class="lang-sh">add_subdirectory(./googletest)
+include_directories(${PROJECT_SOURCE_DIR}/src/include ./googletest/include)
+link_directories(${PROJECT_SOURCE_DIR}/lib ${PROJECT_SOURCE_DIR}/googletest)
+target_link_libraries(${PROJECT_NAME} gtest)
+</code></pre>
+<p>如果我们想要使用 google test，就在任意cpp文件添加头<code>#include &quot;gtest/gtest.h&quot;</code></p>
+<h1 id="2-简单的用例"><a href="#2-简单的用例" class="headerlink" title="2. 简单的用例"></a>2. 简单的用例</h1><p>做一个简单的测试，我编写了一个将<code>unsigned long long</code>转为二进制数据的函数<code>ulld_to_b</code>，该函数能将一个无符号64位整数转换为64位长的二进制字符串。</p>
+<pre><code class="lang-cpp">string ulld_to_b(uint64_t i) {
+    return bitset&lt;64&gt;(i).to_string();
+}
+</code></pre>
+<p>现在对其进行测试。测试用例为18，我的预期结果为10010，但是前面应该补零至64位长：</p>
+<pre><code class="lang-cpp">TEST(TestCase, test1) {
+    EXPECT_STREQ(&quot;10010&quot;, ulld_to_b(18ULL).c_str());
+}
+
+TEST(TestCase, test2) {
+    EXPECT_STREQ(&quot;00000000000000000000000000010010&quot;, ulld_to_b(18ULL).c_str());
+}
+
+TEST(TestCase, test3) {
+    EXPECT_STREQ(&quot;0000000000000000000000000000000000000000000000000000000000010010&quot;, ulld_to_b(18ULL).c_str());
+}
+</code></pre>
+<p>写完测试用例后，需要改造下<code>main()</code>使其运行所有测试用例：</p>
+<pre><code class="lang-cpp">int main(int argc, char** argv) {
+    testing::InitGoogleTest(&amp;argc, argv);
+    return RUN_ALL_TESTS();
+}
+</code></pre>
+<p>预期结果为前两个测试用例不通过，后一个测试用例通过。</p>
+<p>编译运行后结果如下，完全符合我们的预期：</p>
+<p><img src="/2021/05/01/【学习笔记】在-Clion-中使用-Google-Test/results.png" srcset="/img/loading.gif" alt></p>
+<p>当然这里的使用是不恰当的，我们应当尽可能令所有单元测试都通过。</p>
+<p>在CLion的代码编辑器中可以方便地查看出错的测试用例：</p>
+<p><img src="/2021/05/01/【学习笔记】在-Clion-中使用-Google-Test/result_wrong.png" srcset="/img/loading.gif" alt></p>
+<h1 id="3-批量开关测试用例"><a href="#3-批量开关测试用例" class="headerlink" title="3. 批量开关测试用例"></a>3. 批量开关测试用例</h1><p>在大型工程中，项目上线前需要关闭所有测试用例，逐个删除未免显得笨拙。这个时候我们可以使用宏定义。</p>
+<p>首先将<code>googletest</code>的头文件放在一个统一的头文件<code>stdafx.h</code>中，然后以<code>#ifdef</code>包裹起来：</p>
+<pre><code class="lang-cpp">#ifndef LEETCODE_2021_STDAFX_H
+#define LEETCODE_2021_STDAFX_H
+
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;string&gt;
+#include &lt;map&gt;
+#include &lt;set&gt;
+#include &lt;algorithm&gt;
+#include &lt;stack&gt;
+#include &lt;memory&gt;
+#include &lt;bitset&gt;
+
+// 开启测试模式
+#define DEBUG_MODE
+
+#ifdef DEBUG_MODE
+#include &quot;gtest/gtest.h&quot;
+#endif
+
+#endif //LEETCODE_2021_STDAFX_H
+</code></pre>
+<p>如果我把<code>#define DEBUG_MODE</code>删除的话，<code>#include &quot;gtest/gtest.h&quot;</code>就不会执行了。</p>
+<p>然后回到每个函数实现处，我们在这里写了很多的测试用例，以及修改了<code>main()</code>函数。同样将它们用<code>#ifdef</code>包裹起来：</p>
+<pre><code class="lang-cpp">#ifdef DEBUG_MODE
+TEST(TestCase, test1) {
+    EXPECT_STREQ(&quot;10010&quot;, ulld_to_b(18ULL).c_str());
+}
+
+TEST(TestCase, test2) {
+    EXPECT_STREQ(&quot;00000000000000000000000000010010&quot;, ulld_to_b(18ULL).c_str());
+}
+
+TEST(TestCase, test3) {
+    EXPECT_STREQ(&quot;0000000000000000000000000000000000000000000000000000000000010010&quot;, ulld_to_b(18ULL).c_str());
+}
+#endif
+</code></pre>
+<p>这些测试用例会随着<code>&quot;stdafx.h&quot;</code>中<code>#define DEBUG_MODE</code>语句的删除而失效。</p>
+<p>最后来看看<code>main()</code>函数如何处理：</p>
+<pre><code class="lang-cpp">#ifndef DEBUG_MODE
+int main() {
+    /*...*/
+    return 0;
+}
+#else
+int main(int argc, char** argv) {
+    testing::InitGoogleTest(&amp;argc, argv);
+    return RUN_ALL_TESTS();
+}
+#endif
+</code></pre>
+<p>如果没定义<code>DEBUG_MODE</code>，则执行正常的<code>main()</code>；否则执行所有测试用例的<code>main(int argc, char** argv)</code>。</p>
+<p>在项目需要上线时，把<code>#define DEBUG_MODE</code>那一行删除即可。</p>
+<h1 id="4-测试用例编写"><a href="#4-测试用例编写" class="headerlink" title="4. 测试用例编写"></a>4. 测试用例编写</h1><h2 id="4-1-EXPECT和ASSERT"><a href="#4-1-EXPECT和ASSERT" class="headerlink" title="4.1 EXPECT和ASSERT"></a>4.1 <code>EXPECT</code>和<code>ASSERT</code></h2><p>google test 使用 TEST 宏声明测试用例。TEST() 有两个参数，<code>TestCaseName</code>，<code>TestName</code>。</p>
+<p>我们之前使用了<code>EXPECT_STREQ</code>这个宏，其含义为验证内部的两个参数为相同的字符串。除此之外，还有很多以EXPECT开头的宏，它们功能各不相同，比如<code>EXPECT_EQ</code>这个宏比较两个数字是否相等。</p>
+<p>EXPECT系列和ASSERT系列的区别是，EXPECT失败后，继续往下执行；ASSERT失败则直接终止程序。</p>
+<p>EXPECT和ASSERT的返回是一个流对象，这意味着我们可以在之后使用<code>&lt;&lt;</code>运算符输出额外信息：</p>
+<pre><code class="lang-cpp">for (int i = 0; i &lt; x.size(); ++i) {
+    EXPECT_EQ(x[i], y[i]) &lt;&lt; &quot;Vectors x and y differ at index &quot; &lt;&lt; i;
+}
+</code></pre>
+<h2 id="4-2-各种不同的宏断言"><a href="#4-2-各种不同的宏断言" class="headerlink" title="4.2 各种不同的宏断言"></a>4.2 各种不同的宏断言</h2><p>本节只列出了<code>ASSERT</code>，实际上每个<code>ASSERT</code>对应一个<code>EXPECT</code>版本。</p>
+<p><strong>编写测试用例时，如果有两个参数，注意把待测函数输出放在后面！前面的参数是Ground Truth，也就是答案。</strong></p>
+<h3 id="布尔值断言，只有一个参数，参数只能为true或者false："><a href="#布尔值断言，只有一个参数，参数只能为true或者false：" class="headerlink" title="布尔值断言，只有一个参数，参数只能为true或者false："></a>布尔值断言，只有一个参数，参数只能为true或者false：</h3><pre><code class="lang-cpp">ASSERT_TRUE(condition)
+ASSERT_FALSE(condition)
+</code></pre>
+<h3 id="数值断言："><a href="#数值断言：" class="headerlink" title="数值断言："></a>数值断言：</h3><pre><code class="lang-cpp">ASSERT_EQ(v1, v2) // v1 == v2
+ASSERT_NE(v1, v2) // v1 != v2
+ASSERT_LT(v1, v2) // v1 &lt; v2
+ASSERT_LE(v1, v2) // v1 &lt;= v2
+ASSERT_GT(v1, v2) // v1 &gt; v2
+ASSERT_GE(v1, v2) // v1 &gt;= v2
+</code></pre>
+<h3 id="字符串断言"><a href="#字符串断言" class="headerlink" title="字符串断言"></a>字符串断言</h3><p>这里的参数为C风格字符串，因此当参数为<code>string</code>类型时，你需要调用<code>c_str()</code>方法。</p>
+<pre><code class="lang-cpp">ASSERT_STREQ(s1, s2) // s1和s2内容相同
+ASSERT_STRNE(s1, s2) // s1和s2内容不同
+ASSERT_STRCASEEQ(s1, s2) // 忽略大小写，s1和s2内容相同
+ASSERT_STRCASENE(s1, s2) // 忽略大小写，s1和s2内容不同
+</code></pre>
+<h3 id="断言返回成功或者失败"><a href="#断言返回成功或者失败" class="headerlink" title="断言返回成功或者失败"></a>断言返回成功或者失败</h3><pre><code class="lang-cpp">TEST(ExplicitTest, Demo)
+{
+    ADD_FAILURE() &lt;&lt; &quot;Sorry&quot;; // None Fatal Asserton，继续往下执行。
+    FAIL(); // Fatal Assertion，不往下执行该案例。
+    SUCCEED();
+}
+</code></pre>
+<h3 id="抛出异常的断言"><a href="#抛出异常的断言" class="headerlink" title="抛出异常的断言"></a>抛出异常的断言</h3><pre><code class="lang-cpp">int Foo(int a, int b)
+{
+    if (a == 0 || b == 0)
+    {
+        throw &quot;don&#39;t do that&quot;;
+    }
+    int c = a % b;
+    if (c == 0)
+        return b;
+    return Foo(b, c);
+}
+
+TEST(FooTest, HandleZeroInput)
+{
+    EXPECT_ANY_THROW(Foo(10, 0)); // Foo应当抛出异常
+    EXPECT_THROW(Foo(0, 5), char*); // Foo应当抛出字符串类型的异常
+    EXPECT_NO_THROW(Foo(1, 1)); // Foo不应该抛出异常
+}
+</code></pre>
+<h3 id="浮点数断言"><a href="#浮点数断言" class="headerlink" title="浮点数断言"></a>浮点数断言</h3><pre><code class="lang-cpp">ASSERT_FLOAT_EQ(exp, act) // 检验两个浮点数是否**几乎**相等
+ASSERT_DOUBLE_EQ(exp, act) // 同上，只不过精度更高
+ASSERT_NEAR(exp, act, abs_error) // exp和act之间的差值不会超过abs_error
+</code></pre>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.cnblogs.com/coderzh/archive/2009/04/06/1426755.html" target="_blank" rel="noopener">https://www.cnblogs.com/coderzh/archive/2009/04/06/1426755.html</a></p>
+<p><a href="https://blog.csdn.net/zhizhengguan/article/details/110313265" target="_blank" rel="noopener">https://blog.csdn.net/zhizhengguan/article/details/110313265</a></p>
+
+            </div>
+            <hr>
+            <div>
+              <p>
+                
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/notes/">notes</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/clion/">clion</a>
+                    
+                      <a class="hover-with-bg" href="/tags/google-test/">google test</a>
+                    
+                      <a class="hover-with-bg" href="/tags/unit-test/">unit test</a>
+                    
+                  </span>
+                
+              </p>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <div class="comments" id="comments">
+                
+                
+  <script defer src="https://utteranc.es/client.js"
+          repo="superlova / superlova.github.io"
+          issue-term="pathname"
+  
+          label="utterances"
+    
+          theme="github-light"
+          crossorigin="anonymous"
+  >
+  </script>
+
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc-start"></div>
+<div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+<div>
+  <span id="timeDate">载入天数...</span>
+  <span id="times">载入时分秒...</span>
+  <script>
+  var now = new Date();
+  function createtime(){
+      var grt= new Date("02/14/2017 00:00:00");//此处修改你的建站时间或者网站上线时间
+      now.setTime(now.getTime()+250);
+      days = (now - grt ) / 1000 / 60 / 60 / 24;
+      dnum = Math.floor(days);
+      hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum);
+      hnum = Math.floor(hours);
+      if(String(hnum).length ==1 ){
+          hnum = "0" + hnum;
+      }
+      minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+      mnum = Math.floor(minutes);
+      if(String(mnum).length ==1 ){
+                mnum = "0" + mnum;
+      }
+      seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+      snum = Math.round(seconds);
+      if(String(snum).length ==1 ){
+                snum = "0" + snum;
+      }
+      document.getElementById("timeDate").innerHTML = "本站安全运行&nbsp"+dnum+"&nbsp天";
+      document.getElementById("times").innerHTML = hnum + "&nbsp小时&nbsp" + mnum + "&nbsp分&nbsp" + snum + "&nbsp秒";
+  }
+  setInterval("createtime()",250);
+  </script>
+</div>
+
+<p id="hitokoto">:D 获取中...</p>
+<script>
+  fetch('https://v1.hitokoto.cn')
+    .then(response => response.json())
+    .then(data => {
+      const hitokoto = document.getElementById('hitokoto')
+      hitokoto.innerText = data.hitokoto
+      })
+      .catch(console.error)
+</script>
+
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    </div>
+    
+  <div>
+    
+      <!-- 不蒜子统计PV -->
+      
+      <span id="busuanzi_container_site_pv" style="display: none">
+      总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    </span>
+    
+    
+      <!-- 不蒜子统计UV -->
+      
+      <span id="busuanzi_container_site_uv" style="display: none">
+      总访客数 <span id="busuanzi_value_site_uv"></span> 人
+    </span>
+    
+  </div>
+
+
+    
+
+    
+  </div>
+</footer>
+
+
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var post = $('#post');
+      var toc = $('#toc');
+      var tocLimMax = post.offset().top + post.height() - navHeight;
+
+      $(window).scroll(function () {
+        var tocLimMin = $('#toc-start').offset().top - navHeight;
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': navHeight,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+      var offset = $('#board-ctn').css('margin-right')
+      $('#toc-ctn').css({
+        'right': offset
+      })
+    });
+  </script>
+
+
+
+
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+<!-- Plugins -->
+
+
+  
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?1040bcc5d25d5f4a9cb5e9855eb2c6db";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "【学习笔记】在 Clion 中使用 Google Test&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 90,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

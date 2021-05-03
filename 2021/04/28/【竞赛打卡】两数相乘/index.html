@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content>
+  <meta name="author" content="Superlova">
+  <meta name="keywords" content>
+  <title>【竞赛打卡】大整数相乘 I - Superlova</title>
+  <meta name="google-site-verification" content="CPvPw8mUZw65A1ALJ8uRzsYECq4mXgE4_eCq40VIhPM">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<link rel="alternate" href="/atom.xml" title="Superlova" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Superlova</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/cover_2.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期三, 四月 28日 2021, 2:49 下午
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    1.8k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                      7 分钟
+                  </span>
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  <span id="busuanzi_container_page_pv" class="post-meta" style="display: none">
+                    <i class="far fa-eye" aria-hidden="true"></i>
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5 z-depth-3" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+              <p
+                class="note note-warning">本文最后更新于：星期一, 五月 3日 2021, 2:27 下午</p>
+            
+            <div class="markdown-body">
+              <p>两个大整数相乘，如何在不损失精度的前提下计算得到正确的结果？<br><a id="more"></a></p>
+<h1 id="unsigned-long-long-整数之间的乘法"><a href="#unsigned-long-long-整数之间的乘法" class="headerlink" title="unsigned long long 整数之间的乘法"></a><code>unsigned long long</code> 整数之间的乘法</h1><h2 id="1-问题引入"><a href="#1-问题引入" class="headerlink" title="1. 问题引入"></a>1. 问题引入</h2><p>如果我们使用 <code>C++</code> 语言，在 64 位系统上，<code>unsigned long long</code> 类型（或者 <code>uint64_t</code> 类型）的变量能够保存的数值范围是 $\left[0,2^{64}\right)$。任何小于该数值的数字都能被正确存储。</p>
+<script type="math/tex; mode=display">
+2^{64}-1=18,446,744,073,709,551,615</script><p>这个十进制的整数足足有20位，一般情况下我们是不需要考虑溢出问题的。</p>
+<p>但是如果两个<code>uint64_t</code>的变量要做乘法，就必须考虑溢出问题了。因为两个64位整数相乘，其结果可能达到128位，超过了一个变量能存储的数据的极限大小。</p>
+<p>两个<code>uint64_t</code>变量的乘法该如何正确计算？考虑极端情况，两个<code>uint64_t</code>整数所能表达的最大数字<code>UINT_MAX</code>相乘：</p>
+<script type="math/tex; mode=display">
+(2^{64}-1)\times (2^{64}-1)=2^{128}-2^{65}+1</script><p>这里面最大的数字是$2^{128}$，因此我们最极端情况下有128位的信息需要保存。</p>
+<h2 id="2-问题简化"><a href="#2-问题简化" class="headerlink" title="2. 问题简化"></a>2. 问题简化</h2><p>首先让我们<strong>简化一下问题</strong>。假设我现在只能用一款古董电脑，它只支持保存四位十进制整数的变量，也就是一个变量的保存范围为$[0,9999]$。如何计算两个四位整数相乘？</p>
+<p>还记得乘法是怎么计算的吗？我们应该都学习过小学数学，通过将数字中的每一个字符看作计算单元，然后利用99乘法表就能够口算出结果了。</p>
+<p><img src="/2021/04/28/【竞赛打卡】两数相乘/2021-04-29-08-44-58.png" srcset="/img/loading.gif" alt></p>
+<p>或者可以每两个字符看成计算的基本单元，这样就需要计算两位数乘法。</p>
+<p><img src="/2021/04/28/【竞赛打卡】两数相乘/2021-04-29-08-50-09.png" srcset="/img/loading.gif" alt></p>
+<p>同样可以计算得到正确结果。假设每个方框是计算机的一个变量，后一种计算方式可以保证每个变量中保存的元素大小不超过计算机的保存能力（假设计算机保存能力为2位）。</p>
+<p>回到题目本身。该运算的结果达到7位，超过了我们计算机限制的4位，因此可以使用两个变量保存该结果：<code>lo</code>保存结果的低四位，<code>hi</code>保存结果的高四位。</p>
+<p>另外我们使用四个变量将两个乘数拆分成前后两个部分，<code>a</code>保存第一个操作数的高2位，<code>b</code>保存第一个操作数的低2位,<code>c</code>保存第二个操作数的高2位，<code>d</code>保存第二个操作数的低2位。</p>
+<p>为什么要这么做？因为计算机的存储能力为4位，两个四位数字相乘，结果最多能达到八位，所以我们肯定不能容忍两个四位数字相乘；但是两个两位数字相乘，结果最多达到四位，是可以被当前的计算机所存储的。所以我们需要把四位数字拆分成前后两个部分。</p>
+<p>抽象一下计算过程，以下不考虑进位。</p>
+<p><img src="/2021/04/28/【竞赛打卡】两数相乘/2021-04-29-09-07-00.png" srcset="/img/loading.gif" alt></p>
+<p>第一步，计算b与d的乘积，得到结果<code>bd</code>和进位k_1：</p>
+<p><img src="/2021/04/28/【竞赛打卡】两数相乘/计算b与d的乘积.png" srcset="/img/loading.gif" alt></p>
+<p>第二步，计算a与d的乘积，并且加上bd的进位k_1，得到结果ad和进位k_2，注意这个k_2最终会与ac求和：</p>
+<p><img src="/2021/04/28/【竞赛打卡】两数相乘/计算a与d的乘积.png" srcset="/img/loading.gif" alt></p>
+<p>第三步，计算b与c的乘积，得到结果bc和进位k_3：</p>
+<p><img src="/2021/04/28/【竞赛打卡】两数相乘/计算b与c的乘积.png" srcset="/img/loading.gif" alt></p>
+<p>第四步，计算a与c的乘积，并且加上bc的进位k_3，得到结果ac和进位k_4，注意这个k_4最终会成为高位hi的最大的部分，因此ac得到的k_4没必要和ac分离开：</p>
+<p><img src="/2021/04/28/【竞赛打卡】两数相乘/计算a与c的乘积.png" srcset="/img/loading.gif" alt></p>
+<p>第五步，低位结果计算，首先将ad和bc加起来，得到ad+bc以及可能存在的进位k_5；然后将ad+bc向左移位两格，再加上bd，就是低位结果lo。</p>
+<p><img src="/2021/04/28/【竞赛打卡】两数相乘/低位结果计算.png" srcset="/img/loading.gif" alt></p>
+<p>第六步，高位结果计算，将ac和进位k_5加起来，注意此时的ac包含了进位k_4，并没有分离出去。我们还需要加上计算ad得到的k_2，因此hi=ac+k_2+k_5。</p>
+<p><img src="/2021/04/28/【竞赛打卡】两数相乘/高位结果计算.png" srcset="/img/loading.gif" alt></p>
+<h2 id="3-示例"><a href="#3-示例" class="headerlink" title="3. 示例"></a>3. 示例</h2><p>举一个具体点的例子：如何利用该电脑正确计算<code>1213*1214</code>？</p>
+<script type="math/tex; mode=display">
+1213\times 1214=1,472,582</script><pre><code>a = 12
+b = 13
+c = 12
+d = 14
+</code></pre><ol>
+<li>计算b与d的乘积，得到结果<code>bd</code>和进位k_1：<br>```<br>b <em> d = 13 </em> 14 = 182</li>
+</ol>
+<hr>
+<p>k_1 = 1<br>bd = 82</p>
+<pre><code>
+2. 计算a与d的乘积，并且加上bd的进位k_1，得到结果ad和进位k_2
+</code></pre><p>a <em> d + k_1 = 12 </em> 14 + 1 = 169<br>k_2 = 1<br>ad = 69</p>
+<pre><code>
+3. 计算b与c的乘积，得到结果bc和进位k_3
+</code></pre><p>b <em> c = 13 </em> 12 = 156<br>k_3 = 1<br>bc = 56</p>
+<pre><code>
+4. 计算a与c的乘积，并且加上bc的进位k_3，得到结果ac。此时不用分离进位，因此没有k_4。
+</code></pre><p>a <em> c + k_3 = 12 </em> 12 + 1 = 145<br>ac = 145</p>
+<pre><code>
+5. 低位结果计算，首先将ad和bc加起来，得到ad+bc以及可能存在的进位k_5；然后将ad+bc向左移位两格，再加上bd，就是低位结果lo
+</code></pre><p>ad + bc = 125<br>k_5 = 1<br>adbc = 25<br>lo = adbc &lt;&lt; 2 + bd = 2500 + 82 = 2582</p>
+<pre><code>
+6. 高位结果计算，将ac和进位k_5加起来，注意此时的ac包含了进位k_4，并没有分离出去。我们还需要加上计算ad得到的k_2，因此hi=ac+k_2+k_5
+</code></pre><p>hi = ac + k_2 + k_5 = 145 + 1 + 1 = 147</p>
+<pre><code>
+最终结果的高位部分为147，低位部分为2582，与答案1472582相同。
+
+## 迁移到64位整数相乘
+
+以上我们讨论的都是四位整数相乘的问题，其实64位二进制数相乘也是一样的道理。首先我们将两个64位乘数OP1和OP2各自分成两半32位整数，也就是a/b/c/d，然后按照上述算法计算，即可得到结果的高64位和低64位。算法如下：
+
+```cpp
+void mul_64_64_to_128(uint64_t op1, uint64_t op2, uint64_t *hi, uint64_t *lo) {
+    // 取abcd
+    uint64_t a, b, c, d;
+    b = (op1 &amp; 0xFFFFFFFF);
+    a = (op1 &gt;&gt; 32);
+    d = (op2 &amp; 0xFFFFFFFF);
+    c = (op2 &gt;&gt; 32);
+    // bd
+    uint64_t k_1 = b * d;
+    uint64_t bd = (k_1 &amp; 0xFFFFFFFF);
+    k_1 &gt;&gt;= 32;
+    // ad
+    uint64_t k_2 = a * d + k_1;
+    uint64_t ad = (k_2 &amp; 0xFFFFFFFF);
+    k_2 &gt;&gt;= 32;
+    // bc
+    uint64_t k_3 = b * c;
+    uint64_t bc = (k_3 &amp; 0xFFFFFFFF);
+    k_3 &gt;&gt;= 32;
+    // ac
+    uint64_t ac = a * c + k_3;
+    // lo
+    uint64_t k_5 = ad + bc;
+    uint64_t ad_bc = (k_5 &amp; 0xFFFFFFFF);
+    k_5 &gt;&gt;= 32;
+    *lo = (ad_bc &lt;&lt; 32) + bd;
+    // hi
+    *hi = ac + k_2 + k_5;
+}
+</code></pre><p>验证一下结果：</p>
+<pre><code class="lang-cpp">int main() {
+    uint64_t op1 = 1e12;
+    uint64_t op2 = 1e12;
+    uint64_t hi = 0ULL, lo = 0ULL;
+    mul_64_64_to_128(op1, op2, &amp;hi, &amp;lo);
+    cout &lt;&lt; hi &lt;&lt; &quot;\n&quot; &lt;&lt; lo &lt;&lt; endl;
+    return 0;
+}
+
+&gt;&gt;&gt;
+54210
+2003764205206896640
+
+Process finished with exit code 0
+</code></pre>
+<p>乍一看结果，<code>1e12*1e12</code>结果怎么不是<code>1e24</code>呢？其实这是由于结果是十进制导致不直观，实际上我们的结果是正确的。我们比较下二进制就可以了。</p>
+<p>首先定义一个函数<code>ulld_to_b</code>，将<code>uint64_t</code>变量转换为64位的二进制字符串：</p>
+<pre><code class="lang-cpp">string ulld_to_b(uint64_t i) {
+    return bitset&lt;64&gt;(i).to_string();
+}
+</code></pre>
+<p>然后查询<code>1e24</code>的二进制表示为：</p>
+<pre><code>00000000000000000000000000000000000000000000000011010011110000100001101111001110110011001110110110100001000000000000000000000000
+</code></pre><p>该数值是我在<a href="https://www.sojson.com/hexconvert.html" target="_blank" rel="noopener">这个网站</a>上查询的。</p>
+<p>然后编写测试用例：</p>
+<pre><code class="lang-cpp">TEST(TestCase, test1) {
+    uint64_t op1 = 1e12;
+    uint64_t op2 = 1e12;
+    uint64_t hi = 0ULL, lo = 0ULL;
+    mul_64_64_to_128(op1, op2, &amp;hi, &amp;lo);
+    string res = &quot;&quot;;
+    res = ulld_to_b(hi) + ulld_to_b(lo);
+    cout &lt;&lt; res &lt;&lt; endl;
+
+    string ground_truth = &quot;00000000000000000000000000000000000000000000000011010011110000100001101111001110110011001110110110100001000000000000000000000000&quot;;
+
+    EXPECT_STREQ(ground_truth.c_str(), res.c_str());
+}
+
+int main(int argc, char** argv) {
+    testing::InitGoogleTest(&amp;argc, argv);
+    return RUN_ALL_TESTS();
+}
+</code></pre>
+<p>没问题，通过了。当然，仅通过一个测试用例不算证明程序的正确性，勤劳的你可以多用几个测试用例试试。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.codeproject.com/Tips/618570/UInt-Multiplication-Squaring" target="_blank" rel="noopener">https://www.codeproject.com/Tips/618570/UInt-Multiplication-Squaring</a></p>
+
+            </div>
+            <hr>
+            <div>
+              <p>
+                
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/notes/">notes</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/algorithm/">algorithm</a>
+                    
+                      <a class="hover-with-bg" href="/tags/leetcode/">leetcode</a>
+                    
+                      <a class="hover-with-bg" href="/tags/searching/">searching</a>
+                    
+                  </span>
+                
+              </p>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <div class="comments" id="comments">
+                
+                
+  <script defer src="https://utteranc.es/client.js"
+          repo="superlova / superlova.github.io"
+          issue-term="pathname"
+  
+          label="utterances"
+    
+          theme="github-light"
+          crossorigin="anonymous"
+  >
+  </script>
+
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc-start"></div>
+<div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+<div>
+  <span id="timeDate">载入天数...</span>
+  <span id="times">载入时分秒...</span>
+  <script>
+  var now = new Date();
+  function createtime(){
+      var grt= new Date("02/14/2017 00:00:00");//此处修改你的建站时间或者网站上线时间
+      now.setTime(now.getTime()+250);
+      days = (now - grt ) / 1000 / 60 / 60 / 24;
+      dnum = Math.floor(days);
+      hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum);
+      hnum = Math.floor(hours);
+      if(String(hnum).length ==1 ){
+          hnum = "0" + hnum;
+      }
+      minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+      mnum = Math.floor(minutes);
+      if(String(mnum).length ==1 ){
+                mnum = "0" + mnum;
+      }
+      seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+      snum = Math.round(seconds);
+      if(String(snum).length ==1 ){
+                snum = "0" + snum;
+      }
+      document.getElementById("timeDate").innerHTML = "本站安全运行&nbsp"+dnum+"&nbsp天";
+      document.getElementById("times").innerHTML = hnum + "&nbsp小时&nbsp" + mnum + "&nbsp分&nbsp" + snum + "&nbsp秒";
+  }
+  setInterval("createtime()",250);
+  </script>
+</div>
+
+<p id="hitokoto">:D 获取中...</p>
+<script>
+  fetch('https://v1.hitokoto.cn')
+    .then(response => response.json())
+    .then(data => {
+      const hitokoto = document.getElementById('hitokoto')
+      hitokoto.innerText = data.hitokoto
+      })
+      .catch(console.error)
+</script>
+
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    </div>
+    
+  <div>
+    
+      <!-- 不蒜子统计PV -->
+      
+      <span id="busuanzi_container_site_pv" style="display: none">
+      总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    </span>
+    
+    
+      <!-- 不蒜子统计UV -->
+      
+      <span id="busuanzi_container_site_uv" style="display: none">
+      总访客数 <span id="busuanzi_value_site_uv"></span> 人
+    </span>
+    
+  </div>
+
+
+    
+
+    
+  </div>
+</footer>
+
+
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var post = $('#post');
+      var toc = $('#toc');
+      var tocLimMax = post.offset().top + post.height() - navHeight;
+
+      $(window).scroll(function () {
+        var tocLimMin = $('#toc-start').offset().top - navHeight;
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': navHeight,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+      var offset = $('#board-ctn').css('margin-right')
+      $('#toc-ctn').css({
+        'right': offset
+      })
+    });
+  </script>
+
+
+
+
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+<!-- Plugins -->
+
+
+  
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?1040bcc5d25d5f4a9cb5e9855eb2c6db";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "【竞赛打卡】大整数相乘 I&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 90,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+          tex2jax: {
+              inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+              processEscapes: true,
+              skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+          }
+      });
+
+      MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+
+    </script>
+
+    <script  src="https://cdn.staticfile.org/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>
