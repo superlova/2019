@@ -4,6 +4,91 @@
   
   
   <entry>
+    <title>【学习笔记】数据密集性应用系统设计CH1笔记</title>
+    <link href="/2021/05/04/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E6%95%B0%E6%8D%AE%E5%AF%86%E9%9B%86%E6%80%A7%E5%BA%94%E7%94%A8%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1CH1%E7%AC%94%E8%AE%B0/"/>
+    <url>/2021/05/04/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E6%95%B0%E6%8D%AE%E5%AF%86%E9%9B%86%E6%80%A7%E5%BA%94%E7%94%A8%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1CH1%E7%AC%94%E8%AE%B0/</url>
+    
+    <content type="html"><![CDATA[<p>第一章：可靠、可扩展和可维护的应用系统<br><a id="more"></a></p><h3 id="数据密集型问题的挑战："><a href="#数据密集型问题的挑战：" class="headerlink" title="数据密集型问题的挑战："></a>数据密集型问题的挑战：</h3><p>数据量，数据复杂度，数据的快速多变性；</p><h3 id="数据密集型应用包含以下模块："><a href="#数据密集型应用包含以下模块：" class="headerlink" title="数据密集型应用包含以下模块："></a>数据密集型应用包含以下模块：</h3><ul><li>数据库；</li><li>高速缓存；</li><li>索引：用户可以按关键字搜索数据井支持各种过滤操作；</li><li>流式处理：持续发送消息至另一个进程，处理采用异步方式；</li><li>批处理：定期处理大量累计数据。</li></ul><h3 id="数据系统"><a href="#数据系统" class="headerlink" title="数据系统"></a>数据系统</h3><p>本章提出<strong>数据系统</strong>的概念，包括<strong>数据库</strong>、<strong>消息队列</strong>和<strong>高速缓存</strong>等不同类型的系统。这样分类的原因有以下几点：</p><ol><li><p>都能将数据保存一段时间。区别在于访问模式不同，以及由于不同访问模式导致的不同性能。</p></li><li><p>新技术、工具拥有多种功能，系统之间的界限变得模糊。比如redis既能<strong>存储</strong>也能作为<strong>消息队列</strong>，kafka作为<strong>消息队列</strong>也能<strong>持久化存储</strong>。</p></li><li><p>系统也需要细分，原有的但各组件无法满足数据处理与存储需求，三分类概念需要进一步分解。例如，即便是一个简单的数据系统，也可能由很多子组件构成：</p></li></ol><p><img src="/2021/05/04/【学习笔记】数据密集性应用系统设计CH1笔记/一种数据系统架构.png" srcset="/img/loading.gif" alt></p><p>这个应用包含缓存层（Memcached）和全文索引服务器（Elasticsearch或者Solr）以及数据库。程序员编写应用代码来控制缓存、索引和数据同步操作。</p><h3 id="数据系统的三种关键特性："><a href="#数据系统的三种关键特性：" class="headerlink" title="数据系统的三种关键特性："></a>数据系统的三种关键特性：</h3><ul><li><p>可靠性（Reliability）：当出现意外情况，如软件、硬件故障，人为操作失误等现象时，系统仍可以正常运转的能力。这里的正常运转，是指牺牲部分性能条件下，提供正确的服务。</p></li><li><p>可扩展性（Scalability）：随着问题规模的增长，比如流量、数据量或者任务复杂度，系统以合理方式匹配这种增长的能力。</p></li><li><p>可维护性（Maintainability）：新的开发或者维护人员上手的容易程度，以及适配新场景的能力。</p></li></ul><h3 id="可靠性"><a href="#可靠性" class="headerlink" title="可靠性"></a>可靠性</h3><p>什么是可靠性？即使发生了某些错误，系统仍可以继续正常工作的能力。</p><ul><li>故障或错误（fault）：组件偏离正确规格的现象。</li><li>失效（failure）：系统宕机，无法提供服务。</li></ul><p>为保证可靠性，需要设计容错机制（fault-tolerant）来避免故障引发系统失效，而不是避免故障（当然，避免故障也是提升可靠性的手段）。</p><h3 id="可靠性指标"><a href="#可靠性指标" class="headerlink" title="可靠性指标"></a>可靠性指标</h3><h4 id="失效前平均时间（MTTF）"><a href="#失效前平均时间（MTTF）" class="headerlink" title="失效前平均时间（MTTF）"></a>失效前平均时间（MTTF）</h4><p>是针对不可修复系统而言的，是指系统发生失效前的平均工作（或存储） 时间或工作次数。越高越好。</p><h4 id="平均无故障时间（MTBF）"><a href="#平均无故障时间（MTBF）" class="headerlink" title="平均无故障时间（MTBF）"></a>平均无故障时间（MTBF）</h4><p>是针对可修复系统而言的，指两次相邻失效（故障） 之间的工作时间， 而不是指整个系统的报废时间。越高越好。</p><h4 id="平均修复时间（MTTR）"><a href="#平均修复时间（MTTR）" class="headerlink" title="平均修复时间（MTTR）"></a>平均修复时间（MTTR）</h4><p>是对可修复系统而言的，指从出现故障到修复中间的这段时间。越低越好。</p><h4 id="可用性"><a href="#可用性" class="headerlink" title="可用性"></a>可用性</h4><p>又称为有效性，一般用可用度来定量计算，公式为</p><script type="math/tex; mode=display">A=\frac{\text{MTBF}}{\text{MTBF}+\text{MTTR}}</script><p>可靠性通常低于可用性。对于不可维修系统， 可用度就仅仅决定于且等于可靠度。</p><h3 id="数据系统可能发生哪些故障？如何提升容错能力？"><a href="#数据系统可能发生哪些故障？如何提升容错能力？" class="headerlink" title="数据系统可能发生哪些故障？如何提升容错能力？"></a>数据系统可能发生哪些故障？如何提升容错能力？</h3><h4 id="1-硬件故障"><a href="#1-硬件故障" class="headerlink" title="1. 硬件故障"></a>1. 硬件故障</h4><p>包括硬盘错误、电源错误、网口接触不良等。</p><p>最耐用的硬盘的MTTF为10~50年，因此一个包括10000个磁盘的存储集群中，一天坏一个也是很正常的（假设购买硬盘在时间上是均匀分布）。</p><p>应对方案是添加冗余，比如上述硬盘问题就可以用RAID，电源用双电源，甚至热插拔CPU等。</p><p>以上是从硬件角度解决硬件故障，其实可以通过软件角度解决硬件故障问题。</p><h4 id="2-软件错误"><a href="#2-软件错误" class="headerlink" title="2. 软件错误"></a>2. 软件错误</h4><p>操作系统内核的Bug，系统依赖的服务突然没有响应，某个组件的失控等。</p><p>软件系统的问题有时没有快速解决的办法，只能通过检查依赖假设和系统交互、进行全面测试等方法来预防，或者允许进程重启、评估运行时表现等应对。</p><h4 id="3-人为失误"><a href="#3-人为失误" class="headerlink" title="3. 人为失误"></a>3. 人为失误</h4><p>人是最不可靠的因素。运维人员配置错误往往是系统下线的主要原因。</p><p>这部分的预防以及应对，更加依赖软件工程领域的知识。</p><h3 id="可扩展性"><a href="#可扩展性" class="headerlink" title="可扩展性"></a>可扩展性</h3><p>可扩展性是用来描述系统应对负载增加的能力的术语。一个系统添加计算单元越容易，添加计算单元后计算能力的增长越多，就称这个系统的可扩展性越强。</p><h3 id="如何度量系统负载"><a href="#如何度量系统负载" class="headerlink" title="如何度量系统负载"></a>如何度量系统负载</h3><p>每秒请求处理次数、数据库中写入的比例、聊天室的同时活动用户数量、缓存命中率等，</p><p>还要注意分析平均值和峰值对性能的影响</p><h3 id="实例：twitter的两个实现版本"><a href="#实例：twitter的两个实现版本" class="headerlink" title="实例：twitter的两个实现版本"></a>实例：twitter的两个实现版本</h3><p>twitter有两个功能（类比微博，为了方便理解我接下来以微博代替推特），根据其2012年的数据，其功能和负载如下：</p><p>发微博：平均每秒4600条发布申请，峰值12000条推特申请发布。</p><p>收微博：平均每秒300,000条收微博的请求。</p><p>twitter第一个版本使用如下系统设计完成微博的收发：</p><p>发送微博：用户发送的微博插入全局微博集合。</p><p>用户申请查看自己的时间线：  </p><ul><li>遍历所有User的关注对象；</li><li>提取所有关注对象的微博；</li><li>按照发表时间排序并合并。</li></ul><p>随着注册用户变多，负载压力与日俱增，因此采取第二种方法：</p><p>每个用户的时间线维护一个缓存。</p><p>用户发表新的微博：</p><ul><li>查询关注对象；</li><li>插入到每个粉丝的时间线缓存。</li></ul><p>方法二的好处是，用户发布微博时多做一些事情可以加速用户接收微博时的性能。而用户接收微博的请求负载比发送负载高两个数量级。</p><p>Twitter针对那些粉丝量特别多的大V采用方法一，针对粉丝量不太大的绝大多数用户使用方法二。</p><h3 id="如何度量系统性能"><a href="#如何度量系统性能" class="headerlink" title="如何度量系统性能"></a>如何度量系统性能</h3><p><strong>吞吐量</strong></p><p>吞吐量是在一个特定时间段内完成的任务的计数，例如：每秒点击数。</p><p>系统吞吐量几个重要参数：QPS（TPS）、并发数、响应时间</p><p>并发数： 系统同时处理的request/事务数</p><p>TPS：Transactions Per Second（每秒传输的事物处理个数），即服务器每秒处理的事务数。</p><p>QPS：每秒查询率，即对一个特定的查询服务器在规定时间内所处理流量大小。</p><p><strong>响应时间</strong></p><p>从客户端发送请求到接受响应之间的间隔时长。在线系统通常更看重响应时间，批处理系统更关心吞吐量。</p><p>由于每次请求的响应时间服从一个分布，因此我们更关心平均响应时长，或者<strong>百分位数时长</strong>。将响应时长排序，取50百分位数（中位数）比平均数更有意义。其他有意义的百分位数有95、99和99.9百分位数。</p><p>采用较高的响应时间百分位数很重要，因为他们直接影响用户的总体服务体验。95百分位数的响应时间为1.5秒，意味着100个请求中5个请求慢于1.5秒，但是对于电商平台来说，有可能恰恰是这些顾客购买了更多的商品导致访问变慢。</p><p>排队延迟是影响高百分数响应时间的主要延迟来源。因此，如果在性能测试时，负载生成客户端在服务器处理完之前请求后再发送新的请求，就会忽视了排队造成的延迟。</p><h3 id="长尾效应"><a href="#长尾效应" class="headerlink" title="长尾效应"></a>长尾效应</h3><p>一个服务涉及多个不同的后端调用，则最慢的调用会拖累整个服务的响应时间，这种现象称之为长尾效应。</p><p>用户总是需要等待最慢的那个调用完成。因此即便只有很小比例的请求缓慢，也可能由于某一个用户频繁产生这种调用而导致总体变慢。</p><h3 id="如何应对负载增加，提升可扩展性？"><a href="#如何应对负载增加，提升可扩展性？" class="headerlink" title="如何应对负载增加，提升可扩展性？"></a>如何应对负载增加，提升可扩展性？</h3><p>垂直扩展：升级到更强大的机器。</p><p>水平扩展：将负载分布到更多小机器。</p><p>系统设计时，要在这两种扩展中间作取舍。同时要根据不同的吞吐量、请求方式等做针对性优化。</p><h3 id="可维护性"><a href="#可维护性" class="headerlink" title="可维护性"></a>可维护性</h3><p>软件工程师不喜欢读别人留下的代码，不喜欢维护别人开发的老系统，这已经是众所周知的事实。</p><p>但是换个角度，不如说大多数系统在设计之初就没有考虑令后续开发者方便地维护这一个特性。</p><p>为了提升系统的可维护性，减少维护期间的麻烦，可以遵循软件系统的三个设计原则：</p><p>可运维性、简单性、可演化性。</p><h4 id="可运维性"><a href="#可运维性" class="headerlink" title="可运维性"></a>可运维性</h4><p>目标是令运维人员更轻松。之前讨论过，人是系统中最不稳定的因素。因此简化运维人员的操作，使运维人员能够专注于高附加值的任务，能够提升系统的可维护性。</p><p>可以从以下角度提升可运维性：</p><ul><li>提供系统运行时监控工具，方便监控；</li><li>自动化工具；</li><li>避免绑定特定的机器；</li><li>提供良好的文档；</li><li>提供良好的默认配置；</li><li>尝试自我修复等。</li></ul><h4 id="简单性"><a href="#简单性" class="headerlink" title="简单性"></a>简单性</h4><p>简单性是复杂性的反面。而复杂性有各种各样的表现方式，比如模块紧耦合，状态空间膨胀，依赖关系复杂，命名方法混乱，各种性能trick等。</p><p>消除复杂性的最好手段之一是抽象，通过抽象掩盖大量实现细节，提供干净的接口。</p><h4 id="可演化性"><a href="#可演化性" class="headerlink" title="可演化性"></a>可演化性</h4><p>提升可演化性是令系统易于改变的另一种说法。目标是可以轻松地修改数据系统，使其适应不断变化的需求。</p><p>在组织流程方面，敏捷开发模式为适应变化提供了很好的参考。因此敏捷性与可演化性很类似。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>notes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Big Data</tag>
+      
+      <tag>Distributed System</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>【论文阅读笔记】MapReduce: Simplified Data Processing on Large Clusters</title>
+    <link href="/2021/05/04/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91MapReduce-Simplified-Data-Processing-on-Large-Clusters/"/>
+    <url>/2021/05/04/%E3%80%90%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%91MapReduce-Simplified-Data-Processing-on-Large-Clusters/</url>
+    
+    <content type="html"><![CDATA[<p>MapReduce是Google提出的一个软件架构，用于大规模数据集的并行运算。<br><a id="more"></a></p><p>本文描述了MapReduce框架，该框架为大规模的分布式计算和自动化并行计算带来简单的接口。</p><p>TODO</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>paper</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Big Data</tag>
+      
+      <tag>Distributed System</tag>
+      
+      <tag>MapReduce</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>【学习笔记】Hadoop介绍和安装</title>
+    <link href="/2021/05/04/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91Hadoop%E4%BB%8B%E7%BB%8D%E5%92%8C%E5%AE%89%E8%A3%85/"/>
+    <url>/2021/05/04/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91Hadoop%E4%BB%8B%E7%BB%8D%E5%92%8C%E5%AE%89%E8%A3%85/</url>
+    
+    <content type="html"><![CDATA[<p>Hadoop学习笔记第一篇。<br><a id="more"></a></p><h1 id="Hadoop介绍"><a href="#Hadoop介绍" class="headerlink" title="Hadoop介绍"></a>Hadoop介绍</h1><p>Apache Hadoop 软件库是一个框架，允许在<strong>集群服务器</strong>上使用简单的<strong>编程模型</strong>，<strong>对大数据集进行分布式处理</strong>。</p><p>Hadoop 可扩展性强，能从单台服务器扩展到数以千计的服务器；Hadoop 高可用，其代码库自身就能在应用层侦测并处理硬件故障。</p><p>Hadoop 的生态系统不仅包含 Hadoop，而且还包含 HDFS、HBase等基本组件。</p><p><img src="/2021/05/04/【学习笔记】Hadoop介绍和安装/Hadoop生态系统.png" srcset="/img/loading.gif" alt></p><p><strong>HDFS (Hadoop Distributed File System)</strong></p><p>HDFS是分布式文件系统的一种。HDFS是Hadoop生态系统的基本组成，它将数据保存在计算机集群上。HDFS是HBase等工具的基础。</p><p><strong>MapReduce</strong></p><p>MapReduce是一种分布式计算框架，也是一个分布式、并行处理的编程模型。MapReduce把任务分为<code>map</code>阶段和<code>reduce</code>阶段，<code>map</code>阶段将任务分解成子任务后映射到集群上，<code>reduce</code>将结果化简并整合。</p><p>正是利用了MapReduce的工作特性，Hadoop因此能以并行的方式访问数据，从而实现分布式计算。</p><p>关于MapReduce的论文讲解，请看TODO。</p><p><strong>HBase</strong></p><p>HBase 是一个建立在 HDFS 之上，面向列的 NoSQL 数据库，用于快速读 / 写大量数据。HBase 使用 Zookeeper 进行管理。</p><p><strong>ZooKeeper</strong></p><p>ZooKeeper 为大型分布式计算提供开源的分布式配置服务、同步服务和命名注册。</p><p>Hadoop 的许多组件依赖于 Zookeeper，它运行在计算机集群中，用于管理 Hadoop 集群。</p><p><strong>Pig</strong></p><p>Pig是一个基于Hadoop的大规模数据分析平台，它为 MapReduce 编程模型提供了一个简单的操作和编程接口。它提供的SQL-LIKE语言叫Pig Latin，该语言的编译器会把类SQL的数据分析请求转换为一系列经过优化处理的MapReduce运算。</p><p><strong>Hive</strong><br>Apache Hive是一个建立在Hadoop架构之上的数据仓库。它能够提供数据的精炼，查询和分析。像 Pig 一样，Hive 作为一个抽象层工具，吸引了很多熟悉 SQL 而不是 Java 编程的数据分析师。</p><p>与Pig的区别在于，Pig是一中编程语言，使用命令式操作加载数据、表达转换数据以及存储最终结果。Pig中没有表的概念。而Hive更像是SQL，使用类似于SQL语法进行数据查询。</p><p><strong>Sqoop</strong></p><p>用于在关系数据库、数据仓库和 Hadoop 之间转移数据。</p><p><strong>Flume</strong></p><p>是一个分布式、可靠、高可用的海量日志采集、聚合和传输的系统，用于有效地收集、聚合和将大量日志数据从许多不同的源移动到一个集中的数据存储（如文本、HDFS、Hbase等）。</p><p><strong>Yarn</strong></p><p>是从Hadoop 2.0版本开始沿用的任务调度和集群资源管理的框架。</p><p><strong>Spark</strong></p><p>一个快速通用的 Hadoop 数据计算引擎，具有简单和富有表达力的编程模型，支持数据 ETL（提取、转换和加载）、机器学习、流处理和图形计算等方面的应用。</p><p>Spark 这一分布式内存计算框架就是脱胎于 Hadoop 体系的，它对 HDFS 、YARN 等组件有了良好的继承，同时也改进了 Hadoop 现存的一些不足。</p><p>下图是Hadoop集群的基本架构。</p><p><img src="/2021/05/04/【学习笔记】Hadoop介绍和安装/Hadoop集群基本架构.png" srcset="/img/loading.gif" alt></p><h1 id="Hadoop-可以做什么"><a href="#Hadoop-可以做什么" class="headerlink" title="Hadoop 可以做什么"></a>Hadoop 可以做什么</h1><p>据Hadoop Wiki记载，阿里巴巴使用15个节点组成的Hadoop集群，每个节点拥有8核心、16GB内存和1.4TB存储。阿里巴巴使用这些节点来处理商业数据的排序和组合，应用于交易网站的垂直搜索。</p><p>Ebay拥有32个节点组成的集群，使用Java编写的MapReduce应用，来优化搜索引擎。</p><p>FaceBook使用Hadoop来存储内部日志和结构化数据源副本，并且将其作为数据报告、数据分析和机器学习的数据源。</p><h1 id="Hadoop-不同版本"><a href="#Hadoop-不同版本" class="headerlink" title="Hadoop 不同版本"></a>Hadoop 不同版本</h1><p><strong>关于发行方：</strong></p><p>目前Hadoop发行版非常多，有Intel发行版，华为发行版、Cloudera发行版（CDH）、Hortonworks版本等，所有这些发行版均是基于Apache Hadoop衍生出来的，之所以有这么多的版本，是由于Apache Hadoop的开源协议决定的：任何人可以对其进行修改，并作为开源或商业产品发布/销售。</p><p><strong>关于版本：</strong></p><p>现在最新的Hadoop已经达到3.X了，然而大部分公司使用Hadoop 2.X。又由于Hadoop 2.X与1.X相比有较大变化，因此直接使用2.X是比较合理的选择。</p><p>Hadoop2.0新增了HDFS HA机制，HA增加了standbynamenode进行热备份，解决了1.0的单点故障问题。</p><p>Hadoop2.0新增了HDFS federation，解决了HDFS水平可扩展能力。 </p><p>2.0相比于1.0 新增了YARN框架，Mapreduce的运行环境发生了变化</p><h1 id="Hadoop-安装"><a href="#Hadoop-安装" class="headerlink" title="Hadoop 安装"></a>Hadoop 安装</h1><p>Hadoop有三种安装方式</p><ul><li>单机模式：安装简单，几乎不用做任何配置，但仅限于调试用途。</li><li>伪分布模式：在单节点上同时启动 NameNode、DataNode、JobTracker、TaskTracker、Secondary Namenode 等 5 个进程，模拟分布式运行的各个节点。</li><li>完全分布式模式：正常的 Hadoop 集群，由多个各司其职的节点构成。</li></ul><p>本文介绍 Hadoop 伪分布式模式部署方法，Hadoop 版本为 2.6.1。</p><h2 id="1-设置用户和组"><a href="#1-设置用户和组" class="headerlink" title="1. 设置用户和组"></a>1. 设置用户和组</h2><pre><code>sudo adduser hadoopsudo usermod -G sudo hadoop</code></pre><h2 id="2-安装JDK"><a href="#2-安装JDK" class="headerlink" title="2. 安装JDK"></a>2. 安装JDK</h2><p>不同版本的 Hadoop 对 Java 的版本需求有细微的差别，可以在<a href="https://cwiki.apache.org/confluence/display/HADOOP2/HadoopJavaVersions" target="_blank" rel="noopener">这个网站</a>查询 Hadoop 版本与 Java 版本的关系。</p><p>测试jdk是否部署成功：</p><pre><code class="lang-sh">java -version</code></pre><h2 id="3-配置SSH免密码登录"><a href="#3-配置SSH免密码登录" class="headerlink" title="3. 配置SSH免密码登录"></a>3. 配置SSH免密码登录</h2><p>安装和配置 SSH 的目的是为了让 Hadoop 能够方便地运行远程管理守护进程的相关脚本。这些脚本需要用到 sshd 服务。</p><pre><code class="lang-sh">su hadoopcd /home/hadoopssh-keygen -t rsa# 将生成的公钥添加到主机认证记录中。cat .ssh/id_rsa.pub &gt;&gt; .ssh/authorized_keys# 为 authorized_keys 文件赋予写权限chmod 600 .ssh/authorized_keys# 尝试登录到本机ssh localhost</code></pre><h2 id="4-下载-Hadoop"><a href="#4-下载-Hadoop" class="headerlink" title="4. 下载 Hadoop"></a>4. 下载 Hadoop</h2><pre><code class="lang-sh">wget https://archive.apache.org/dist/hadoop/common/hadoop-2.6.1/hadoop-2.6.1.tar.gztar zxvf hadoop-2.6.1.tar.gzsudo mv hadoop-2.6.1 /opt/hadoop-2.6.1sudo chown -R hadoop:hadoop /opt/hadoop-2.6.1vim /home/hadoop/.bashrc</code></pre><p>在 /home/hadoop/.bashrc 文件的末尾添加以下内容：</p><pre><code class="lang-sh">export HADOOP_HOME=/opt/hadoop-2.6.1export JAVA_HOME=/usr/lib/jvm/java-8-oracleexport PATH=$PATH:$JAVA_HOME/bin:$HADOOP_HOME/bin:$HADOOP_HOME/sbin</code></pre><p>在终端中输入 source 命令来激活新添加的环境变量。</p><pre><code class="lang-sh">source /home/hadoop/.bashrc</code></pre><h2 id="5-伪分布式模式配置"><a href="#5-伪分布式模式配置" class="headerlink" title="5. 伪分布式模式配置"></a>5. 伪分布式模式配置</h2><p>Hadoop 还可以以伪分布式模式运行在单个节点上，通过多个独立的 Java 进程来模拟多节点的情况。在初始学习阶段，暂时没有必要耗费大量的资源来创建不同的节点。</p><p>5.1 <strong>打开 core-site.xml 文件:</strong></p><pre><code class="lang-sh">vim /opt/hadoop-2.6.1/etc/hadoop/core-site.xml</code></pre><p>将 configuration 标签的值修改为以下内容：</p><pre><code class="lang-xml">&lt;configuration&gt;    &lt;property&gt;        &lt;name&gt;fs.defaultFS&lt;/name&gt;        &lt;value&gt;hdfs://localhost:9000&lt;/value&gt;    &lt;/property&gt;    &lt;property&gt;        &lt;name&gt;hadoop.tmp.dir&lt;/name&gt;        &lt;value&gt;/home/hadoop/tmp&lt;/value&gt;    &lt;/property&gt;&lt;/configuration&gt;</code></pre><p>fs.defaultFS 配置项用于指示集群默认使用的文件系统的位置。</p><p>5.2 <strong>打开另一个配置文件 hdfs-site.xml</strong></p><pre><code class="lang-sh">vim /opt/hadoop-2.6.1/etc/hadoop/hdfs-site.xml</code></pre><p>将 configuration 标签的值修改为以下内容：</p><pre><code class="lang-xml">&lt;configuration&gt;    &lt;property&gt;        &lt;name&gt;dfs.replication&lt;/name&gt;        &lt;value&gt;1&lt;/value&gt;    &lt;/property&gt;&lt;/configuration&gt;</code></pre><p>该配置项用于指示 HDFS 中文件副本的数量，默认情况下是 3 份，由于我们在单台节点上以伪分布式的方式部署，所以将其修改为 1 。</p><p>5.3 <strong>编辑 hadoop-env.sh 文件：</strong></p><pre><code class="lang-sh">vim /opt/hadoop-2.6.1/etc/hadoop/hadoop-env.sh</code></pre><p>将其中 <code>export JAVA_HOME</code> 的值修改为 JDK 的实际位置，即 <code>/usr/lib/jvm/java-8-oracle</code> 。</p><p>5.4 <strong>编辑 yarn-site.xml 文件：</strong></p><pre><code class="lang-sh">vim /opt/hadoop-2.6.1/etc/hadoop/yarn-site.xml</code></pre><p>在 configuration 标签内添加以下内容：</p><pre><code class="lang-xml">&lt;configuration&gt;    &lt;property&gt;        &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;        &lt;value&gt;mapreduce_shuffle&lt;/value&gt;    &lt;/property&gt;&lt;/configuration&gt;</code></pre><p>5.5 <strong>编辑 mapred-site.xml 文件。首先需要从模板复制过来：</strong></p><pre><code class="lang-sh">cp /opt/hadoop-2.6.1/etc/hadoop/mapred-site.xml.template /opt/hadoop-2.6.1/etc/hadoop/mapred-site.xmlvim /opt/hadoop-2.6.1/etc/hadoop/mapred-site.xml</code></pre><p>在 configuration 标签内添加以下内容：</p><pre><code class="lang-xml">&lt;configuration&gt;    &lt;property&gt;        &lt;name&gt;mapreduce.framework.name&lt;/name&gt;        &lt;value&gt;yarn&lt;/value&gt;    &lt;/property&gt;&lt;/configuration&gt;</code></pre><h2 id="6-Hadoop-启动测试"><a href="#6-Hadoop-启动测试" class="headerlink" title="6. Hadoop 启动测试"></a>6. Hadoop 启动测试</h2><pre><code class="lang-sh">su -l hadoopvim /home/hadoop/.bashrc</code></pre><p>向<code>.bashrc</code>添加 Java 的环境变量：</p><pre><code class="lang-sh">export JAVA_HOME=/usr/lib/jvm/java-8-oracleexport PATH=$PATH:$JAVA_HOME/bin</code></pre><h1 id="HDFS-的基本使用"><a href="#HDFS-的基本使用" class="headerlink" title="HDFS 的基本使用"></a>HDFS 的基本使用</h1><h2 id="1-初始化HDFS"><a href="#1-初始化HDFS" class="headerlink" title="1. 初始化HDFS"></a>1. 初始化HDFS</h2><pre><code class="lang-sh">hdfs namenode -format</code></pre><p>格式化的操作只需要进行一次即可，不需要多次格式化。每一次格式化 namenode 都会清除 HDFS 分布式文件系统中的所有数据文件。同时，多次格式化容易出现 namenode 和 datanode 不同步的问题。</p><h2 id="2-启动HDFS"><a href="#2-启动HDFS" class="headerlink" title="2. 启动HDFS"></a>2. 启动HDFS</h2><p>HDFS 初始化完成之后，就可以启动 NameNode 和 DataNode 的守护进程。启动之后，Hadoop 的应用（如 MapReduce 任务）就可以从 HDFS 中读写文件。</p><p>在终端中输入以下命令来启动守护进程：</p><pre><code class="lang-sh">start-dfs.sh</code></pre><p>为了确认伪分布式模式下的 Hadoop 已经成功运行，可以利用 Java 的进程查看工具 <code>jps</code> 来查看是否有相应的进程。</p><p>如果执行 jps 发现没有 NameNode 服务进程，可以先检查一下是否执行了 namenode 的初始化操作。如果没有初始化 namenode ，先执行 stop-dfs.sh ,然后执行 hdfs namenode -format ,最后执行 start-dfs.sh 命令，通常来说这样就能够保证这三个服务进程成功启动</p><h2 id="3-查看日志和WebUI"><a href="#3-查看日志和WebUI" class="headerlink" title="3. 查看日志和WebUI"></a>3. 查看日志和WebUI</h2><p>作为大数据领域的学习者，掌握分析日志的能力与学习相关计算框架的能力同样重要。</p><p>Hadoop 的守护进程日志默认输出在安装目录的 log 文件夹中，在终端中输入以下命令进入到日志目录：</p><pre><code class="lang-sh">cd /opt/hadoop-2.6.1/logsls</code></pre><p>HDFS 在启动完成之后，还会由内部的 Web 服务提供一个查看集群状态的网页：</p><p><a href="http://localhost:50070/" target="_blank" rel="noopener">http://localhost:50070/</a></p><p>打开网页后，可以在其中查看到集群的概览、DataNode 的状态等信息。</p><h2 id="4-HDFS文件上传测试"><a href="#4-HDFS文件上传测试" class="headerlink" title="4. HDFS文件上传测试"></a>4. HDFS文件上传测试</h2><p>HDFS 运行起来之后，可将其视作一个文件系统。此处进行文件上传的测试，首先需要按照目录层级逐个创建目录，并尝试将 Linux 系统中的一些文件上传到 HDFS 中。</p><pre><code class="lang-sh">cd ~hdfs dfs -mkdir /userhdfs dfs -mkdir /user/hadoop</code></pre><p>如果需要查看创建好的文件夹，可以使用如下命令：</p><pre><code class="lang-sh">hdfs dfs -ls /user</code></pre><p>目录创建成功之后，使用 <code>hdfs dfs -put</code> 命令将本地磁盘上的文件（此处是随意选取的 Hadoop 配置文件）上传到 HDFS 之中。</p><pre><code class="lang-sh">hdfs dfs -put /opt/hadoop-2.6.1/etc/hadoop /user/hadoop/input</code></pre><p>如果要查看上传的文件，可以执行如下命令：</p><pre><code class="lang-sh">hdfs dfs -ls /user/hadoop/input</code></pre><h1 id="WordCount"><a href="#WordCount" class="headerlink" title="WordCount"></a>WordCount</h1><p>WordCount 是 Hadoop 的 “HelloWorld” 程序。</p><p>绝大多数部署在实际生产环境并且解决实际问题的 Hadoop 应用程序都是基于 WordCount 所代表的 MapReduce 编程模型变化而来。</p><p>在终端中首先启动 YARN 计算服务：</p><pre><code class="lang-sh">start-yarn.sh</code></pre><p>然后输入以下命令以启动任务</p><pre><code class="lang-sh">hadoop jar /opt/hadoop-2.6.1/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.6.1.jar wordcount /user/hadoop/input/ output</code></pre><p>上述参数中，关于路径的参数有三个，分别是 jar 包的位置、输入文件的位置和输出结果的存放位置。在填写路径时，应当养成填写绝对路径的习惯。这样做将有利于定位问题和传递工作。</p><p>等待计算完成，然后将 HDFS 上的文件导出到本地目录查看：</p><pre><code class="lang-sh">rm -rf /home/hadoop/outputhdfs dfs -get /user/hadoop/output outputcat output/*</code></pre><p>计算完毕后，如无其他软件需要使用 HDFS 上的文件，则应及时关闭 HDFS 守护进程。</p><p>作为分布式集群和相关计算框架的使用者，应当养成良好的习惯，在每次涉及到集群开启和关闭、软硬件安装和更新的时候，都主动检查相关软硬件的状态。</p><pre><code class="lang-sh">stop-yarn.shstop-dfs.sh</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>notes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Hadoop</tag>
+      
+      <tag>Big Data</tag>
+      
+      <tag>Distributed System</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>【学习笔记】计算二进制中1的个数</title>
     <link href="/2021/05/03/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E8%AE%A1%E7%AE%97%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%AD1%E7%9A%84%E4%B8%AA%E6%95%B0/"/>
     <url>/2021/05/03/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91%E8%AE%A1%E7%AE%97%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%AD1%E7%9A%84%E4%B8%AA%E6%95%B0/</url>
@@ -1287,9 +1372,9 @@
     
     <tags>
       
-      <tag>LSTM</tag>
-      
       <tag>RNN</tag>
+      
+      <tag>LSTM</tag>
       
       <tag>Keras</tag>
       
@@ -1318,9 +1403,9 @@
       
       <tag>NLP</tag>
       
-      <tag>testing</tag>
-      
       <tag>DNN</tag>
+      
+      <tag>testing</tag>
       
     </tags>
     

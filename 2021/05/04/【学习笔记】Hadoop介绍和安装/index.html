@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content>
+  <meta name="author" content="Superlova">
+  <meta name="keywords" content>
+  <title>【学习笔记】Hadoop介绍和安装 - Superlova</title>
+  <meta name="google-site-verification" content="CPvPw8mUZw65A1ALJ8uRzsYECq4mXgE4_eCq40VIhPM">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<link rel="alternate" href="/atom.xml" title="Superlova" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Superlova</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/cover_2.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期二, 五月 4日 2021, 7:26 晚上
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    3.1k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                      12 分钟
+                  </span>
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  <span id="busuanzi_container_page_pv" class="post-meta" style="display: none">
+                    <i class="far fa-eye" aria-hidden="true"></i>
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5 z-depth-3" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+              <p
+                class="note note-warning">本文最后更新于：星期三, 五月 5日 2021, 1:17 凌晨</p>
+            
+            <div class="markdown-body">
+              <p>Hadoop学习笔记第一篇。<br><a id="more"></a></p>
+<h1 id="Hadoop介绍"><a href="#Hadoop介绍" class="headerlink" title="Hadoop介绍"></a>Hadoop介绍</h1><p>Apache Hadoop 软件库是一个框架，允许在<strong>集群服务器</strong>上使用简单的<strong>编程模型</strong>，<strong>对大数据集进行分布式处理</strong>。</p>
+<p>Hadoop 可扩展性强，能从单台服务器扩展到数以千计的服务器；Hadoop 高可用，其代码库自身就能在应用层侦测并处理硬件故障。</p>
+<p>Hadoop 的生态系统不仅包含 Hadoop，而且还包含 HDFS、HBase等基本组件。</p>
+<p><img src="/2021/05/04/【学习笔记】Hadoop介绍和安装/Hadoop生态系统.png" srcset="/img/loading.gif" alt></p>
+<p><strong>HDFS (Hadoop Distributed File System)</strong></p>
+<p>HDFS是分布式文件系统的一种。HDFS是Hadoop生态系统的基本组成，它将数据保存在计算机集群上。HDFS是HBase等工具的基础。</p>
+<p><strong>MapReduce</strong></p>
+<p>MapReduce是一种分布式计算框架，也是一个分布式、并行处理的编程模型。MapReduce把任务分为<code>map</code>阶段和<code>reduce</code>阶段，<code>map</code>阶段将任务分解成子任务后映射到集群上，<code>reduce</code>将结果化简并整合。</p>
+<p>正是利用了MapReduce的工作特性，Hadoop因此能以并行的方式访问数据，从而实现分布式计算。</p>
+<p>关于MapReduce的论文讲解，请看TODO。</p>
+<p><strong>HBase</strong></p>
+<p>HBase 是一个建立在 HDFS 之上，面向列的 NoSQL 数据库，用于快速读 / 写大量数据。HBase 使用 Zookeeper 进行管理。</p>
+<p><strong>ZooKeeper</strong></p>
+<p>ZooKeeper 为大型分布式计算提供开源的分布式配置服务、同步服务和命名注册。</p>
+<p>Hadoop 的许多组件依赖于 Zookeeper，它运行在计算机集群中，用于管理 Hadoop 集群。</p>
+<p><strong>Pig</strong></p>
+<p>Pig是一个基于Hadoop的大规模数据分析平台，它为 MapReduce 编程模型提供了一个简单的操作和编程接口。它提供的SQL-LIKE语言叫Pig Latin，该语言的编译器会把类SQL的数据分析请求转换为一系列经过优化处理的MapReduce运算。</p>
+<p><strong>Hive</strong><br>Apache Hive是一个建立在Hadoop架构之上的数据仓库。它能够提供数据的精炼，查询和分析。像 Pig 一样，Hive 作为一个抽象层工具，吸引了很多熟悉 SQL 而不是 Java 编程的数据分析师。</p>
+<p>与Pig的区别在于，Pig是一中编程语言，使用命令式操作加载数据、表达转换数据以及存储最终结果。Pig中没有表的概念。而Hive更像是SQL，使用类似于SQL语法进行数据查询。</p>
+<p><strong>Sqoop</strong></p>
+<p>用于在关系数据库、数据仓库和 Hadoop 之间转移数据。</p>
+<p><strong>Flume</strong></p>
+<p>是一个分布式、可靠、高可用的海量日志采集、聚合和传输的系统，用于有效地收集、聚合和将大量日志数据从许多不同的源移动到一个集中的数据存储（如文本、HDFS、Hbase等）。</p>
+<p><strong>Yarn</strong></p>
+<p>是从Hadoop 2.0版本开始沿用的任务调度和集群资源管理的框架。</p>
+<p><strong>Spark</strong></p>
+<p>一个快速通用的 Hadoop 数据计算引擎，具有简单和富有表达力的编程模型，支持数据 ETL（提取、转换和加载）、机器学习、流处理和图形计算等方面的应用。</p>
+<p>Spark 这一分布式内存计算框架就是脱胎于 Hadoop 体系的，它对 HDFS 、YARN 等组件有了良好的继承，同时也改进了 Hadoop 现存的一些不足。</p>
+<p>下图是Hadoop集群的基本架构。</p>
+<p><img src="/2021/05/04/【学习笔记】Hadoop介绍和安装/Hadoop集群基本架构.png" srcset="/img/loading.gif" alt></p>
+<h1 id="Hadoop-可以做什么"><a href="#Hadoop-可以做什么" class="headerlink" title="Hadoop 可以做什么"></a>Hadoop 可以做什么</h1><p>据Hadoop Wiki记载，阿里巴巴使用15个节点组成的Hadoop集群，每个节点拥有8核心、16GB内存和1.4TB存储。阿里巴巴使用这些节点来处理商业数据的排序和组合，应用于交易网站的垂直搜索。</p>
+<p>Ebay拥有32个节点组成的集群，使用Java编写的MapReduce应用，来优化搜索引擎。</p>
+<p>FaceBook使用Hadoop来存储内部日志和结构化数据源副本，并且将其作为数据报告、数据分析和机器学习的数据源。</p>
+<h1 id="Hadoop-不同版本"><a href="#Hadoop-不同版本" class="headerlink" title="Hadoop 不同版本"></a>Hadoop 不同版本</h1><p><strong>关于发行方：</strong></p>
+<p>目前Hadoop发行版非常多，有Intel发行版，华为发行版、Cloudera发行版（CDH）、Hortonworks版本等，所有这些发行版均是基于Apache Hadoop衍生出来的，之所以有这么多的版本，是由于Apache Hadoop的开源协议决定的：任何人可以对其进行修改，并作为开源或商业产品发布/销售。</p>
+<p><strong>关于版本：</strong></p>
+<p>现在最新的Hadoop已经达到3.X了，然而大部分公司使用Hadoop 2.X。又由于Hadoop 2.X与1.X相比有较大变化，因此直接使用2.X是比较合理的选择。</p>
+<p>Hadoop2.0新增了HDFS HA机制，HA增加了standbynamenode进行热备份，解决了1.0的单点故障问题。</p>
+<p>Hadoop2.0新增了HDFS federation，解决了HDFS水平可扩展能力。 </p>
+<p>2.0相比于1.0 新增了YARN框架，Mapreduce的运行环境发生了变化</p>
+<h1 id="Hadoop-安装"><a href="#Hadoop-安装" class="headerlink" title="Hadoop 安装"></a>Hadoop 安装</h1><p>Hadoop有三种安装方式</p>
+<ul>
+<li>单机模式：安装简单，几乎不用做任何配置，但仅限于调试用途。</li>
+<li>伪分布模式：在单节点上同时启动 NameNode、DataNode、JobTracker、TaskTracker、Secondary Namenode 等 5 个进程，模拟分布式运行的各个节点。</li>
+<li>完全分布式模式：正常的 Hadoop 集群，由多个各司其职的节点构成。</li>
+</ul>
+<p>本文介绍 Hadoop 伪分布式模式部署方法，Hadoop 版本为 2.6.1。</p>
+<h2 id="1-设置用户和组"><a href="#1-设置用户和组" class="headerlink" title="1. 设置用户和组"></a>1. 设置用户和组</h2><pre><code>sudo adduser hadoop
+sudo usermod -G sudo hadoop
+</code></pre><h2 id="2-安装JDK"><a href="#2-安装JDK" class="headerlink" title="2. 安装JDK"></a>2. 安装JDK</h2><p>不同版本的 Hadoop 对 Java 的版本需求有细微的差别，可以在<a href="https://cwiki.apache.org/confluence/display/HADOOP2/HadoopJavaVersions" target="_blank" rel="noopener">这个网站</a>查询 Hadoop 版本与 Java 版本的关系。</p>
+<p>测试jdk是否部署成功：</p>
+<pre><code class="lang-sh">java -version
+</code></pre>
+<h2 id="3-配置SSH免密码登录"><a href="#3-配置SSH免密码登录" class="headerlink" title="3. 配置SSH免密码登录"></a>3. 配置SSH免密码登录</h2><p>安装和配置 SSH 的目的是为了让 Hadoop 能够方便地运行远程管理守护进程的相关脚本。这些脚本需要用到 sshd 服务。</p>
+<pre><code class="lang-sh">su hadoop
+cd /home/hadoop
+ssh-keygen -t rsa
+# 将生成的公钥添加到主机认证记录中。
+cat .ssh/id_rsa.pub &gt;&gt; .ssh/authorized_keys
+# 为 authorized_keys 文件赋予写权限
+chmod 600 .ssh/authorized_keys
+# 尝试登录到本机
+ssh localhost
+</code></pre>
+<h2 id="4-下载-Hadoop"><a href="#4-下载-Hadoop" class="headerlink" title="4. 下载 Hadoop"></a>4. 下载 Hadoop</h2><pre><code class="lang-sh">wget https://archive.apache.org/dist/hadoop/common/hadoop-2.6.1/hadoop-2.6.1.tar.gz
+tar zxvf hadoop-2.6.1.tar.gz
+sudo mv hadoop-2.6.1 /opt/hadoop-2.6.1
+sudo chown -R hadoop:hadoop /opt/hadoop-2.6.1
+vim /home/hadoop/.bashrc
+</code></pre>
+<p>在 /home/hadoop/.bashrc 文件的末尾添加以下内容：</p>
+<pre><code class="lang-sh">export HADOOP_HOME=/opt/hadoop-2.6.1
+export JAVA_HOME=/usr/lib/jvm/java-8-oracle
+export PATH=$PATH:$JAVA_HOME/bin:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
+</code></pre>
+<p>在终端中输入 source 命令来激活新添加的环境变量。</p>
+<pre><code class="lang-sh">source /home/hadoop/.bashrc
+</code></pre>
+<h2 id="5-伪分布式模式配置"><a href="#5-伪分布式模式配置" class="headerlink" title="5. 伪分布式模式配置"></a>5. 伪分布式模式配置</h2><p>Hadoop 还可以以伪分布式模式运行在单个节点上，通过多个独立的 Java 进程来模拟多节点的情况。在初始学习阶段，暂时没有必要耗费大量的资源来创建不同的节点。</p>
+<p>5.1 <strong>打开 core-site.xml 文件:</strong></p>
+<pre><code class="lang-sh">vim /opt/hadoop-2.6.1/etc/hadoop/core-site.xml
+</code></pre>
+<p>将 configuration 标签的值修改为以下内容：</p>
+<pre><code class="lang-xml">&lt;configuration&gt;
+    &lt;property&gt;
+        &lt;name&gt;fs.defaultFS&lt;/name&gt;
+        &lt;value&gt;hdfs://localhost:9000&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+        &lt;name&gt;hadoop.tmp.dir&lt;/name&gt;
+        &lt;value&gt;/home/hadoop/tmp&lt;/value&gt;
+    &lt;/property&gt;
+&lt;/configuration&gt;
+</code></pre>
+<p>fs.defaultFS 配置项用于指示集群默认使用的文件系统的位置。</p>
+<p>5.2 <strong>打开另一个配置文件 hdfs-site.xml</strong></p>
+<pre><code class="lang-sh">vim /opt/hadoop-2.6.1/etc/hadoop/hdfs-site.xml
+</code></pre>
+<p>将 configuration 标签的值修改为以下内容：</p>
+<pre><code class="lang-xml">&lt;configuration&gt;
+    &lt;property&gt;
+        &lt;name&gt;dfs.replication&lt;/name&gt;
+        &lt;value&gt;1&lt;/value&gt;
+    &lt;/property&gt;
+&lt;/configuration&gt;
+</code></pre>
+<p>该配置项用于指示 HDFS 中文件副本的数量，默认情况下是 3 份，由于我们在单台节点上以伪分布式的方式部署，所以将其修改为 1 。</p>
+<p>5.3 <strong>编辑 hadoop-env.sh 文件：</strong></p>
+<pre><code class="lang-sh">vim /opt/hadoop-2.6.1/etc/hadoop/hadoop-env.sh
+</code></pre>
+<p>将其中 <code>export JAVA_HOME</code> 的值修改为 JDK 的实际位置，即 <code>/usr/lib/jvm/java-8-oracle</code> 。</p>
+<p>5.4 <strong>编辑 yarn-site.xml 文件：</strong></p>
+<pre><code class="lang-sh">vim /opt/hadoop-2.6.1/etc/hadoop/yarn-site.xml
+</code></pre>
+<p>在 configuration 标签内添加以下内容：</p>
+<pre><code class="lang-xml">&lt;configuration&gt;
+    &lt;property&gt;
+        &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;
+        &lt;value&gt;mapreduce_shuffle&lt;/value&gt;
+    &lt;/property&gt;
+&lt;/configuration&gt;
+</code></pre>
+<p>5.5 <strong>编辑 mapred-site.xml 文件。首先需要从模板复制过来：</strong></p>
+<pre><code class="lang-sh">cp /opt/hadoop-2.6.1/etc/hadoop/mapred-site.xml.template /opt/hadoop-2.6.1/etc/hadoop/mapred-site.xml
+vim /opt/hadoop-2.6.1/etc/hadoop/mapred-site.xml
+</code></pre>
+<p>在 configuration 标签内添加以下内容：</p>
+<pre><code class="lang-xml">&lt;configuration&gt;
+    &lt;property&gt;
+        &lt;name&gt;mapreduce.framework.name&lt;/name&gt;
+        &lt;value&gt;yarn&lt;/value&gt;
+    &lt;/property&gt;
+&lt;/configuration&gt;
+</code></pre>
+<h2 id="6-Hadoop-启动测试"><a href="#6-Hadoop-启动测试" class="headerlink" title="6. Hadoop 启动测试"></a>6. Hadoop 启动测试</h2><pre><code class="lang-sh">su -l hadoop
+vim /home/hadoop/.bashrc
+</code></pre>
+<p>向<code>.bashrc</code>添加 Java 的环境变量：</p>
+<pre><code class="lang-sh">export JAVA_HOME=/usr/lib/jvm/java-8-oracle
+export PATH=$PATH:$JAVA_HOME/bin
+</code></pre>
+<h1 id="HDFS-的基本使用"><a href="#HDFS-的基本使用" class="headerlink" title="HDFS 的基本使用"></a>HDFS 的基本使用</h1><h2 id="1-初始化HDFS"><a href="#1-初始化HDFS" class="headerlink" title="1. 初始化HDFS"></a>1. 初始化HDFS</h2><pre><code class="lang-sh">hdfs namenode -format
+</code></pre>
+<p>格式化的操作只需要进行一次即可，不需要多次格式化。每一次格式化 namenode 都会清除 HDFS 分布式文件系统中的所有数据文件。同时，多次格式化容易出现 namenode 和 datanode 不同步的问题。</p>
+<h2 id="2-启动HDFS"><a href="#2-启动HDFS" class="headerlink" title="2. 启动HDFS"></a>2. 启动HDFS</h2><p>HDFS 初始化完成之后，就可以启动 NameNode 和 DataNode 的守护进程。启动之后，Hadoop 的应用（如 MapReduce 任务）就可以从 HDFS 中读写文件。</p>
+<p>在终端中输入以下命令来启动守护进程：</p>
+<pre><code class="lang-sh">start-dfs.sh
+</code></pre>
+<p>为了确认伪分布式模式下的 Hadoop 已经成功运行，可以利用 Java 的进程查看工具 <code>jps</code> 来查看是否有相应的进程。</p>
+<p>如果执行 jps 发现没有 NameNode 服务进程，可以先检查一下是否执行了 namenode 的初始化操作。如果没有初始化 namenode ，先执行 stop-dfs.sh ,然后执行 hdfs namenode -format ,最后执行 start-dfs.sh 命令，通常来说这样就能够保证这三个服务进程成功启动</p>
+<h2 id="3-查看日志和WebUI"><a href="#3-查看日志和WebUI" class="headerlink" title="3. 查看日志和WebUI"></a>3. 查看日志和WebUI</h2><p>作为大数据领域的学习者，掌握分析日志的能力与学习相关计算框架的能力同样重要。</p>
+<p>Hadoop 的守护进程日志默认输出在安装目录的 log 文件夹中，在终端中输入以下命令进入到日志目录：</p>
+<pre><code class="lang-sh">cd /opt/hadoop-2.6.1/logs
+ls
+</code></pre>
+<p>HDFS 在启动完成之后，还会由内部的 Web 服务提供一个查看集群状态的网页：</p>
+<p><a href="http://localhost:50070/" target="_blank" rel="noopener">http://localhost:50070/</a></p>
+<p>打开网页后，可以在其中查看到集群的概览、DataNode 的状态等信息。</p>
+<h2 id="4-HDFS文件上传测试"><a href="#4-HDFS文件上传测试" class="headerlink" title="4. HDFS文件上传测试"></a>4. HDFS文件上传测试</h2><p>HDFS 运行起来之后，可将其视作一个文件系统。此处进行文件上传的测试，首先需要按照目录层级逐个创建目录，并尝试将 Linux 系统中的一些文件上传到 HDFS 中。</p>
+<pre><code class="lang-sh">cd ~
+hdfs dfs -mkdir /user
+hdfs dfs -mkdir /user/hadoop
+</code></pre>
+<p>如果需要查看创建好的文件夹，可以使用如下命令：</p>
+<pre><code class="lang-sh">hdfs dfs -ls /user
+</code></pre>
+<p>目录创建成功之后，使用 <code>hdfs dfs -put</code> 命令将本地磁盘上的文件（此处是随意选取的 Hadoop 配置文件）上传到 HDFS 之中。</p>
+<pre><code class="lang-sh">hdfs dfs -put /opt/hadoop-2.6.1/etc/hadoop /user/hadoop/input
+</code></pre>
+<p>如果要查看上传的文件，可以执行如下命令：</p>
+<pre><code class="lang-sh">hdfs dfs -ls /user/hadoop/input
+</code></pre>
+<h1 id="WordCount"><a href="#WordCount" class="headerlink" title="WordCount"></a>WordCount</h1><p>WordCount 是 Hadoop 的 “HelloWorld” 程序。</p>
+<p>绝大多数部署在实际生产环境并且解决实际问题的 Hadoop 应用程序都是基于 WordCount 所代表的 MapReduce 编程模型变化而来。</p>
+<p>在终端中首先启动 YARN 计算服务：</p>
+<pre><code class="lang-sh">start-yarn.sh
+</code></pre>
+<p>然后输入以下命令以启动任务</p>
+<pre><code class="lang-sh">hadoop jar /opt/hadoop-2.6.1/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.6.1.jar wordcount /user/hadoop/input/ output
+</code></pre>
+<p>上述参数中，关于路径的参数有三个，分别是 jar 包的位置、输入文件的位置和输出结果的存放位置。在填写路径时，应当养成填写绝对路径的习惯。这样做将有利于定位问题和传递工作。</p>
+<p>等待计算完成，然后将 HDFS 上的文件导出到本地目录查看：</p>
+<pre><code class="lang-sh">rm -rf /home/hadoop/output
+hdfs dfs -get /user/hadoop/output output
+cat output/*
+</code></pre>
+<p>计算完毕后，如无其他软件需要使用 HDFS 上的文件，则应及时关闭 HDFS 守护进程。</p>
+<p>作为分布式集群和相关计算框架的使用者，应当养成良好的习惯，在每次涉及到集群开启和关闭、软硬件安装和更新的时候，都主动检查相关软硬件的状态。</p>
+<pre><code class="lang-sh">stop-yarn.sh
+stop-dfs.sh
+</code></pre>
+
+            </div>
+            <hr>
+            <div>
+              <p>
+                
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/notes/">notes</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Hadoop/">Hadoop</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Big-Data/">Big Data</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Distributed-System/">Distributed System</a>
+                    
+                  </span>
+                
+              </p>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <div class="comments" id="comments">
+                
+                
+  <script defer src="https://utteranc.es/client.js"
+          repo="superlova / superlova.github.io"
+          issue-term="pathname"
+  
+          label="utterances"
+    
+          theme="github-light"
+          crossorigin="anonymous"
+  >
+  </script>
+
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc-start"></div>
+<div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+<div>
+  <span id="timeDate">载入天数...</span>
+  <span id="times">载入时分秒...</span>
+  <script>
+  var now = new Date();
+  function createtime(){
+      var grt= new Date("02/14/2017 00:00:00");//此处修改你的建站时间或者网站上线时间
+      now.setTime(now.getTime()+250);
+      days = (now - grt ) / 1000 / 60 / 60 / 24;
+      dnum = Math.floor(days);
+      hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum);
+      hnum = Math.floor(hours);
+      if(String(hnum).length ==1 ){
+          hnum = "0" + hnum;
+      }
+      minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+      mnum = Math.floor(minutes);
+      if(String(mnum).length ==1 ){
+                mnum = "0" + mnum;
+      }
+      seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+      snum = Math.round(seconds);
+      if(String(snum).length ==1 ){
+                snum = "0" + snum;
+      }
+      document.getElementById("timeDate").innerHTML = "本站安全运行&nbsp"+dnum+"&nbsp天";
+      document.getElementById("times").innerHTML = hnum + "&nbsp小时&nbsp" + mnum + "&nbsp分&nbsp" + snum + "&nbsp秒";
+  }
+  setInterval("createtime()",250);
+  </script>
+</div>
+
+<p id="hitokoto">:D 获取中...</p>
+<script>
+  fetch('https://v1.hitokoto.cn')
+    .then(response => response.json())
+    .then(data => {
+      const hitokoto = document.getElementById('hitokoto')
+      hitokoto.innerText = data.hitokoto
+      })
+      .catch(console.error)
+</script>
+
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    </div>
+    
+  <div>
+    
+      <!-- 不蒜子统计PV -->
+      
+      <span id="busuanzi_container_site_pv" style="display: none">
+      总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    </span>
+    
+    
+      <!-- 不蒜子统计UV -->
+      
+      <span id="busuanzi_container_site_uv" style="display: none">
+      总访客数 <span id="busuanzi_value_site_uv"></span> 人
+    </span>
+    
+  </div>
+
+
+    
+
+    
+  </div>
+</footer>
+
+
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var post = $('#post');
+      var toc = $('#toc');
+      var tocLimMax = post.offset().top + post.height() - navHeight;
+
+      $(window).scroll(function () {
+        var tocLimMin = $('#toc-start').offset().top - navHeight;
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': navHeight,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+      var offset = $('#board-ctn').css('margin-right')
+      $('#toc-ctn').css({
+        'right': offset
+      })
+    });
+  </script>
+
+
+
+
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+<!-- Plugins -->
+
+
+  
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?1040bcc5d25d5f4a9cb5e9855eb2c6db";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "【学习笔记】Hadoop介绍和安装&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 90,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

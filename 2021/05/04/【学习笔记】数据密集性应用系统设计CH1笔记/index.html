@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content>
+  <meta name="author" content="Superlova">
+  <meta name="keywords" content>
+  <title>【学习笔记】数据密集性应用系统设计CH1笔记 - Superlova</title>
+  <meta name="google-site-verification" content="CPvPw8mUZw65A1ALJ8uRzsYECq4mXgE4_eCq40VIhPM">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<link rel="alternate" href="/atom.xml" title="Superlova" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Superlova</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/cover_2.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期二, 五月 4日 2021, 9:23 晚上
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    2.7k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                      9 分钟
+                  </span>
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  <span id="busuanzi_container_page_pv" class="post-meta" style="display: none">
+                    <i class="far fa-eye" aria-hidden="true"></i>
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5 z-depth-3" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+              <p
+                class="note note-warning">本文最后更新于：星期三, 五月 5日 2021, 12:25 凌晨</p>
+            
+            <div class="markdown-body">
+              <p>第一章：可靠、可扩展和可维护的应用系统<br><a id="more"></a></p>
+<h3 id="数据密集型问题的挑战："><a href="#数据密集型问题的挑战：" class="headerlink" title="数据密集型问题的挑战："></a>数据密集型问题的挑战：</h3><p>数据量，数据复杂度，数据的快速多变性；</p>
+<h3 id="数据密集型应用包含以下模块："><a href="#数据密集型应用包含以下模块：" class="headerlink" title="数据密集型应用包含以下模块："></a>数据密集型应用包含以下模块：</h3><ul>
+<li>数据库；</li>
+<li>高速缓存；</li>
+<li>索引：用户可以按关键字搜索数据井支持各种过滤操作；</li>
+<li>流式处理：持续发送消息至另一个进程，处理采用异步方式；</li>
+<li>批处理：定期处理大量累计数据。</li>
+</ul>
+<h3 id="数据系统"><a href="#数据系统" class="headerlink" title="数据系统"></a>数据系统</h3><p>本章提出<strong>数据系统</strong>的概念，包括<strong>数据库</strong>、<strong>消息队列</strong>和<strong>高速缓存</strong>等不同类型的系统。这样分类的原因有以下几点：</p>
+<ol>
+<li><p>都能将数据保存一段时间。区别在于访问模式不同，以及由于不同访问模式导致的不同性能。</p>
+</li>
+<li><p>新技术、工具拥有多种功能，系统之间的界限变得模糊。比如redis既能<strong>存储</strong>也能作为<strong>消息队列</strong>，kafka作为<strong>消息队列</strong>也能<strong>持久化存储</strong>。</p>
+</li>
+<li><p>系统也需要细分，原有的但各组件无法满足数据处理与存储需求，三分类概念需要进一步分解。例如，即便是一个简单的数据系统，也可能由很多子组件构成：</p>
+</li>
+</ol>
+<p><img src="/2021/05/04/【学习笔记】数据密集性应用系统设计CH1笔记/一种数据系统架构.png" srcset="/img/loading.gif" alt></p>
+<p>这个应用包含缓存层（Memcached）和全文索引服务器（Elasticsearch或者Solr）以及数据库。程序员编写应用代码来控制缓存、索引和数据同步操作。</p>
+<h3 id="数据系统的三种关键特性："><a href="#数据系统的三种关键特性：" class="headerlink" title="数据系统的三种关键特性："></a>数据系统的三种关键特性：</h3><ul>
+<li><p>可靠性（Reliability）：当出现意外情况，如软件、硬件故障，人为操作失误等现象时，系统仍可以正常运转的能力。这里的正常运转，是指牺牲部分性能条件下，提供正确的服务。</p>
+</li>
+<li><p>可扩展性（Scalability）：随着问题规模的增长，比如流量、数据量或者任务复杂度，系统以合理方式匹配这种增长的能力。</p>
+</li>
+<li><p>可维护性（Maintainability）：新的开发或者维护人员上手的容易程度，以及适配新场景的能力。</p>
+</li>
+</ul>
+<h3 id="可靠性"><a href="#可靠性" class="headerlink" title="可靠性"></a>可靠性</h3><p>什么是可靠性？即使发生了某些错误，系统仍可以继续正常工作的能力。</p>
+<ul>
+<li>故障或错误（fault）：组件偏离正确规格的现象。</li>
+<li>失效（failure）：系统宕机，无法提供服务。</li>
+</ul>
+<p>为保证可靠性，需要设计容错机制（fault-tolerant）来避免故障引发系统失效，而不是避免故障（当然，避免故障也是提升可靠性的手段）。</p>
+<h3 id="可靠性指标"><a href="#可靠性指标" class="headerlink" title="可靠性指标"></a>可靠性指标</h3><h4 id="失效前平均时间（MTTF）"><a href="#失效前平均时间（MTTF）" class="headerlink" title="失效前平均时间（MTTF）"></a>失效前平均时间（MTTF）</h4><p>是针对不可修复系统而言的，是指系统发生失效前的平均工作（或存储） 时间或工作次数。越高越好。</p>
+<h4 id="平均无故障时间（MTBF）"><a href="#平均无故障时间（MTBF）" class="headerlink" title="平均无故障时间（MTBF）"></a>平均无故障时间（MTBF）</h4><p>是针对可修复系统而言的，指两次相邻失效（故障） 之间的工作时间， 而不是指整个系统的报废时间。越高越好。</p>
+<h4 id="平均修复时间（MTTR）"><a href="#平均修复时间（MTTR）" class="headerlink" title="平均修复时间（MTTR）"></a>平均修复时间（MTTR）</h4><p>是对可修复系统而言的，指从出现故障到修复中间的这段时间。越低越好。</p>
+<h4 id="可用性"><a href="#可用性" class="headerlink" title="可用性"></a>可用性</h4><p>又称为有效性，一般用可用度来定量计算，公式为</p>
+<script type="math/tex; mode=display">
+A=\frac{\text{MTBF}}{\text{MTBF}+\text{MTTR}}</script><p>可靠性通常低于可用性。对于不可维修系统， 可用度就仅仅决定于且等于可靠度。</p>
+<h3 id="数据系统可能发生哪些故障？如何提升容错能力？"><a href="#数据系统可能发生哪些故障？如何提升容错能力？" class="headerlink" title="数据系统可能发生哪些故障？如何提升容错能力？"></a>数据系统可能发生哪些故障？如何提升容错能力？</h3><h4 id="1-硬件故障"><a href="#1-硬件故障" class="headerlink" title="1. 硬件故障"></a>1. 硬件故障</h4><p>包括硬盘错误、电源错误、网口接触不良等。</p>
+<p>最耐用的硬盘的MTTF为10~50年，因此一个包括10000个磁盘的存储集群中，一天坏一个也是很正常的（假设购买硬盘在时间上是均匀分布）。</p>
+<p>应对方案是添加冗余，比如上述硬盘问题就可以用RAID，电源用双电源，甚至热插拔CPU等。</p>
+<p>以上是从硬件角度解决硬件故障，其实可以通过软件角度解决硬件故障问题。</p>
+<h4 id="2-软件错误"><a href="#2-软件错误" class="headerlink" title="2. 软件错误"></a>2. 软件错误</h4><p>操作系统内核的Bug，系统依赖的服务突然没有响应，某个组件的失控等。</p>
+<p>软件系统的问题有时没有快速解决的办法，只能通过检查依赖假设和系统交互、进行全面测试等方法来预防，或者允许进程重启、评估运行时表现等应对。</p>
+<h4 id="3-人为失误"><a href="#3-人为失误" class="headerlink" title="3. 人为失误"></a>3. 人为失误</h4><p>人是最不可靠的因素。运维人员配置错误往往是系统下线的主要原因。</p>
+<p>这部分的预防以及应对，更加依赖软件工程领域的知识。</p>
+<h3 id="可扩展性"><a href="#可扩展性" class="headerlink" title="可扩展性"></a>可扩展性</h3><p>可扩展性是用来描述系统应对负载增加的能力的术语。一个系统添加计算单元越容易，添加计算单元后计算能力的增长越多，就称这个系统的可扩展性越强。</p>
+<h3 id="如何度量系统负载"><a href="#如何度量系统负载" class="headerlink" title="如何度量系统负载"></a>如何度量系统负载</h3><p>每秒请求处理次数、数据库中写入的比例、聊天室的同时活动用户数量、缓存命中率等，</p>
+<p>还要注意分析平均值和峰值对性能的影响</p>
+<h3 id="实例：twitter的两个实现版本"><a href="#实例：twitter的两个实现版本" class="headerlink" title="实例：twitter的两个实现版本"></a>实例：twitter的两个实现版本</h3><p>twitter有两个功能（类比微博，为了方便理解我接下来以微博代替推特），根据其2012年的数据，其功能和负载如下：</p>
+<p>发微博：平均每秒4600条发布申请，峰值12000条推特申请发布。</p>
+<p>收微博：平均每秒300,000条收微博的请求。</p>
+<p>twitter第一个版本使用如下系统设计完成微博的收发：</p>
+<p>发送微博：用户发送的微博插入全局微博集合。</p>
+<p>用户申请查看自己的时间线：  </p>
+<ul>
+<li>遍历所有User的关注对象；</li>
+<li>提取所有关注对象的微博；</li>
+<li>按照发表时间排序并合并。</li>
+</ul>
+<p>随着注册用户变多，负载压力与日俱增，因此采取第二种方法：</p>
+<p>每个用户的时间线维护一个缓存。</p>
+<p>用户发表新的微博：</p>
+<ul>
+<li>查询关注对象；</li>
+<li>插入到每个粉丝的时间线缓存。</li>
+</ul>
+<p>方法二的好处是，用户发布微博时多做一些事情可以加速用户接收微博时的性能。而用户接收微博的请求负载比发送负载高两个数量级。</p>
+<p>Twitter针对那些粉丝量特别多的大V采用方法一，针对粉丝量不太大的绝大多数用户使用方法二。</p>
+<h3 id="如何度量系统性能"><a href="#如何度量系统性能" class="headerlink" title="如何度量系统性能"></a>如何度量系统性能</h3><p><strong>吞吐量</strong></p>
+<p>吞吐量是在一个特定时间段内完成的任务的计数，例如：每秒点击数。</p>
+<p>系统吞吐量几个重要参数：QPS（TPS）、并发数、响应时间</p>
+<p>并发数： 系统同时处理的request/事务数</p>
+<p>TPS：Transactions Per Second（每秒传输的事物处理个数），即服务器每秒处理的事务数。</p>
+<p>QPS：每秒查询率，即对一个特定的查询服务器在规定时间内所处理流量大小。</p>
+<p><strong>响应时间</strong></p>
+<p>从客户端发送请求到接受响应之间的间隔时长。在线系统通常更看重响应时间，批处理系统更关心吞吐量。</p>
+<p>由于每次请求的响应时间服从一个分布，因此我们更关心平均响应时长，或者<strong>百分位数时长</strong>。将响应时长排序，取50百分位数（中位数）比平均数更有意义。其他有意义的百分位数有95、99和99.9百分位数。</p>
+<p>采用较高的响应时间百分位数很重要，因为他们直接影响用户的总体服务体验。95百分位数的响应时间为1.5秒，意味着100个请求中5个请求慢于1.5秒，但是对于电商平台来说，有可能恰恰是这些顾客购买了更多的商品导致访问变慢。</p>
+<p>排队延迟是影响高百分数响应时间的主要延迟来源。因此，如果在性能测试时，负载生成客户端在服务器处理完之前请求后再发送新的请求，就会忽视了排队造成的延迟。</p>
+<h3 id="长尾效应"><a href="#长尾效应" class="headerlink" title="长尾效应"></a>长尾效应</h3><p>一个服务涉及多个不同的后端调用，则最慢的调用会拖累整个服务的响应时间，这种现象称之为长尾效应。</p>
+<p>用户总是需要等待最慢的那个调用完成。因此即便只有很小比例的请求缓慢，也可能由于某一个用户频繁产生这种调用而导致总体变慢。</p>
+<h3 id="如何应对负载增加，提升可扩展性？"><a href="#如何应对负载增加，提升可扩展性？" class="headerlink" title="如何应对负载增加，提升可扩展性？"></a>如何应对负载增加，提升可扩展性？</h3><p>垂直扩展：升级到更强大的机器。</p>
+<p>水平扩展：将负载分布到更多小机器。</p>
+<p>系统设计时，要在这两种扩展中间作取舍。同时要根据不同的吞吐量、请求方式等做针对性优化。</p>
+<h3 id="可维护性"><a href="#可维护性" class="headerlink" title="可维护性"></a>可维护性</h3><p>软件工程师不喜欢读别人留下的代码，不喜欢维护别人开发的老系统，这已经是众所周知的事实。</p>
+<p>但是换个角度，不如说大多数系统在设计之初就没有考虑令后续开发者方便地维护这一个特性。</p>
+<p>为了提升系统的可维护性，减少维护期间的麻烦，可以遵循软件系统的三个设计原则：</p>
+<p>可运维性、简单性、可演化性。</p>
+<h4 id="可运维性"><a href="#可运维性" class="headerlink" title="可运维性"></a>可运维性</h4><p>目标是令运维人员更轻松。之前讨论过，人是系统中最不稳定的因素。因此简化运维人员的操作，使运维人员能够专注于高附加值的任务，能够提升系统的可维护性。</p>
+<p>可以从以下角度提升可运维性：</p>
+<ul>
+<li>提供系统运行时监控工具，方便监控；</li>
+<li>自动化工具；</li>
+<li>避免绑定特定的机器；</li>
+<li>提供良好的文档；</li>
+<li>提供良好的默认配置；</li>
+<li>尝试自我修复等。</li>
+</ul>
+<h4 id="简单性"><a href="#简单性" class="headerlink" title="简单性"></a>简单性</h4><p>简单性是复杂性的反面。而复杂性有各种各样的表现方式，比如模块紧耦合，状态空间膨胀，依赖关系复杂，命名方法混乱，各种性能trick等。</p>
+<p>消除复杂性的最好手段之一是抽象，通过抽象掩盖大量实现细节，提供干净的接口。</p>
+<h4 id="可演化性"><a href="#可演化性" class="headerlink" title="可演化性"></a>可演化性</h4><p>提升可演化性是令系统易于改变的另一种说法。目标是可以轻松地修改数据系统，使其适应不断变化的需求。</p>
+<p>在组织流程方面，敏捷开发模式为适应变化提供了很好的参考。因此敏捷性与可演化性很类似。</p>
+
+            </div>
+            <hr>
+            <div>
+              <p>
+                
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/notes/">notes</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Big-Data/">Big Data</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Distributed-System/">Distributed System</a>
+                    
+                  </span>
+                
+              </p>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <div class="comments" id="comments">
+                
+                
+  <script defer src="https://utteranc.es/client.js"
+          repo="superlova / superlova.github.io"
+          issue-term="pathname"
+  
+          label="utterances"
+    
+          theme="github-light"
+          crossorigin="anonymous"
+  >
+  </script>
+
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc-start"></div>
+<div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+<div>
+  <span id="timeDate">载入天数...</span>
+  <span id="times">载入时分秒...</span>
+  <script>
+  var now = new Date();
+  function createtime(){
+      var grt= new Date("02/14/2017 00:00:00");//此处修改你的建站时间或者网站上线时间
+      now.setTime(now.getTime()+250);
+      days = (now - grt ) / 1000 / 60 / 60 / 24;
+      dnum = Math.floor(days);
+      hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum);
+      hnum = Math.floor(hours);
+      if(String(hnum).length ==1 ){
+          hnum = "0" + hnum;
+      }
+      minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+      mnum = Math.floor(minutes);
+      if(String(mnum).length ==1 ){
+                mnum = "0" + mnum;
+      }
+      seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+      snum = Math.round(seconds);
+      if(String(snum).length ==1 ){
+                snum = "0" + snum;
+      }
+      document.getElementById("timeDate").innerHTML = "本站安全运行&nbsp"+dnum+"&nbsp天";
+      document.getElementById("times").innerHTML = hnum + "&nbsp小时&nbsp" + mnum + "&nbsp分&nbsp" + snum + "&nbsp秒";
+  }
+  setInterval("createtime()",250);
+  </script>
+</div>
+
+<p id="hitokoto">:D 获取中...</p>
+<script>
+  fetch('https://v1.hitokoto.cn')
+    .then(response => response.json())
+    .then(data => {
+      const hitokoto = document.getElementById('hitokoto')
+      hitokoto.innerText = data.hitokoto
+      })
+      .catch(console.error)
+</script>
+
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    </div>
+    
+  <div>
+    
+      <!-- 不蒜子统计PV -->
+      
+      <span id="busuanzi_container_site_pv" style="display: none">
+      总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    </span>
+    
+    
+      <!-- 不蒜子统计UV -->
+      
+      <span id="busuanzi_container_site_uv" style="display: none">
+      总访客数 <span id="busuanzi_value_site_uv"></span> 人
+    </span>
+    
+  </div>
+
+
+    
+
+    
+  </div>
+</footer>
+
+
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var post = $('#post');
+      var toc = $('#toc');
+      var tocLimMax = post.offset().top + post.height() - navHeight;
+
+      $(window).scroll(function () {
+        var tocLimMin = $('#toc-start').offset().top - navHeight;
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': navHeight,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+      var offset = $('#board-ctn').css('margin-right')
+      $('#toc-ctn').css({
+        'right': offset
+      })
+    });
+  </script>
+
+
+
+
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+<!-- Plugins -->
+
+
+  
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?1040bcc5d25d5f4a9cb5e9855eb2c6db";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "【学习笔记】数据密集性应用系统设计CH1笔记&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 90,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+          tex2jax: {
+              inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+              processEscapes: true,
+              skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+          }
+      });
+
+      MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+
+    </script>
+
+    <script  src="https://cdn.staticfile.org/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>
